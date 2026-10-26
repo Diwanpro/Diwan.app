@@ -1,11 +1,12 @@
 /* Diwan v9.7.1 — Service Worker (offline-first app shell) */
 'use strict';
 
-var CACHE = 'diwan-v9.7.1';
+var CACHE = 'diwan-v9.8.0';
 var PRECACHE = [
   './',
   './index.html',
   './manifest.json',
+  './logo.png',
   './icon-192.png',
   './icon-512.png',
   './icon-180.png'
@@ -76,7 +77,7 @@ self.addEventListener('fetch', function (event) {
         }
         return res;
       }).catch(function () {
-        return caches.match('./icon-192.png');
+        return caches.match('./logo.png');
       });
     })
   );
