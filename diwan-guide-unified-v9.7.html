@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دليل ديوان الموحّد — إدارة مكتب المحاماة (الجزائر) | v9.7</title>
+<meta name="author" content="ديوان — نظام إدارة مكتب المحاماة">
+<meta name="description" content="الدليل الرسمي الكامل لبرنامج ديوان v9.7 — شرح مفصل + دليل استخدام لكل أنواع المستخدمين">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --navy:#0d2138;--navy2:#153250;--teal:#0f8f86;--teal-ink:#0b6e67;--teal-soft:#dff3f1;
+ --brass:#b3832a;--brass-soft:#f6edd9;--ink:#0f1e2e;--muted:#566677;--line:#e0e6ed;
+ --bg:#f1f4f8;--surface:#fff;--bad:#c0392b;--bad-soft:#fbe6e3;--ok:#2b7a4e;--ok-soft:#e1f2e9;
+ --warn:#b0700d;--warn-soft:#fcefd8;--info:#245f9f;--info-soft:#e2edf8;
+ --serif:'Amiri','Traditional Arabic','Times New Roman',serif;
+ --sans:'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not(.light){
+ --bg:#08121d;--surface:#101d2b;--ink:#e8eef4;--muted:#93a4b5;--line:#21344a;
+ --navy:#061019;--navy2:#0b2033;--teal:#2bc0b4;--teal-ink:#5fd6cc;--teal-soft:#0f2e31;
+ --brass:#dcae55;--brass-soft:#2c2412;--bad:#f08b7f;--bad-soft:#341a17;
+ --ok:#72c796;--ok-soft:#14291e;--warn:#e3a84f;--warn-soft:#2e2310;
+ --info:#7fb8e6;--info-soft:#102434;
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;color-scheme:light dark}
+body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--serif);margin:0;line-height:1.3;color:var(--ink)}
+h1{font-size:42px;line-height:1.15}
+h2{font-size:32px;margin:0 0 8px}
+h3{font-size:22px;margin:0 0 6px}
+h4{font-size:18px;margin:0 0 4px;font-family:var(--sans);font-weight:700}
+p{margin:0 0 12px}
+a{color:var(--teal-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'SF Mono',Consolas,monospace;background:var(--bg);padding:1px 6px;border-radius:4px;font-size:14px;direction:ltr;unicode-bidi:isolate}
+svg{flex:none}
+
+.toolbar{position:fixed;top:0;inset-inline:0;z-index:100;background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 20px -4px rgba(0,0,0,.4)}
+.toolbar .brand{font-family:var(--serif);font-size:22px;font-weight:700;color:#fff}
+.toolbar .brand small{font-family:var(--sans);font-size:12px;color:#9db4c9;font-weight:400;margin-inline-start:8px}
+.toolbar .spacer{flex:1}
+.toolbar button{background:var(--teal);border:0;color:#fff;padding:8px 18px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.toolbar button:hover{filter:brightness(1.1)}
+.toolbar button.ghost{background:transparent;border:1px solid rgba(255,255,255,.3)}
+@media (max-width:768px){.toolbar .brand small{display:none}.toolbar{padding:8px 12px;gap:8px}.toolbar button{padding:6px 12px;font-size:14px}}
+
+.doc{max-width:900px;margin:70px auto 40px;background:var(--surface);box-shadow:0 4px 40px -10px rgba(13,33,56,.15);border-radius:4px}
+@media print{.doc{max-width:none;margin:0;box-shadow:none;border-radius:0}}
+
+.cover{background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:100px 60px 80px;position:relative;overflow:hidden;min-height:calc(100vh - 70px);display:flex;flex-direction:column;justify-content:center;border-radius:4px 4px 0 0}
+@media print{.cover{min-height:auto;page-break-after:always;padding:60px 40px;border-radius:0}}
+.cover::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 10%,rgba(43,192,180,.25),transparent 50%),radial-gradient(circle at 80% 90%,rgba(179,131,42,.2),transparent 50%);pointer-events:none}
+.cover>*{position:relative;z-index:1}
+.cover .logo{width:96px;height:96px;border-radius:26px;background:linear-gradient(145deg,var(--teal),#0b6e67);display:grid;place-items:center;margin-bottom:32px;box-shadow:0 20px 40px -10px rgba(15,143,134,.6)}
+.cover .logo svg{width:54px;height:54px;stroke-width:1.6;color:#fff}
+.cover .brand{font-family:var(--serif);font-size:56px;font-weight:700;margin:0 0 8px;line-height:1}
+.cover .tag{font-size:20px;color:#9fd8d3;margin-bottom:44px;font-weight:500}
+.cover h1{font-size:44px;color:#fff;max-width:640px;margin:0 0 20px}
+.cover .subtitle{font-size:19px;color:#d6e2ee;max-width:600px;line-height:1.7;margin-bottom:32px}
+.cover .badge-v94{display:inline-block;padding:6px 18px;border-radius:99px;background:rgba(43,192,180,.25);border:1px solid rgba(43,192,180,.5);color:#9fd8d3;font-size:14px;font-weight:600;margin-bottom:24px}
+.cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;padding-top:36px;border-top:1px solid rgba(255,255,255,.15);max-width:640px}
+.cover .meta div small{display:block;color:#9db4c9;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.cover .meta div b{color:#fff;font-size:15px}
+
+.toc{padding:60px 60px 40px;border-bottom:1px solid var(--line)}
+@media print{.toc{page-break-after:always;padding:40px}}
+.toc h2{font-size:36px;color:var(--navy);border-bottom:3px solid var(--teal);padding-bottom:12px;margin-bottom:32px;display:inline-block}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px 48px}
+@media (max-width:700px){.toc-grid{grid-template-columns:1fr;gap:24px}}
+@media print{.toc-grid{grid-template-columns:1fr 1fr;gap:20px 40px}}
+.toc-sec h3{font-size:18px;color:var(--navy);border-inline-start:4px solid var(--teal);padding-inline-start:12px;margin-bottom:14px;padding-bottom:0}
+.toc-sec ul{list-style:none;padding:0;margin:0}
+.toc-sec li{padding:5px 0;border-bottom:1px dashed var(--line);font-size:15px;display:flex;align-items:baseline;gap:8px}
+.toc-sec li a{color:var(--ink);flex:1;font-weight:500}
+.toc-sec li a:hover{color:var(--teal-ink)}
+.toc-sec li .num{color:var(--brass);font-family:var(--serif);font-weight:700;font-size:15px;min-width:32px}
+
+.part{padding:60px 60px 40px}
+@media print{.part{padding:30px 40px}}
+.part-cover{page-break-before:always;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:70px 60px;border-radius:4px;margin:0 0 40px}
+@media print{.part-cover{padding:50px 40px;page-break-after:avoid}}
+.part-cover .label{font-size:14px;color:#9fd8d3;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:8px}
+.part-cover h2{font-size:52px;color:#fff;margin-bottom:12px;line-height:1.1}
+.part-cover p{color:#d6e2ee;font-size:18px;max-width:560px;margin:0}
+
+.section{padding:32px 0;border-bottom:1px solid var(--line)}
+.section:last-child{border-bottom:0}
+.section-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--teal)}
+.section-head .num{width:48px;height:48px;border-radius:14px;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:22px;flex:none}
+.section-head h2{font-size:30px;margin:0;color:var(--navy)}
+
+.subsection{padding:20px 0}
+.subsection h3{font-size:24px;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.subsection h3::before{content:"";width:6px;height:24px;background:var(--brass);border-radius:3px;display:inline-block}
+.subsection h4{font-size:17px;color:var(--teal-ink);margin:14px 0 8px}
+
+.box{background:var(--bg);border-radius:12px;padding:20px 22px;margin:16px 0;border-inline-start:4px solid var(--teal)}
+.box.info{background:var(--info-soft);border-inline-start-color:var(--info)}
+.box.ok{background:var(--ok-soft);border-inline-start-color:var(--ok)}
+.box.warn{background:var(--warn-soft);border-inline-start-color:var(--warn)}
+.box.bad{background:var(--bad-soft);border-inline-start-color:var(--bad)}
+.box.brass{background:var(--brass-soft);border-inline-start-color:var(--brass)}
+.box p:last-child{margin-bottom:0}
+.box strong{display:block;margin-bottom:6px;font-size:15px}
+
+.callout{background:var(--brass-soft);border-radius:12px;padding:16px 20px;font-size:15px;border-inline-start:4px solid var(--brass);margin:14px 0}
+.callout strong{color:var(--brass);display:inline-block;margin-inline-end:6px}
+
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
+table th{background:var(--navy);color:#fff;padding:12px 14px;text-align:start;font-weight:600;font-size:14px}
+table td{padding:11px 14px;border-top:1px solid var(--line);vertical-align:top}
+table tbody tr:nth-child(even){background:var(--bg)}
+table tbody tr:hover{background:var(--teal-soft)}
+.chk-yes{color:var(--ok);font-weight:700;font-size:18px}
+.chk-no{color:var(--bad);font-weight:700;font-size:18px}
+
+ul,ol{padding-inline-start:22px;margin:10px 0}
+li{padding:4px 0}
+ul.steps{list-style:none;padding:0;counter-reset:s}
+ul.steps li{position:relative;padding:10px 44px 10px 8px;border-bottom:1px dashed var(--line);counter-increment:s}
+ul.steps li:last-child{border-bottom:0}
+ul.steps li::before{content:counter(s);position:absolute;inset-inline-start:0;top:8px;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;font-family:var(--serif)}
+@media print{ul.steps li::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+.user-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:14px 0;border-inline-start:5px solid var(--teal)}
+.user-card.manager{border-inline-start-color:var(--brass)}
+.user-card.secretary{border-inline-start-color:var(--info)}
+.user-card.trainee{border-inline-start-color:var(--ok)}
+.user-card.partner{border-inline-start-color:#8e44ad}
+.user-card .badge{display:inline-block;padding:2px 12px;border-radius:99px;font-size:12.5px;font-weight:700;margin-bottom:8px}
+.user-card.manager .badge{background:var(--brass-soft);color:var(--brass)}
+.user-card.secretary .badge{background:var(--info-soft);color:var(--info)}
+.user-card.trainee .badge{background:var(--ok-soft);color:var(--ok)}
+.user-card.partner .badge{background:#f0e6f6;color:#8e44ad}
+.user-card h4{font-size:20px;color:var(--navy);font-family:var(--serif);margin:0 0 8px}
+
+.screens{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media (max-width:700px){.screens{grid-template-columns:1fr}}
+@media print{.screens{grid-template-columns:1fr 1fr}}
+.screen-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;border-inline-start:4px solid var(--teal)}
+.screen-card h4{font-size:16px;color:var(--navy);margin:0 0 4px;display:flex;align-items:baseline;gap:6px}
+.screen-card h4 .n{color:var(--brass);font-family:var(--serif);font-size:15px}
+.screen-card p{font-size:14px;margin:0;line-height:1.6}
+.screen-card .tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px}
+.screen-card .tag{font-size:11.5px;padding:1px 8px;border-radius:99px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.screen-card .tag.mgr{background:var(--brass-soft);color:var(--brass);border-color:transparent}
+.screen-card .tag.sec{background:var(--info-soft);color:var(--info);border-color:transparent}
+.screen-card .tag.trn{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.screen-card .tag.prt{background:#f0e6f6;color:#8e44ad;border-color:transparent}
+
+.scenario{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin:18px 0;box-shadow:0 2px 20px -8px rgba(13,33,56,.08)}
+.scenario-h{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.scenario-h .n{width:44px;height:44px;border-radius:12px;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:20px;font-weight:700;flex:none}
+.scenario-h h4{font-size:20px;color:var(--navy);margin:0 0 4px;font-family:var(--serif)}
+.scenario-h .meta{font-size:13px;color:var(--muted)}
+
+.footer{background:var(--navy);color:#fff;padding:60px 60px;text-align:center;border-radius:0 0 4px 4px}
+@media print{.footer{page-break-before:always;padding:60px 40px}}
+.footer h2{color:#fff;font-size:36px;margin-bottom:12px}
+.footer p{color:#9db4c9;max-width:560px;margin:0 auto 20px}
+.footer .logo{width:72px;height:72px;border-radius:20px;background:linear-gradient(145deg,var(--teal),#0b6e67);display:grid;place-items:center;margin:0 auto 20px}
+.footer .logo svg{width:40px;height:40px;stroke-width:1.6;color:#fff}
+
+.floating-toc{position:fixed;bottom:20px;inset-inline-start:20px;z-index:50;background:var(--navy);color:#fff;border-radius:14px;padding:12px 18px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);cursor:pointer;font-weight:600;display:none;align-items:center;gap:8px}
+.floating-toc.on{display:flex}
+@media print{.floating-toc{display:none!important}}
+
+@page{size:A4;margin:14mm 12mm}
+@media print{
+ body{background:#fff;font-size:11pt;line-height:1.6}
+ h1,h2,h3,h4{color:#0d2138!important}
+ .toolbar,.floating-toc{display:none!important}
+ .section{page-break-inside:avoid;padding:16px 0}
+ .subsection{page-break-inside:avoid}
+ .box,.callout,.scenario,.user-card,.screen-card{page-break-inside:avoid}
+ table{page-break-inside:auto}
+ tr{page-break-inside:avoid}
+ a{color:#0d2138!important;text-decoration:none!important}
+ .part-cover,.cover,.footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ table th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .chk-yes{color:#2b7a4e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .chk-no{color:#c0392b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+ <div class="brand">ديوان <small>الدليل الموحّد — v9.7</small></div>
+ <div class="spacer"></div>
+ <button class="ghost" onclick="toggleTheme()" title="تبديل المظهر">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+  المظهر
+ </button>
+ <button onclick="window.print()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18h12v3H6zM6 14H3V9h18v5h-3"/></svg>
+  طباعة / حفظ PDF
+ </button>
+</div>
+
+<div class="floating-toc" id="ftoc" onclick="document.getElementById('toc').scrollIntoView({behavior:'smooth'})">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+ المحتويات
+</div>
+
+<main class="doc">
+
+<!-- COVER -->
+<section class="cover">
+ <div class="logo">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M12 3v18M5 21h14M6 7h12M6 7l-3 7a3 3 0 0 0 6 0L6 7zM18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/>
+  </svg>
+ </div>
+ <div class="brand">ديوان</div>
+ <div class="tag">نظام إدارة مكتب المحاماة — الجزائر</div>
+ <div class="badge-v94">الدليل الموحّد — الإصدار 9.7 • مطابق لـ diwan-v9.7.html · تتبّع الوقت + المواعيد + وصل سريع + أعمار الديون + PWA</div>
+ <h1>الدليل الرسمي الكامل<br>وشرح دليل الاستخدام</h1>
+ <p class="subtitle">شرح مفصل للبرنامج، لكل واجهاته وبياناته، ولكل نوع من المستخدمين. مصمم للمحامين الجزائريين، ويعمل بلا إنترنت مع تشفير كامل للبيانات.</p>
+ <div class="meta">
+  <div><small>الإصدار</small><b>الإصدار 9.7 (v9.7)</b></div>
+  <div><small>النوع</small><b>نسخة تجريبية احترافية</b></div>
+  <div><small>اللغة</small><b>العربية / الفرنسية</b></div>
+  <div><small>الصيغة</small><b>HTML — جاهز للطباعة PDF</b></div>
+ </div>
+</section>
+
+<!-- TOC -->
+<section class="toc" id="toc">
+ <h2>📑 جدول المحتويات</h2>
+ <div class="toc-grid">
+  <div class="toc-sec">
+   <h3>الجزء الأول — فهم البرنامج</h3>
+   <ul>
+    <li><span class="num">1</span><a href="#s1">ما هو ديوان؟</a></li>
+    <li><span class="num">2</span><a href="#s2">المشكلة التي يحلّها لكل محامٍ</a></li>
+    <li><span class="num">3</span><a href="#s3">المبادئ الأربعة التي بُني عليها</a></li>
+    <li><span class="num">4</span><a href="#s4">المستخدمون الأربعة ونظام الصلاحيات</a></li>
+    <li><span class="num">5</span><a href="#s5">هيكل الواجهات الست</a></li>
+    <li><span class="num">6</span><a href="#s6">نظرة عامة على كل شاشة (32 شاشة)</a></li>
+   </ul>
+  </div>
+  <div class="toc-sec">
+   <h3>الجزء الثاني — دليل الاستخدام</h3>
+   <ul>
+    <li><span class="num">7</span><a href="#s7">الإقلاع الأول والإعداد (بما فيه كلمة المرور)</a></li>
+    <li><span class="num">8</span><a href="#s8">يومك الأول في ديوان</a></li>
+    <li><span class="num">9</span><a href="#s9">اثنا عشر سيناريو عملي</a></li>
+    <li><span class="num">10</span><a href="#s10">الأسئلة الشائعة والمشاكل</a></li>
+    <li><span class="num">11</span><a href="#s11">الملاحق (اختصارات، مسرد، صلاحيات، مستندات، أمان)</a></li>
+    <li><span class="num">11.7</span><a href="#s11-7">ما الجديد في v9.7 (تبسيط الواجهات)</a></li>
+    <li><span class="num">11.9</span><a href="#s11-9">ما الجديد في v9.7 — إصلاحات وميزات</a></li>
+    <li><span class="num">12</span><a href="#s12">خلاصة نهائية</a></li>
+   </ul>
+  </div>
+ </div>
+</section>
+
+<!-- PART 1 -->
+<div class="part">
+
+ <div class="part-cover">
+  <div class="label">الجزء الأول</div>
+  <h2>فهم البرنامج</h2>
+  <p>من هو ديوان؟ لماذا بُني؟ لمن؟ وماذا يقدّم لكل محامٍ جزائري؟ هذا الجزء يُعرّفك على البرنامج قبل أن تلمس أي زر.</p>
+ </div>
+
+ <!-- 1 -->
+ <section class="section" id="s1">
+  <div class="section-head"><div class="num">1</div><h2>ما هو ديوان؟</h2></div>
+  <p><strong>ديوان</strong> هو نظام رقمي متكامل لإدارة مكتب المحاماة في الجزائر، مبني على أرضية تقنية حديثة تعمل <strong>دون اتصال بالإنترنت</strong>، ويجمع في مكان واحد كل ما يحتاجه المحامي في يومه المهني. بياناته <strong>مشفّرة AES-256 على جهازك</strong> ومحمية بكلمة مرور.</p>
+
+  <table>
+   <thead><tr><th>ما يجده المحامي في ديوان</th><th>الفائدة المباشرة</th></tr></thead>
+   <tbody>
+    <tr><td>ملفات القضايا بكل أطرافها ووثائقها</td><td>لا يضيع أي ملف، ولا يُنسى موعد</td></tr>
+    <tr><td>جلسات الأسبوع والآجال القانونية (قابلة للتعديل)</td><td>تنبيه تلقائي قبل كل أجل حرج</td></tr>
+    <tr><td>مولّد عرائض ومذكرات وسندات (18 قالباً)</td><td>توفير ساعات كل أسبوع</td></tr>
+    <tr><td>وصولات الأتعاب الرسمية</td><td>مطابقة للمرسوم 05-468</td></tr>
+    <tr><td>حساب الأمانات منفصل عن الأتعاب</td><td>التزام قانوني تام</td></tr>
+    <tr><td>بوابة الموكل + تذكيرات واتساب</td><td>شفافية وثقة مع الموكل</td></tr>
+    <tr><td>تقارير ضريبية G50/IFU/IBS</td><td>يُعين المحاسب</td></tr>
+    <tr><td>إدارة الفريق والصلاحيات + محامون شركاء</td><td>كل واحد يرى ما يخصه فقط</td></tr>
+    <tr><td>حماية قانونية عند القبول (تعارض المصالح)</td><td>تجنّب المساءلة التأديبية</td></tr>
+   </tbody>
+  </table>
+
+  <div class="box info">
+   <strong>مَن يستخدمه؟</strong>
+   مكاتب المحاماة المستقلة، الشركات المدنية المهنية، مكاتب بمحامٍ واحد أو بفريق متعدد الشركاء.
+  </div>
+ </section>
+
+ <!-- 2 -->
+ <section class="section" id="s2">
+  <div class="section-head"><div class="num">2</div><h2>المشكلة التي يحلّها لكل محامٍ</h2></div>
+
+  <h3 style="color:var(--bad);margin-bottom:10px">🩸 الواقع اليومي المؤلم</h3>
+  <ul>
+   <li><strong>دفاتر ورقية مبعثرة</strong> بين المكتب والبيت والمحكمة.</li>
+   <li><strong>آجال تفوت</strong> بسبب عدم وجود نظام تنبيه (استئناف 30 يوماً، نقض شهران، معارضة 10 أيام).</li>
+   <li><strong>أتعاب غير محصّلة</strong> لا أحد يتذكرها لأن لا فهرس واضح.</li>
+   <li><strong>أمانات الموكلين مختلطة</strong> بالأتعاب → مخاطرة تأديبية.</li>
+   <li><strong>موكل يطلب معلومات</strong> فتضيع نصف ساعة في البحث.</li>
+   <li><strong>وصولات أتعاب</strong> يكتبها المحامي يدوياً كل مرة، بأخطاء في NIF/RC/TVA.</li>
+   <li><strong>تعارض مصالح</strong> يُكتشف بعد قبول الملف → مشكلة تأديبية حقيقية.</li>
+  </ul>
+
+  <h3 style="color:var(--ok);margin:20px 0 10px">✅ الحل الذي يقدمه ديوان</h3>
+  <p>كل بند من البنود أعلاه له شاشة مخصصة، تعمل <strong>بلا إنترنت</strong>، تُحفظ <strong>مشفّرة تلقائياً</strong>، ويمكن <strong>التراجع عنها</strong> بنقرة واحدة.</p>
+ </section>
+
+ <!-- 3 -->
+ <section class="section" id="s3">
+  <div class="section-head"><div class="num">3</div><h2>المبادئ الأربعة التي بُني عليها</h2></div>
+  <table>
+   <thead><tr><th>المبدأ</th><th>ماذا يعني عملياً؟</th></tr></thead>
+   <tbody>
+    <tr><td><strong>١. البيانات أولاً</strong></td><td>كل شيء محفوظ مشفّراً في جهازك، لا يعتمد على خادم</td></tr>
+    <tr><td><strong>٢. الأمان بالتصميم</strong></td><td>4 أدوار + صلاحيات + ملفات سرية + سجل عمليات + تشفير AES-256 + كلمة مرور لكل مستخدم</td></tr>
+    <tr><td><strong>٣. العمل دون اتصال</strong></td><td>تكتب وتحرر بلا إنترنت، وتُزامَن التعديلات عند العودة</td></tr>
+    <tr><td><strong>٤. اللغة والاختصاص</strong></td><td>واجهة عربية/فرنسية، ومصطلحات قانونية جزائرية دقيقة</td></tr>
+   </tbody>
+  </table>
+ </section>
+
+ <!-- 4 -->
+ <section class="section" id="s4">
+  <div class="section-head"><div class="num">4</div><h2>المستخدمون الأربعة ونظام الصلاحيات</h2></div>
+
+  <div class="user-card manager">
+   <div class="badge">المستخدم الأول</div>
+   <h4>المحامي / المدير (Manager)</h4>
+   <p>كل شيء مفتوح له. يرى كل الملفات، كل الأتعاب، كل الأمانات، يعدّل الفريق، يطبع كل شيء، يوافق على مسودات المتربص، ويُدير المحامين الشركاء. <strong>لا يمكن حذف آخر مدير في النظام</strong> — حماية تلقائية.</p>
+  </div>
+
+  <div class="user-card partner">
+   <div class="badge">المستخدم الثاني</div>
+   <h4>المحامي الشريك (Partner) — جديد في v9.7</h4>
+   <p>محامٍ آخر في نفس المكتب، له:</p>
+   <ul>
+    <li>ملفاته الخاصة فقط (يُفلتر تلقائياً حسب lawyerId).</li>
+    <li>بطاقة إجازة مستقلة (رقم، إصدار، انتهاء، نقابة).</li>
+    <li>كلمة مرور خاصة للدخول.</li>
+    <li>يمكن للمدير تعطيله مؤقتاً (suspended).</li>
+    <li><strong>لا يستطيع</strong> رؤية ملفات المدير أو الشركاء الآخرين.</li>
+   </ul>
+  </div>
+
+  <div class="user-card secretary">
+   <div class="badge">المستخدم الثالث</div>
+   <h4>السكرتيرة (Secretary)</h4>
+   <p>ترى الملفات والوثائق والجلسات. لكن:</p>
+   <ul>
+    <li><strong>الأتعاب والأمانات</strong>: لا تراها إلا إذا فعّل المدير خيار «السماح للسكرتارية برؤية الأتعاب».</li>
+    <li><strong>هواتف الموكلين</strong>: لا تراها إلا إذا فعّل «السماح للسكرتارية برؤية هواتف الموكلين».</li>
+    <li><strong>الملفات السرية</strong>: لا تراها أبداً.</li>
+   </ul>
+  </div>
+
+  <div class="user-card trainee">
+   <div class="badge">المستخدم الرابع</div>
+   <h4>المتربص (Trainee)</h4>
+   <p>أضيق صلاحية. يرى فقط:</p>
+   <ul>
+    <li>الملفات المكلّف بها.</li>
+    <li>مهامه الشخصية.</li>
+    <li>لا يرى أتعاباً ولا أمانات ولا موكلين.</li>
+    <li><strong>لا يطبع مستنداً</strong> إلا بعد موافقة المدير على مسودة مطابقة.</li>
+    <li>لا يمكنه إنشاء ملفات جديدة.</li>
+   </ul>
+  </div>
+
+  <div class="box info">
+   <strong>🔑 تبديل الأدوار محمي بكلمة مرور</strong>
+   لا يمكن لأي مستخدم أن «يَتَلبّس» شخصية غيره. عند تبديل الدور من القائمة العلوية، يطلب البرنامج كلمة مرور المستخدم الهدف. بعد 5 محاولات فاشلة، يُقفل الحساب مؤقتاً لمدة 60 ثانية.
+  </div>
+
+  <h3 style="margin-top:24px">📊 مصفوفة الصلاحيات المبسّطة</h3>
+  <table>
+   <thead><tr><th>القدرة</th><th>المدير</th><th>الشريك</th><th>السكرتيرة</th><th>المتربص</th></tr></thead>
+   <tbody>
+    <tr><td>إنشاء ملف قضية</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-no">✗</td></tr>
+    <tr><td>رؤية كل الملفات</td><td class="chk-yes">✓</td><td>ملفاته فقط</td><td class="chk-yes">✓</td><td>حسب التكليف</td></tr>
+    <tr><td>رؤية ملف سري</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+    <tr><td>رؤية الأتعاب</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+    <tr><td>رؤية هواتف الموكلين</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+    <tr><td>إنشاء وصل أتعاب</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+    <tr><td>طباعة مستند</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td>بعد الموافقة</td></tr>
+    <tr><td>KYC / QR</td><td class="chk-yes">✓</td><td>ملفاته</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+    <tr><td>تغيير الأدوار</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+    <tr><td>تعطيل شريك</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+   </tbody>
+  </table>
+ </section>
+
+ <!-- 5 -->
+ <section class="section" id="s5">
+  <div class="section-head"><div class="num">5</div><h2>هيكل الواجهات الست</h2></div>
+  <p>قائمة ديوان الجانبية مُنظّمة في <strong>6 مجموعات</strong> قابلة للطي:</p>
+  <table>
+   <thead><tr><th>المجموعة</th><th>متى تُستخدم؟</th></tr></thead>
+   <tbody>
+    <tr><td><strong>🏠 العمل اليومي</strong></td><td>كل صباح: لوحة التحكم، الملفات، التقويم، المهام، الوثائق، مولّد الوثائق، حاسبة الآجال</td></tr>
+    <tr><td><strong>💰 المالية والأتعاب</strong></td><td>مرة أسبوعياً: الأتعاب، وصولات، رسوم الدعاوى، الصندوق، رواتب الموظفين</td></tr>
+    <tr><td><strong>⚖️ القضايا والخصوم</strong></td><td>عند الحاجة: المساعدة القضائية، المحضرون، الخبراء، التنفيذ، KYC</td></tr>
+    <tr><td><strong>🛡️ الإدارة والصلاحيات</strong></td><td>مرة شهرياً: الفريق، الحسابات، بطاقة الإجازة، الإعدادات</td></tr>
+    <tr><td><strong>📊 البيانات والتقارير</strong></td><td>آخر الشهر: التقارير، سجل العمليات، الاجتهادات، الاستيراد، QR</td></tr>
+    <tr><td><strong>🧭 المساعدة والمشروع</strong></td><td>عند الحاجة: التذكيرات، بوابة الموكل، الروابط القضائية، عن النظام، الأسئلة</td></tr>
+   </tbody>
+  </table>
+ </section>
+
+ <!-- 6 -->
+ <section class="section" id="s6">
+  <div class="section-head"><div class="num">6</div><h2>نظرة عامة على كل شاشة (32 شاشة)</h2></div>
+
+  <h3 style="margin:16px 0 10px;color:var(--navy)">🏠 مجموعة العمل اليومي</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.1</span> لوحة التحكم</h4><p>4 مؤشرات كبرى (KPI)، جدول جلسات الأسبوع، الآجال القريبة، المهام، آخر النشاطات، تقدم التحصيل المالي، شريط التنبيهات.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.2</span> الملفات</h4><p>جدول 6 أعمدة + فلاتر + فرز + درج تفاصيل شامل (أطراف، جلسات، أتعاب، وثائق، تاريخ، ملفات مرتبطة).</p><div class="tags"><span class="tag">الجميع</span><span class="tag trn">المتربص: المكلف فقط</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.3</span> الجلسات والآجال</h4><p>تقويم شهري 7 أعمدة، الأزرق للجلسات والذهبي للآجال. تفاصيل اليوم عند النقر + تنبيه التعارض في نفس التوقيت.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.4</span> المهام</h4><p>عنوان، ملف، مكلّف، أولوية، تاريخ، مربع إتمام. فلاتر مفتوحة/منجزة/الكل. فلاتر حسب المستخدم للمدير.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.5</span> الموكلون</h4><p>بطاقة لكل موكل + بيانات NIN والميلاد والعنوان + ملخص مالي + رابط واتساب مباشر + زر «كشف حساب الموكل».</p><div class="tags"><span class="tag mgr">المدير</span><span class="tag sec">السكرتيرة</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.6</span> الوثائق</h4><p>قائمة كل الوثائق مرتبطة بملفاتها + نوع (PDF/DOC/IMG/KYC) + شارة «مشارك/داخلي» + تحميل الملف الفعلي من IndexedDB.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.7</span> سكانر PDF</h4><p>التقاط صور من الكاميرا، ضغط تلقائي (max 2400px, JPEG q0.7)، تجميع في PDF واحد عبر jsPDF، ثم رفعه للملف.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.8</span> الموافقات</h4><p>4 تبويبات: بانتظار المراجعة، معتمدة، مرفوضة، مسوداتي. المدير يعتمد أو يرفض مع سبب. المتربص يرسل مسودته للموافقة قبل الطباعة.</p><div class="tags"><span class="tag mgr">المدير</span><span class="tag trn">المتربص</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.9</span> مولّد الوثائق</h4><p>18 قالباً جاهزاً للطباعة A4 (عرائض، مذكرات، سندات، وصولات، محاضر، إجراءات) + معاينة حية + إرسال للموافقة + طباعة عبر iframe.</p><div class="tags"><span class="tag">الجميع</span><span class="tag trn">المتربص: بعد الموافقة</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.10</span> حاسبة الآجال</h4><p>حساب استئناف، نقض، معارضة، استئناف جنح — مع خيار «مقيم بالخارج» و«استثناء العطل» + تنبيه إذا انقضى الأجل في يوم عطلة + زر «حفظ الأجل في الملف».</p><div class="tags"><span class="tag">الجميع</span></div></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px;color:var(--navy)">💰 مجموعة المالية والأتعاب</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.11</span> الأتعاب والحسابات</h4><p>4 تبويبات مترابطة: نظرة عامة (اتفاقات + تحصيل + متبقي)، وصولات الأتعاب (رسمية A4)، الأمانات (compte séquestre)، المصاريف القضائية.</p><div class="tags"><span class="tag mgr">المدير</span><span class="tag sec">السكرتيرة: بإذن</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.12</span> الأدوات المالية المتقدمة</h4><p>ثلاث أدوات في بطاقة واحدة:<br>• <strong>حاسبة رسوم الدعاوى</strong> — تقدير الرسوم حسب النوع والمبلغ ودرجة التقاضي (استرشادي).<br>• <strong>دفتر الصندوق والربح الصافي</strong> — متحصلات الأتعاب مقابل مصاريف المكتب والمصاريف القضائية.<br>• <strong>الموارد البشرية والرواتب</strong> — إدارة الموظفين + كشف شهري مع اقتطاع CNAS 9% واعتماد الكشوف.</p><div class="tags"><span class="tag mgr">المدير فقط</span></div></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px;color:var(--navy)">⚖️ مجموعة القضايا والخصوم</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.13</span> المساعدة القضائية</h4><p>متابعة ملفات JA: الرقم، الموضوع، الحالة (مطلوب/مقبول/مرفوض)، مكتب المساعدة.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.14</span> المحضرون والتبليغ</h4><p>قائمة المحضرين القضائيين + جدول التبليغات (رسمي/إشعار) مع حالتها (مُرسَل/مُبلَّغ/مرتجع) + ربط بوثيقة PDF للتبليغ.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.15</span> الخبراء</h4><p>قائمة الخبراء (اسم، اختصاص، هاتف، محكمة) + مهام الخبرة لكل ملف مع أجل التقرير + زر «تسجيل الإيداع» + تنبيه تلقائي قبل الأجل.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.16</span> الحجز والتنفيذ</h4><p>متابعة إجراءات الحجز (عادي/لدى الغير/عقاري/على الراتب/مزاد) + مسار التنفيذ 6 خطوات داخل الملف (تبليغ، تكليف بالوفاء، شهادة عدم طعن...).</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.17</span> KYC</h4><p>التحقق من هوية الموكلين: NIN، جواز، RC، NIF + رفع الوثائق + شارة الاكتمال لكل موكل.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px;color:var(--navy)">🛡️ مجموعة الإدارة والصلاحيات</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.18</span> الفريق والصلاحيات</h4><p>أعضاء الفريق + 3 مفاتيح تحكم + مصفوفة صلاحيات + دعوة مساعد + إعادة تعيين كلمات المرور.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.19</span> المحامون الشركاء</h4><p>قائمة المحامين الشركاء + إضافة/تعديل/تعطيل + ترخيص مستقل لكل شريك + ربطه بملفاته. آخر مدير محمي من الحذف.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.20</span> الحسابات</h4><p>تغيير أدوار المستخدمين (manager/secretary/trainee) + سجل عمليات الحسابات (دخول، فشل، قفل، تغيير كلمة مرور).</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.21</span> بطاقة الإجازة</h4><p>رقم، إصدار، انتهاء، نقابة + تنبيه قبل 60 يوماً + سجل التجديدات.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.22</span> الإعدادات</h4><p>بيانات المكتب (NIF/NIS/RC/AI/TVA/الطابع)، كلمة المرور، النسخ الاحتياطي، النظام الجبائي (IFU/IBS)، محرر قواعد الآجال، إدارة الأعياد الثابتة والمتغيرة.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px;color:var(--navy)">📊 مجموعة البيانات والتقارير</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.23</span> التقارير</h4><p>نظرة عامة (حسب النوع/المرحلة/الشهر/الفريق، أكبر المتبقيات) + تقرير ضريبي G50/IFU/IBS.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.24</span> سجل العمليات</h4><p>من فعل ماذا ومتى. فلترة حسب المستخدم (مدير/سكرتيرة/متربص) + بحث نصي في العمليات.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.25</span> مكتبة الاجتهادات</h4><p>أرشيف الأحكام (محكمة، سنة، رقم، كلمات مفتاحية، نص) + قاموس مصطلحات AR/FR مع بحث فوري.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.26</span> الاستيراد والنسخ</h4><p>استيراد CSV مع اختيار الترميز (UTF-8 / Windows-1256) + معاينة أول 5 صفوف قبل الاستيراد + تصدير/استيراد JSON (مشفّر).</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.27</span> أرشفة QR</h4><p>توليد QR لكل ملف (diwan://case/&lt;رقم&gt;) + طباعة ملصقات A4 + مسح QR.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px;color:var(--navy)">🧭 مجموعة المساعدة والمشروع</h3>
+  <div class="screens">
+   <div class="screen-card"><h4><span class="n">6.28</span> التذكيرات</h4><p>جدول الجلسات والأقساط القريبة + 3 قوالب واتساب (جلسة، طلب مستندات، تذكير بقسط) بنص جاهز لكل موكل.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.29</span> بوابة الموكل</h4><p>معاينة تفاعلية لهاتف الموكل: المرحلة، الجلسة القادمة، الوثائق المشاركة فقط. لا يرى الأتعاب ولا الملاحظات.</p><div class="tags"><span class="tag mgr">المدير</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.30</span> الروابط القضائية</h4><p>4 أقسام: منصات وزارة العدل، القوانين والتشريع، التطبيقات، المحاكم العليا. تفتح في تبويب جديد.</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.31</span> عن النظام</h4><p>صفحة تسويقية بـ 6 ميزات + 5 أسئلة شائعة + زر «ابدأ الجولة».</p><div class="tags"><span class="tag">الجميع</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.32</span> الأسئلة الشائعة</h4><p>نفس صفحة Landing (مُعاد استخدامها — تُتيح الوصول السريع للأسئلة دون مغادرة النظام).</p><div class="tags"><span class="tag">الجميع</span></div></div>
+  </div>
+ </section>
+
+</div>
+
+<!-- PART 2 -->
+<div class="part">
+
+ <div class="part-cover">
+  <div class="label">الجزء الثاني</div>
+  <h2>دليل الاستخدام</h2>
+  <p>خطوات عملية لكل مهمة، مع سيناريوهات واقعية. موجّه للسكرتيرة، المتربص، الشريك، وكل من سيستعمل ديوان يومياً.</p>
+ </div>
+
+ <!-- 7 -->
+ <section class="section" id="s7">
+  <div class="section-head"><div class="num">7</div><h2>الإقلاع الأول والإعداد</h2></div>
+
+  <div class="subsection">
+   <h3>7.1 أول فتح للبرنامج</h3>
+   <ul class="steps">
+    <li><strong>افتح ملف</strong> <code>diwan-v9.7.html</code> في متصفح حديث (Chrome, Edge, Safari, Firefox).</li>
+    <li>تظهر نافذة <strong>الترحيب</strong> → اختر اللغة (العربية/الفرنسية).</li>
+    <li>اقرأ الخطوات الثلاث ثم اضغط <strong>«ابدأ الجولة»</strong>.</li>
+   </ul>
+  </div>
+
+  <div class="subsection">
+   <h3>7.2 🔐 إعداد كلمة مرور المدير (إلزامي — جديد في v9.7)</h3>
+   <div class="box warn">
+    <strong>⚠ خطوة حرجة لا يمكن تجاوزها</strong>
+    عند أول فتح، يطلب البرنامج تعيين <strong>كلمة مرور المدير</strong>. هذه الكلمة <strong>تشفّر كل بيانات المكتب</strong> على جهازك باستخدام AES-256. إذا نسيتها، <strong>لا يمكن استرجاع البيانات</strong>.
+   </div>
+   <ul class="steps">
+    <li>املأ كلمة المرور (8 خانات على الأقل، تحتوي حرفاً ورقماً) + التأكيد.</li>
+    <li>اضغط <strong>«تعيين»</strong>.</li>
+    <li>سيفتح البرنامج على لوحة التحكم مباشرة.</li>
+    <li>من الآن فصاعداً، في كل مرة تفتح فيها الملف، يطلب البرنامج كلمة المرور لفتح البيانات المشفّرة.</li>
+   </ul>
+   <div class="callout">
+    <strong>💡 نصيحة احترافية:</strong> استخدم مدير كلمات مرور (Bitwarden, 1Password) لتخزين كلمة مرور المدير. لا تكتبها على ورقة قرب الجهاز.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>7.3 بيانات المكتب</h3>
+   <ul class="steps">
+    <li>القائمة → 🛡️ الإدارة → ⚙️ الإعدادات.</li>
+    <li>بطاقة <strong>«بيانات المكتب»</strong> → زر <strong>«تعديل»</strong>.</li>
+    <li>املأ: الاسم، العنوان، NIF, NIS, RC, AI, الهاتف، البريد، RIB، TVA، الطابع.</li>
+    <li>اضغط حفظ.</li>
+   </ul>
+   <div class="box warn">
+    <strong>⚠ مهم جداً</strong>
+    هذه البيانات ستظهر على <strong>كل وصل أتعاب</strong> تطبعه. أخطاء فيها = أخطاء قانونية. راجعها مع محاسبك مرة واحدة.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>7.4 بطاقة الإجازة</h3>
+   <ul class="steps">
+    <li>الإدارة → 🪪 بطاقة الإجازة.</li>
+    <li>اضغط <strong>«تجديد»</strong> → أدخل رقم الإجازة وتواريخ الإصدار والانتهاء والنقابة.</li>
+    <li>البرنامج سيتذكرك تلقائياً قبل 60 يوماً من الانتهاء.</li>
+    <li>إذا كان لديك <strong>محامون شركاء</strong>، لكل واحد بطاقة مستقلة في شاشة «المحامون الشركاء».</li>
+   </ul>
+  </div>
+
+  <div class="subsection">
+   <h3>7.5 الفريق والصلاحيات</h3>
+   <ul class="steps">
+    <li>الإدارة → 👥 الفريق والصلاحيات.</li>
+    <li>راجع المفاتيح الثلاثة:
+     <ul>
+      <li><strong>«السكرتيرة ترى الأتعاب»</strong> → فعّلها فقط إذا كانت موثوقة تماماً.</li>
+      <li><strong>«السكرتيرة ترى هواتف الموكلين»</strong> → عادةً مفعّلة.</li>
+      <li><strong>«المتربص يرى كل الملفات»</strong> → اتركها <strong>معطّلة</strong> حتى يكسب ثقتك.</li>
+     </ul>
+    </li>
+    <li><strong>أضف محامياً شريكاً</strong> إن وُجد: زر «إضافة محامٍ شريك» → املأ اسمه ورقم قيده.</li>
+    <li>بعد الإضافة، سيرى الشريك ملفاته فقط عند فتح حسابه بكلمة مروره.</li>
+   </ul>
+  </div>
+
+  <div class="subsection">
+   <h3>7.6 قواعد الآجال والأعياد (جديد — أصبحت قابلة للتحرير)</h3>
+   <ul class="steps">
+    <li>الإعدادات → بطاقة <strong>«قواعد الآجال»</strong>.</li>
+    <li>جدول قابل للتعديل: كل قاعدة (استئناف، نقض، معارضة، استئناف جنح) لها:
+     <ul>
+      <li>الاسم (بالعربية والفرنسية).</li>
+      <li>المدة (عدد) + الوحدة (يوم/شهر).</li>
+      <li>تأجيل الخارج (شهور إضافية للمقيمين بالخارج — 2 افتراضياً).</li>
+      <li>زر حذف لأي قاعدة إضافية.</li>
+     </ul>
+    </li>
+    <li>زر <strong>«+ قاعدة»</strong> لإضافة أجل جديد (مثلاً: أجل استئناف خاص).</li>
+    <li>زر <strong>«حفظ القواعد»</strong> لتثبيت التعديلات.</li>
+    <li>زر <strong>«استعادة الافتراضي»</strong> لإعادة ضبط كل شيء.</li>
+   </ul>
+
+   <h4>الأعياد الثابتة (MM-DD)</h4>
+   <ul>
+    <li>القائمة الافتراضية: 01-01، 01-11 (عيد الثورة)، 05-01 (عيد العمال)، 07-05 (عيد الاستقلال).</li>
+    <li>أضف أياماً إضافية بصيغة MM-DD (مثلاً 12-25).</li>
+    <li>الصيغة تُتحقق: شهر بين 01-12، يوم صحيح.</li>
+   </ul>
+
+   <h4>الأعياد المتغيرة</h4>
+   <ul>
+    <li>عيد الفطر، الأضحى، المولد، عاشوراء — تتغير سنوياً.</li>
+    <li>أضف التاريخ المحدد لكل سنة عبر منتقي التاريخ.</li>
+    <li>تُستخدم للتنبيه إن انقضى أجل في يوم عطلة.</li>
+   </ul>
+   <div class="callout">
+    <strong>⚠ تنبيه قانوني:</strong> آجال التقاضي في الجزائر <strong>تقويمية</strong> (لا تُمدَّد تلقائياً إذا وقعت في عطلة). البرنامج يُظهر تحذيراً لكنه <strong>لا يُمدّد تلقائياً</strong> — تحقق من النص الساري قبل الاعتماد.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>7.7 النسخة الاحتياطية الأولى</h3>
+   <ul class="steps">
+    <li>الإعدادات → <strong>«تصدير كامل»</strong>.</li>
+    <li>يُنتج ملف <code>diwan-v9.7-YYYY-MM-DD.json</code> — <strong>مشفّراً بنفس كلمة مرورك</strong>.</li>
+    <li>احفظه في مجلد آمن <strong>خارج الجهاز</strong> (USB مشفّر، سحابة خاصة).</li>
+    <li>كرر هذه العملية <strong>أسبوعياً</strong> — البرنامج يُذكّرك إذا تأخرت أكثر من 7 أيام.</li>
+   </ul>
+   <div class="box bad">
+    <strong>🚨 قاعدة ذهبية:</strong> بدون نسخة احتياطية خارج الجهاز، تعطّل القرص الصلب أو حذف بيانات المتصفح = <strong>ضياع نهائي</strong>. لا يوجد استرجاع سحابي في النسخة الحالية.
+   </div>
+  </div>
+ </section>
+
+ <!-- 8 -->
+ <section class="section" id="s8">
+  <div class="section-head"><div class="num">8</div><h2>يومك الأول في ديوان</h2></div>
+
+  <div class="subsection">
+   <h3>🌅 الصباح: افتح لوحة التحكم</h3>
+   <p>في أول 30 ثانية ستعرف:</p>
+   <ul>
+    <li>كم <strong>جلسة</strong> لديك اليوم.</li>
+    <li>كم <strong>أجل</strong> يقترب خلال 3 أيام.</li>
+    <li>أكبر <strong>ملفات</strong> تحتاج انتباهك.</li>
+    <li>تنبيهات: ملفات بلا وكالة، رصيد أمانة سالب، التزام بطاقة الإجازة.</li>
+   </ul>
+   <p><strong>الإجراء الأول:</strong> إذا كانت هناك جلسة اليوم → انقر عليها → يفتح درج التفاصيل → راجع الوثائق، الملاحظات، الجلسة السابقة.</p>
+  </div>
+
+  <div class="subsection">
+   <h3>📁 إنشاء ملف قضية جديد (مع كشف تعارض المصالح)</h3>
+   <ol>
+    <li>من أي مكان → زر <strong>«+ ملف جديد»</strong>.</li>
+    <li>تفتح نافذة مقسّمة إلى قسمين:
+     <ul>
+      <li><strong>قسم بيانات القضية:</strong> الرقم، الموضوع (عربي/فرنسي)، النوع، الجهة، التاريخ/الساعة، الوكالة، المساعدة القضائية، التقادم، المكلف، <strong>المحامي المسؤول</strong> (للمكاتب متعددة الشركاء).</li>
+      <li><strong>قسم الأطراف:</strong> الطرف 1 ثابت كـ«موكل»، الطرف 2 خصم افتراضي، وزر «+ إضافة طرف» يضيف أطرافاً ثالثة ورابعة... <strong>مهم للقضايا المتعددة الأطراف.</strong></li>
+     </ul>
+    </li>
+    <li>لكل طرف املأ:
+     <ul>
+      <li>الصفة (موكل / خصم / طرف آخر + صفة حرة).</li>
+      <li>الاسم واللقب (عربي/فرنسي).</li>
+      <li>تاريخ ومكان الميلاد.</li>
+      <li>نوع الشخص: طبيعي أو معنوي (إذا معنوي → حقل NIF يظهر).</li>
+      <li><strong>نوع الوثيقة:</strong> لا شيء / بطاقة وطنية NIN / جواز سفر / رخصة سياقة.</li>
+      <li>رقم الوثيقة + تاريخ الإصدار + تاريخ الانتهاء (عند اختيار نوع).</li>
+      <li>مكان الإقامة.</li>
+     </ul>
+    </li>
+    <li>اضغط <strong>«حفظ»</strong>.</li>
+   </ol>
+
+   <div class="box warn">
+    <strong>⚠ كشف تعارض المصالح تلقائياً (ميزة جديدة في v9.7)</strong>
+    عند الضغط على «حفظ»، يفحص البرنامج كل الأطراف مقابل كل الملفات القائمة بـ:
+    <ul>
+     <li><strong>NIN متطابق</strong> → تصنيف «حرج».</li>
+     <li><strong>NIF متطابق</strong> (للشخص المعنوي) → تصنيف «حرج».</li>
+     <li><strong>موكل/خصم متقابلان</strong> بين ملفين → تصنيف «مرتفع».</li>
+     <li><strong>اسم متطابق</strong> → تصنيف «متوسط».</li>
+     <li><strong>اسم متشابه</strong> (≥ 60% تطابق) → تصنيف «متوسط».</li>
+    </ul>
+    إذا وُجد تصنيف «حرج» أو «مرتفع»، <strong>لا يمكن حفظ الملف</strong> إلا بكتابة العبارة حرفياً: <strong>«قبلت المسؤولية»</strong>. أي طريقة أخرى (إلغاء، Esc) تُسجَّل تلقائياً كـ<strong>رفض للملف</strong> في سجل العمليات.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>📅 إضافة جلسة إلى ملف</h3>
+   <ol>
+    <li>افتح الملف → زر <strong>«+ جلسة»</strong>.</li>
+    <li>املأ: التاريخ، النوع، ماذا دار في الجلسة، الجلسة التالية (اختياري).</li>
+    <li>اضغط حفظ.</li>
+   </ol>
+   <div class="box ok">
+    <strong>الفائدة</strong>
+    سجل كامل يُظهر مسار القضية للموكل عبر بوابة الموكل.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>📄 توليد عريضة افتتاح دعوى</h3>
+   <ol>
+    <li>العمل اليومي → <strong>✍️ مولّد الوثائق</strong>.</li>
+    <li>اختر النوع: <strong>«عريضة افتتاح دعوى»</strong>.</li>
+    <li>املأ: الجهة، رقم الملف، المدّعي، المدّعى عليه، الموضوع، الوقائع، الطلبات، الأسانيد، <strong>المادة القانونية</strong>، بيانات المحامي.</li>
+    <li><strong>انظر إلى المعاينة الحية على اليمين</strong> — تتحدث معك حرفاً بحرف.</li>
+    <li>اضغط <strong>«طباعة / PDF»</strong> → يفتح نافذة الطباعة على A4.</li>
+   </ol>
+   <div class="box warn"><strong>تحذير البرنامج</strong>«تحقق من النص القانوني الساري قبل الإيداع».</div>
+   <div class="box info">
+    <strong>للمتربص فقط:</strong> عند محاولة الطباعة، يتحقق البرنامج من وجود <strong>مسودة معتمدة من المدير</strong> بنفس النوع ورقم الملف. إن لم توجد، تُحوَّل تلقائياً إلى «موافقات» كمسودة معلّقة.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>💰 إنشاء وصل أتعاب رسمي</h3>
+   <ol>
+    <li>💰 المالية → <strong>الأتعاب والحسابات</strong>.</li>
+    <li>تبويب <strong>«وصولات الأتعاب»</strong>.</li>
+    <li>زر <strong>«+ وصل أتعاب جديد»</strong> — يُولَّد رقم الوصل تلقائياً (REC-2026-0001).</li>
+    <li>املأ: الملف، التاريخ، طريقة الدفع، TVA (19%)، الطابع (1%)، وصف البند، الكمية، السعر.</li>
+    <li>اضغط حفظ → يفتح <strong>معاينة A4 كاملة</strong> مع NIF/NIS/RC/AI وRIB المكتب.</li>
+    <li>زر <strong>«طباعة»</strong> → طباعة على ورق عادي.</li>
+    <li>زر <strong>«تحديد كمُسَدَّد»</strong> → يُسجّل الدفعة في ملف القضية تلقائياً + يولّد مرجع دفع.</li>
+   </ol>
+  </div>
+
+  <div class="subsection">
+   <h3>💼 حساب الأمانات (التزام قانوني)</h3>
+   <ol>
+    <li>💰 المالية → تبويب <strong>«الأمانات»</strong>.</li>
+    <li>زر <strong>«+ إيداع أمانة»</strong>: الملف، المبلغ، المرجع، البيان.</li>
+    <li><strong>قاعدة ذهبية:</strong> لا يمكنك سحب أكثر من الرصيد المتاح — البرنامج يرفض تلقائياً برسالة «المبلغ أكبر من الرصيد المتاح».</li>
+    <li>تحقق من الرصيد الصافي أعلى الشاشة — إذا ظهر <strong>بالأحمر</strong> فهناك خطأ يجب مراجعته فوراً.</li>
+   </ol>
+  </div>
+
+  <div class="subsection">
+   <h3>📊 توليد التقرير الضريبي (G50)</h3>
+   <ol>
+    <li>📊 البيانات → <strong>التقارير</strong>.</li>
+    <li>تبويب <strong>«التقرير الضريبي»</strong>.</li>
+    <li>راجع: إجمالي المحصّل (HT)، TVA مستحقة، الطابع الجبائي، <strong>إجمالي G50</strong>، IFU 5%، IBS 23%.</li>
+    <li><strong>لا تعتمد هذه الأرقام</strong> قبل مراجعتها مع محاسب معتمد — البرنامج يُذكّرك بذلك صراحة.</li>
+   </ol>
+   <div class="box bad"><strong>G50 ليس جمع وصولات:</strong> يشمل CNAS، IRG، TAP. الأرقام هنا للعرض فقط.</div>
+  </div>
+
+  <div class="subsection">
+   <h3>👁️ عرض بوابة الموكل</h3>
+   <ol>
+    <li>🧭 المساعدة → <strong>بوابة الموكل</strong>.</li>
+    <li>اختر ملفاً من القائمة.</li>
+    <li>يظهر <strong>هاتف وهمي</strong> يعرض ما يراه موكلك.</li>
+    <li>راجع: ماذا يرى؟ ماذا لا يرى؟ (لن يرى أتعابك، ملاحظاتك، ملفات غيره).</li>
+   </ol>
+  </div>
+
+  <div class="subsection">
+   <h3>🖨️ طباعة كشف حساب موكل</h3>
+   <ol>
+    <li>الموكلون → اختر موكلاً.</li>
+    <li>زر <strong>«كشف حساب الموكل»</strong>.</li>
+    <li>صفحة A4 تحتوي: كل ملفاته، كل اتفاقاته، كل مدفوعاته، إجمالي المتبقي، وسجل الدفعات.</li>
+    <li>طباعة أو PDF.</li>
+   </ol>
+  </div>
+
+  <div class="subsection">
+   <h3>📎 رفع وثيقة (metadata مقابل ملف فعلي) — توضيح مهم</h3>
+   <p>عند رفع وثيقة، تُحفظ <strong>طبقتان</strong>:</p>
+   <ul>
+    <li><strong>Metadata (JSON):</strong> الاسم، النوع (PDF/DOC/IMG)، الحجم، التاريخ، المشاركة. تُخزَّن مع باقي البيانات المشفّرة.</li>
+    <li><strong>الملف الفعلي (IndexedDB):</strong> يُخزَّن في قاعدة بيانات منفصلة داخل المتصفح (لأن الحجم الكبير لا يناسب localStorage).</li>
+   </ul>
+   <p>إذا فشل حفظ الملف الفعلي (مثلاً مساحة ممتلئة)، <strong>البيانات الوصفية تبقى محفوظة</strong> وترى شارة «لا يمكن التحميل» — يمكنك إعادة الرفع لاحقاً. لن تفقد معلومات الوثيقة.</p>
+  </div>
+ </section>
+
+ <!-- 9 -->
+ <section class="section" id="s9">
+  <div class="section-head"><div class="num">9</div><h2>اثنا عشر سيناريو عملي</h2></div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">1</div><div><h4>استقبال موكل جديد</h4><div class="meta">المدة المتوقعة: 8 دقائق</div></div></div>
+   <ol>
+    <li>اسأل الموكل عن المستندات → اطلبها.</li>
+    <li>«+ ملف جديد» → املأ البيانات + بيانات الموكل كاملة (NIN، الميلاد، العنوان).</li>
+    <li>حدد الوكالة: «لم تُودَع بعد» (ستودع لاحقاً).</li>
+    <li>حدد الجلسة الأولى إن كانت معروفة.</li>
+    <li>اذهب إلى <strong>KYC</strong> → «رفع KYC» → أدخل: نوع الوثيقة، رقمها، تاريخها.</li>
+    <li>اطبع <strong>سند توكيل</strong> من مولّد الوثائق → أعطه للموكل ليوقّعه.</li>
+    <li>بعد التوقيع → افتح الملف → عدّل «الوكالة موقعة؟» → نعم.</li>
+   </ol>
+   <div class="box ok"><strong>النتيجة:</strong> ملف متكامل + وكالة + KYC في 8 دقائق.</div>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">2</div><div><h4>جلسة اليوم</h4><div class="meta">المدة: 3 دقائق قبل الخروج</div></div></div>
+   <ol>
+    <li>افتح لوحة التحكم.</li>
+    <li>ستجد جلسة اليوم في التقويم.</li>
+    <li>انقر عليها → درج التفاصيل.</li>
+    <li>راجع: آخر جلسة (ماذا دار)، آخر مذكرة، حالة الوثائق.</li>
+    <li><strong>اطبع</strong> أي وثيقة ناقصة.</li>
+    <li><strong>صوّر</strong> الوثائق بالكاميرا → سكانر PDF → ترفع تلقائياً إلى الملف.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">3</div><div><h4>الأجل الحرج (استئناف بعد 5 أيام)</h4></div></div>
+   <ol>
+    <li>لوحة التحكم → الآجال القريبة.</li>
+    <li>سترى الاستئناف <strong>باللون الأحمر</strong>.</li>
+    <li>اضغط عليه → يفتح الملف.</li>
+    <li><strong>حاسبة الآجال:</strong> التاريخ = تاريخ التبليغ، استثناء العطل = مفعّل، احسب.</li>
+    <li><strong>زر «حفظ الأجل في ملف»</strong> → يُضاف إلى قائمة الآجال.</li>
+    <li>انتقل إلى <strong>مولّد الوثائق</strong> → «عريضة استئناف».</li>
+    <li>املأ الحقول → طباعة.</li>
+    <li>أرسل للمتربص للتحقق → «إرسال للموافقة».</li>
+    <li>راجع المسودة → اعتمد → اطبع.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">4</div><div><h4>موكل يطلب تحديثاً هاتفياً</h4></div></div>
+   <ol>
+    <li>افتح الملف من البحث (Ctrl+K).</li>
+    <li>في الدرج: راجع الحالة الحالية + آخر جلسة + الجلسة القادمة.</li>
+    <li>زر <strong>«واتساب»</strong> → يفتح واتساب الموكل مع رسالة جاهزة.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">5</div><div><h4>موكل تأخر في الدفع (8 أيام بعد الاتفاق)</h4></div></div>
+   <ol>
+    <li>الأتعاب → نظرة عامة.</li>
+    <li>جد الملف → المتبقي بالأحمر.</li>
+    <li><strong>الخطوة 1:</strong> ذكّر بودّ عبر التذكيرات → «إرسال تذكير» (رسالة واتساب).</li>
+    <li><strong>الخطوة 2 (إذا لم يستجب):</strong> مولّد الوثائق → «إعذار بأتعاب مستحقة».</li>
+    <li>املأ المبلغ والأجل.</li>
+    <li>اطبع وأرسل بالبريد المسجّل.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">6</div><div><h4>خبير تأخر في تسليم تقريره</h4></div></div>
+   <ol>
+    <li>⚖️ القضايا → <strong>الخبراء</strong>.</li>
+    <li>ابحث عن المهمة → تظهر باللون البرتقالي.</li>
+    <li>تنبيه تلقائي ظهر منذ 7 أيام ولم يُتحرك.</li>
+    <li><strong>اتصل بالخبير</strong> (هاتفه في البطاقة).</li>
+    <li>إذا وصل التقرير → زر <strong>«تسجيل الإيداع»</strong>.</li>
+    <li>ارفع نسخة عبر سكانر PDF.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">7</div><div><h4>نهاية الشهر — النسخة الاحتياطية والتقرير</h4></div></div>
+   <ol>
+    <li><strong>أولاً:</strong> الإعدادات → <strong>«تصدير كامل»</strong> → احفظ الملف (مشفّراً).</li>
+    <li><strong>ثانياً:</strong> التقارير → نظرة عامة.</li>
+    <li>راجع: عدد الملفات النشطة، التحصيل الشهري، المتبقيات، أداء الفريق.</li>
+    <li><strong>ثالثاً:</strong> التقرير الضريبي.</li>
+    <li>أرسل كل شيء لمحاسبك عبر البريد.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">8</div><div><h4>قبول ملف بتعارض مصالح</h4><div class="meta">قرار مهني حرج</div></div></div>
+   <ol>
+    <li>عند الضغط على «حفظ» في ملف جديد → يظهر تنبيه <strong>«تعارض مصالح محتمل»</strong>.</li>
+    <li>اقرأ <strong>كل</strong> سبب مرصود بعناية:
+     <ul>
+      <li>«NIN مطابق: أحمد بن علي — موكل — الملف 2026/00012».</li>
+      <li>«موكل/خصم متقابلان: خديجة بوزيد — خصم — الملف 2026/00045».</li>
+     </ul>
+    </li>
+    <li><strong>سيناريو القبول:</strong> إذا قررت أن التعارض لا يمنع (مثلاً قضية مختلفة، طرف مختلف بالهوية)، اكتب في الحقل: <strong>«قبلت المسؤولية»</strong> واضغط «قبول الملف».</li>
+    <li><strong>سيناريو الرفض:</strong> اضغط «رفض الملف» أو Esc. يُسجَّل تلقائياً في سجل العمليات + سجل قبول الملفات (intakeLog).</li>
+    <li>كل القرارات (قبول/رفض) قابلة للمراجعة في <strong>الإعدادات → سجل قبول الملفات</strong>.</li>
+   </ol>
+   <div class="box bad"><strong>🚨 تذكير مهني:</strong> القبول بعبارة «قبلت المسؤولية» يعني تحمّلك مسؤولية مهنية. راجع قواعد آداب المهنة قبل القبول.</div>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">9</div><div><h4>محامٍ شريك يفتح حسابه</h4></div></div>
+   <ol>
+    <li>المدير: الإدارة → <strong>المحامون الشركاء</strong> → «+ إضافة محامٍ شريك».</li>
+    <li>املأ: الاسم (عربي/فرنسي)، رقم القيد، الهاتف، البريد، بطاقة الإجازة.</li>
+    <li>اضغط حفظ.</li>
+    <li>الشريك يفتح البرنامج على جهازه (نسخة مستقلة) → يُطلب منه تعيين كلمة مروره الخاصة.</li>
+    <li>يرى <strong>ملفاته فقط</strong> (حيث يكون lawyerId مساوياً له).</li>
+    <li>عند تبديل الدور من القائمة العلوية، يُطلب من كل مستخدم كلمة مروره — لا تنقّل خفي.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">10</div><div><h4>التصدير المشفّر ونقله إلى جهاز آخر</h4></div></div>
+   <ol>
+    <li>على الجهاز القديم: الإعدادات → «تصدير كامل» → احفظ الملف <code>.json</code>.</li>
+    <li>الملف <strong>مشفّر بنفس كلمة مرور المدير</strong>.</li>
+    <li>انقله للجهاز الجديد (USB/بريد/سحابة).</li>
+    <li>على الجهاز الجديد: افتح البرنامج → عند طلب الإعداد، <strong>لا تُعيّن كلمة مرور جديدة</strong>.</li>
+    <li>افتح الإعدادات → «استرجاع من نسخة سابقة» → اختر الملف.</li>
+    <li>سيطلب البرنامج <strong>كلمة المرور القديمة</strong> لفك التشفير.</li>
+    <li>تأكد من ظهور كل الملفات والموكلين والوصولات.</li>
+   </ol>
+   <div class="box warn"><strong>⚠ إذا نسيت كلمة المرور القديمة → الملف لا يمكن استرجاعه.</strong></div>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">11</div><div><h4>المتربص يطبع مستنداً</h4></div></div>
+   <ol>
+    <li>المتربص يفتح مولّد الوثائق → يملأ عريضة.</li>
+    <li>يضغط <strong>«إرسال للموافقة»</strong> → تُحفظ المسودة كـ«معلّقة».</li>
+    <li>المدير يفتح <strong>الموافقات</strong> → يرى المسودة → يعتمد أو يرفض مع سبب.</li>
+    <li>إذا اعتمد، يظهر للمتربص زر «إعادة طباعة» وزر «طباعة» يعملان.</li>
+    <li>إذا حاول المتربص الطباعة قبل الموافقة → يُنبَّه ويُحوَّل إلى إرسال للموافقة.</li>
+   </ol>
+  </div>
+
+  <div class="scenario">
+   <div class="scenario-h"><div class="n">12</div><div><h4>KYC لموكل جديد (4 خطوات)</h4></div></div>
+   <ol>
+    <li>⚖️ القضايا → <strong>KYC</strong>.</li>
+    <li>جد الموكل → يظهر بحالة «ناقص» إذا كانت بياناته أو وثائقه غير مكتملة.</li>
+    <li>اضغط <strong>«رفع KYC»</strong> → أدخل: اسم الوثيقة (مثلاً «بطاقة التعريف الأمامية»)، نوعها (CIN/جواز/RC/NIF/أخرى)، ارفع الملف.</li>
+    <li>بعد الرفع → تتحول الحالة إلى <strong>«KYC مكتمل»</strong> إذا كان NIN موجوداً + وثيقة واحدة على الأقل.</li>
+   </ol>
+  </div>
+ </section>
+
+ <!-- 10 -->
+ <section class="section" id="s10">
+  <div class="section-head"><div class="num">10</div><h2>الأسئلة الشائعة والمشاكل</h2></div>
+
+  <div class="subsection">
+   <h3>❓ هل بياناتي آمنة؟</h3>
+   <p><strong>نعم، بقوة، وبشروط:</strong></p>
+   <ul>
+    <li>كل شيء محفوظ <strong>في جهازك</strong> فقط، <strong>مشفّراً بـ AES-256</strong>.</li>
+    <li>مفتاح التشفير مشتق من <strong>كلمة مرورك</strong> عبر PBKDF2-SHA256 بـ 200,000 دورة.</li>
+    <li>لا يخرج أي شيء إلى الإنترنت.</li>
+    <li><strong>ولكن</strong> — إذا تعطّل الجهاز أو نسيت كلمة المرور، تضيع البيانات.</li>
+    <li><strong>الحماية:</strong> نسخة احتياطية أسبوعية إلزامية مشفّرة.</li>
+    <li>النسخة السحابية القادمة ستُشفّر البيانات أثناء النقل والتخزين وفق القانون 18-07.</li>
+   </ul>
+
+   <h3>❓ ماذا لو نسيت كلمة المرور؟</h3>
+   <div class="box bad">
+    <strong>لا يوجد استرجاع تلقائي.</strong> هذا تصميم أمني وليس عيباً. الحل الوحيد:
+    <ol>
+     <li>إذا كان لديك <strong>نسخة احتياطية مشفّرة</strong> وتتذكر كلمة مرورها → استوردها على جهاز آخر.</li>
+     <li>إذا لم تتذكر → البيانات <strong>لا يمكن استرجاعها</strong>. ابدأ من جديد.</li>
+    </ol>
+    <strong>لذلك:</strong> احفظ كلمة المرور في مدير كلمات مرور موثوق.
+   </div>
+
+   <h3>❓ لماذا يطلب مني البرنامج كلمة مرور عند تبديل الدور؟</h3>
+   <p>لمنع أي مستخدم من <strong>«التلبّس»</strong> بشخصية غيره. هذه حماية أساسية في المكاتب التي فيها أكثر من مستخدم على نفس الجهاز. بعد 5 محاولات فاشلة، يُقفل الحساب 60 ثانية.</p>
+
+   <h3>❓ لماذا لا أرى بعض الشاشات في القائمة؟</h3>
+   <p>لأنك <strong>سكرتيرة</strong> أو <strong>متربص</strong> أو <strong>شريك</strong>. المالية، الإدارة، البيانات، القضايا المتقدمة — للمدير فقط. الشريك يرى ملفاته فقط. اطلب من المدير تعديل صلاحياتك من «الفريق».</p>
+
+   <h3>❓ هل يمكنني استرجاع ملف حذفته؟</h3>
+   <ul>
+    <li>لا يوجد زر «حذف ملف» — الملفات <strong>لا تُحذف نهائياً</strong>.</li>
+    <li>إذا حذفت مهمة أو مصروفاً، اضغط <strong>«تراجع»</strong> في الرسالة المنبثقة خلال 5 ثوان.</li>
+    <li>بعدها: استرجع من آخر نسخة احتياطية.</li>
+   </ul>
+
+   <h3>❓ لماذا لا يظهر ملف معين في نتائج البحث؟</h3>
+   <ul>
+    <li>إذا كان <strong>سرياً</strong>: لن يظهر لغير المدير.</li>
+    <li>إذا كان الملف لمتربص ولم يُكلّفه به المدير.</li>
+    <li>جرّب البحث برقم الملف مباشرة (أكثر دقة من الاسم).</li>
+   </ul>
+
+   <h3>❓ زر واتساب لا يعمل</h3>
+   <ul>
+    <li>تأكد أن رقم هاتف الموكل مُدخل بشكل صحيح في بطاقة الموكل.</li>
+    <li>تأكد أن البرنامج يستطيع فتح روابط <code>wa.me</code>.</li>
+    <li>إذا لم يظهر الزر أساساً → لا يوجد رقم هاتف في بيانات الموكل.</li>
+   </ul>
+
+   <h3>❓ المستند المطبوع يخرج صفحتين بدل صفحة</h3>
+   <ul>
+    <li>بعض العرائض الطويلة تحتاج صفحتين — طبيعي.</li>
+    <li>لتقليل الحجم: قلّل النص في الحقول، أو قلّل حجم الخط من إعدادات الطباعة في المتصفح.</li>
+   </ul>
+
+   <h3>❓ الطباعة لا تظهر في نافذة جديدة</h3>
+   <p>البرنامج يستخدم <strong>iframe مخفي</strong> للطباعة أولاً، وإن فشل يستخدم نافذة جديدة. إن حجب المتصفح النوافذ، اسمح بها لهذا الملف (شريط العناوين → أيقونة الحجب → «السماح دائماً»).</p>
+
+   <h3>❓ هل يمكن استخدام البرنامج على الهاتف؟</h3>
+   <ul>
+    <li><strong>نعم</strong>، مصمّم أصلاً للموبايل (responsive).</li>
+    <li>القائمة الجانبية تُفتح بزر ☰ أعلى اليسار.</li>
+    <li>جميع الوظائف تعمل، والطباعة تعمل عبر مشاركة PDF.</li>
+   </ul>
+
+   <h3>❓ كيف أنقل بياناتي إلى جهاز آخر؟</h3>
+   <ol>
+    <li>على الجهاز القديم: الإعدادات → «تصدير كامل» → احفظ ملف JSON (مشفّر).</li>
+    <li>على الجهاز الجديد: الإعدادات → «استرجاع من نسخة سابقة» → اختر الملف → أدخل كلمة المرور القديمة.</li>
+    <li>تأكد من ظهور كل الملفات والموكلين والوصولات.</li>
+   </ol>
+
+   <h3>❓ هل يمكن استرجاع نسخة مشفّرة على جهاز آخر؟</h3>
+   <p><strong>نعم، بشرط:</strong> معرفة <strong>نفس كلمة المرور</strong> التي شفّرت النسخة. إذا كانت كلمة المرور مختلفة على الجهاز الجديد، يُرفض فك التشفير برسالة «تعذّر فك التشفير — تحقق من كلمة المرور».</p>
+
+   <h3>❓ ماذا يعني «المتربص لا يطبع بدون موافقة»؟</h3>
+   <p>عند محاولة المتربص طباعة أي مستند من مولّد الوثائق، يتحقق البرنامج من وجود <strong>مسودة معتمدة</strong> بنفس النوع ورقم الملف. إن لم توجد، يُرسل تلقائياً مسودة للمدير بدل الطباعة. هذا يحمي المكتب من طباعة مستندات غير مراجعة.</p>
+  </div>
+ </section>
+
+ <!-- 11 -->
+ <section class="section" id="s11">
+  <div class="section-head"><div class="num">11</div><h2>الملاحق</h2></div>
+
+  <div class="subsection">
+   <h3>11.1 اختصارات لوحة المفاتيح</h3>
+   <table>
+    <thead><tr><th>الاختصار</th><th>الوظيفة</th></tr></thead>
+    <tbody>
+     <tr><td><code>Ctrl + K</code></td><td>البحث السريع</td></tr>
+     <tr><td><code>N</code></td><td>ملف جديد (للمدير/سكرتيرة فقط)</td></tr>
+     <tr><td><code>T</code></td><td>مهمة جديدة</td></tr>
+     <tr><td><code>Esc</code></td><td>إغلاق أي نافذة أو درج</td></tr>
+     <tr><td><code>Enter</code></td><td>تأكيد في النماذج / فتح وصل أتعاب محدد</td></tr>
+     <tr><td><code>Enter / Space</code> على عنوان مجموعة</td><td>فتح/طي المجموعة</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <div class="subsection">
+   <h3>11.2 مسرد المصطلحات</h3>
+   <table>
+    <thead><tr><th>المصطلح</th><th>التعريف</th></tr></thead>
+    <tbody>
+     <tr><td><strong>Compte Séquestre</strong></td><td>حساب الأمانات — مبالغ الموكلين المؤقتة، منفصلة تماماً عن أتعاب المكتب</td></tr>
+     <tr><td><strong>KYC</strong></td><td>Know Your Customer — التحقق من هوية الموكل</td></tr>
+     <tr><td><strong>G50</strong></td><td>التصريح الشهري للضرائب والرسوم في الجزائر</td></tr>
+     <tr><td><strong>IFU</strong></td><td>الضريبة الجزافية الوحيدة — للمحامي الحر (5%)</td></tr>
+     <tr><td><strong>IBS</strong></td><td>ضريبة أرباح الشركات — للمكاتب في شكل شركة (23%)</td></tr>
+     <tr><td><strong>TVA</strong></td><td>الضريبة على القيمة المضافة (19%)</td></tr>
+     <tr><td><strong>الطابع الجبائي</strong></td><td>رسم جبائي صغير على كل وصل (1% تقريباً، بحد أدنى 100 دج)</td></tr>
+     <tr><td><strong>NIF / NIS / RC / AI</strong></td><td>المعرفات الجبائية والتجارية الإلزامية على كل وثيقة مالية</td></tr>
+     <tr><td><strong>JA</strong></td><td>المساعدة القضائية — تمثيل مجاني يوفره القضاء</td></tr>
+     <tr><td><strong>PBKDF2</strong></td><td>خوارزمية اشتقاق مفتاح من كلمة مرور (تُضعف هجمات التخمين)</td></tr>
+     <tr><td><strong>AES-GCM-256</strong></td><td>خوارزمية تشفير متماثل قوية تُستخدم لحماية البيانات</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <div class="subsection">
+   <h3>11.3 مصفوفة الصلاحيات الكاملة (4 أدوار)</h3>
+   <table>
+    <thead><tr><th>الوظيفة</th><th>المدير</th><th>الشريك</th><th>السكرتيرة</th><th>المتربص</th></tr></thead>
+    <tbody>
+     <tr><td>لوحة التحكم</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td></tr>
+     <tr><td>الملفات — عرض</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بدون سري</td><td>مكلف فقط</td></tr>
+     <tr><td>الملفات — إنشاء</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-no">✗</td></tr>
+     <tr><td>ملف سري</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>الجلسات والآجال</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td></tr>
+     <tr><td>المهام</td><td class="chk-yes">✓</td><td>ملفاته</td><td class="chk-yes">✓</td><td>الخاصة</td></tr>
+     <tr><td>الموكلون</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-no">✗</td></tr>
+     <tr><td>الوثائق</td><td class="chk-yes">✓</td><td>ملفاته</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td></tr>
+     <tr><td>مولّد الوثائق</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td>+ موافقة</td></tr>
+     <tr><td>حاسبة الآجال</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td><td class="chk-yes">✓</td></tr>
+     <tr><td>الأتعاب</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+     <tr><td>وصولات الأتعاب</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+     <tr><td>الأمانات</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+     <tr><td>المصاريف</td><td class="chk-yes">✓</td><td>ملفاته</td><td>بإذن</td><td class="chk-no">✗</td></tr>
+     <tr><td>التقارير</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>سجل العمليات</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>الفريق والصلاحيات</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>المحامون الشركاء</td><td class="chk-yes">✓</td><td>بطاقته فقط</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>الإعدادات</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>بوابة الموكل</td><td class="chk-yes">✓</td><td>ملفاته</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>بطاقة الإجازة</td><td class="chk-yes">✓</td><td>بطاقته</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>المساعدة القضائية</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>المحضرون</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>الخبراء</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>التنفيذ</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>حاسبة الرسوم</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>KYC</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>التذكيرات</td><td class="chk-yes">✓</td><td>ملفاته</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>HR / الرواتب</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>الحسابات</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+     <tr><td>QR</td><td class="chk-yes">✓</td><td class="chk-no">✗</td><td class="chk-no">✗</td><td class="chk-no">✗</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <div class="subsection">
+   <h3>11.4 قائمة المستندات الجاهزة (18 قالباً في مولّد الوثائق)</h3>
+   <table>
+    <thead><tr><th>#</th><th>المستند</th><th>يُستخدم في</th><th>الإلزامية</th></tr></thead>
+    <tbody>
+     <tr><td>1</td><td>عريضة افتتاح دعوى</td><td>بدء الدعوى</td><td class="chk-yes">✓</td></tr>
+     <tr><td>2</td><td>عريضة استئناف</td><td>الطعن في حكم</td><td class="chk-yes">✓</td></tr>
+     <tr><td>3</td><td>عريضة طعن بالنقض</td><td>الطعن أمام المحكمة العليا</td><td class="chk-yes">✓</td></tr>
+     <tr><td>4</td><td>مذكرة جوابية</td><td>الرد على دعوى</td><td>مستحسن</td></tr>
+     <tr><td>5</td><td>مذكرة دفاع</td><td>الدفاع ضد دعوى</td><td>مستحسن</td></tr>
+     <tr><td>6</td><td>سند توكيل</td><td>تفويض المحامي</td><td class="chk-yes">✓ إلزامي</td></tr>
+     <tr><td>7</td><td>عقد اتفاق أتعاب</td><td>تحديد العلاقة المالية</td><td>مستحسن جداً</td></tr>
+     <tr><td>8</td><td>وصل أتعاب (مبسط/رسمي/غير محصّل)</td><td>إثبات الدفع</td><td class="chk-yes">✓ إلزامي</td></tr>
+     <tr><td>9</td><td>وصل تسليم وثائق</td><td>إثبات استلام</td><td>مستحسن</td></tr>
+     <tr><td>10</td><td>محضر استلام ملف</td><td>بداية التكليف</td><td>مستحسن</td></tr>
+     <tr><td>11</td><td>محضر تسليم ملف</td><td>نهاية التكليف</td><td>مستحسن</td></tr>
+     <tr><td>12</td><td>طلب تأجيل جلسة</td><td>للقاضي</td><td>مستحسن</td></tr>
+     <tr><td>13</td><td>طلب نسخة حكم</td><td>للتنفيذ</td><td>مستحسن</td></tr>
+     <tr><td>14</td><td>شهادة عدم طعن</td><td>مطلوبة للتنفيذ</td><td class="chk-yes">✓</td></tr>
+     <tr><td>15</td><td>إنذار رسمي</td><td>إعذار قانوني</td><td>مستحسن</td></tr>
+     <tr><td>16</td><td>إعذار بأتعاب</td><td>للموكل المتأخر</td><td>مستحسن</td></tr>
+     <tr><td>17</td><td>عريضة معارضة</td><td>الطعن في حكم غيابي</td><td>مستحسن</td></tr>
+     <tr><td>18</td><td>عريضة طعن (سند عام)</td><td>حالات خاصة</td><td>مستحسن</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <div class="subsection">
+   <h3>11.5 🔒 الأمان والتشفير — كيف تحمي ديوان بياناتك</h3>
+   <p>هذا القسم مهم لكل مستخدم، خاصة من يحفظ ملفات موكلين حساسة. اقرأه مرة واحدة على الأقل.</p>
+
+   <h4>دورة حياة البيانات</h4>
+   <ol>
+    <li><strong>الإدخال:</strong> تكتب اسم موكل، ترفع وثيقة، تُسجّل دفعة.</li>
+    <li><strong>التجميع:</strong> يجمعها البرنامج في كائن JSON واحد.</li>
+    <li><strong>التشفير:</strong> يُشفّرها بمفتاح <strong>AES-GCM-256</strong> مشتق من كلمة مرور المدير.</li>
+    <li><strong>التخزين:</strong> تُحفظ في <strong>localStorage</strong> داخل متصفحك (بحجم ~5MB، والملفات الفعلية في IndexedDB).</li>
+    <li><strong>الفتح التالي:</strong> يطلب البرنامج كلمة المرور → يشتق المفتاح → يفك التشفير → يعرض البيانات.</li>
+   </ol>
+
+   <h4>خوارزميات الحماية</h4>
+   <table>
+    <thead><tr><th>الطبقة</th><th>الخوارزمية</th><th>المعاملات</th></tr></thead>
+    <tbody>
+     <tr><td>تشفير البيانات في الراحة</td><td>AES-GCM-256</td><td>IV عشوائي 12 بايت في كل حفظ</td></tr>
+     <tr><td>اشتقاق مفتاح التشفير</td><td>PBKDF2-SHA256</td><td>200,000 دورة + ملح عشوائي 16 بايت</td></tr>
+     <tr><td>كلمة مرور كل مستخدم</td><td>PBKDF2-SHA256</td><td>150,000 دورة + ملح عشوائي 16 بايت</td></tr>
+     <tr><td>قفل الحساب بعد فشل</td><td>عداد محلي</td><td>5 محاولات → 60 ثانية قفل</td></tr>
+    </tbody>
+   </table>
+
+   <h4>ما تحميك منه هذه الطبقات</h4>
+   <ul>
+    <li>✅ <strong>سرقة الجهاز:</strong> الملف <code>localStorage</code> مشفّر — لا يمكن قراءته بدون كلمة المرور.</li>
+    <li>✅ <strong>سرقة النسخة الاحتياطية:</strong> الملف <code>.json</code> مشفّر بنفس الطريقة.</li>
+    <li>✅ <strong>التلبّس بالشخصية:</strong> تبديل الدور يتطلب كلمة مرور المستخدم الهدف.</li>
+    <li>✅ <strong>هجوم القاموس:</strong> PBKDF2 بـ 200,000 دورة يجعل التخمين مكلفاً جداً.</li>
+   </ul>
+
+   <h4>ما لا تحميك منه</h4>
+   <ul>
+    <li>❌ <strong>كلمة مرور ضعيفة:</strong> 8 خانات + حرف + رقم = الحد الأدنى. استخدم 12+ خانة وعبارة سرية.</li>
+    <li>❌ <strong>مشاركة كلمة المرور:</strong> كل مستخدم له كلمة مروره. لا تشارك كلمة مرور المدير.</li>
+    <li>❌ <strong>فقدان كلمة المرور:</strong> لا يوجد استرجاع — التصميم الأمني كذلك.</li>
+    <li>❌ <strong>تسريب من المتصفح:</strong> إضافات خبيثة يمكنها قراءة شاشتك أثناء فتح البيانات.</li>
+    <li>❌ <strong>تزامن سحابي (النسخة الحالية):</strong> لا يوجد تزامن — نسخة واحدة على جهاز واحد.</li>
+   </ul>
+
+   <h4>نصائح عملية</h4>
+   <ul>
+    <li>استخدم <strong>مدير كلمات مرور</strong> (Bitwarden, 1Password, KeePass).</li>
+    <li>احفظ نسخة احتياطية مشفّرة <strong>أسبوعياً</strong> على USB مشفّر أو سحابة خاصة (ProtonDrive, Tresorit).</li>
+    <li>لا تفتح البرنامج على جهاز مشترك بين عدة أشخاص بدون كلمات مرور منفصلة.</li>
+    <li>راجع <strong>سجل العمليات</strong> أسبوعياً — أي دخول غير متوقع = علامة إنذار.</li>
+    <li>عند تسليم جهاز لشخص آخر، احذف بيانات المتصفح بالكامل (<code>localStorage.clear()</code> + IndexedDB).</li>
+   </ul>
+
+   <h4>القيود الحالية (نسخة v9.7 التجريبية)</h4>
+   <ul>
+    <li>التخزين محلي فقط (لا سحابة).</li>
+    <li>التزامن بين الأجهزة يدوي (تصدير/استيراد).</li>
+    <li>لا يوجد 2FA حقيقي (يمكن إضافته في النسخة السحابية).</li>
+    <li>الإشعارات تعمل فقط والمتصفح مفتوح (Notification API).</li>
+   </ul>
+
+   <div class="box brass" style="margin-top:16px">
+    <strong>🎯 الخلاصة</strong>
+    ديوان يعطيك <strong>أماناً حقيقياً</strong> يفوق بكثير الملفات الورقية أو ملفات Excel غير المحمية. لكنه ليس سحراً: كلمة مرور قوية + نسخة احتياطية منتظمة + جهاز نظيف = بياناتك في أمان.
+   </div>
+  </div>
+
+  <div class="subsection">
+   <h3>11.6 سجل التحديثات — ما الجديد منذ دليل v9؟</h3>
+   <p>هذا الدليل الموحّد يستبدل دليل الإصدار 9 بالكامل. إذا كنت قد استخدمت النسخة السابقة، إليك أهم ما تغيّر:</p>
+   <table>
+    <thead><tr><th>المجال</th><th>في v9</th><th>في v9.7 (الحالي)</th></tr></thead>
+    <tbody>
+     <tr><td><strong>حماية الدخول</strong></td><td>PIN اختياري</td><td>كلمة مرور إلزامية للمدير (8+ خانات) تُستخدم في تشفير كل البيانات</td></tr>
+     <tr><td><strong>تشفير البيانات</strong></td><td>تخزين محلي بسيط</td><td>AES-GCM-256 + PBKDF2-SHA256 (200,000 دورة) — راجع قسم 11.5</td></tr>
+     <tr><td><strong>المستخدمون</strong></td><td>3 أدوار (مدير/سكرتيرة/متربص)</td><td>4 أدوار — أُضيف <strong>المحامي الشريك</strong> بملفاته وبطاقة إجازته المستقلة</td></tr>
+     <tr><td><strong>تبديل الأدوار</strong></td><td>مفتوح</td><td>محمي بكلمة مرور المستخدم الهدف + قفل 60 ثانية بعد 5 محاولات</td></tr>
+     <tr><td><strong>تعارض المصالح</strong></td><td>تنبيه بسيط عند التكرار</td><td>فحص تلقائي شامل (NIN / NIF / تقابل موكل-خصم / تطابق اسم) مع تصنيف حرج/مرتفع/متوسط + عبارة «قبلت المسؤولية» + سجل قبول مدمج</td></tr>
+     <tr><td><strong>قواعد الآجال</strong></td><td>ثابتة</td><td>قابلة للتحرير والإضافة والاستعادة الافتراضية + محرر أعياد ثابتة ومتغيرة</td></tr>
+     <tr><td><strong>الأدوات المالية</strong></td><td>3 شاشات منفصلة</td><td>مدمجة في شاشة واحدة: «الأدوات المالية المتقدمة»</td></tr>
+     <tr><td><strong>قوالب الوثائق</strong></td><td>16–17 قالباً</td><td>18 قالباً — أُضيفت «عريضة طعن (سند عام)» وحقل المادة القانونية</td></tr>
+     <tr><td><strong>السيناريوهات</strong></td><td>7 سيناريوهات</td><td>12 سيناريو عملياً (شريك جديد، نقل مشفّر بين الأجهزة، KYC، قبول ملف بتعارض...)</td></tr>
+     <tr><td><strong>حماية آخر مدير</strong></td><td>—</td><td>لا يمكن حذف آخر مدير في النظام</td></tr>
+     <tr><td><strong>ملحق الأمان</strong></td><td>—</td><td>قسم 11.5 كامل: دورة حياة البيانات، الخوارزميات، الحمايات والقيود</td></tr>
+    </tbody>
+   </table>
+   <div class="box info">
+    <strong>ملاحظة للمستخدم القديم</strong>
+    بياناتك من نسخة v9 لا تنتقل تلقائياً إلى v9.7. استخدم «تصدير كامل» من النسخة القديمة ثم «استرجاع من نسخة سابقة» في الجديدة، مع ملاحظة أن النسخ الاحتياطية المشفّرة تتطلب نفس كلمة المرور.
+   </div>
+  </div>
+ </section>
+
+ 
+  <div class="subsection" id="s11-7">
+   <h3>11.7 ما الجديد في v9.7 — تبسيط الواجهات وإصلاحات الممارسة</h3>
+   <p>بناءً على مراجعة مزدوجة (مهندس برمجيات + محامٍ خبير 20 سنة)، ركّز الإصدار 9.7 على <strong>تقليل الحمولة المعرفية</strong> و<strong>مطابقة واقع المحاكم الجزائرية</strong> دون إعادة بناء من الصفر.</p>
+
+   <h4>أ) تبسيط القائمة الجانبية (من ~32 إلى ~14 شاشة)</h4>
+   <table>
+    <thead><tr><th>الشاشة الموحّدة</th><th>ما دُمج داخلها (تبويبات)</th></tr></thead>
+    <tbody>
+     <tr><td><strong>رول الجلسات</strong> (جديد — أولوية الصباح)</td><td>ورقة يومية قابلة للطباعة: الوقت، رقم الملف، الموكل، القاضي/الغرفة، رقم الجدول، سبب التأجيل، الإنابة، تأشير</td></tr>
+     <tr><td><strong>الوثائق</strong></td><td>قائمة الوثائق + سكانر PDF</td></tr>
+     <tr><td><strong>مولّد الوثائق</strong></td><td>القوالب + تبويب الموافقات (للمتربص/المدير)</td></tr>
+     <tr><td><strong>الأتعاب والحسابات</strong></td><td>نظرة عامة + رسوم الدعاوى + الصندوق</td></tr>
+     <tr><td><strong>التبليغ والتنفيذ</strong></td><td>المحضرون + الخبراء + التنفيذ/الحجز + المساعدة القضائية</td></tr>
+     <tr><td><strong>الفريق والصلاحيات</strong></td><td>الفريق + الموارد البشرية/الرواتب + الحسابات + بطاقة الإجازة</td></tr>
+     <tr><td><strong>التقارير</strong></td><td>نظرة عامة + سجل العمليات + الاجتهادات + الاستيراد + QR</td></tr>
+    </tbody>
+   </table>
+
+   <h4>ب) إصلاحات المحامي الخبير (الممارسة الميدانية)</h4>
+   <ul>
+    <li><strong>سبب التأجيل / مآل الجلسة (Cause de renvoi):</strong> يظهر في رول الجلسات وفي بيانات الجلسة.</li>
+    <li><strong>المداولة (Mise en délibéré):</strong> شارة «مداولة» وتاريخ المداولة على الرول والتقويم.</li>
+    <li><strong>الإنابة (Substitution):</strong> تسجيل اسم الزميل المعني في الجلسة وعلى الرول المطبوع.</li>
+    <li><strong>القضايا الاستعجالية (Référé):</strong> شارة حمراء مميزة على الملف والرول.</li>
+    <li><strong>رقم القيد / الفهرس (N° d'enrôlement):</strong> حقل مخصص لسهولة النسخ التنفيذية.</li>
+    <li><strong>توليد ملف استئناف من ملف ابتدائي:</strong> ينسخ الأطراف والتاريخ مع ربط parentId.</li>
+    <li><strong>أتعاب النتيجة (Honoraire de résultat):</strong> دعم نسبة من مبلغ التحصيل في الاتفاق المالي.</li>
+    <li><strong>وصل أتعاب مبسّط:</strong> بجانب الفاتورة الرسمية للموكلين الأفراد.</li>
+    <li><strong>دور محامٍ مساعد (Collaborateur):</strong> بين الشريك والمتربص — ملفات ونِسب مرافعة دون شراكة رأس مال. يظهر في قائمة تبديل الأدوار (الأستاذ كريم في النسخة التجريبية) ويرى الملفات المكلّف بها فقط مع إمكانية الأتعاب لملفاته.</li>
+   </ul>
+
+   <h4>ج) إصلاحات مهندس الواجهات</h4>
+   <ul>
+    <li>تقليل عناصر القائمة الجانبية ودمج الشاشات الفرعية في تبويبات.</li>
+    <li>الشريط السفلي للموبايل: لوحة التحكم · رول الجلسات · الملفات · المهام · المزيد.</li>
+    <li><strong>قفل الخمول التلقائي:</strong> بعد 10 دقائق بدون تفاعل تُقفل الشاشة وتُطلب كلمة المرور.</li>
+    <li><strong>زر الطوارئ (Panic):</strong> قفل فوري بضغطة واحدة لحماية أسرار الموكلين.</li>
+    <li>رول الجلسات منتج الصباح الأسرع: اختيار التاريخ → طباعة A4 أفقية جاهزة للمحكمة.</li>
+   </ul>
+
+   <div class="box ok">
+    <strong>ملاحظة الترقية من v9.4</strong>
+    صدّر نسخة كاملة من v9.4 ثم استوردها في v9.7 بنفس كلمة المرور. الشاشات القديمة (مثل scan منفرداً) ما زالت في الكود عبر التبويبات؛ الروابط المباشرة تبقى تعمل إن وُجدت في الإشارات المرجعية.
+   </div>
+  </div>
+
+
+  <div class="subsection" id="s11-8">
+   <h3>11.8 ما الجديد في v9.7 — كلمات مرور الدعوة ونسبة أتعاب المساعد</h3>
+   <h4>كلمة مرور عند دعوة مستخدم</h4>
+   <ol>
+    <li>المدير → الفريق والصلاحيات → دعوة.</li>
+    <li>الاسم، البريد، الدور (محامٍ مساعد / سكرتارية / متربص).</li>
+    <li><strong>كلمة المرور + التأكيد</strong> (8 خانات على الأقل، حرف ورقم).</li>
+    <li>يُنشأ المستخدم فوراً وتُحفظ كلمة المرور مشفّرة (PBKDF2) — تُطلب عند تبديل الدور إليه.</li>
+   </ol>
+   <h4>نسبة أتعاب المساعد على كل ملف</h4>
+   <ol>
+    <li>افتح ملف القضية (الدرج).</li>
+    <li>زر <strong>«نسبة المساعد»</strong> (للمدير فقط).</li>
+    <li>حدّد نسبة مئوية (0–100) لكل مساعد أو متربص مكلّف بالملف.</li>
+    <li>تُحفظ مع الملف في <code>feeShares</code> وتظهر كشارة على الملف.</li>
+   </ol>
+   <div class="box info">في البيانات التجريبية: الملف 2026/00377 مضبوط بنسبة 30٪ للمساعد «كريم».</div>
+  </div>
+
+<!-- 12 -->
+ 
+  <div class="subsection" id="s11-9">
+   <h3>11.9 ما الجديد في v9.7 — إصلاحات حرجة وميزات عملية</h3>
+   <p>ترقية جراحية من v9.6 دون إعادة بناء. ركّز الإصدار على استقرار البيانات وثلاث ميزات يومية للمحامي.</p>
+
+   <h4>أ) سبعة إصلاحات حرجة</h4>
+   <ul>
+    <li><strong>addExpense:</strong> حماية من الانهيار عند إغلاق درج ملف غير موجود.</li>
+    <li><strong>مصفوفات مالية آمنة:</strong> <code>S.pays / expenses / invoices / trust</code> تُقرأ دائماً كـ <code>[]</code> إن غابت.</li>
+    <li><strong>التحصيل الشهري ديناميكي:</strong> الرسم البياني يُحسب من الدفعات الحقيقية لا من بيانات ثابتة.</li>
+    <li><strong>آخر النشاطات ديناميكية:</strong> من سجل العمليات (audit) مباشرة.</li>
+    <li><strong>تصدير كلمات المرور:</strong> النسخة الاحتياطية المشفّرة تحمل <code>userPasswords</code> لاستعادة الدخول على جهاز آخر.</li>
+    <li><strong>مفاتيح الترجمة الناقصة:</strong> تحذير في Console بدل نص <code>undefined</code>.</li>
+    <li><strong>زر Panic:</strong> يُسجَّل في سجل العمليات قبل قفل الشاشة.</li>
+   </ul>
+
+   <h4>ب) خمس ميزات جديدة</h4>
+   <div class="screens">
+    <div class="screen-card"><h4><span class="n">1</span> تتبّع الوقت</h4><p>مؤقت لكل ملف (بدء / إيقاف / إدخال يدوي). يُحفظ في <code>timeEntries</code> ويُحدّث <code>hours</code>. يظهر في درج الملف.</p></div>
+    <div class="screen-card"><h4><span class="n">2</span> المواعيد</h4><p>شاشة مستقلة للمواعيد غير الجلسات (استشارة، توقيع، استلام، لقاء). تظهر في لوحة التحكم لليوم الحالي وفي القائمة الجانبية.</p></div>
+    <div class="screen-card"><h4><span class="n">3</span> وصل استلام سريع</h4><p>من درج الملف: زر «استلام دفعة نقدية» → تسجيل في الدفعات + طباعة وصل A4 برقم REC-YYYY-NNNN.</p></div>
+    <div class="screen-card"><h4><span class="n">4</span> تقرير أعمار الديون</h4><p>في الأتعاب: أربع فئات (0–30 / 31–60 / 61–90 / 90+) + أعلى 10 متبقيات.</p></div>
+    <div class="screen-card"><h4><span class="n">5</span> PWA</h4><p>روابط manifest وService Worker لتثبيت التطبيق على الشاشة الرئيسية (يتطلب ملفات manifest.json و sw.js والأيقونات في نفس المجلد).</p></div>
+   </div>
+
+   <h4>ج) تنظيف</h4>
+   <ul>
+    <li>إزالة نظام PIN القديم (الاعتماد على كلمات مرور المستخدمين المشفّرة).</li>
+    <li>إخفاء شاشات ثانوية من القائمة (KYC مستقل، accounts، hr، exec، experts، services، ja، courtfees) مع الإبقاء على الدوال للوصول عبر التبويبات المدمجة.</li>
+   </ul>
+
+   <div class="box ok">
+    <strong>الترحيل من v9.6</strong>
+    صدّر نسخة كاملة من v9.6 ثم استوردها في v9.7 بنفس كلمة المرور. <code>schemaVersion</code> أصبح 9؛ الحقول الجديدة (مثل <code>appointments</code>) تُنشأ تلقائياً إن غابت.
+   </div>
+  </div>
+
+<section class="section" id="s12">
+  <div class="section-head"><div class="num">12</div><h2>خلاصة نهائية</h2></div>
+
+  <p><strong>ديوان</strong> ليس مجرد برنامج. هو <strong>نظام عمل كامل</strong> يحمي المحامي من:</p>
+  <ul>
+   <li>❌ الآجال التي تفوت.</li>
+   <li>❌ الأتعاب التي تُنسى.</li>
+   <li>❌ الأمانات المختلطة.</li>
+   <li>❌ الأخطاء في الوصولات الرسمية.</li>
+   <li>❌ النزاعات مع الموكلين.</li>
+   <li>❌ تعارض المصالح غير المكشوف.</li>
+   <li>❌ تسريب البيانات الحساسة.</li>
+  </ul>
+
+  <p style="margin-top:16px">ويوفّر له:</p>
+  <ul>
+   <li>✅ متابعة دقيقة لكل ملف.</li>
+   <li>✅ ثقة الموكل عبر شفافية محدودة.</li>
+   <li>✅ تكامل مع القانون الجزائري.</li>
+   <li>✅ عمل بلا إنترنت + تشفير AES-256.</li>
+   <li>✅ فريق مُنظّم بصلاحيات واضحة.</li>
+   <li>✅ حماية قانونية تلقائية عند القبول.</li>
+  </ul>
+
+  <div class="box brass" style="margin-top:20px">
+   <strong>هذه النسخة الموحّدة (v9.7) تجريبية</strong>
+   الغرض منها <strong>العرض الاحترافي</strong> للمحامين. النسخة السحابية القادمة ستضيف:
+   <ul style="margin-top:8px">
+    <li>🖥️ خادم آمن مشفّر مع نسخ احتياطي تلقائي.</li>
+    <li>👥 تعاون فوري بين المكتب والفرع والشركاء.</li>
+    <li>📱 تطبيق موبايل أصلي.</li>
+    <li>🔗 تكامل حقيقي مع منصة العدل.</li>
+    <li>🔐 2FA حقيقي + إدارة جلسات مركزية.</li>
+   </ul>
+  </div>
+ </section>
+
+</div>
+
+<!-- FOOTER -->
+<section class="footer">
+ <div class="logo">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M12 3v18M5 21h14M6 7h12M6 7l-3 7a3 3 0 0 0 6 0L6 7zM18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/>
+  </svg>
+ </div>
+ <h2>ديوان</h2>
+ <p>نظام إدارة مكتب المحاماة — الجزائر. حيث يلتقي المحامي بأدوات العصر.</p>
+ <p style="font-size:13px;margin-top:30px;opacity:.7">الدليل الموحّد — الإصدار 9.7 (يدمج v9 + v9.7) | مطابق لـ diwan-v9.7.html · تتبّع الوقت + المواعيد + وصل سريع + أعمار الديون + PWA | جميع الحقوق محفوظة © 2026</p>
+</section>
+
+</main>
+
+<script>
+function toggleTheme(){
+ var r=document.documentElement;
+ var dk=r.classList.contains('dark')||(!r.classList.contains('light')&&matchMedia('(prefers-color-scheme: dark)').matches);
+ r.classList.toggle('dark',!dk);r.classList.toggle('light',dk);
+}
+window.addEventListener('scroll',function(){
+ var t=document.getElementById('ftoc');
+ if(!t)return;
+ var y=window.scrollY||document.documentElement.scrollTop;
+ t.classList.toggle('on',y>600);
+});
+document.querySelectorAll('.toc a[href^="#"]').forEach(a=>{
+ a.addEventListener('click',function(e){
+  var id=this.getAttribute('href').slice(1);
+  var el=document.getElementById(id);
+  if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});}
+ });
+});
+</script>
+</body>
+</html>
