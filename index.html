@@ -935,7 +935,7 @@ function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filte
 function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<span class="chip ${c||'ok'}">${v}</span>`:''}</div>`; const v8sec=`<div class="card" style="margin-bottom:16px"><div class="card-b"><div class="kv"><span>${t('st_security')}</span><button class="btn sm" data-act="chgpass">${t('sec_chg_btn')}</button> <span class="chip ${_SEC.avail()?'ok':'bad'}">${t(_SEC.avail()?'sec_enc_on':'sec_enc_off')}</span> <button class="btn sm" data-act="enablenotif">${t('notif_enable')}</button></div><div class="kv"><span>${t('v7_export_full')}</span><button class="btn sm primary" data-act="exportfull">${ic('download')} ${t('v7_export_full')}</button></div></div></div>`;
  const cab=S.cabinet,ltr=v=>`<dd dir="ltr" style="text-align:start">${esc(v)}</dd>`;
  return `<div class="page-h"><div><h1>${t('st_title')}</h1></div></div>
- ${v8sec}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
+ ${v8sec}${licenseCard()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
   <dl class="dl-list" style="margin:0"><dt>${t('cabinet_name')}</dt><dd>${esc(tr(cab.name))}</dd><dt>${t('cabinet_addr')}</dt><dd>${esc(tr(cab.address))}</dd><dt>${t('cabinet_nif')}</dt>${ltr(cab.nif)}<dt>${t('cabinet_nis')}</dt>${ltr(cab.nis)}<dt>${t('cabinet_rc')}</dt>${ltr(cab.rc)}<dt>${t('cabinet_ai')}</dt>${ltr(cab.ai)}<dt>${t('cabinet_phone')}</dt>${ltr(cab.phone)}<dt>${t('cabinet_email')}</dt>${ltr(cab.email)}<dt>${t('cabinet_bank')}</dt><dd>${esc(tr(cab.bank))}</dd><dt>${t('cabinet_tva')}</dt><dd>${cab.tva}%</dd><dt>${t('cabinet_timbre')}</dt><dd>${cab.timbre} دج</dd></dl></div></section>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_backup')}</h2></div><div class="card-b">${kv(t('st_b_auto'),t('on'))}${kv(t('st_b_last'),'✓')}${kv(t('st_b_restore'),'✓')}<div class="kv"><span>${t('st_b_export')}</span><button class="btn sm" data-act="exportfull">${ic('download')}${t('st_b_export')}</button></div></div></section>
  <section class="card"><div class="card-h"><h2>${t('st_security')}</h2></div><div class="card-b">${kv(t('st_lock'),t('on'))}${kv(t('st_2fa'),t('on'))}${kv(t('st_sync'),t('on'),'teal')}<p class="sub" style="margin:4px 0 0">${t('st_sync_d')}</p></div></section></div>
@@ -1432,7 +1432,7 @@ function scheduleReminders(){if(typeof Notification==='undefined')return;if(Noti
 
 /* ============== chrome ============== */
 const $=id=>document.getElementById(id);
-function chrome(){document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v9.7.1 — '+t('appSub');
+function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v9.7.1 — '+t('appSub');
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
@@ -1472,9 +1472,9 @@ function chrome(){document.documentElement.lang=S.lang;document.documentElement.
  $('offBar').innerHTML=offH;
  const my=myCases(),th=my.filter(c=>c.next===K(TODAY)).length,ot=myTasks().filter(x=>!x.done).length;
  $('bellDot').textContent=th+ur.length+(ot?1:0);
- try{scheduleReminders()}catch(_){}
+ try{scheduleReminders()}catch(_){}try{_LIC.tick()}catch(_){}
  $('notif').innerHTML=`<h3>${t('digest')}</h3><ul><li>${ic('cal')} <b>${th}</b> ${t('n_hear')}</li><li>${ic('alert')} <b>${ur.length}</b> ${t('n_dl')}</li><li>${ic('tasks')} <b>${ot}</b> ${t('n_task')}</li></ul>`}
-function render(){if(!allowed(S.view))S.view='dash';$('view').innerHTML=VIEWS[S.view]();
+function render(){if(window._LK_ON)return;if(!allowed(S.view))S.view='dash';$('view').innerHTML=VIEWS[S.view]();
  if(S.view==='cases'){caseRows();['fq','ft','fs'].forEach(i=>$(i).addEventListener('input',caseRows))}
  if(S.view==='portal')$('portalSel').addEventListener('change',e=>{S.arg=+e.target.value;render()});
  if(S.view==='tasks'&&$('tw'))$('tw').addEventListener('change',e=>{S.taskWho=e.target.value;render()});
@@ -2036,7 +2036,130 @@ al_summary:(x,y)=>`${x} délai(s) expirent demain et ${y} audience(s) aujourd'hu
 });
 
 
-chrome();render();
+/* ================= V9.9 — نظام الفترة التجريبية والتفعيل (Trial & License) =================
+   ملاحظة أمنية: التحقق يجري في المتصفح، فهو حاجز ضد النسخ العابر لا حماية مطلقة.
+   المفاتيح تُولَّد بـ tools/keygen.mjs (سرّي، غير مُرفَق بالمستودع). */
+var _LK_ON=false;
+var _LIC=(function(){
+ var _rev=function(b){try{var v=atob(b);return v.split('').reverse().join('')}catch(_){return ''}};
+ var SA=_rev('N1J6fEF8OW5hd2lE'),SB=_rev('MlFrfEJ8OW5hd2lE'),SC=_rev('NU5tfEN8OW5hd2lE'),SG=_rev('NFB4fFN8OW5hd2lE'),
+     KT=_rev('MXZfbGFpcnRfbmF3aWQ='),KL=_rev('MXZfZXNuZWNpbF9uYXdpZA=='),CK=_rev('cnRfd2Q='),
+     AL='0123456789ABCDEFGHJKMNPQRSTVWXYZ',DAYS=30,CMAX=(10*365*24*3600);
+ var _booted=false,_fails=0,_lastTick=0;
+ function H(str){var h=0x811c9dc5,i,s=String(str);for(i=0;i<s.length;i++){h^=s.charCodeAt(i);h=(h+((h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24)))>>>0}return h>>>0}
+ function X(x){x=(x||0x9e3779b9)>>>0;x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;return x>>>0}
+ function sig(p){var x=(H(SC+'|'+p)||0x1234567)>>>0,o='',i;for(i=0;i<4;i++){x=X(x);o+=AL.charAt(x&31)}return o}
+ function body(seed){var x=(H(SA+'|'+seed)^H(SB+'|'+seed+'~'))>>>0;x=x||0x9e3779b9;var o='',i;for(i=0;i<12;i++){x=X(x);o+=AL.charAt(x&31)}return o}
+ function fmt(k){return String(k).replace(/(.{4})(?=.)/g,'$1-')}
+ function norm(k){return String(k||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
+ function eq(a,b){if(a.length!==b.length)return false;var r=0,i;for(i=0;i<a.length;i++)r|=a.charCodeAt(i)^b.charCodeAt(i);return r===0}
+ function validKey(k){var n=norm(k),i;if(n.length!==16)return false;for(i=0;i<16;i++)if(AL.indexOf(n.charAt(i))<0)return false;return eq(n.slice(12),sig(n.slice(0,12)))}
+ function lsGet(k){try{return localStorage.getItem(k)}catch(_){return null}}
+ function lsSet(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+ function pack(o){var d=JSON.stringify(o);return JSON.stringify({d:d,s:String(H(SG+'|'+d))})}
+ function unpack(raw){try{var o=JSON.parse(raw);if(!o||typeof o.d!=='string'||String(o.s)!==String(H(SG+'|'+o.d)))return null;return JSON.parse(o.d)}catch(_){return null}}
+ function ckGet(){try{var m=document.cookie.match(new RegExp('(?:^|; )'+CK+'=(\\d+)'));return m?+m[1]:0}catch(_){return 0}}
+ function ckSet(v){try{document.cookie=CK+'='+v+';path=/;max-age='+CMAX+';SameSite=Lax'}catch(_){}}
+ function rec(){var r=unpack(lsGet(KT)||''),c=ckGet();
+  if(!r||!isFinite(+r.s)||+r.s<=0){if(c){r={s:c,l:0}}else{r={s:Date.now(),l:0};lsSet(KT,pack(r))}}
+  else if(c&&c<+r.s){r.s=c;lsSet(KT,pack(r))}
+  if(!c)ckSet(r.s);
+  return r}
+ function state(){var r=rec(),now=Date.now(),l=+(r.l||0),back=false;
+  if(l&&now<l-21600000){back=true;now=l}
+  if(now>l){r.l=now;lsSet(KT,pack(r))}
+  var lic=unpack(lsGet(KL)||''),ok=!!(lic&&lic.k&&validKey(lic.k)),
+      el=(now-(+r.s))/86400000,left=Math.max(0,Math.ceil(DAYS-el));
+  return {licensed:ok,key:ok?norm(lic.k):'',start:+r.s,elapsed:el,left:left,expired:!ok&&el>=DAYS,back:back,pct:Math.max(0,Math.min(100,Math.round((1-el/DAYS)*100)))}
+ }
+ function devId(){var r=rec(),ua=(navigator.userAgent||'')+'|'+(screen.width||0)+'x'+(screen.height||0),
+  a=H(SG+'|dv|'+r.s+'|'+ua).toString(36).toUpperCase(),b=H(SG+'|dw|'+r.s+'|'+ua).toString(36).toUpperCase(),
+  s=(a+b+'00000000').slice(0,8);return s.slice(0,4)+'-'+s.slice(4,8)}
+ function lockHtml(mode){
+  var st=state();
+  return '<div class="modal" style="max-width:480px;text-align:center">'
+   +'<img src="./logo.png" alt="Diwan" style="width:88px;height:88px;object-fit:contain;background:#fff;border-radius:20px;padding:6px;margin:0 auto 14px;display:block">'
+   +'<h2 style="margin:0 0 8px;font-size:23px">'+(mode?t('lck_end_t'):t('lck_act_t'))+'</h2>'
+   +'<p class="sub" style="margin:0 0 14px;line-height:1.85">'+(mode?t('lck_end_d'):t('lck_act_d'))+'</p>'
+   +'<form id="licForm" novalidate><div class="fld" style="text-align:start"><label for="licKey">'+t('lck_key_l')+'</label>'
+   +'<input id="licKey" dir="ltr" autocomplete="off" spellcheck="false" maxlength="19" placeholder="XXXX-XXXX-XXXX-XXXX" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:3px;text-align:center;font-size:16px"></div>'
+   +'<div class="lk-msg" id="licMsg" role="alert"></div>'
+   +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn primary" type="submit" id="licBtn">'+t('lck_activate')+'</button>'
+   +(mode?'':'<button class="btn" type="button" id="licClose">'+t('lck_close')+'</button>')+'</div></form>'
+   +'<div class="kv" style="margin-top:14px"><span>'+t('lck_dev')+'</span><code dir="ltr" style="font-family:ui-monospace,monospace">'+devId()+'</code></div>'
+   +'<small class="lk-note">'+t('lck_need')+'</small></div>'
+ }
+ function bind(o,mode){
+  var f=o.querySelector('#licForm'),inp=o.querySelector('#licKey'),msg=o.querySelector('#licMsg'),btn=o.querySelector('#licBtn');
+  if(!f||!inp)return;
+  inp.addEventListener('input',function(){inp.value=fmt(norm(inp.value).slice(0,16))});
+  var cl=o.querySelector('#licClose');if(cl)cl.addEventListener('click',function(){secCloseOverlay()});
+  try{inp.focus()}catch(_){}
+  f.addEventListener('submit',function(e){e.preventDefault();
+   if(_fails>=5){msg.textContent=t('lck_wait');return}
+   var n=norm(inp.value);
+   if(!validKey(n)){_fails++;msg.textContent=t('lck_bad');
+    if(_fails>=5)setTimeout(function(){_fails=0},60000);return}
+   lsSet(KL,pack({k:fmt(n),a:Date.now()}));
+   _LK_ON=false;_fails=0;
+   try{secCloseOverlay()}catch(_){}
+   try{toast(t('lck_ok'))}catch(_){}
+   var wasBooted=_booted;
+   if(!wasBooted){_booted=true;try{secBoot()}catch(_){try{chrome();render()}catch(__){}}}
+   else{try{chrome();render()}catch(_){}}
+  });
+ }
+ function show(mode){var o=secOverlay(lockHtml(mode));bind(o,mode);return o}
+ return {
+  status:state, devId:devId, makeKey:function(seed){var b=body(String(seed));return fmt(b+sig(b))},
+  valid:validKey, norm:norm, fmt:fmt,
+  gate:function(){if(_LK_ON)return true;var st=state();if(st.expired&&!st.licensed){_LK_ON=true;show(true);return true}return false},
+  booted:function(){_booted=true},
+  openActivation:function(){_LK_ON=false;show(false)},
+  tick:function(){var n=Date.now();if(n-_lastTick<60000)return;_lastTick=n;
+   if(!_LK_ON&&!_booted)return;
+   var st=state();if(st.expired&&!st.licensed){_LK_ON=true;show(true)}},
+  locked:function(){return _LK_ON}
+ };
+})();
+function licenseCard(){var st=_LIC.status(),warn=!st.licensed&&st.left<=7,
+ col=st.licensed?'var(--ok)':(warn?'var(--bad)':'var(--ink)'),
+ lbl=st.licensed?t('lck_active'):(st.left<=1?t('lck_lastday'):t('lck_days',st.left));
+ return '<section class="card" style="margin-bottom:16px"><div class="card-h"><h2>'+t('lck_card_t')+'</h2><span class="chip '+(st.licensed?'ok':(warn?'urgent':''))+'">'+(st.licensed?t('lck_full'):t('lck_trial'))+'</span></div>'
+ +'<div class="card-b"><div class="kv"><span>'+t('lck_status')+'</span><b style="color:'+col+'">'+lbl+'</b></div>'
+ +(st.licensed?'':'<div style="height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:12px 0 10px"><div style="width:'+st.pct+'%;height:100%;background:'+(warn?'var(--bad)':'var(--teal)')+'"></div></div>')
+ +'<p class="sub" style="margin:0 0 12px">'+(st.licensed?t('lck_active_sub'):t('lck_trial_sub'))+'</p>'
+ +'<div class="kv"><span>'+t('lck_dev')+'</span><code dir="ltr" style="font-family:ui-monospace,monospace">'+_LIC.devId()+'</code></div>'
+ +'<button class="btn sm primary" data-act="licopen">'+(st.licensed?t('lck_btn_full'):t('lck_btn'))+'</button></div></section>';
+}
+/* i18n */
+(function(){
+ var A={lck_card_t:'الترخيص والفترة التجريبية',lck_status:'الحالة',lck_trial:'نسخة تجريبية',lck_full:'نسخة كاملة',lck_active:'مفعّلة مدى الحياة على هذا الجهاز',
+ lck_days:n=>('متبقٍ '+n+' يوماً من أصل 30'),lck_lastday:'ينقضي اليوم آخر يوم من التجربة',
+ lck_trial_sub:'الفترة التجريبية 30 يوماً من أول تشغيل. بعد انتهائها يُقفل التطبيق حتى إدخال مفتاح التفعيل — بياناتك تبقى محفوظة على هذا الجهاز ولا تُمسّ.',
+ lck_active_sub:'النسخة الكاملة مفعّلة على هذا الجهاز. شكراً لاقتنائك ديوان.',
+ lck_btn:'إدخال مفتاح التفعيل',lck_btn_full:'إدارة الترخيص',lck_key_l:'مفتاح التفعيل (16 خانة)',
+ lck_activate:'تفعيل النسخة الكاملة',lck_close:'إغلاق',lck_bad:'⚠ مفتاح غير صالح — تحقق من الخانات الست عشرة',
+ lck_wait:'توقّف قليلاً قبل إعادة المحاولة',lck_ok:'تم التفعيل — النسخة الكاملة',
+ lck_end_t:'انتهت الفترة التجريبية',lck_end_d:'انتهت مدة الثلاثين يوماً. أدخل مفتاح التفعيل لمتابعة العمل — بياناتك سليمة ومحفوظة ولن تُمسّ.',
+ lck_act_t:'تفعيل ديوان',lck_act_d:'أدخل مفتاح التفعيل الذي استلمته عند الشراء لفتح النسخة الكاملة على هذا الجهاز.',
+ lck_need:'لم تستلم مفتاحاً؟ تواصل مع مزوّد الترخيص مع ذكر معرّف الجهاز أعلاه.',lck_dev:'معرّف الجهاز'};
+ var F={lck_card_t:'Licence et période d’essai',lck_status:'Statut',lck_trial:'Version d’essai',lck_full:'Version complète',lck_active:'Activée à vie sur cet appareil',
+ lck_days:n=>('Il reste '+n+' jour(s) sur 30'),lck_lastday:'Dernier jour de la période d’essai',
+ lck_trial_sub:'Essai de 30 jours à compter du premier lancement. Ensuite l’application se verrouille jusqu’à la saisie d’une clé d’activation — vos données restent intactes sur cet appareil.',
+ lck_active_sub:'La version complète est activée sur cet appareil. Merci d’avoir choisi Diwan.',
+ lck_btn:'Saisir la clé d’activation',lck_btn_full:'Gérer la licence',lck_key_l:'Clé d’activation (16 caractères)',
+ lck_activate:'Activer la version complète',lck_close:'Fermer',lck_bad:'⚠ Clé invalide — vérifiez les seize caractères',
+ lck_wait:'Patientez avant de réessayer',lck_ok:'Activée — version complète',
+ lck_end_t:'Période d’essai terminée',lck_end_d:'Les trente jours sont écoulés. Saisissez une clé d’activation pour continuer — vos données sont sauvegardées et restent intactes.',
+ lck_act_t:'Activer Diwan',lck_act_d:'Saisissez la clé remise lors de l’achat pour débloquer la version complète sur cet appareil.',
+ lck_need:'Pas encore de clé ? Contactez le fournisseur de licence en indiquant l’identifiant de l’appareil ci-dessus.',lck_dev:'Identifiant appareil'};
+ for(var k in A)if(!(k in L.ar))L.ar[k]=A[k];
+ for(var k2 in F)if(!(k2 in L.fr))L.fr[k2]=F[k2];
+})();
+
+
+if(!_LIC.gate()){chrome();render()}
 
 /* ===== v7 ADDON: storage, approvals, scanner, notifs, docs ===== */
 // FIX-13-REAL // FIX13R: v7 addon i18n blocks moved ABOVE the first chrome();render();
@@ -2546,12 +2669,13 @@ if(typeof VIEWS!=='undefined'){VIEWS.scan=scanV;VIEWS.approvals=approvalsV;VIEWS
 
 /* Boot load store — FIX3: encrypted boot (unlock / first-run setup) lives in secBoot() */
 (function(){
- try{secBoot()}catch(e){console.warn('v9 boot',e)}
+ try{if(_LIC.gate())return;_LIC.booted();secBoot()}catch(e){console.warn('v9 boot',e)}
 })();
 
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='scanInput'&&e.target.files){Promise.all([].slice.call(e.target.files).map(function(f){return compressImg(f)})).then(function(arr){_scanPages=_scanPages.concat(arr);render()}).catch(function(){toast('⚠')})}});
 document.addEventListener('click',function(e){
  var el=e.target.closest('[data-act]');if(!el)return;var a=el.dataset.act,id=+el.dataset.id;
+ if(a==='licopen'){_LIC.openActivation();return}
  if(a==='cleardemo')clearDemo();
  /* setpin removed */
  if(a==='exportfull')exportFullV7();
