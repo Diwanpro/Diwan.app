@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ديوان v9.10.0 — نظام إدارة مكتب المحاماة (الجزائر)</title>
+<title>ديوان v10.0.0 — نظام إدارة مكتب المحاماة (الجزائر)</title>
 <link rel="icon" type="image/png" href="./logo.png">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0f8f86">
@@ -339,6 +339,28 @@ html[dir=ltr] .tl li{padding:0 0 14px 24px}
 .fts-box{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg)}
 .fp-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
 .fp-row:first-child{border-top:0}
+/* ===== V10.0 ===== */
+.fab{position:fixed;inset-block-end:88px;inset-inline-end:20px;z-index:60;display:inline-flex;align-items:center;gap:8px;padding:14px 20px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--brass),#d8a94a);color:#1b1204;font-weight:800;font-size:15px;font-family:inherit;box-shadow:0 14px 32px -12px rgba(0,0,0,.55);cursor:pointer;min-height:52px}
+.fab:hover{filter:brightness(1.06)}
+.fab:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.fab .badge{background:#1b1204;color:#f6edd9}
+@media (min-width:1100px){.fab{inset-block-end:28px}}
+.qh-modal{max-width:640px;width:min(640px,94vw)}
+.qh-search{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:16px;font-family:inherit}
+.qh-list{max-height:230px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:12px}
+.qh-item{display:flex;gap:10px;align-items:center;width:100%;text-align:start;padding:10px 12px;border:0;border-top:1px solid var(--line);background:transparent;color:inherit;font-family:inherit;font-size:14px;cursor:pointer}
+.qh-item:first-child{border-top:0}
+.qh-item[aria-pressed=true]{background:var(--teal-soft)}
+.qh-item b{display:block}
+.qh-item small{color:var(--muted);display:block;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.qh-grid .btn{justify-content:center;padding:14px 10px;font-size:14.5px}
+.qh-note{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;resize:vertical}
+.qh-pick{padding:10px 12px;border-radius:12px;border:1px dashed var(--line);background:var(--bg);margin-top:12px;font-size:14px}
+.guide-wrap{background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.guide-frame{width:100%;height:calc(100vh - 120px);border:0;display:block;background:#fff}
+@media (max-width:720px){.guide-frame{height:calc(100vh - 190px)}}
+@media (max-width:520px){.qh-grid{grid-template-columns:1fr}.fab{inset-inline-end:14px;padding:12px 16px;font-size:14px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js" defer></script>
 </head>
@@ -686,6 +708,7 @@ const fmt=s=>{if(!s)return '—';const d=D(s);return d.getDate()+' '+MON[S.lang]
 /* عزل اتجاه المبلغ كي لا ينعكس داخل النص العربي */
 const money=n=>'\u2066'+String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+(S.lang==='ar'?' دج':' DA')+'\u2069';
 const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',cases:'<path d="M3 8h18v12H3zM9 8V5h6v3M3 13h18"/>',cal:'<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/>',tasks:'<path d="M9 11l2 2 4-4M5 4h14a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M17 11a2.5 2.5 0 1 0 0-5M21 19c0-2.4-1.6-4.4-4-5"/>',file:'<path d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/>',coin:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c.5-1 1.5-1.5 2.5-1.5 1.5 0 2.5.7 2.5 1.8 0 2.4-5 1.2-5 3.7 0 1.1 1 1.8 2.5 1.8 1 0 2-.5 2.5-1.5"/>',chart:'<path d="M4 20h16M7 20v-8M12 20V6M17 20v-11"/>',team:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5a3 3 0 0 1 0 6M21 20c0-2.6-1.5-4.7-4-5.5"/>',sliders:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/>',phone:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',plus:'<path d="M12 5v14M5 12h14"/>',alert:'<path d="M12 4l9 16H3L12 4zM12 10v4M12 17h.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',logout:'<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 8l-4 4 4 4M6 12h10"/>',prev:'<path d="M15 6l-6 6 6 6"/>',next:'<path d="M9 6l6 6-6 6"/>',download:'<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/>',refresh:'<path d="M20 11a8 8 0 0 0-14-4M4 5v4h4M4 13a8 8 0 0 0 14 4M20 19v-4h-4"/>',more:'<path d="M5 12h.01M12 12h.01M19 12h.01"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/>',undo:'<path d="M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/>',print:'<path d="M6 9V3h12v6M6 18h12v3H6zM6 14H3V9h18v5h-3"/>',bills:'<path d="M5 4h14v18l-3-2-2 2-2-2-2 2-2-2-3 2zM9 8h6M9 12h6M9 16h4"/>',tax:'<path d="M4 20h16M4 20V8l4-3 4 3 4-3 4 3v12M8 12h2M8 16h2M14 12h2M14 16h2"/>',link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/>',pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>'};
+IC.book='<path d="M4 5a2 2 0 0 1 2-2h5v18H6a2 2 0 0 0-2 2zM20 5a2 2 0 0 0-2-2h-5v18h5a2 2 0 0 1 2 2z"/>';
 const ic=k=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[k]||''}</svg>`;
 const av=(id,sm)=>{const u=byU(id);return u?`<span class="avatar ${id}${sm?' sm':''}" title="${esc(tr(u.n))}">${tr(u.init)}</span>`:''};
 const avs=ids=>`<span class="stack-av">${ids.map(i=>av(i,true)).join('')}</span>`;
@@ -716,7 +739,7 @@ const NAVS=()=>{const r=me().role,a=[];
  if(r==='manager')a.push(['reports','chart','nav_reports','d']); /* tabs: overview, audit, library, import, qr */
  if(r!=='trainee')a.push(['reminders','bell','nav_reminders','x']);
  if(r==='manager'||r==='partner')a.push(['portal','phone','nav_portal','x']);
- a.push(['links','link','nav_links','x'],['landing','info','nav_landing','x'],['faq','shield','nav_faq','x']);
+ a.push(['links','link','nav_links','x'],['guide','book','nav_guide','x'],['landing','info','nav_landing','x'],['faq','shield','nav_faq','x']);
  return a};
 const allowed=v=>NAVS().some(n=>n[0]===v);
 const caseBal=cid=>(S.trust||[]).filter(x=>x.c===cid).reduce((a,x)=>a+(x.type==='deposit'?x.amount:-x.amount),0);
@@ -780,7 +803,8 @@ function dash(){const m=isM(),r=me().role,my=myCases(),tk=myTasks();
  ${alerts}${dl48Card()}<div class="kpis">${k1}</div>
  <div class="g2"><section class="card"><div class="card-h"><h2>${t('roll_title')}</h2><button class="btn sm" data-act="go" data-v="cal">${t('nav_cal')}</button></div><div class="card-b"><div class="roll">${roll}</div></div></section>
  <section class="card"><div class="card-h"><h2>${t('dl_title')}</h2></div><div class="card-b">${dlRows(near.slice(),5)}</div></section></div>
- <div class="g2e">${taskCard}${apCard}</div><div class="g2e" style="margin-top:16px">${second}</div>${third}`}
+ <div class="g2e">${taskCard}${apCard}</div><div class="g2e" style="margin-top:16px">${second}</div>${third}
+ ${(()=>{const n=my.filter(c=>c.next===K(TODAY)).length;return `<button class="fab" data-act="quickhear" aria-label="${t('qh_fab')}">⚡ ${t('qh_fab')}${n?` <span class="badge">${n}</span>`:''}</button>`})()}`}
 
 function casesV(){const r=me().role;
  const scope=(r==='secretary'||r==='partner'||r==='manager')?`<div class="seg" role="group"><button data-act="scope" data-v="mine" aria-pressed="${S.casesScope==='mine'}">${t('f_mine')}</button><button data-act="scope" data-v="all" aria-pressed="${S.casesScope==='all'}">${t('f_everyone')}</button></div>`:'';
@@ -906,7 +930,7 @@ function expensesV(){
 
 function reportsV(){
  const tab=(k,l)=>`<button role="tab" data-act="reporttab" data-v="${k}" aria-current="${S.reportTab===k}">${l}</button>`;
- return `<div class="page-h"><div><h1>${t('rp_title')}</h1><p>${t('rp_sub')}</p></div><button class="btn" data-act="export">${ic('download')}${t('rp_export')}</button></div><div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('tax',t('tax_title'))}${tab('stamp',t('stamp_rep_title'))}</div>${S.reportTab==='tax'?taxV():S.reportTab==='stamp'?stampReportV():reportsOverview()}`}
+ return `<div class="page-h"><div><h1>${t('rp_title')}</h1><p>${t('rp_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-act="invyear">${ic('tax')}${t('inv_year_btn')}</button><button class="btn" data-act="export">${ic('download')}${t('rp_export')}</button></div></div><div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('tax',t('tax_title'))}${tab('inv',t('inv_year'))}${tab('stamp',t('stamp_rep_title'))}</div>${S.reportTab==='inv'?annualV():S.reportTab==='tax'?taxV():S.reportTab==='stamp'?stampReportV():reportsOverview()}`}
 
 function computeMonthlyCollections(){
  var pays=S.pays||[], buckets={};
@@ -964,7 +988,7 @@ function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filte
 function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<span class="chip ${c||'ok'}">${v}</span>`:''}</div>`; const v8sec=`<div class="card" style="margin-bottom:16px"><div class="card-b"><div class="kv"><span>${t('st_security')}</span><button class="btn sm" data-act="chgpass">${t('sec_chg_btn')}</button> <span class="chip ${_SEC.avail()?'ok':'bad'}">${t(_SEC.avail()?'sec_enc_on':'sec_enc_off')}</span> <button class="btn sm" data-act="enablenotif">${t('notif_enable')}</button></div><div class="kv"><span>${t('v7_export_full')}</span><button class="btn sm primary" data-act="exportfull">${ic('download')} ${t('v7_export_full')}</button></div></div></div>`;
  const cab=S.cabinet,ltr=v=>`<dd dir="ltr" style="text-align:start">${esc(v)}</dd>`;
  return `<div class="page-h"><div><h1>${t('st_title')}</h1></div></div>
- ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
+ ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${colleaguesCard()}${encBackupCard()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
   <dl class="dl-list" style="margin:0"><dt>${t('cabinet_name')}</dt><dd>${esc(tr(cab.name))}</dd><dt>${t('cabinet_addr')}</dt><dd>${esc(tr(cab.address))}</dd><dt>${t('cabinet_nif')}</dt>${ltr(cab.nif)}<dt>${t('cabinet_nis')}</dt>${ltr(cab.nis)}<dt>${t('cabinet_rc')}</dt>${ltr(cab.rc)}<dt>${t('cabinet_ai')}</dt>${ltr(cab.ai)}<dt>${t('cabinet_phone')}</dt>${ltr(cab.phone)}<dt>${t('cabinet_email')}</dt>${ltr(cab.email)}<dt>${t('cabinet_bank')}</dt><dd>${esc(tr(cab.bank))}</dd><dt>${t('cabinet_tva')}</dt><dd>${cab.tva}%</dd><dt>${t('cabinet_timbre')}</dt><dd>${cab.timbre} دج</dd></dl></div></section>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_backup')}</h2></div><div class="card-b">${kv(t('st_b_auto'),t('on'))}${kv(t('st_b_last'),'✓')}${kv(t('st_b_restore'),'✓')}<div class="kv"><span>${t('st_b_export')}</span><button class="btn sm" data-act="exportfull">${ic('download')}${t('st_b_export')}</button></div></div></section>
  <section class="card"><div class="card-h"><h2>${t('st_security')}</h2></div><div class="card-b">${kv(t('st_lock'),t('on'))}${kv(t('st_2fa'),t('on'))}${kv(t('st_sync'),t('on'),'teal')}<p class="sub" style="margin:4px 0 0">${t('st_sync_d')}</p></div></section></div>
@@ -1005,15 +1029,11 @@ function saveSubs(){S.subs=S.subs||{};
 
 function portalV(id){const c=byC(id||4)||S.cases[0],n=c.next?D(c.next):null,shared=S.docs.filter(d=>d.c===c.id&&d.sh),ptab=S.portalTab||'file';
  const tl=[c.next?`<li><strong>${tr(KIND[c.kind])}</strong><small>${fmt(c.next)} — ${c.time}</small></li>`:`<li><strong>${tr(KIND[c.kind])}</strong><small>${t('po_notify')}</small></li>`,c.judg?`<li><strong>${esc(tr(c.judg))}</strong></li>`:'',`<li><strong>${t('po_open')}</strong><small>${t('po_done')}</small></li>`].join('');
- return `<div class="page-h"><div><h1>${t('po_title')}</h1><p>${t('po_sub')}</p></div><select id="portalSel" class="btn" aria-label="${t('fl_client')}">${S.cases.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(tr(CL[x.cl]))} — ${esc(tr(x.title))}</option>`).join('')}</select></div>
+ return `<div class="page-h"><div><h1>${t('po_title')}</h1><p>${t('po_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="portalSel" class="btn" aria-label="${t('fl_client')}">${S.cases.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(tr(CL[x.cl]))} — ${esc(tr(x.title))}</option>`).join('')}</select><button class="btn" style="background:var(--ok);border-color:var(--ok);color:#fff" data-act="portalshare" data-id="${c.id}">${ic('download')} ${t('po_share_pdf')}</button></div></div>
  <div class="portal"><section class="card expl"><div class="card-b"><h2 style="margin-bottom:8px">${t('po_see')}</h2><ul><li>${t('po_1')}</li><li>${t('po_2')}</li><li>${t('po_3')}</li><li>${t('po_4')}</li><li>${t('po_5')}</li></ul><p class="note">${t('po_note')}</p></div></section>
  <div class="phone"><div class="phone-t"><small>${t('po_hello')}</small><h2>${esc(tr(CL[c.cl]))}</h2><small>${t('po_no')} ${c.no}</small></div><div class="phone-b">
   <div class="merged-tabs" style="margin:0 0 10px;border-bottom:1px solid var(--line)"><button data-act="portaltab" data-v="file" ${ptab==='file'?'aria-current="true"':''}>${t('po_tab_file')}</button><button data-act="portaltab" data-v="timeline" ${ptab==='timeline'?'aria-current="true"':''}>${t('po_tab_timeline')}</button></div>
-  ${ptab==='timeline'?portalTimeline(c):`
-  <div class="card"><h3>${esc(tr(c.title))}</h3><p class="sub" style="margin:0 0 6px">${esc(tr(c.court))}</p>${stepper(c.stage)}</div>
-  ${n?`<div class="card next"><div class="d">${n.getDate()}<small>${MON[S.lang][n.getMonth()]}</small></div><div><strong>${t('po_next')}</strong><div class="sub">${tr(KIND[c.kind])} — ${c.time}</div></div></div>`:''}
-  <div class="card"><h3>${t('po_track')}</h3><ul class="tl">${tl}</ul></div>
-  <div class="card"><h3>${t('po_docs')}</h3>${shared.length?shared.map(d=>`<div class="dlrow"><div class="ficon" style="width:34px;height:38px">${d.t}</div><div style="font-size:14px">${esc(tr(d.n))}</div></div>`).join(''):`<p class="empty">${t('po_nodocs')}</p>`}</div>`}</div></div></div>`}
+  ${ptab==='timeline'?portalTimeline(c):portalFileTab(c,n,shared,tl)}</div></div></div>`}
 
 /* ===== V9.8: سجل أحداث الموكل (Timeline) — شفافية بدون كشف الملاحظات الداخلية أو الأتعاب ===== */
 function portalTimeline(c){var ev=[];
@@ -1417,7 +1437,7 @@ function importV(){_csvBuf=null;return `<div class="page-h"><div><h1>استير�
  <p class="sub">ملف JSON يحوي كل الملفات والموكلين ووصولات الأتعاب والأمانات وسجل العمليات.</p></div></section></div>`}
 
 function importFile(f){if(!f)return;const r=new FileReader();r.onload=()=>{let d0=null;try{d0=JSON.parse(r.result)}catch(_){d0=null}if(d0===null||typeof d0!=='object'){if(typeof importEncrypted==='function')importEncrypted(r.result,importData);else toast('⚠ ملف غير صالح');return}importData(d0)};r.readAsText(f)}
-function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays))S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-12'?'01-11':h});if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
+function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays))S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-12'?'01-11':h});if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
   if(d.clients){S.clients=d.clients;CL.length=0;d.clients.forEach(c=>CL.push(c))}
   (S.cases||[]).forEach(c=>{if(c.clientId!=null)c.cl=c.clientId-1;else if(typeof c.cl==='number')c.clientId=c.cl+1});
   try{applyRoles()}catch(_){}try{secPostImport(_pa)}catch(_){}toast('تم الاسترجاع — '+(d.cases?d.cases.length:0)+' ملف');chrome();render()}catch(err){toast('⚠ ملف غير صالح')}}
@@ -1484,7 +1504,7 @@ function qrV(){const cards=visCases().slice(0,8).map(c=>`<div class="card client
  return `<div class="page-h"><div><h1>${t('qr_title')}</h1></div><button class="btn primary" data-act="qrgen">${t('qr_gen')}</button> <button class="btn" data-act="qrprint">${t('qr_print')}</button></div>
  <div class="cards" id="qrCards">${cards||'<p class="empty">—</p>'}</div><p class="note">diwan://case/&lt;رقم الملف&gt; — يُحمَّل qrcode عبر CDN عند الحاجة.</p>`}
 
-const VIEWS={dash,client:()=>clientV(S.arg),deadlines:deadlinesV,cash:cashV,audit:auditV,library:libraryV,import:importV,cases:casesV,cal:calV,tasks:tasksV,clients:clientsV,docs:docsV95,fees:feesV95,reports:reportsV95,team:teamV95,settings:settingsV,portal:()=>portalV(S.arg),landing:landingV,faq:landingV,links:legalLinksV,docgen:docGenV95,scan:typeof scanV==='function'?scanV:()=>'',approvals:typeof approvalsV==='function'?approvalsV:()=>'',license:licenseV,ja:jaV,services:servicesV,experts:expertsV,exec:execV,courtfees:courtfeesV,kyc:kycV,reminders:remindersV,hr:hrV,accounts:accountsV,qr:qrV,role:roleV,procedures:proceduresV,appointments:typeof appointmentsV==='function'?appointmentsV:()=>'<p>—</p>'};
+const VIEWS={dash,client:()=>clientV(S.arg),deadlines:deadlinesV,cash:cashV,audit:auditV,library:libraryV,import:importV,cases:casesV,cal:calV,tasks:tasksV,clients:clientsV,docs:docsV95,fees:feesV95,reports:reportsV95,team:teamV95,settings:settingsV,portal:()=>portalV(S.arg),landing:landingV,faq:landingV,links:legalLinksV,docgen:docGenV95,scan:typeof scanV==='function'?scanV:()=>'',approvals:typeof approvalsV==='function'?approvalsV:()=>'',license:licenseV,ja:jaV,services:servicesV,experts:expertsV,exec:execV,courtfees:courtfeesV,kyc:kycV,reminders:remindersV,hr:hrV,accounts:accountsV,qr:qrV,role:roleV,procedures:proceduresV,guide:typeof guideV==='function'?guideV:()=>'',appointments:typeof appointmentsV==='function'?appointmentsV:()=>'<p>—</p>'};
 
 
 // FIX-12 + FIX-10 + FIX-11 helpers
@@ -1500,7 +1520,7 @@ function scheduleReminders(){if(typeof Notification==='undefined')return;if(Noti
 
 /* ============== chrome ============== */
 const $=id=>document.getElementById(id);
-function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v9.10.0 — '+t('appSub');
+function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.0.0 — '+t('appSub');
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
@@ -1777,6 +1797,7 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
   <div class="kv"><span>${t('fl_rolenumber')}</span><b dir="ltr">${esc(c.roleNumber||'—')}</b></div>
   <div class="kv"><span>${t('fl_judgename')}</span><b>${esc(c.judgeName||'—')}</b></div>
   <div class="kv"><span>${t('fl_substname')}</span><b>${esc(c.substName||'—')}</b></div>
+  <div class="kv"><span>${t('fl_substfee')}</span><b>${c.substFee?money(c.substFee):'—'}</b></div>
   <div class="kv"><span>${t('fl_delibdate')}</span><b>${c.delibDate?fmt(c.delibDate):'—'}</b></div>
   <div style="height:1px;background:var(--line);margin:8px 0"></div>
   <div class="kv"><span>${t('fl_huissier')}</span><b>${esc(c.huissierName||'—')}</b></div>
@@ -1812,12 +1833,13 @@ function caseHearingModal(cid){var c=byC(cid);if(!c)return;
  modal('hear_track',[
   {n:'roleNumber',l:'fl_rolenumber',v:c.roleNumber||''},
   {n:'judgeName',l:'fl_judgename',v:c.judgeName||''},
-  {n:'substName',l:'fl_substname',v:c.substName||''},
+  substField(c),
+  {n:'substFee',l:'fl_substfee',type:'number',min:0,v:(c.substFee!=null?String(c.substFee):'')},
   {n:'delibDate',l:'fl_delibdate',type:'date',v:c.delibDate||''},
   {n:'huissierName',l:'fl_huissier',v:c.huissierName||''},
   {n:'signifStatus',l:'fl_signifstatus',type:'select',opts:[['','—'],['done',t('signif_done')],['refused',t('signif_refused')],['absent',t('signif_absent')]],v:c.signifStatus||''},
   {n:'signifDate',l:'fl_signifdate',type:'date',v:c.signifDate||''}
- ],function(v){undoable(function(){var x=byC(cid);x.roleNumber=v.roleNumber;x.judgeName=v.judgeName;x.substName=v.substName;x.delibDate=v.delibDate||null;x.huissierName=v.huissierName;x.signifStatus=v.signifStatus;x.signifDate=v.signifDate||null;
+ ],function(v){undoable(function(){var x=byC(cid);x.roleNumber=v.roleNumber;x.judgeName=v.judgeName;x.substName=v.substName;x.substFee=+v.substFee||0;x.delibDate=v.delibDate||null;x.huissierName=v.huissierName;x.signifStatus=v.signifStatus;x.signifDate=v.signifDate||null;
   if(v.signifDate)x.notif=v.signifDate;},'savedOnline');openDrawer(cid)},'save')}
 
 /* ===== V9.8: تصدير ملف القضية كاملاً (PDF) — بدون الملاحظات الداخلية ولا الأتعاب ===== */
@@ -2268,6 +2290,79 @@ dl48_title:'Délais expirant dans 48 h',dl48_hint:'Alerte anticipée — à trai
 xp_s0:'Extraction de la copie exécutoire',xp_s7:'Contestations d’exécution',xp_bailiff:'Commissaire de justice chargé',exec_bailiff:'Commissaire de justice',
 aud_c:'Collaborateur',aud_p:'Avocat associé'
 });
+/* ===== V10.0 i18n AR ===== */
+Object.assign(L.ar,{
+nav_guide:'دليل الاستخدام',
+qh_fab:'الجلسة السريعة',qh_title:'الجلسة السريعة (داخل المحكمة)',qh_sub:'ابحث عن الملف، سجّل مآل الجلسة، وحدّث الجلسة القادمة بضغطة واحدة',
+qh_search_ph:'ابحث برقم الملف أو الموضوع أو الموكل',qh_none:'لا نتائج مطابقة',qh_pick:'الملف المحدد',
+qh_reports:'تقرير سريع',qh_reports_ph:'ما الذي جرى في الجلسة؟ (يُسجَّل في الملف)',
+qh_dh:'تأجيل للتبادل',qh_dl:'حجز للمداولة',qh_rr:'إعادة للجدول',qh_other:'تأجيل آخر',
+qh_done:'تم تحديث الجلسة',qh_need:'اختر ملفاً أولاً',
+qh_kind_dh:'تأجيل للتبادل',qh_kind_dl:'حجز للمداولة',qh_kind_rr:'إعادة للجدول',qh_kind_other:'تأجيل آخر',
+qh_other_title:'تأجيل آخر — الجلسة القادمة',qh_date:'تاريخ الجلسة القادمة',qh_time:'الساعة',
+colg_title:'الزملاء والإنابات',colg_sub:'قائمة الزملاء المتعامل معهم — تُستعمل في الإنابات ورول الجلسات',colg_add:'+ زميل',
+colg_add_title:'إضافة زميل',colg_name:'اسم الزميل',colg_bar:'رقم التسجيل بالمنظمة',colg_phone:'الهاتف',
+colg_saved:'أُضيف الزميل',colg_del:'حذف',colg_none:'لا زملاء مسجّلون بعد',
+colg_hint:'تظهر هذه القائمة في حقل «الزميل المنوب عنه» بمحرر الجلسة، لتفادي الأخطاء الكتابية.',
+fl_substname_l:'الزميل المنوب عنه',fl_substfee:'مبلغ الإنابة المتفق عليه (دج)',
+inv_year:'الجرد السنوي',inv_year_btn:'جرد سنوي',inv_year_title:'الجرد السنوي للنتائج المالية',
+inv_year_sub:'إجمالي الأتعاب الصافية · إجمالي الأمانات · إجمالي المصاريف القضائية',
+inv_fees_net:'إجمالي الأتعاب الصافية',inv_trust_total:'إجمالي الأمانات',inv_caseexp_total:'إجمالي المصاريف القضائية',inv_grand:'المجموع العام',
+inv_col_case:'الملف',inv_col_fees:'الأتعاب المحصّلة',inv_col_trust:'رصيد الأمانات',inv_col_exp:'مصاريف الدعوى',
+inv_year_note:'الأتعاب = الدفعات المحصّلة فعلاً (صافي أتعاب المكتب). الأمانات = مبالغ الموكلين المودعة (تُخصم منها المسحوبات). المصاريف القضائية = مصاريف الدعوى القابلة للاسترداد (خبراء، تبليغ، حقوق تسجيل). الأرقام إرشادية وتُراجَع مع محاسب معتمد قبل التصريح.',
+inv_year_empty:'لا حركات مالية في هذه السنة',inv_year_print:'طباعة الجرد',inv_year_cases:n=>`${n} ملف`,
+bk_enc:'النسخ الاحتياطي المشفّر',bk_enc_sub:'ملف واحد مشفّر بكلمة مرور تحفظه في مكان آمن خارج الجهاز',bk_enc_btn:'تصدير نسخة مشفّرة',
+bk_enc_title:'كلمة مرور النسخة الاحتياطية',bk_enc_pass:'كلمة المرور',bk_enc_pass2:'تأكيد كلمة المرور',
+bk_enc_pw_hint:'8 خانات على الأقل مع حرف ورقم — تُطلب عند الاسترجاع ولا يمكن استرجاعها إن فُقدت',
+bk_enc_ok:'تم إنشاء النسخة الاحتياطية المشفّرة',bk_enc_busy:'جارٍ التشفير…',bk_enc_err:'تعذّر التشفير — افتح الملف في متصفح حديث',
+bk_enc_mismatch:'كلمتا المرور غير متطابقتين',
+bk_enc_note:'الملف مشفّر بـ AES-GCM-256 بمفتاح مشتق بـ PBKDF2 (200 ألف دورة). لاسترجاعه: الإعدادات ← «استرجاع نسخة سابقة» ثم اختر الملف وأدخل كلمة المرور نفسها.',
+po_ident:'بيانات القضية',po_parties:'الأطراف',po_hearings:'سجل الجلسات',po_hear_none:'لا جلسات مسجّلة',
+po_shared_note:'تظهر هنا الوثائق التي شاركها المكتب معك فقط.',po_role:'الصفة',
+po_no_secret:'لا تعرض بوابة الموكل الأتعاب ولا الأمانات ولا الملاحظات الداخلية إطلاقاً.',
+po_share_pdf:'مشاركة البوابة (PDF)',po_share_busy:'جارٍ توليد ملف PDF…',po_share_ok:'تم إنشاء ملف PDF',
+po_share_offline:'تعذّر تحميل مكتبة PDF — سيُفتح أمر الطباعة بدلاً منها',po_share_filename:'ملف-القضية',
+po_share_ok_shared:'تم فتح واجهة المشاركة',po_share_docs_note:'نسخة موجّهة إلى الموكل — بدون أي بيانات مالية أو ملاحظات داخلية.',
+guide_title:'دليل الاستخدام',guide_sub:'الدليل التشغيلي الشامل — يعمل دون اتصال',guide_open:'فتح في نافذة جديدة',
+guide_missing:'إن لم يظهر الدليل أعلاه، تأكد من وجود ملف diwan_guide-1.html في جذر الموقع ثم أعد التحديث.'
+});
+/* ===== V10.0 i18n FR ===== */
+Object.assign(L.fr,{
+nav_guide:'Guide d’utilisation',
+qh_fab:'Audience rapide',qh_title:'Audience rapide (au tribunal)',qh_sub:'Cherchez le dossier, consignez l’issue et fixez la prochaine date en un geste',
+qh_search_ph:'Rechercher par n° de dossier, objet ou client',qh_none:'Aucun résultat',qh_pick:'Dossier sélectionné',
+qh_reports:'Rapport rapide',qh_reports_ph:'Que s’est-il passé à l’audience ? (consigné au dossier)',
+qh_dh:'Renvoi pour échange',qh_dl:'Mise en délibéré',qh_rr:'Remise au rôle',qh_other:'Autre renvoi',
+qh_done:'Audience mise à jour',qh_need:'Sélectionnez d’abord un dossier',
+qh_kind_dh:'Renvoi pour échange',qh_kind_dl:'Mise en délibéré',qh_kind_rr:'Remise au rôle',qh_kind_other:'Autre renvoi',
+qh_other_title:'Autre renvoi — prochaine audience',qh_date:'Date de la prochaine audience',qh_time:'Heure',
+colg_title:'Confrères et substitutions',colg_sub:'Liste des confrères — utilisée pour les substitutions et le rôle',colg_add:'+ Confrère',
+colg_add_title:'Ajouter un confrère',colg_name:'Nom du confrère',colg_bar:'N° d’inscription au barreau',colg_phone:'Téléphone',
+colg_saved:'Confrère ajouté',colg_del:'Supprimer',colg_none:'Aucun confrère enregistré',
+colg_hint:'Cette liste alimente le champ « Confrère substitué » de la fiche d’audience et le rôle.',
+fl_substname_l:'Confrère substitué',fl_substfee:'Montant de la substitution convenu (DA)',
+inv_year:'Inventaire annuel',inv_year_btn:'Inventaire annuel',inv_year_title:'Inventaire annuel des résultats financiers',
+inv_year_sub:'Total des honoraires nets · total des séquestres · total des frais de procédure',
+inv_fees_net:'Total honoraires nets',inv_trust_total:'Total des séquestres',inv_caseexp_total:'Total des frais de procédure',inv_grand:'Total général',
+inv_col_case:'Dossier',inv_col_fees:'Honoraires encaissés',inv_col_trust:'Solde séquestre',inv_col_exp:'Frais de dossier',
+inv_year_note:'Honoraires = paiements réellement encaissés (honoraires nets du cabinet). Séquestres = fonds clients déposés (moins les retraits). Frais de procédure = frais répétibles (experts, signification, droits d’enregistrement). Chiffres indicatifs à vérifier avec un comptable agréé avant déclaration.',
+inv_year_empty:'Aucun mouvement financier cette année',inv_year_print:'Imprimer l’inventaire',inv_year_cases:n=>`${n} dossier(s)`,
+bk_enc:'Sauvegarde chiffrée',bk_enc_sub:'Un seul fichier chiffré par mot de passe, à conserver hors de l’appareil',bk_enc_btn:'Exporter une sauvegarde chiffrée',
+bk_enc_title:'Mot de passe de la sauvegarde',bk_enc_pass:'Mot de passe',bk_enc_pass2:'Confirmation',
+bk_enc_pw_hint:'8 caractères min., une lettre et un chiffre — demandé à la restauration, irrécupérable',
+bk_enc_ok:'Sauvegarde chiffrée créée',bk_enc_busy:'Chiffrement…',bk_enc_err:'Chiffrement impossible — ouvrez le fichier dans un navigateur récent',
+bk_enc_mismatch:'Les mots de passe ne correspondent pas',
+bk_enc_note:'Fichier chiffré en AES-GCM-256 avec clé dérivée PBKDF2 (200 000 tours). Pour restaurer : Paramètres → « Restaurer une sauvegarde », choisissez le fichier et saisissez le même mot de passe.',
+po_ident:'Données du dossier',po_parties:'Parties',po_hearings:'Historique des audiences',po_hear_none:'Aucune audience enregistrée',
+po_shared_note:'Seuls les documents partagés par le cabinet apparaissent ici.',po_role:'Qualité',
+po_no_secret:'Le portail client n’affiche jamais les honoraires, les séquestres ni les notes internes.',
+po_share_pdf:'Partager le portail (PDF)',po_share_busy:'Génération du PDF…',po_share_ok:'PDF créé',
+po_share_offline:'Bibliothèque PDF indisponible — ouverture de l’impression',po_share_filename:'Dossier-client',
+po_share_ok_shared:'Partage ouvert',po_share_docs_note:'Copie destinée au client — sans aucune donnée financière ni note interne.',
+guide_title:'Guide d’utilisation',guide_sub:'Guide opérationnel complet — fonctionne hors ligne',guide_open:'Ouvrir dans un nouvel onglet',
+guide_missing:'Si le guide ne s’affiche pas, vérifiez la présence du fichier diwan_guide-1.html à la racine du site puis rechargez.'
+});
+
 /* ================= V9.10 — وحدة الدمغة ================= */
 var STAMP_PRICE={court:250,council:400,admin:300};
 var STAMP_KINDS=['court','council','admin'];
@@ -2531,6 +2626,349 @@ document.addEventListener('change',function(e){
 document.addEventListener('input',function(e){
  if(e.target&&e.target.id==='ftsq'){S.ftsQuery=e.target.value;var box=document.getElementById('ftsres');if(box)box.innerHTML=ftsBody(S.ftsQuery);return}
 });
+
+/* ===================================================================
+   ==== V10.0 (Phase 2) — الجلسة السريعة، الإنابات، الجرد السنوي،
+   النسخة المشفّرة، بوابة الموكل الموسّعة، مشاركة PDF، دليل الاستخدام
+   =================================================================== */
+
+/* ---------- 1) الزملاء والإنابات (Substitutions) ---------- */
+function colleagues(){return S.colleagues||[]}
+function substField(c){
+ var list=colleagues(),cur=(c&&c.substName)||'';
+ if(!list.length)return {n:'substName',l:'fl_substname',v:cur};
+ var opts=[['','—']].concat(list.map(function(x){return [x.name,x.name+(x.bar?' — '+x.bar:'')]}));
+ if(cur&&!list.some(function(x){return x.name===cur}))opts.push([cur,cur]);
+ return {n:'substName',l:'fl_substname_l',type:'select',opts:opts,v:cur}}
+function colleaguesCard(){
+ var rows=colleagues().map(function(x){
+  return '<div class="dlrow"><span class="avatar sm">'+esc(String(x.name||'?').charAt(0))+'</span><div style="flex:1"><strong>'+esc(x.name)+'</strong><span class="sub">'+esc([x.bar,x.phone].filter(Boolean).join(' · ')||'—')+'</span></div>'
+   +'<button class="btn sm danger" data-act="colgdel" data-id="'+esc(String(x.id))+'">'+t('colg_del')+'</button></div>'}).join('');
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('colg_title')+'</h2><button class="btn sm primary" data-act="colgadd">'+t('colg_add')+'</button></div><div class="card-b">'
+  +'<p class="sub" style="margin:0 0 10px">'+t('colg_sub')+'</p>'
+  +(rows||'<p class="empty">'+t('colg_none')+'</p>')
+  +'<p class="sub" style="margin:10px 0 0;font-size:12px">'+t('colg_hint')+'</p></div></section>'}
+function addColleague(){
+ modal('colg_add_title',[
+  {n:'name',l:'colg_name',req:true,v:''},
+  {n:'bar',l:'colg_bar',v:''},
+  {n:'phone',l:'colg_phone',type:'tel',v:''}
+ ],function(v){
+  S.colleagues=S.colleagues||[];
+  S.colleagues.push({id:'cg'+Date.now(),name:v.name,bar:v.bar||'',phone:v.phone||''});
+  try{v9save()}catch(_){}
+  render();toast(t('colg_saved'))},'save')}
+function delColleague(id){if(!isM())return;
+ if(!confirm(t('v9_confirm')||'؟'))return;
+ S.colleagues=(S.colleagues||[]).filter(function(x){return String(x.id)!==String(id)});
+ try{v9save()}catch(_){}render()}
+
+/* ---------- 2) وضع الجلسة السريعة (داخل المحكمة) ---------- */
+var QH={q:'',id:null,note:''};
+function qhNorm(s){return String(s||'').toLowerCase().replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[\u064B-\u065F]/g,'').trim()}
+function qhCases(){
+ var q=qhNorm(QH.q);
+ var list=visCases().filter(function(c){
+  if(!q)return true;
+  return qhNorm(tr(c.title)).indexOf(q)>=0||qhNorm(tr(CL[c.cl]||{})).indexOf(q)>=0||qhNorm(c.no).indexOf(q)>=0});
+ var today=K(TODAY);
+ return list.sort(function(a,b){
+  var ta=a.next===today?0:1,tb=b.next===today?0:1;
+  if(ta!==tb)return ta-tb;
+  return D(a.next||'2999-01-01')-D(b.next||'2999-01-01')}).slice(0,30)}
+function qhListHTML(){
+ var list=qhCases();
+ if(!list.some(function(c){return c.id===QH.id}))QH.id=list.length?list[0].id:null;
+ var rows=list.map(function(c){
+  return '<button type="button" class="qh-item" data-act="qhpick" data-id="'+c.id+'" aria-pressed="'+(c.id===QH.id)+'">'
+   +'<span style="flex:1;min-width:0"><b dir="ltr" style="text-align:start">'+esc(c.no)+'</b><small>'+esc(tr(c.title))+'</small></span>'
+   +(c.next===K(TODAY)?'<span class="chip warn">'+t('inDays',0)+'</span>':'')+'</button>'}).join('');
+ return rows||'<p class="empty" style="padding:12px;margin:0">'+t('qh_none')+'</p>'}
+function qhSelHTML(){
+ var sel=QH.id?byC(QH.id):null;
+ if(!sel)return '<div class="qh-pick">'+t('qh_need')+'</div>';
+ return '<div class="qh-pick"><b>'+t('qh_pick')+':</b> '+esc(sel.no)+' — '+esc(tr(sel.title))
+  +'<div class="sub">'+esc(tr(sel.court))+' · '+(sel.next?esc(fmt(sel.next)):'—')+(sel.time?' · '+esc(sel.time):'')+'</div></div>'}
+function qhBody(){
+ return '<input id="qhq" class="qh-search" type="search" value="'+esc(QH.q)+'" placeholder="'+esc(t('qh_search_ph'))+'" aria-label="'+esc(t('qh_search_ph'))+'">'
+  +'<div class="qh-list" id="qhList">'+qhListHTML()+'</div>'
+  +'<div id="qhCase">'+qhSelHTML()+'</div>'
+  +'<div class="fld" style="margin-top:12px"><label for="qhNote">'+t('qh_reports')+'</label><textarea id="qhNote" class="qh-note" rows="2" placeholder="'+esc(t('qh_reports_ph'))+'">'+esc(QH.note||'')+'</textarea></div>'
+  +'<div class="qh-grid">'
+  +'<button type="button" class="btn primary" data-act="qhset" data-v="dh">'+t('qh_dh')+'</button>'
+  +'<button type="button" class="btn" data-act="qhset" data-v="dl">'+t('qh_dl')+'</button>'
+  +'<button type="button" class="btn" data-act="qhset" data-v="rr">'+t('qh_rr')+'</button>'
+  +'<button type="button" class="btn" data-act="qhset" data-v="other">'+t('qh_other')+'</button>'
+  +'</div>'}
+function qhPaint(){
+ var l=document.getElementById('qhList');if(l)l.innerHTML=qhListHTML();
+ var s=document.getElementById('qhCase');if(s)s.innerHTML=qhSelHTML()}
+function qhPick(id){var c=byC(+id);if(!c)return;QH.id=c.id;qhPaint()}
+function quickHearModal(){
+ QH.q='';QH.note='';
+ $('modal').className='modal qh-modal';
+ $('modal').innerHTML='<h2>'+t('qh_title')+'</h2><p class="sub" style="margin:0 0 12px">'+t('qh_sub')+'</p><div id="qhBody">'+qhBody()+'</div>'
+  +'<div class="mf"><button type="button" class="btn" data-act="closeModal">'+t('close')+'</button></div>';
+ $('modalWrap').classList.add('on');$('scrim').classList.add('on');
+ _cfOnDismiss=function(){QH={q:'',id:null,note:''}};
+ var inp=document.getElementById('qhq');if(inp)inp.focus()}
+function qhCaptureNote(){var n=document.getElementById('qhNote');if(n)QH.note=n.value;return QH.note}
+function qhApply(kind,custom,cidIn,noteIn){
+ var cid=(cidIn!=null&&cidIn!=='')?cidIn:QH.id;
+ var c=cid?byC(+cid):null;
+ if(!c){toast(t('qh_need'));return}
+ var note=String(noteIn!=null?noteIn:(QH.note||'')).trim(),today=K(TODAY);
+ var label={dh:t('qh_kind_dh'),dl:t('qh_kind_dl'),rr:t('qh_kind_rr'),other:t('qh_kind_other')}[kind]||kind;
+ var next=null;
+ if(kind==='dh')next=K(addCalDays(today,15));
+ else if(kind==='rr')next=K(addCalDays(today,8));
+ else if(kind==='other')next=custom||K(addCalDays(today,15));
+ undoable(function(){
+  c.sessions=c.sessions||[];
+  c.sessions.unshift({date:today,kind:label,out:note||label,next:next||''});
+  c.hearings=c.hearings||[];
+  c.hearings.push({date:today,done:true,time:c.time,cause:label});
+  if(kind==='dl'){c.delibDate=c.delibDate||K(addCalDays(today,15));c.next=null}
+  else{c.next=next}
+  if(note){c.notes=c.notes||[];c.notes.unshift({w:S.user,t:{ar:'تقرير جلسة — '+note,fr:'Rapport d’audience — '+note},d:today})}
+ },'qh_done');
+ closeModal();
+ chrome();render();
+ toast(t('qh_done')+' — '+(kind==='dl'?t('qh_dl')+' '+fmt(c.delibDate):(next?fmt(next):'')));
+ if($('drawer')&&$('drawer').classList.contains('on'))openDrawer(c.id)}
+function qhOtherModal(){
+ var note=qhCaptureNote(),cid=QH.id;
+ var c=cid?byC(cid):null;
+ modal('qh_other_title',[
+  {n:'date',l:'qh_date',type:'date',req:true,v:K(addCalDays(K(TODAY),15))},
+  {n:'time',l:'qh_time',v:(c&&c.time)||''}
+ ],function(v){
+  var cc=cid?byC(cid):null;
+  if(cc&&v.time)cc.time=v.time;
+  qhApply('other',v.date,cid,note)},'save')}
+
+/* ---------- 3) الجرد السنوي (Tax export) ---------- */
+function recDateOf(x){return String((x&&(x.d||x.date||x.at))||'')}
+function invYears(){
+ var ys={},add=function(d){var y=recDateOf({d:d});if(/^\d{4}$/.test(y.slice(0,4)))ys[y.slice(0,4)]=1};
+ (S.pays||[]).forEach(function(p){add(p.d||p.date)});
+ (S.trust||[]).forEach(function(x){add(x.date||x.d)});
+ (S.expenses||[]).forEach(function(x){add(x.d)});
+ (S.caseExpenses||[]).forEach(function(x){add(x.d)});
+ (S.invoices||[]).forEach(function(i){add(i.date)});
+ var out=Object.keys(ys).sort().reverse(),cur=String(TODAY.getFullYear());
+ if(out.indexOf(cur)<0)out.unshift(cur);
+ return out}
+function invYear(){return String(S.invYear||TODAY.getFullYear())}
+function annualRows(year){
+ var out=[];
+ visCases().forEach(function(c){
+  var fees=(S.pays||[]).filter(function(p){return (p.c===c.id||p.caseId===c.id)&&recDateOf(p).slice(0,4)===year}).reduce(function(a,p){return a+(+p.a||+p.amount||0)},0);
+  var dep=(S.trust||[]).filter(function(x){return x.c===c.id&&recDateOf(x).slice(0,4)===year&&x.type==='deposit'}).reduce(function(a,x){return a+(+x.amount||0)},0);
+  var wd=(S.trust||[]).filter(function(x){return x.c===c.id&&recDateOf(x).slice(0,4)===year&&x.type==='withdraw'}).reduce(function(a,x){return a+(+x.amount||0)},0);
+  var exp=(S.caseExpenses||[]).filter(function(x){return x.caseId===c.id&&recDateOf(x).slice(0,4)===year}).reduce(function(a,x){return a+(+x.amount||0)},0);
+  if(fees||dep||wd||exp)out.push({c:c,fees:fees,trust:dep-wd,exp:exp})});
+ return out}
+function annualTotals(rows){return rows.reduce(function(t,r){return {fees:t.fees+r.fees,trust:t.trust+r.trust,exp:t.exp+r.exp}},{fees:0,trust:0,exp:0})}
+function annualV(){
+ var y=invYear(),rows=annualRows(y),tt=annualTotals(rows);
+ var opts=invYears().map(function(x){return '<option value="'+x+'"'+(x===y?' selected':'')+'>'+x+'</option>'}).join('');
+ var kp=function(cls,icon,l,v,s){return '<div class="card kpi"><div class="ic '+cls+'">'+ic(icon)+'</div><div><span>'+l+'</span><b class="sm">'+money(v)+'</b><small>'+s+'</small></div></div>'};
+ var tb=rows.map(function(r){
+  return '<tr><td dir="ltr">'+esc(r.c.no)+'</td><td>'+esc(tr(r.c.title))+'<br><small class="sub">'+esc(tr(CL[r.c.cl]||{}))+'</small></td><td>'+money(r.fees)+'</td><td>'+money(r.trust)+'</td><td>'+money(r.exp)+'</td></tr>'}).join('');
+ return '<div class="filters"><div class="fld" style="margin:0;min-width:140px"><label for="invYearSel">'+t('tax_year')+'</label><select id="invYearSel">'+opts+'</select></div>'
+  +'<button class="btn primary" data-act="invprint">'+ic('print')+' '+t('inv_year_print')+'</button></div>'
+  +'<p class="sub" style="margin:0 0 14px">'+t('inv_year_sub')+' — '+t('inv_year_cases',rows.length)+'</p>'
+  +'<div class="kpis">'+kp('teal','coin',t('inv_fees_net'),tt.fees,t('tab_invoices'))+kp('info','shield',t('inv_trust_total'),tt.trust,t('trust_title'))+kp('brass','bills',t('inv_caseexp_total'),tt.exp,t('caseexp_title'))+'</div>'
+  +'<section class="card"><div class="card-h"><h2>'+t('inv_year_title')+' — '+y+'</h2></div><div class="card-b" style="overflow-x:auto">'
+  +'<table class="matrix" style="width:100%"><thead><tr><th>'+t('inv_col_case')+'</th><th>'+t('c_subject')+'</th><th>'+t('inv_col_fees')+'</th><th>'+t('inv_col_trust')+'</th><th>'+t('inv_col_exp')+'</th></tr></thead><tbody>'
+  +(tb||'<tr><td colspan="5">'+t('inv_year_empty')+'</td></tr>')
+  +'</tbody><tfoot><tr><th>'+t('inv_grand')+'</th><th></th><th>'+money(tt.fees)+'</th><th>'+money(tt.trust)+'</th><th>'+money(tt.exp)+'</th></tr></tfoot></table>'
+  +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('inv_year_note')+'</p></div></section>'}
+function printAnnual(){
+ var y=invYear(),rows=annualRows(y),tt=annualTotals(rows),cab=S.cabinet||{};
+ var trs=rows.map(function(r,i){return '<tr><td>'+(i+1)+'</td><td dir="ltr">'+esc(r.c.no)+'</td><td>'+esc(tr(r.c.title))+'</td><td>'+money(r.fees)+'</td><td>'+money(r.trust)+'</td><td>'+money(r.exp)+'</td></tr>'}).join('');
+ var html='<!DOCTYPE html><html lang="'+S.lang+'" dir="'+(S.lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8"><title>'+esc(t('inv_year_title')+' '+y)+'</title>'
+  +(typeof PRINT_FONT_LINK!=='undefined'?PRINT_FONT_LINK:'')
+  +'<style>body{font-family:'+(typeof PRINT_FONT_STACK!=='undefined'?PRINT_FONT_STACK:"'IBM Plex Sans Arabic',sans-serif")+';padding:14mm;color:#0f1e2e;font-size:12px}'
+  +'h1{font-size:19px;margin:0}h2{font-size:14px;margin:16px 0 6px;text-align:center}.hd{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0d2138;padding-bottom:10px}'
+  +'.hd img{width:54px;height:54px;object-fit:contain;background:#fff;border:1px solid #e0e6ed;border-radius:10px;padding:3px}'
+  +'table{width:100%;border-collapse:collapse;margin-top:8px}th,td{border:1px solid #d8dee6;padding:5px 7px;text-align:start}th{background:#f1f4f8}tfoot th{background:#eef2f7}'
+  +'.note{background:#f6edd9;border:1px solid #e7d3a8;padding:8px 10px;border-radius:8px;font-size:11px;margin-top:14px}@page{size:A4;margin:12mm}</style></head><body>'
+  +'<div class="hd"><div><h1>'+esc(tr(cab.name))+'</h1><div style="color:#566677">'+esc(tr(cab.address))+' · NIF '+esc(cab.nif||'—')+' · RC '+esc(cab.rc||'—')+'</div></div><img src="./logo.png" alt=""></div>'
+  +'<h2>'+esc(t('inv_year_title'))+' — '+y+'</h2>'
+  +'<div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px"><div><b>'+t('inv_fees_net')+':</b> '+money(tt.fees)+'</div><div><b>'+t('inv_trust_total')+':</b> '+money(tt.trust)+'</div><div><b>'+t('inv_caseexp_total')+':</b> '+money(tt.exp)+'</div></div>'
+  +'<table><thead><tr><th>#</th><th>'+t('inv_col_case')+'</th><th>'+t('c_subject')+'</th><th>'+t('inv_col_fees')+'</th><th>'+t('inv_col_trust')+'</th><th>'+t('inv_col_exp')+'</th></tr></thead><tbody>'
+  +(trs||'<tr><td colspan="6">'+t('inv_year_empty')+'</td></tr>')
+  +'</tbody><tfoot><tr><th colspan="3">'+t('inv_grand')+'</th><th>'+money(tt.fees)+'</th><th>'+money(tt.trust)+'</th><th>'+money(tt.exp)+'</th></tr></tfoot></table>'
+  +'<div class="note">'+t('inv_year_note')+'</div></body></html>';
+ printHtmlIframe(html)}
+
+/* ---------- 4) النسخة الاحتياطية المشفّرة ---------- */
+function encBackupCard(){
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('bk_enc')+'</h2></div><div class="card-b">'
+  +'<p class="sub" style="margin:0 0 10px">'+t('bk_enc_sub')+'</p>'
+  +'<button class="btn primary" data-act="expenc">'+ic('download')+' '+t('bk_enc_btn')+'</button>'
+  +'<p class="sub" style="margin:10px 0 0;font-size:12px">'+t('bk_enc_note')+'</p></div></section>'}
+function encBackupExport(){
+ if(!_SEC.avail()){toast(t('bk_enc_err'));return}
+ modal('bk_enc_title',[
+  {n:'p1',l:'bk_enc_pass',type:'password',req:true,v:'',hint:t('bk_enc_pw_hint'),chk:secPwChk},
+  {n:'p2',l:'bk_enc_pass2',type:'password',req:true,v:''}
+ ],function(v){
+  if(v.p1!==v.p2){toast(t('bk_enc_mismatch'));return}
+  var snap=null;
+  try{snap=snapV7(true)}catch(_){snap=null}
+  if(!snap){toast(t('bk_enc_err'));return}
+  toast(t('bk_enc_busy'));
+  encryptJSON(snap,v.p1).then(function(b64){
+   var blob=new Blob([ENC_PREFIX+b64],{type:'text/plain'});
+   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+   a.download='diwan-backup-enc-'+K(TODAY)+'.txt';a.click();
+   setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(_){}},3000);
+   S.lastBackup=K(TODAY);try{v9save()}catch(_){}
+   toast(t('bk_enc_ok'))}).catch(function(){toast(t('bk_enc_err'))})},'bk_enc_btn')}
+
+/* ---------- 5) بوابة الموكل الموسّعة (بدون أي بيانات مالية) ---------- */
+function portalParties(c){
+ var ps=(c.parties||[]).map(normParty);
+ if(!ps.length)return '<p class="empty">—</p>';
+ return ps.map(function(p){
+  var nm=pFull(p)||'—';
+  var rl=p.role==='other'?(tr(p.roleLabel)||t('pr_role_other')):t('pr_role_'+p.role);
+  var pr=p.proc?procLbl(p.proc):'';
+  return '<div class="dlrow"><span class="avatar sm">'+esc(String(nm).charAt(0))+'</span><div style="flex:1"><strong>'+esc(nm)+'</strong><span class="sub">'+esc([rl,pr,tr(p.address)].filter(function(x){return x&&x!=='—'}).join(' · '))+'</span></div></div>'}).join('')}
+function portalHearings(c){
+ var list=(c.sessions||[]).slice().sort(function(a,b){return D(b.date)-D(a.date)});
+ var own=(c.hearings||[]).slice().sort(function(a,b){return D(b.date)-D(a.date)});
+ if(!list.length&&!own.length)return '<p class="empty">'+t('po_hear_none')+'</p>';
+ var rows=list.map(function(s){
+  return '<div class="dlrow"><span class="chip info">'+fmt(s.date)+'</span><div style="flex:1"><strong>'+esc(s.kind||'—')+'</strong><span class="sub">'+esc(s.out||'')+(s.next?' · '+t('po_next')+': '+fmt(s.next):'')+'</span></div></div>'}).join('');
+ if(rows)return rows;
+ return own.map(function(h){
+  return '<div class="dlrow"><span class="chip info">'+fmt(h.date)+'</span><div style="flex:1"><strong>'+esc(t('tl_hearing'))+'</strong><span class="sub">'+esc(h.cause||'')+'</span></div></div>'}).join('')}
+function portalFileTab(c,n,shared,tl){
+ return '<div class="card"><h3>'+esc(tr(c.title))+'</h3><p class="sub" style="margin:0 0 6px">'+esc(tr(c.court))+'</p>'+stepper(c.stage)+'</div>'
+  +'<div class="card"><h3>'+t('po_ident')+'</h3>'
+  +'<div class="kv"><span>'+t('po_no')+'</span><b dir="ltr">'+esc(c.no)+'</b></div>'
+  +'<div class="kv"><span>'+t('fl_type')+'</span><b>'+esc(tr(TYPES[c.type]||{ar:'—',fr:'—'}))+'</b></div>'
+  +'<div class="kv"><span>'+t('d_court')+'</span><b>'+esc(tr(c.court))+'</b></div>'
+  +'<div class="kv"><span>'+t('c_stage')+'</span><b>'+esc(tr(STAGES[c.stage]))+'</b></div>'
+  +(c.roleNumber?'<div class="kv"><span>'+t('fl_rolenumber')+'</span><b dir="ltr">'+esc(c.roleNumber)+'</b></div>':'')
+  +(c.judgeName?'<div class="kv"><span>'+t('fl_judgename')+'</span><b>'+esc(c.judgeName)+'</b></div>':'')+'</div>'
+  +(n?'<div class="card next"><div class="d">'+n.getDate()+'<small>'+MON[S.lang][n.getMonth()]+'</small></div><div><strong>'+t('po_next')+'</strong><div class="sub">'+esc(tr(KIND[c.kind]))+(c.time?' — '+esc(c.time):'')+'</div></div></div>':'')
+  +(c.delibDate?'<div class="card"><h3>'+t('hear_delib')+'</h3><p class="sub" style="margin:0">'+fmt(c.delibDate)+'</p></div>':'')
+  +'<div class="card"><h3>'+t('po_parties')+'</h3>'+portalParties(c)+'</div>'
+  +'<div class="card"><h3>'+t('po_hearings')+'</h3>'+portalHearings(c)+'</div>'
+  +'<div class="card"><h3>'+t('po_track')+'</h3><ul class="tl">'+tl+'</ul></div>'
+  +'<div class="card"><h3>'+t('po_docs')+'</h3>'+(shared.length?shared.map(function(d){return '<div class="dlrow"><div class="ficon" style="width:34px;height:38px">'+d.t+'</div><div style="font-size:14px">'+esc(tr(d.n))+'</div></div>'}).join(''):'<p class="empty">'+t('po_nodocs')+'</p>')
+  +'<p class="sub" style="margin:8px 0 0;font-size:12px">'+t('po_shared_note')+'</p></div>'
+  +'<p class="note" style="font-size:12px">'+t('po_no_secret')+'</p>'}
+
+/* ---------- 6) مشاركة بوابة الموكل كملف PDF ---------- */
+function portalShareFileName(c){
+ var no=String((c&&c.no)||'').replace(/[^0-9A-Za-z\u0600-\u06FF_-]/g,'-');
+ return t('po_share_filename')+'-'+no+'.pdf'}
+function portalShareHTML(c){
+ var cab=S.cabinet||{},cl=CL[c.cl]||{ar:'—',fr:'—'},n=c.next?D(c.next):null;
+ var shared=S.docs.filter(function(d){return d.c===c.id&&d.sh});
+ var parties=(c.parties||[]).map(normParty).map(function(p){
+  var nm=pFull(p)||'—';
+  var rl=p.role==='other'?(tr(p.roleLabel)||t('pr_role_other')):t('pr_role_'+p.role);
+  var pr=p.proc?procLbl(p.proc):'';
+  return '<tr><td>'+esc(nm)+'</td><td>'+esc([rl,pr].filter(Boolean).join(' — '))+'</td><td>'+esc(tr(p.address)||'—')+'</td></tr>'}).join('');
+ var ses=(c.sessions||[]).slice().sort(function(a,b){return D(b.date)-D(a.date)}).map(function(s){
+  return '<tr><td>'+esc(s.date)+'</td><td>'+esc(s.kind||'')+'</td><td>'+esc(s.out||'')+'</td><td>'+esc(s.next||'—')+'</td></tr>'}).join('');
+ var docs=shared.map(function(d){return '<li>'+esc(tr(d.n))+' <span style="color:#566677">('+esc(d.s||'')+')</span></li>'}).join('');
+ var ST='border:1px solid #d8dee6;padding:5px 7px;text-align:start;font-size:11.5px';
+ var TH='style="'+ST+';background:#f1f4f8"';
+ var TD='style="'+ST+'"';
+ return '<div style="font-family:'+(typeof PRINT_FONT_STACK!=='undefined'?PRINT_FONT_STACK:"'IBM Plex Sans Arabic',sans-serif")+';color:#0f1e2e;font-size:12.5px;line-height:1.7">'
+  +'<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0d2138;padding-bottom:10px">'
+  +'<div><h1 style="font-size:19px;margin:0">'+esc(tr(cab.name))+'</h1>'
+  +'<div style="font-size:11.5px;color:#566677">'+esc(tr(cab.address))+' · '+esc(cab.phone||'')+'</div>'
+  +'<div style="font-size:11.5px;color:#566677">NIF '+esc(cab.nif||'—')+' · RC '+esc(cab.rc||'—')+'</div></div>'
+  +'<img src="./logo.png" alt="" style="width:58px;height:58px;object-fit:contain;background:#fff;border:1px solid #e0e6ed;border-radius:10px;padding:3px"></div>'
+  +'<h2 style="text-align:center;font-size:16px;margin:16px 0 2px">'+t('po_title')+'</h2>'
+  +'<div style="text-align:center;color:#566677;font-size:11.5px;margin-bottom:10px" dir="ltr">'+esc(c.no)+'</div>'
+  +'<h3 style="font-size:14px;border-bottom:1px solid #d8dee6;padding-bottom:4px">'+t('po_ident')+'</h3>'
+  +'<div><b>'+t('fl_title')+':</b> '+esc(tr(c.title))+'</div>'
+  +'<div><b>'+t('d_client')+':</b> '+esc(tr(cl))+' &nbsp; <b>'+t('d_court')+':</b> '+esc(tr(c.court))+'</div>'
+  +'<div><b>'+t('c_stage')+':</b> '+esc(tr(STAGES[c.stage]))+' &nbsp; <b>'+t('fl_type')+':</b> '+esc(tr(TYPES[c.type]||{ar:'—',fr:'—'}))+(c.roleNumber?' &nbsp; <b>'+t('fl_rolenumber')+':</b> '+esc(c.roleNumber):'')+'</div>'
+  +(n?'<div><b>'+t('po_next')+':</b> '+esc(fmt(c.next)+' — '+(c.time||''))+'</div>':'')
+  +(c.judg?'<div><b>'+t('d_judg')+':</b> '+esc(tr(c.judg))+'</div>':'')
+  +'<h3 style="font-size:14px;border-bottom:1px solid #d8dee6;padding-bottom:4px;margin-top:16px">'+t('po_parties')+'</h3>'
+  +'<table style="width:100%;border-collapse:collapse"><thead><tr><th '+TH+'>'+t('pr_party')+'</th><th '+TH+'>'+t('pr_role')+'</th><th '+TH+'>'+t('pr_address')+'</th></tr></thead><tbody>'
+  +(parties||'<tr><td '+TD+' colspan="3">—</td></tr>')+'</tbody></table>'
+  +'<h3 style="font-size:14px;border-bottom:1px solid #d8dee6;padding-bottom:4px;margin-top:16px">'+t('po_hearings')+'</h3>'
+  +(ses?'<table style="width:100%;border-collapse:collapse"><thead><tr><th '+TH+'>'+t('fl_date')+'</th><th '+TH+'>'+t('fl_kind')+'</th><th '+TH+'>'+t('fl_outcome')+'</th><th '+TH+'>'+t('fl_next2')+'</th></tr></thead><tbody>'+ses+'</tbody></table>':'<p style="color:#566677">'+t('po_hear_none')+'</p>')
+  +'<h3 style="font-size:14px;border-bottom:1px solid #d8dee6;padding-bottom:4px;margin-top:16px">'+t('po_docs')+'</h3>'
+  +'<ul style="margin:6px 0 0;padding-inline-start:20px">'+(docs||'<li>'+t('po_nodocs')+'</li>')+'</ul>'
+  +'<div style="background:#f6edd9;border:1px solid #e7d3a8;padding:8px 10px;border-radius:8px;font-size:11px;margin-top:16px">'+t('po_share_docs_note')+'</div>'
+  +'<div style="margin-top:24px;text-align:center;color:#566677;font-size:11px">'+esc(tr(cab.name))+' — '+esc(K(TODAY))+'</div></div>'}
+function portalShare(cid){
+ var c=byC(cid);if(!c)return;
+ var html=portalShareHTML(c),name=portalShareFileName(c);
+ function fallback(){
+  toast(t('po_share_offline'));
+  printHtmlIframe('<!DOCTYPE html><html lang="'+S.lang+'" dir="'+(S.lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8"><title>'+esc(name)+'</title>'
+   +(typeof PRINT_FONT_LINK!=='undefined'?PRINT_FONT_LINK:'')+'<style>body{padding:14mm;margin:0;background:#fff}@page{size:A4;margin:12mm}</style></head><body>'+html+'</body></html>')}
+ function dl(blob){
+  try{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
+   setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(_){}},3000);toast(t('po_share_ok'))}catch(_){fallback()}}
+ function run(){
+  if(!window.html2pdf){fallback();return}
+  var wrap=document.createElement('div');
+  wrap.setAttribute('dir',S.lang==='ar'?'rtl':'ltr');
+  wrap.style.cssText='position:fixed;top:0;inset-inline-start:-99999px;width:190mm;background:#fff;color:#0f1e2e;padding:6mm';
+  wrap.innerHTML=html.replace(/src="\.\/logo\.png"/g,'src="'+((typeof LOGO_SRC!=='undefined')?LOGO_SRC:'./logo.png')+'"');
+  document.body.appendChild(wrap);
+  var fin=function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap)};
+  toast(t('po_share_busy'));
+  try{
+   window.html2pdf().set({margin:[6,6,6,6],image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}})
+    .from(wrap).outputPdf('blob').then(function(blob){
+     fin();
+     var file=null;try{file=new File([blob],name,{type:'application/pdf'})}catch(_){file=null}
+     if(file&&navigator.canShare&&navigator.share){
+      try{if(navigator.canShare({files:[file]})){
+       navigator.share({files:[file],title:name}).then(function(){toast(t('po_share_ok_shared'))}).catch(function(){dl(blob)});
+       return}}catch(_){}}
+     dl(blob)}).catch(function(){fin();fallback()})
+  }catch(_){fin();fallback()}}
+ ensureH2P(run)}
+
+/* ---------- 7) دليل الاستخدام داخل التطبيق ---------- */
+function guideV(){
+ return '<div class="page-h"><div><h1>'+t('guide_title')+'</h1><p>'+t('guide_sub')+'</p></div>'
+  +'<button class="btn" data-act="guideopen">'+ic('book')+' '+t('guide_open')+'</button></div>'
+  +'<div class="guide-wrap"><iframe class="guide-frame" src="./diwan_guide-1.html" title="'+esc(t('guide_title'))+'" loading="lazy"></iframe></div>'
+  +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('guide_missing')+'</p>'}
+
+/* ---------- V10.0 — الأحداث ---------- */
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;
+ var a=el.dataset.act,id=+el.dataset.id;
+ if(a==='quickhear'){quickHearModal();return}
+ if(a==='qhpick'){qhPick(id);return}
+ if(a==='qhset'){var v=el.dataset.v;if(v==='other'){qhOtherModal();return}qhCaptureNote();qhApply(v);return}
+ if(a==='colgadd'){addColleague();return}
+ if(a==='colgdel'){delColleague(el.dataset.id);return}
+ if(a==='invyear'){S.reportTab='inv';render();return}
+ if(a==='invprint'){printAnnual();return}
+ if(a==='expenc'){encBackupExport();return}
+ if(a==='portalshare'){portalShare(id);return}
+ if(a==='guideopen'){try{window.open('./diwan_guide-1.html','_blank','noopener')}catch(_){}return}
+});
+document.addEventListener('input',function(e){
+ if(!e.target||!e.target.id)return;
+ if(e.target.id==='qhq'){QH.q=e.target.value;qhPaint();return}
+ if(e.target.id==='qhNote'){QH.note=e.target.value;return}
+});
+document.addEventListener('change',function(e){
+ if(e.target&&e.target.id==='invYearSel'){S.invYear=e.target.value;try{v9save()}catch(_){}render();return}
+});
+
 if(!_LIC.gate()){chrome();render()}
 
 /* ===== v7 ADDON: storage, approvals, scanner, notifs, docs ===== */
@@ -2540,10 +2978,10 @@ if(!_LIC.gate()){chrome();render()}
 
 // FIX13R: STORE_KEY / SCHEMA / _saveTimer declarations moved above the first chrome()
 /* FIX3: scheduleSave/persistNow are defined in the FIX3 security block below (debounced, encrypted) */
-function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null}}
+function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null,colleagues:S.colleagues||[]}}
 function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(raw.indexOf(ENC_PREFIX)===0)return null;return normStore(JSON.parse(raw))}catch(e){return null}}
 function normStore(data){try{if(!data.clients&&data.cases){var clients=[],seen={};(data.cases||[]).forEach(function(c){if(c.clientId!=null)return;if(typeof c.cl==='number'){var src0=(CL)[c.cl]||{ar:'—',fr:'—',ph:'—'};var key=(src0.ar||'')+'|'+(src0.ph||'');if(seen[key]!=null)c.clientId=seen[key];else{var id=clients.length+1;clients.push(Object.assign({id:id},src0));seen[key]=id;c.clientId=id}}});data.clients=clients.length?clients:CL.map(function(x,i){return Object.assign({id:i+1},x)})}if(!data.dlHolidays)data.dlHolidays=DEFAULT_HOLIDAYS.slice();if(!data.dlRules)data.dlRules=DEFAULT_DLK.slice();if(!data.drafts)data.drafts=[];data.schemaVersion=SCHEMA;return data}catch(e){return null}}
-function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
+function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
 function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.tasks=[];S.dls=[];S.docs=[];S.pays=[];S.expenses=[];S.officeExp=[];S.invoices=[];S.trust=[];S.installments=[];S.audit=[];S.drafts=[];S.clients=[];CL.length=0;S.nextId=1;S.nextTask=1;S.nextInv=1;S.nextTrust=1;S.nextPay=1;S.isDemo=false;scheduleSave();chrome();render()}
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
@@ -2860,7 +3298,7 @@ function genScanPdf(){if(!_scanPages.length){toast('—');return}if(typeof windo
  storeDocFile(did,blob);
  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();toast(t('scan_ok'));_scanPages=[];render()}
 function enableNotifs(){if(!('Notification' in window))return;Notification.requestPermission().then(function(p){toast(p==='granted'?t('notif_enable'):'—')})}
-function exportFullV7(){S.lastBackup=K(TODAY);scheduleSave();var blob=new Blob([JSON.stringify(snapV7(true),null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='diwan-v9.10-'+K(TODAY)+'.json';a.click();toast(t('v7_export_full'))}
+function exportFullV7(){S.lastBackup=K(TODAY);scheduleSave();var blob=new Blob([JSON.stringify(snapV7(true),null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='diwan-v10-'+K(TODAY)+'.json';a.click();toast(t('v7_export_full'))}
 
 
 
