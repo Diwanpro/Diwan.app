@@ -320,7 +320,27 @@ html[dir=ltr] .tl li{padding:0 0 14px 24px}
 .inv-page .cab-logo{background:#fff;border-radius:12px;padding:3px}
 .stagebook-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 4px;border-top:1px solid var(--line)}
 .stagebook-row:first-child{border-top:0}
+/* ===== V9.10 ===== */
+.stamp-grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.stamp-inv{flex:1;min-width:140px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:center;background:var(--bg)}
+.stamp-inv b{display:block;font-family:var(--serif);font-size:28px;line-height:1.25;font-variant-numeric:tabular-nums}
+.stamp-inv small{color:var(--muted);font-size:12.5px}
+.stamp-inv.low{border-color:var(--bad);background:var(--bad-soft)}
+.stamp-inv.low b{color:var(--bad)}
+.chip.stamp{background:var(--brass-soft);color:var(--brass)}
+.chip.exempt{background:var(--ok-soft);color:var(--ok)}
+.sig-up{display:flex;gap:16px;flex-wrap:wrap}
+.sig-up .u{flex:1;min-width:200px;border:1px dashed var(--line);border-radius:14px;padding:12px;text-align:center;background:var(--bg)}
+.sig-up img{max-width:180px;max-height:96px;object-fit:contain;display:block;margin:8px auto;background:#fff;border-radius:8px;padding:4px;border:1px solid var(--line)}
+.doc-sign{display:flex;align-items:flex-end;gap:18px;justify-content:space-between;margin-top:30px;flex-wrap:wrap}
+.doc-sign .sigbox{border-top:1px dashed #566677;min-width:170px;padding-top:10px;text-align:center;font-size:12px;color:#566677}
+.doc-sign .sigbox img{max-width:130px;max-height:80px;object-fit:contain;display:block;margin:0 auto 4px;background:#fff;border-radius:6px;padding:2px}
+.hit{background:var(--brass-soft);border-radius:4px;padding:0 2px;font-weight:700}
+.fts-box{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg)}
+.fp-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.fp-row:first-child{border-top:0}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#view" id="skipLink"></a>
@@ -537,7 +557,7 @@ const CL=[
  {ar:'قاسمي سمية',fr:'Soumia Kassimi',ph:'0550 72 40 47',nif:'—'},
  {ar:'ورثة بلعيد',fr:'Héritiers Belaïd',ph:'0661 82 41 48',nif:'—'}];
 const U=[{id:'m',role:'manager',n:{ar:'الأستاذ',fr:'Maître'},rk:'r_m',init:{ar:'أ',fr:'M'}},{id:'p',role:'partner',n:{ar:'الأستاذة ليلى',fr:'Maître Leila'},rk:'r_p',init:{ar:'ل',fr:'L'},partner:true},{id:'c',role:'collaborator',n:{ar:'الأستاذ كريم',fr:'Maître Karim'},rk:'r_collab',init:{ar:'ك',fr:'K'}},{id:'s',role:'secretary',n:{ar:'أمينة',fr:'Amina'},rk:'r_s',init:{ar:'أ',fr:'A'}},{id:'t',role:'trainee',n:{ar:'رياض',fr:'Riyad'},rk:'r_t',init:{ar:'ر',fr:'R'}}];
-const DG0=()=>({type:'open',huissierName:'',priorRef:'',court:'0',courtName:COURTS[0].ar,caseNo:'',pName:'',pAddr:'',pQuality:'natural',pCompany:'',dName:'',dAddr:'',dQuality:'natural',dCompany:'',judgment:'',subject:'',facts:'',requests:'',grounds:'',evidence:'',lawyerName:'',lawyerAddr:'',lawyerPhone:'',place:'الجزائر',legalArt:'',amount:'',sessionDate:'',sessionTime:'',docList:'',feeAmount:'',feeTerms:'',refNo:''});
+const DG0=()=>({type:'open',caseId:'',stampFirst:'',priorAdmin:'',huissierName:'',priorRef:'',court:'0',courtName:COURTS[0].ar,caseNo:'',pName:'',pAddr:'',pQuality:'natural',pCompany:'',dName:'',dAddr:'',dQuality:'natural',dCompany:'',judgment:'',subject:'',facts:'',requests:'',grounds:'',evidence:'',lawyerName:'',lawyerAddr:'',lawyerPhone:'',place:'الجزائر',legalArt:'',amount:'',sessionDate:'',sessionTime:'',docList:'',feeAmount:'',feeTerms:'',refNo:''});
 
 const S={
  lang:'ar',user:'m',view:'dash',arg:null,online:true,pending:0,syncing:false,
@@ -545,7 +565,7 @@ const S={
  casesScope:'mine',taskFilter:'open',taskWho:'all',sortBy:'no',sortDir:-1,
  feesTab:'overview',reportTab:'overview',
  perms:{secFees:false,secContacts:true,traineeAll:false},
- invites:[],nextId:9,nextTask:9,nextInv:4,nextTrust:4,nextPay:1,welcomed:false,isDemo:true,clients:null,dlHolidays:null,dlRules:null,dlMovableHolidays:[],drafts:[],scans:[],pinHash:null,lastBackup:null,schemaVersion:9,apprTab:'pending',receiptSeq:{year:TODAY.getFullYear(),next:1},invoiceSeq:{year:TODAY.getFullYear(),next:4},license:{no:'',issued:'',expires:'',bar:'',status:'active'},processServers:[],services:[],experts:[],expertTasks:[],seizures:[],feesCalc:[],employees:[],payroll:[],auth:{sessions:[],log:[]},extraLawyers:[],intakeLog:[],deliveries:[],userPasswords:{},appointments:[],qrRegistry:[],smsLog:[],notifSent:{},
+ invites:[],nextId:9,nextTask:9,nextInv:4,nextTrust:4,nextPay:1,welcomed:false,isDemo:true,clients:null,dlHolidays:null,dlRules:null,dlMovableHolidays:[],drafts:[],scans:[],pinHash:null,lastBackup:null,schemaVersion:9,apprTab:'pending',receiptSeq:{year:TODAY.getFullYear(),next:1},invoiceSeq:{year:TODAY.getFullYear(),next:4},license:{no:'',issued:'',expires:'',bar:'',status:'active'},processServers:[],services:[],experts:[],expertTasks:[],seizures:[],feesCalc:[],employees:[],payroll:[],auth:{sessions:[],log:[]},extraLawyers:[],intakeLog:[],deliveries:[],userPasswords:{},appointments:[],qrRegistry:[],smsLog:[],notifSent:{},stampInventory:{court:12,council:8,admin:4},stampMoves:[],caseExpenses:[],attendance:[],dlVacation:{on:true,from:'07-15',to:'08-31'},ftsQuery:'',
  cabinet:{name:{ar:'مكتب الأستاذ بن علي للمحاماة',fr:'Cabinet Maître Ben Ali'},address:{ar:'15 شارع الاستقلال، ميلة 43000، الجزائر',fr:'15 rue de l’Indépendance, Mila 43000, Algérie'},nif:'000 1234 5678912',nis:'000 1234 5678913',rc:'19/00-1234567B20',ai:'123456789012345',phone:'+213 31 55 66 77',email:'contact@benali-avocat.dz',bank:{ar:'BADR — حساب 002 12345 0000123456 78',fr:'BADR — compte 002 12345 0000123456 78'},tva:19,timbre:100,timbreFixed:true},
  docGen:DG0(),
  cases:[
@@ -608,16 +628,20 @@ Object.assign(L.ar,{nav_deadlines:'حاسبة الآجال القانونية',n
 Object.assign(L.fr,{nav_deadlines:'Calculateur de délais',nav_cash:'Caisse et profit',nav_audit:"Journal d'activité",nav_library:'Jurisprudence & glossaire',nav_import:'Import & sauvegarde',nav_client:'Fiche client',dg_t5:'Pourvoi en cassation',dg_t6:'Opposition',link_case:'Lier à un dossier',secret_file:'Dossier confidentiel',d_parties:'Parties',d_sessions:'Historique audiences',wa_msg:'Bonjour, Cabinet Maître Ben Ali : votre prochaine audience',stmt:'Relevé de compte client',m_party:'Nouvelle partie',m_session:"Enregistrer audience",m_offexp:'Frais de cabinet',m_link:'Lier dossier',m_notif:'Date de signification',fl_partyname:'Nom',fl_role:'Qualité',fl_outcome:"Ce qui s'est passé",fl_kind:"Type d'audience",fl_next2:'Audience suivante',dlg_auto:'Délais calculés automatiquement'});
 const DEFAULT_HOLIDAYS=['01-01','01-11','05-01','07-05'];
 const DZ_HOLIDAYS=DEFAULT_HOLIDAYS;
-const DEFAULT_DLK=[{id:'appeal',name:{ar:'استئناف مدني (م 579 ق.إ.م.إ)',fr:'Appel civil (art. 579 CPCA)'},n:1,unit:'month',abroadMonths:2},{id:'cassation',name:{ar:'طعن بالنقض (م 541)',fr:'Pourvoi (art. 541)'},n:2,unit:'month',abroadMonths:2},{id:'opposition',name:{ar:'معارضة (م 155)',fr:'Opposition (art. 155)'},n:10,unit:'day',abroadMonths:2},{id:'appealg',name:{ar:'استئناف جنح (م 455 ق.إ.ج)',fr:'Appel correctionnel (art. 455 CPP)'},n:10,unit:'day',abroadMonths:0}];
+const DEFAULT_VACATION={on:true,from:'07-15',to:'08-31'};
+const DEFAULT_DLK=[{id:'appeal',name:{ar:'استئناف مدني (م 579 ق.إ.م.إ)',fr:'Appel civil (art. 579 CPCA)'},n:1,unit:'month',abroadMonths:2},{id:'cassation',name:{ar:'طعن بالنقض (م 541)',fr:'Pourvoi (art. 541)'},n:2,unit:'month',abroadMonths:2},{id:'opposition',name:{ar:'معارضة (م 155)',fr:'Opposition (art. 155)'},n:10,unit:'day',abroadMonths:2},{id:'appealg',name:{ar:'استئناف جنح (م 455 ق.إ.ج)',fr:'Appel correctionnel (art. 455 CPP)'},n:10,unit:'day',abroadMonths:0},
+ {id:'prelitigation',name:{ar:'التظلم الإداري المسبق (م 817 ق.إ.م.إ)',fr:'Recours administratif préalable (art. 817 CPCA)'},n:4,unit:'month',abroadMonths:0,distMonths:0}];
 const DLK=DEFAULT_DLK;
 function isHoliday(d){const md=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');return ((typeof S!=='undefined'&&S.dlHolidays)||DEFAULT_HOLIDAYS).includes(md)}
 function isMovableHoliday(x){const k=typeof x==='string'?x.slice(0,10):K(x);return ((typeof S!=='undefined'&&S.dlMovableHolidays)||[]).includes(k)}
-function isNonWorking(d){return d.getDay()===5||d.getDay()===6||isHoliday(d)||isMovableHoliday(d)}
+function vacRange(){var v=(typeof S!=='undefined'&&S.dlVacation)||DEFAULT_VACATION;return v.on===false?null:v}
+function isVacation(d){var r=vacRange();if(!r||!r.from||!r.to)return false;var md=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');return md>=r.from&&md<=r.to}
+function isNonWorking(d){return d.getDay()===5||d.getDay()===6||isHoliday(d)||isMovableHoliday(d)||isVacation(d)}
 function addMonthsCal(from,n){const d=D(from),day=d.getDate();d.setMonth(d.getMonth()+n);if(d.getDate()!==day)d.setDate(0);return d}
 function addCalDays(from,n){const d=D(from);d.setDate(d.getDate()+n);return d}
 // FIX-03: respect skip flag for workday extension
 function extendToWorkday(d, skip){if(!skip) return {date:d, reason:''}; const x=new Date(d.getTime()); let reason=''; while(isNonWorking(x)){x.setDate(x.getDate()+1); reason='تمديد ليوم عمل'} return {date:x, reason}}
-function calcDeadline(from,rule,abroad,skip){let start=D(from); start.setDate(start.getDate()+1); let end; if(rule.unit==='month'){end=addMonthsCal(K(start),rule.n); end.setDate(end.getDate()-1)} else {end=addCalDays(K(start),rule.n-1)} if(abroad){const am=rule.abroadMonths!=null?+rule.abroadMonths:2;if(am>0)end=addMonthsCal(K(end),am)} const doSkip = skip!==undefined ? skip : !!(S.dlCalc&&S.dlCalc.skip); const ext=extendToWorkday(end, doSkip); return {orig:K(end), final:K(ext.date), reason:ext.reason||'', daysLeft:diff(K(ext.date)), warnHol:!doSkip&&isNonWorking(ext.date)}}
+function calcDeadline(from,rule,abroad,skip,dist){let start=D(from); start.setDate(start.getDate()+1); let end; if(rule.unit==='month'){end=addMonthsCal(K(start),rule.n); end.setDate(end.getDate()-1)} else {end=addCalDays(K(start),rule.n-1)} if(abroad){const am=rule.abroadMonths!=null?+rule.abroadMonths:2;if(am>0)end=addMonthsCal(K(end),am)} if(dist){const dm=rule.distMonths!=null?+rule.distMonths:1;if(dm>0)end=addMonthsCal(K(end),dm)} const doSkip = skip!==undefined ? skip : !!(S.dlCalc&&S.dlCalc.skip); const ext=extendToWorkday(end, doSkip); return {orig:K(end), final:K(ext.date), reason:ext.reason||'', daysLeft:diff(K(ext.date)), warnHol:!doSkip&&isNonWorking(ext.date), vac:isVacation(ext.date), dist:!!dist}}
 function addBiz(from,n,skip){const sk = skip!==undefined ? skip : !!(S.dlCalc&&S.dlCalc.skip); return extendToWorkday(addCalDays(from,n), sk).date}
 Object.assign(S,{audit:[{w:'m',what:'فتح النظام — بدء العمل',d:new Date().toLocaleString('fr-FR')}],officeExp:[{d:addDays(-32),t:'إيجار المكتب الشهري',a:40000},{d:addDays(-20),t:'كهرباء وماء',a:6500},{d:addDays(-6),t:'أجور السكرتيرة',a:30000},{d:addDays(-3),t:'اشتراك الإنترنت والهاتف',a:4500}],tax:{regime:'free',ifu:5,ibs:23},jurisprudence:[{court:'المحكمة العليا — الغرفة المدنية',year:2024,ref:'قرار رقم 108976',kw:'تقادم، ملكية، حيازة',text:'حيث إن دعوى الملكية تقع تحت طائلة التقادم المكسب وفق المادة 827 من القانون المدني، ويترتب على انقضائه انتقال الملكية للحائز بشروط القانون...'},{court:'المحكمة العليا — الغرفة الاجتماعية',year:2023,ref:'قرار رقم 98451',kw:'فصل، تعويض، 11-90',text:'يكون فصل الأجير تعسفياً إذا خالف المستخدم الإجراءات الشكلية المنصوص عليها في المادة 12 من القانون 11-90 المعدل والمتمم...'},{court:'مجلس قضاء قسنطينة',year:2024,ref:'حكم رقم 2210',kw:'شيك، صورية، 665',text:'تقوم قرينة الصورية بمجرد إثبات تقديم شيك بدون رصيد وفق المادة 665 من التجاري، ويبقى إثبات الحقيقة على من يتمسك بها...'}],glossary:[{ar:'أجل',fr:'Délai',d:'مدة زمنية قانونية لإجراء ما تحسب من تاريخ معين ولا يجوز تجاوزها.'},{ar:'استئناف',fr:'Appel',d:'طريق عادي للطعن في الأحكام أمام مجلس القضاء خلال شهر.'},{ar:'نقض',fr:'Cassation',d:'طريق غير عادي أمام المحكمة العليا لمخالفة القانون خلال شهرين.'},{ar:'معارضة',fr:'Opposition',d:'طعن في الأحكام الغيابية خلال عشرة أيام من التبليغ.'},{ar:'حائز',fr:'Possesseur',d:'من يملك الشيء بيده بشكل فعلي.'},{ar:'تقادم مكسب',fr:'Usucapion',d:'كسب الملكية بالحيازة المتواصلة المدة القانونية.'},{ar:'إنابة قضائية',fr:'Commissaire de justice',d:'المكلف بالتبليغ والتنفيذ (المفوض القضائي).'},{ar:'قسمة',fr:'Partage',d:'تقسيم المال الشائع بين الشركاء قضاءً أو اتفاقاً.'},{ar:'إحالة',fr:'Renvoi',d:'تأجيل الدعوى إلى جلسة لاحقة لاستكمال الإجراءات.'},{ar:'مداولة',fr:'Délibéré',d:'فترة تأمل القاضي قبل النطق بالحكم.'}],installments:[{c:4,amount:50000,due:addDays(10),paid:false},{c:8,amount:35000,due:addDays(-4),paid:false}],dlMovableHolidays:[],dlCalc:{date:K(TODAY),skip:false,result:null}});
 Object.assign(CL[0],{nin:'1080123456',birth:'1978-03-14',addr:'حي 200 مسكن، ميلة'});Object.assign(CL[1],{nin:'1090654321',birth:'1985-07-02',addr:'وسط المدينة، ميلة'});Object.assign(CL[2],{nin:'1070987654',birth:'1990-11-20',addr:'عين التين، ميلة'});Object.assign(CL[3],{addr:'المنطقة الصناعية، قسنطينة',birth:'—'});Object.assign(CL[4],{nin:'1050678901',birth:'1988-09-09',addr:'ميلة'});Object.assign(CL[5],{nin:'1060543210',birth:'1975-01-30',addr:'شلغوم العيد'});Object.assign(CL[6],{nin:'1040321654',birth:'1992-05-25',addr:'شلغوم العيد'});Object.assign(CL[7],{addr:'ميلة'});
@@ -625,12 +649,17 @@ Object.assign(CL[0],{nin:'1080123456',birth:'1978-03-14',addr:'حي 200 مسكن
 Object.assign(L.ar,{nc_sec_case:'بيانات القضية',pr_party:'الطرف',pr_role:'الصفة',pr_role_client:'موكل',pr_role_opponent:'خصم',pr_role_other:'طرف آخر',pr_role_free:'الصفة (نص حر)',pr_first:'الاسم',pr_last:'اللقب',pr_birthdate:'تاريخ الميلاد',pr_birthplace:'مكان الميلاد',pr_idtype:'نوع الوثيقة',pr_id_none:'لا شيء',pr_id_nin:'بطاقة وطنية (NIN)',pr_id_passport:'جواز سفر',pr_id_license:'رخصة سياقة',pr_idnumber:'رقم الوثيقة',pr_idissue:'تاريخ الإصدار',pr_idexpiry:'تاريخ الانتهاء',pr_address:'مكان الإقامة',pr_add:'+ إضافة طرف',pr_add_aria:'إضافة طرف جديد',pr_remove_aria:'حذف هذا الطرف',pr_name_req:'اسم الطرف مطلوب'});
 Object.assign(L.fr,{nc_sec_case:'Données du dossier',pr_party:'Partie',pr_role:'Qualité',pr_role_client:'Client',pr_role_opponent:'Adversaire',pr_role_other:'Autre partie',pr_role_free:'Qualité (libre)',pr_first:'Prénom',pr_last:'Nom',pr_birthdate:'Date de naissance',pr_birthplace:'Lieu de naissance',pr_idtype:'Type de pièce',pr_id_none:'Aucune',pr_id_nin:'Carte nationale (NIN)',pr_id_passport:'Passeport',pr_id_license:'Permis de conduire',pr_idnumber:'N° de la pièce',pr_idissue:'Date de délivrance',pr_idexpiry:'Date d’expiration',pr_address:'Lieu de résidence',pr_add:'+ Ajouter une partie',pr_add_aria:'Ajouter une nouvelle partie',pr_remove_aria:'Supprimer cette partie',pr_name_req:'Le nom de la partie est requis'});
 /* V9-FIX-02: party model helpers */
-function blankParty(role){return {kind:'natural',nif:'',role:role||'other',roleLabel:{ar:'',fr:''},firstName:{ar:'',fr:''},lastName:{ar:'',fr:''},birthDate:'',birthPlace:{ar:'',fr:''},idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:{ar:'',fr:''}}}
+const PROC_KEYS=['demandeur','defendeur','mis_en_cause','interv_conserv','interv_agressif','garant','assurance'];
+const PROC_BASE={demandeur:'client',defendeur:'opponent',mis_en_cause:'other',interv_conserv:'other',interv_agressif:'other',garant:'other',assurance:'opponent'};
+function normProc(k){return PROC_KEYS.indexOf(k)>=0?k:''}
+function procBase(k){return PROC_BASE[normProc(k)]||''}
+function procLbl(k){k=normProc(k);return k?t('pr_pc_'+k):''}
+function blankParty(role){return {kind:'natural',nif:'',role:role||'other',proc:'',procLabel:{ar:'',fr:''},roleLabel:{ar:'',fr:''},firstName:{ar:'',fr:''},lastName:{ar:'',fr:''},birthDate:'',birthPlace:{ar:'',fr:''},idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:{ar:'',fr:''}}}
 function _bi(v){if(v&&typeof v==='object')return {ar:v.ar||'',fr:v.fr||''};const x=(v==null?'':String(v));return {ar:x,fr:x}}
 function mkParty(role,name){const q=blankParty(role);q.firstName=_bi(name);return q}
 function normParty(p){const b=blankParty();if(!p||typeof p!=='object')return b;
- if(p.firstName===undefined&&p.lastName===undefined&&p.n!==undefined){const rl=String(p.role||'');b.role=/موكل|client/i.test(rl)?'client':/خصم|advers|oppos/i.test(rl)?'opponent':'other';b.roleLabel=_bi(rl);b.firstName=_bi(p.n);return b}
- b.role=['client','opponent','other'].indexOf(p.role)>=0?p.role:'other';b.roleLabel=_bi(p.roleLabel);b.firstName=_bi(p.firstName);b.lastName=_bi(p.lastName);
+ if(p.firstName===undefined&&p.lastName===undefined&&p.n!==undefined){const rl=String(p.role||'');b.role=/موكل|client/i.test(rl)?'client':/خصم|advers|oppos/i.test(rl)?'opponent':'other';b.roleLabel=_bi(rl);b.proc=normProc(p.proc);b.firstName=_bi(p.n);return b}
+ b.role=['client','opponent','other'].indexOf(p.role)>=0?p.role:'other';b.proc=normProc(p.proc);if(b.proc)b.role=procBase(b.proc);b.procLabel=_bi(p.procLabel);b.roleLabel=_bi(p.roleLabel);b.firstName=_bi(p.firstName);b.lastName=_bi(p.lastName);
  b.birthDate=p.birthDate||'';b.birthPlace=_bi(p.birthPlace);b.idType=['nin','passport','license'].indexOf(p.idType)>=0?p.idType:'';
  b.idNumber=p.idNumber||'';b.idIssueDate=p.idIssueDate||'';b.idExpiryDate=p.idExpiryDate||'';b.address=_bi(p.address);b.kind=p.kind==='legal'?'legal':'natural';b.nif=b.kind==='legal'?(p.nif||''):'';return b}
 function normParties(c){let arr=Array.isArray(c.parties)&&c.parties.length?c.parties:null;
@@ -746,9 +775,9 @@ function dash(){const m=isM(),r=me().role,my=myCases(),tk=myTasks();
   third=`<div class="g2e"><section class="card"><div class="card-h"><h2>${t('activity')}</h2></div><div class="card-b">${(computeRecentActivity()).map(a=>{const u=byU(a.w);return `<div class="dlrow">${av(a.w)}<div><strong>${esc(u?tr(u.n):'—')}</strong> ${esc(tr(a.t))}<span class="sub">${esc(tr(a.h))}</span></div></div>`}).join('')||'<p class="empty">—</p>'}</div></section>
   <section class="card"><div class="card-h"><h2>${t('fees_card')}</h2><button class="btn sm" data-act="go" data-v="fees">${t('view_all')}</button></div><div class="card-b"><div class="bar"><i style="width:${pct}%"></i></div><div style="display:flex;justify-content:space-between;margin-top:10px"><div><span class="sub">${t('collected')}</span><b style="font-size:22px">${money(got)}</b></div><div style="text-align:end"><span class="sub">${t('remaining')}</span><b style="font-size:22px;color:var(--bad)">${money(rest)}</b></div></div></div></section></div>`}
  const apBanner=_apToday.length?`<div class="bar-off" style="border-radius:12px;margin-bottom:12px"><span style="flex:1">📅 ${t('appt_title')}: ${_apToday.length}</span><button data-act="go" data-v="appointments" class="btn sm">${t('view_all')}</button></div>`:'';
-  const alerts=apBanner+(noPOA?`<div class="bar-off" style="border-color:var(--bad);color:var(--bad);background:var(--bad-soft);border-radius:12px;margin-bottom:16px;border:1px solid var(--bad)">${ic('alert')}<span style="flex:1">${t('al_poa')} — ${t('al_poa_n',noPOA)}</span></div>`:'');
+  const alerts=stampAlertHTML()+apBanner+(noPOA?`<div class="bar-off" style="border-color:var(--bad);color:var(--bad);background:var(--bad-soft);border-radius:12px;margin-bottom:16px;border:1px solid var(--bad)">${ic('alert')}<span style="flex:1">${t('al_poa')} — ${t('al_poa_n',noPOA)}</span></div>`:'');
  return `<div class="page-h"><div><h1>${t(r==='manager'?'greet_m':r==='secretary'?'greet_s':'greet_t')}</h1><p>${t('todaySum',todayH,d3)}</p></div>${r!=='trainee'?`<button class="btn primary big" data-act="newcase">${ic('plus')}${t('newCase').replace('+ ','')}</button>`:''}</div>
- ${alerts}<div class="kpis">${k1}</div>
+ ${alerts}${dl48Card()}<div class="kpis">${k1}</div>
  <div class="g2"><section class="card"><div class="card-h"><h2>${t('roll_title')}</h2><button class="btn sm" data-act="go" data-v="cal">${t('nav_cal')}</button></div><div class="card-b"><div class="roll">${roll}</div></div></section>
  <section class="card"><div class="card-h"><h2>${t('dl_title')}</h2></div><div class="card-b">${dlRows(near.slice(),5)}</div></section></div>
  <div class="g2e">${taskCard}${apCard}</div><div class="g2e" style="margin-top:16px">${second}</div>${third}`}
@@ -810,8 +839,8 @@ function docsV(){const ids=new Set(visCases().map(c=>c.id)),list=S.docs.filter(d
 
 function feesV(){
  const tab=(k,l)=>`<button role="tab" data-act="feestab" data-v="${k}" aria-current="${S.feesTab===k}">${l}</button>`;
- const tabs=`<div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('invoices',t('tab_invoices')+' ('+(S.invoices||[]).filter(i=>canSee(byC(i.caseId))).length+')')}${tab('trust',t('tab_trust'))}${tab('expenses',t('tab_expenses'))}</div>`;
- const c=S.feesTab==='overview'?feesOverview():S.feesTab==='invoices'?invoicesV():S.feesTab==='trust'?trustV():expensesV();
+ const tabs=`<div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('invoices',t('tab_invoices')+' ('+(S.invoices||[]).filter(i=>canSee(byC(i.caseId))).length+')')}${tab('trust',t('tab_trust'))}${tab('expenses',t('tab_expenses'))}${tab('recoverable',t('caseexp_title'))}</div>`;
+ const c=S.feesTab==='overview'?feesOverview():S.feesTab==='invoices'?invoicesV():S.feesTab==='trust'?trustV():S.feesTab==='recoverable'?caseExpensesV():expensesV();
  return `<div class="page-h"><div><h1>${t('fe_title')}</h1><p>${t('fe_sub')}</p></div></div>${tabs}${c}`}
 function feesOverview(){
  // FIX-04 + FIX-14: visCases + exclude judicial aid from fee totals
@@ -877,7 +906,7 @@ function expensesV(){
 
 function reportsV(){
  const tab=(k,l)=>`<button role="tab" data-act="reporttab" data-v="${k}" aria-current="${S.reportTab===k}">${l}</button>`;
- return `<div class="page-h"><div><h1>${t('rp_title')}</h1><p>${t('rp_sub')}</p></div><button class="btn" data-act="export">${ic('download')}${t('rp_export')}</button></div><div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('tax',t('tax_title'))}</div>${S.reportTab==='tax'?taxV():reportsOverview()}`}
+ return `<div class="page-h"><div><h1>${t('rp_title')}</h1><p>${t('rp_sub')}</p></div><button class="btn" data-act="export">${ic('download')}${t('rp_export')}</button></div><div class="tabs" role="tablist">${tab('overview',t('tab_overview'))}${tab('tax',t('tax_title'))}${tab('stamp',t('stamp_rep_title'))}</div>${S.reportTab==='tax'?taxV():S.reportTab==='stamp'?stampReportV():reportsOverview()}`}
 
 function computeMonthlyCollections(){
  var pays=S.pays||[], buckets={};
@@ -935,7 +964,7 @@ function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filte
 function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<span class="chip ${c||'ok'}">${v}</span>`:''}</div>`; const v8sec=`<div class="card" style="margin-bottom:16px"><div class="card-b"><div class="kv"><span>${t('st_security')}</span><button class="btn sm" data-act="chgpass">${t('sec_chg_btn')}</button> <span class="chip ${_SEC.avail()?'ok':'bad'}">${t(_SEC.avail()?'sec_enc_on':'sec_enc_off')}</span> <button class="btn sm" data-act="enablenotif">${t('notif_enable')}</button></div><div class="kv"><span>${t('v7_export_full')}</span><button class="btn sm primary" data-act="exportfull">${ic('download')} ${t('v7_export_full')}</button></div></div></div>`;
  const cab=S.cabinet,ltr=v=>`<dd dir="ltr" style="text-align:start">${esc(v)}</dd>`;
  return `<div class="page-h"><div><h1>${t('st_title')}</h1></div></div>
- ${v8sec}${licenseCard()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
+ ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
   <dl class="dl-list" style="margin:0"><dt>${t('cabinet_name')}</dt><dd>${esc(tr(cab.name))}</dd><dt>${t('cabinet_addr')}</dt><dd>${esc(tr(cab.address))}</dd><dt>${t('cabinet_nif')}</dt>${ltr(cab.nif)}<dt>${t('cabinet_nis')}</dt>${ltr(cab.nis)}<dt>${t('cabinet_rc')}</dt>${ltr(cab.rc)}<dt>${t('cabinet_ai')}</dt>${ltr(cab.ai)}<dt>${t('cabinet_phone')}</dt>${ltr(cab.phone)}<dt>${t('cabinet_email')}</dt>${ltr(cab.email)}<dt>${t('cabinet_bank')}</dt><dd>${esc(tr(cab.bank))}</dd><dt>${t('cabinet_tva')}</dt><dd>${cab.tva}%</dd><dt>${t('cabinet_timbre')}</dt><dd>${cab.timbre} دج</dd></dl></div></section>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_backup')}</h2></div><div class="card-b">${kv(t('st_b_auto'),t('on'))}${kv(t('st_b_last'),'✓')}${kv(t('st_b_restore'),'✓')}<div class="kv"><span>${t('st_b_export')}</span><button class="btn sm" data-act="exportfull">${ic('download')}${t('st_b_export')}</button></div></div></section>
  <section class="card"><div class="card-h"><h2>${t('st_security')}</h2></div><div class="card-b">${kv(t('st_lock'),t('on'))}${kv(t('st_2fa'),t('on'))}${kv(t('st_sync'),t('on'),'teal')}<p class="sub" style="margin:4px 0 0">${t('st_sync_d')}</p></div></section></div>
@@ -1029,11 +1058,14 @@ function docGenV(){
   else if(o.textarea)inp=`<textarea id="dg_${key}" data-dg="${key}" rows="4" placeholder="${esc(o.ph||'')}">${esc(v)}</textarea>`;
   else inp=`<input id="dg_${key}" data-dg="${key}" type="text" value="${esc(v)}" placeholder="${esc(o.ph||'')}">`;
   return `<div class="fld" style="margin-bottom:12px"><label for="dg_${key}" style="font-size:13px">${label}</label>${inp}</div>`};
+ const caseOpts='<option value="">—</option>'+visCases().map(c=>`<option value="${c.id}" ${String(dg.caseId||'')===String(c.id)?'selected':''}>${esc(c.no)} — ${esc(tr(c.title))}</option>`).join('');
  const Q=[['natural',t('dg_party_natural')],['legal',t('dg_party_legal')]];
  const hr='<div style="height:1px;background:var(--line);margin:14px 0"></div>';
- return `<div class="page-h"><div><h1>${t('dg_title')}</h1><p>${t('dg_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="dgdraft">${t('dg_save_draft')}</button><button class="btn" data-act="dgsend">${t('dg_send_appr')}</button><button class="btn primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button></div></div>
+ return `<div class="page-h"><div><h1>${t('dg_title')}</h1><p>${t('dg_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="dgdraft">${t('dg_save_draft')}</button><button class="btn" data-act="dgsend">${t('dg_send_appr')}</button><button class="btn primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button><button class="btn primary" data-act="dgpdf">${ic('download')} ${t('dg_save_pdf')}</button></div></div>
  <div class="dg-grid"><section class="card"><div class="card-b" style="max-height:calc(100vh - 200px);overflow:auto">
-  ${field(t('dg_type'),'type',{select:[['open',t('dg_t_open')],['appeal',t('dg_t_appeal')],['cassation',t('dg_t_cass')],['reply',t('dg_t_reply')],['defense',t('dg_t_defense')],['poa',t('dg_t_poa')],['fee',t('dg_t_fee')],['rcpt_s',t('dg_t_rcpt_s')],['rcpt_f',t('dg_t_rcpt_f')],['rcpt_u',t('dg_t_rcpt_u')],['docs',t('dg_t_docs')],['recv',t('dg_t_recv')],['hand',t('dg_t_hand')],['adjourn',t('dg_t_adjourn')],['copy',t('dg_t_copy')],['noappeal',t('dg_t_noappeal')],['notice',t('dg_t_notice')],['fee_notice',t('dg_t_fee_notice')],['recours_revision',t('dg_t_rev')],['intervention',t('dg_t_interv')],['exception',t('dg_t_exc')],['mainlevee',t('dg_t_mainlevee')],['desistement',t('dg_t_desist')]]})}${hr}
+  ${field(t('dg_type'),'type',{select:[['open',t('dg_t_open')],['appeal',t('dg_t_appeal')],['cassation',t('dg_t_cass')],['reply',t('dg_t_reply')],['defense',t('dg_t_defense')],['poa',t('dg_t_poa')],['fee',t('dg_t_fee')],['rcpt_s',t('dg_t_rcpt_s')],['rcpt_f',t('dg_t_rcpt_f')],['rcpt_u',t('dg_t_rcpt_u')],['docs',t('dg_t_docs')],['recv',t('dg_t_recv')],['hand',t('dg_t_hand')],['adjourn',t('dg_t_adjourn')],['copy',t('dg_t_copy')],['noappeal',t('dg_t_noappeal')],['notice',t('dg_t_notice')],['fee_notice',t('dg_t_fee_notice')],['recours_revision',t('dg_t_rev')],['intervention',t('dg_t_interv')],['exception',t('dg_t_exc')],['mainlevee',t('dg_t_mainlevee')],['desistement',t('dg_t_desist')],['admin_open',t('dg_t_admin')],['reenroll',t('dg_t_reenroll')],['execcopy',t('dg_t_execcopy')]]})}${hr}
+  <div class="fld" style="margin-bottom:12px"><label for="dg_casepick">${t('dg_pick_case')}</label><select id="dg_casepick">${caseOpts}</select><div class="hint"><button type="button" class="btn sm" data-act="dgfill">${ic('download')} ${t('dg_fill')}</button></div></div>
+  ${field(t('dg_stamp_lbl'),'stampFirst',{select:[['',t('stamp_auto')],['1',t('stamp_force')],['0',t('stamp_skip')]]})}
   ${field(t('dg_court'),'court',{select:COURTS.map((c,i)=>[i,tr(c)])})}
   ${field(t('dg_case_no'),'caseNo',{ph:'2026/00XXX'})}
   <div style="font-weight:700;margin:14px 0 8px;color:var(--teal-ink);font-size:14px">${isMemo?t('dg_against'):t('dg_for')}</div>
@@ -1053,18 +1085,21 @@ function docGenV(){
   ${['rcpt_s','rcpt_f','rcpt_u'].includes(dg.type)?field('مرجع الوصل','refNo',{ph:'2026/0001'}):''}
   ${['mainlevee','desistement','recours_revision'].includes(dg.type)?field(t('fl_huissier'),'huissierName',{ph:'الاسم واللقب — Commissaire de justice'}):''}
   ${['recours_revision','intervention'].includes(dg.type)?field(t('dg_prior_ref'),'priorRef',{ph:'رقم القرار / الحكم وتاريخه'}):''}
+  ${dg.type==='admin_open'?field(t('dg_prior_admin'),'priorAdmin',{ph:t('dg_prior_admin_hint')}):''}
   ${field(t('dg_evidence'),'evidence',{textarea:true,ph:'قائمة المستندات المرفقة'})}${hr}
   ${field(t('dg_lawyer_name'),'lawyerName')}${field(t('dg_lawyer_addr'),'lawyerAddr')}${field(t('dg_lawyer_phone'),'lawyerPhone',{ph:'05XX XX XX XX'})}${field(t('dg_place'),'place',{ph:'الجزائر'})}
   <div style="margin-top:16px"><button type="button" class="btn" data-act="dgreset">${ic('refresh')} ${t('dg_reset')}</button></div>
  </div></section>
- <section class="card"><div class="card-h"><h2>${t('dg_preview')}</h2><button class="btn sm primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button></div><div class="card-b"><div id="dgPreview">${dgRender()}</div><p class="sub" style="margin-top:12px">${t('dg_hint')}</p></div></section></div>`}
+ <section class="card"><div class="card-h"><h2>${t('dg_preview')}</h2><button class="btn sm primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button></div><div class="card-b"><div id="dgPreview">${dgRender()}</div>${dgStampBanner()}<p class="sub" style="margin-top:12px">${t('dg_hint')}</p></div></section></div>`}
 function dgRender(){
  const d=S.docGen||{}, q=(v,f)=>{const s=(v==null||v===''||v===undefined)?'':String(v);return esc(s||f||'—')};
  const party=(name,addr,quality,company)=>{let s='<b>'+q(name)+'</b>';if(addr)s+='<br>'+t('dg_address')+': '+q(addr);if(quality==='legal'&&company)s+='<br>'+q(company);else if(quality==='legal')s+='<br><small>('+(S.lang==='ar'?'شخص معنوي':'Personne morale')+')</small>';return s};
  const cab=S.cabinet||{};
  const lawyerBlock='<div style="margin-top:20px;padding:10px 12px;background:#f1f4f8;border-radius:8px;font-size:13px"><b>'+t('dg_lawyer_line')+':</b> '+q(d.lawyerName||tr(cab.name))+((d.lawyerAddr||tr(cab.address))?'<br>'+q(d.lawyerAddr||tr(cab.address)):'')+(d.lawyerPhone||cab.phone?'<br><span dir="ltr" style="unicode-bidi:isolate">'+q(d.lawyerPhone||cab.phone)+'</span>':'')+'</div>';
  const todayStr=new Date().toLocaleDateString(S.lang==='ar'?'ar-DZ-u-nu-latn':'fr-FR',{year:'numeric',month:'long',day:'numeric'});
- const signBlock='<div style="margin-top:36px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px"><div style="font-size:13px">'+t('dg_place')+': <b>'+q(d.place||'الجزائر')+'</b><br>'+todayStr+'</div><div style="text-align:center;border-top:1px dashed #566677;padding-top:48px;min-width:200px;font-size:12px;color:#566677">'+t('dg_sign')+'</div></div>';
+ const _sigImg=(S.cabinet&&S.cabinet.signatureImg)?'<img src="'+S.cabinet.signatureImg+'" alt="" style="max-width:130px;max-height:80px;object-fit:contain;display:block;margin:0 auto 4px">':'';
+ const _stmpImg=(S.cabinet&&S.cabinet.stampImg)?'<img src="'+S.cabinet.stampImg+'" alt="" style="max-width:120px;max-height:95px;object-fit:contain;display:block;margin:0 auto 4px">':'';
+ const signBlock='<div style="margin-top:36px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap"><div style="font-size:13px">'+t('dg_place')+': <b>'+q(d.place||'الجزائر')+'</b><br>'+todayStr+'</div><div style="display:flex;gap:26px;flex-wrap:wrap"><div style="text-align:center;border-top:1px dashed #566677;padding-top:12px;min-width:170px;font-size:12px;color:#566677">'+_sigImg+t('dg_sign')+'</div><div style="text-align:center;border-top:1px dashed #566677;padding-top:12px;min-width:170px;font-size:12px;color:#566677">'+_stmpImg+t('sign_stamp')+'</div></div></div>';
  const legalNote='<p style="margin-top:18px;font-size:11px;color:#566677;border-top:1px solid #e0e6ed;padding-top:8px">⚠ '+t('v7_legal_note')+(d.legalArt?' — '+q(d.legalArt):'')+'</p>';
  const court=q(d.courtName)||tr(COURTS[+(d.court||0)]||COURTS[0]);
  const header='<div style="text-align:center;border-bottom:3px solid #0d2138;padding-bottom:12px;margin-bottom:18px"><img src="./logo.png" alt="شعار ديوان" style="width:58px;height:58px;object-fit:contain;display:block;margin:0 auto 6px"><div style="font-size:13px;font-weight:700;color:#0d2138">'+t('dg_repub')+'</div><div style="font-size:11px;color:#566677">'+t('dg_ministry')+'</div><div style="font-family:Amiri,serif;font-size:18px;color:#0d2138;margin-top:8px">'+t('dg_before')+' '+court+'</div>'+(d.caseNo?'<div style="margin-top:6px;font-size:13px">رقم الملف: <b dir="ltr">'+q(d.caseNo)+'</b></div>':'')+'</div>';
@@ -1287,6 +1322,36 @@ function dgRender(){
    lawyerBlock+signBlock+legalNote+'</div>';
  }
 
+ /* ===== V9.10: دعوى إدارية / إعادة إدراج بعد الخبرة / نسخة تنفيذية ===== */
+ if(ty==='admin_open'){
+  return '<div class="doc-preview">'+header+title('عريضة افتتاح دعوى إدارية','Requête introductive — juridiction administrative')+subArt(d.legalArt||'المادتان 817 و818 من قانون الإجراءات المدنية والإدارية — التظلم الإداري المسبق')+
+   partiesGrid('المدّعي / العارض','الإدارة المدعى عليها')+
+   '<div style="background:#f6edd9;border-inline-start:4px solid #b3832a;padding:10px 12px;border-radius:8px;margin-bottom:14px;font-size:12.5px"><b>'+t('dg_prior_admin')+':</b> '+q(d.priorAdmin||d.priorRef,'لم يُذكر — يجب إثبات التظلم المسبق وإلا قُضي بعدم القبول')+'</div>'+
+   (d.subject?h3('الموضوع')+'<p>'+q(d.subject)+'</p>':'')+
+   h3('الوقائع')+'<p>'+q(d.facts,'يُرجى بيان الوقائع والقرار الإداري المطعون فيه...')+'</p>'+
+   h3('التظلم الإداري المسبق')+'<p>لما كان القرار الإداري المطعون فيه لم يُسحب ولم يُعدَّل بعد التظلم المسبق المؤرَّخ في '+q(d.priorAdmin||'—')+'، ومضى أجل أربعة (4) أشهر دون رد، فإن الدعوى مقبولة شكلاً.</p>'+
+   h3('الطلبات')+'<p>'+q(d.requests,'إلغاء القرار الإداري المطعون فيه، مع تحميل الإدارة المصاريف...')+'</p>'+
+   h3('الأسانيد')+'<p>'+q(d.evidence||d.grounds,'عيب الاختصاص / عيب الشكل / مخالفة القانون / الانحراف في استعمال السلطة...')+'</p>'+
+   lawyerBlock+signBlock+legalNote+'</div>';
+ }
+ if(ty==='reenroll'){
+  return '<div class="doc-preview">'+header+title('عريضة إعادة الإدراج بعد الخبرة','Réenrôlement après expertise')+subArt(d.legalArt||'')+
+   partiesGrid('العارض','الطرف الآخر')+
+   (d.caseNo?'<p><b>رقم الملف:</b> <span dir="ltr">'+q(d.caseNo)+'</span></p>':'')+
+   (d.priorRef?h3('تقرير الخبرة')+'<p>'+q(d.priorRef)+'</p>':(d.judgment?h3('القرار السابق')+'<p>'+q(d.judgment)+'</p>':''))+
+   h3('الوقائع')+'<p>'+q(d.facts,'أُودع تقرير الخبرة وبات الملف جاهزاً للمرافعة...')+'</p>'+
+   h3('الطلبات')+'<p>'+q(d.requests,'إعادة إدراج القضية بجدول الجلسات للمرافعة في الموضوع...')+'</p>'+
+   h3('المرفقات')+'<p>'+q(d.evidence)+'</p>'+lawyerBlock+signBlock+legalNote+'</div>';
+ }
+ if(ty==='execcopy'){
+  return '<div class="doc-preview">'+header+title('طلب استخراج النسخة التنفيذية','Demande de copie exécutoire')+
+   '<p>يتشرف العارض <b>'+q(d.pName)+'</b> بطلب تسليمه نسخة تنفيذية من:</p>'+
+   (d.judgment?h3('الحكم / القرار')+'<p>'+q(d.judgment)+'</p>':'')+
+   (d.caseNo?'<p><b>رقم القضية:</b> <span dir="ltr">'+q(d.caseNo)+'</span></p>':'')+
+   h3('البيانات المطلوبة')+'<p>'+q(d.subject||'النسخة التنفيذية مشفوعة بالصيغة التنفيذية')+'</p>'+
+   h3('الغرض من الطلب')+'<p>'+q(d.requests||d.facts,'الشروع في إجراءات التنفيذ طبقاً للقانون...')+'</p>'+
+   '<p style="margin-top:12px">وتفضلوا بقبول فائق الاحترام.</p>'+lawyerBlock+signBlock+legalNote+'</div>';
+ }
  /* fallback */
  return '<div class="doc-preview">'+header+title(q(ty),'Document')+
   partiesGrid(t('dg_for'),t('dg_against'))+
@@ -1304,14 +1369,15 @@ function printDoc(){
   if(!approved){saveDraft('pending');toast(t('dg_send_appr'));return}
  }
  const el=document.getElementById('dgPreview');if(!el){toast(t('dg_pick'));return}
+ try{stampOnDocPrint()}catch(_){}
  printHtmlIframe(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>${esc(t('dg_petition'))}</title>${PRINT_FONT_LINK}<style>body{font-family:${PRINT_FONT_STACK};padding:20mm 18mm;font-size:13px;line-height:1.7;color:#0f1e2e}h2,h3{font-family:${PRINT_FONT_STACK}}.doc-preview{max-width:180mm;margin:0 auto}.doc-preview p{white-space:pre-wrap;margin:8px 0}@page{size:A4;margin:15mm 14mm}@media print{body{padding:0}}</style></head><body>${el.innerHTML}</body></html>`)}
 
 
 /* ===== v6: وظائف وواجهات جديدة ===== */
 const addCal=(f,n)=>{const d=D(f);d.setDate(d.getDate()+n);return d};
 function calcDLTable(){const base=S.dlCalc.date;if(!base)return '';const rules=S.dlRules||DEFAULT_DLK;const abroad=!!(S.dlCalc&&S.dlCalc.abroad);
- return rules.map(rule=>{const r=calcDeadline(base,rule,abroad,!!(S.dlCalc&&S.dlCalc.skip));const n=r.daysLeft;const cls=n<0||n<=3?'bad':n<=7?'warn':'ok';const name=typeof rule.name==='object'?tr(rule.name):(rule.name||rule.id);
- return `<tr><td style="text-align:start"><strong>${esc(name)}</strong><br><small class="sub">${rule.n} ${rule.unit==='month'?'شهر':'يوم'} — ${t('v7_dl_verify')}</small></td><td>${fmt(r.orig)}</td><td>${fmt(r.final)}${r.reason?`<br><small>${esc(r.reason)}</small>`:''}${r.warnHol?'<br><small class="sub">⚠ أجل ينقضي في عطلة — تحقق من العرف القضائي</small>':''}</td><td><span class="chip ${cls}">${n}</span></td><td><button class="btn sm" data-act="savedl" data-rule="${rule.id}" data-final="${r.final}">${t('v7_save_dl')}</button></td></tr>`}).join('')}
+ return rules.map(rule=>{const r=calcDeadline(base,rule,abroad,!!(S.dlCalc&&S.dlCalc.skip),!!(S.dlCalc&&S.dlCalc.dist));const n=r.daysLeft;const cls=n<0||n<=3?'bad':n<=7?'warn':'ok';const name=typeof rule.name==='object'?tr(rule.name):(rule.name||rule.id);
+ return `<tr><td style="text-align:start"><strong>${esc(name)}</strong><br><small class="sub">${rule.n} ${rule.unit==='month'?'شهر':'يوم'} — ${t('v7_dl_verify')}</small></td><td>${fmt(r.orig)}</td><td>${fmt(r.final)}${r.reason?`<br><small>${esc(r.reason)}</small>`:''}${r.warnHol?'<br><small class="sub">⚠ أجل ينقضي في عطلة — تحقق من العرف القضائي</small>':''}${r.vac?'<br><small class="sub">⚠ '+t('dl_vac')+'</small>':''}</td><td><span class="chip ${cls}">${n}</span></td><td><button class="btn sm" data-act="savedl" data-rule="${rule.id}" data-final="${r.final}">${t('v7_save_dl')}</button></td></tr>`}).join('')}
 
 function deadlinesV(){
  // FIX-01 + FIX-02: case selector + abroad checkbox
@@ -1322,6 +1388,8 @@ function deadlinesV(){
   <div class="fld"><label for="dl_date">تاريخ التبليغ / صدور الحكم</label><input type="date" id="dl_date" value="${S.dlCalc.date||''}"></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_skip" ${S.dlCalc.skip?'checked':''}><label for="dl_skip" style="margin:0">استثناء أيام الراحة والعطل — <small>خيار استرشادي فقط — ليس قاعدة قانونية، الآجال تقويمية</small></label></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_abroad" ${S.dlCalc.abroad?'checked':''}><label for="dl_abroad" style="margin:0">${t('v7_abroad')}</label></div>
+  <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_dist" ${S.dlCalc.dist?'checked':''}><label for="dl_dist" style="margin:0">${t('dl_dist')} <small>${t('dl_dist_note')}</small></label></div>
+  <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_vac_on" ${(S.dlVacation&&S.dlVacation.on!==false)?'checked':''}><label for="dl_vac_on" style="margin:0">${t('dl_vac_on')} <small>${S.dlVacation?(S.dlVacation.from+' → '+S.dlVacation.to):''} — ${t('dl_vac_note')}</small></label></div>
   <button class="btn primary" data-act="dlcalc">احسب الآجال</button>
   ${S.dlCalc.result?`<table class="matrix" style="margin-top:18px"><thead><tr><th style="text-align:start">نوع الأجل</th><th>حسب الأيام العادية</th><th>مع استثناء العطل</th><th>المتبقي</th><th></th></tr></thead><tbody>${S.dlCalc.result}</tbody></table>`:''}
   <p class="note warn" style="margin-top:14px">⚠ آجال استرشادية وفق القانون الساري: الاستئناف المدني شهر (م 579 ق.إ.م.إ)، النقض شهران (م 541)، المعارضة 10 أيام (م 155)، استئناف الجنح 10 أيام (م 455 ق.إ.ج) — تُراجَع دائماً مع النص قبل الاحتجاج بالأجل. الأرقام استرشادية — احتسب يدوياً وفق النص الساري ولا تعتمد على البرنامج كمرجع وحيد.</p>
@@ -1338,7 +1406,7 @@ function jurisRows(q){return S.jurisprudence.filter(j=>!q||(j.court+j.kw+j.text+
 function glosRows(q){return S.glossary.filter(g=>!q||(g.ar+g.fr+g.d).toLowerCase().includes(q.toLowerCase())).map(g=>`<div class="dlrow"><div style="flex:1"><strong>${esc(g.ar)} — <i style="color:var(--muted)">${esc(g.fr)}</i></strong><span class="sub">${esc(g.d)}</span></div></div>`).join('')||'<p class="empty">لا نتائج</p>'}
 function libraryV(){return `<div class="page-h"><div><h1>مكتبة الاجتهادات والقاموس</h1><p>أرشيف الاجتهادات الخاص بمكتبك مع بحث بالكلمات + قاموس عربي/فرنسي للمحامي</p></div></div>
  <div class="g2e"><section class="card"><div class="card-h"><h2>الاجتهادات والأحكام</h2></div><div class="card-b"><input id="libq" type="search" placeholder="ابحث: تقادم، شيك، فصل..." style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:10px"><div id="juris">${jurisRows('')}</div></div></section>
- <section class="card"><div class="card-h"><h2>قاموس المصطلحات AR/FR</h2></div><div class="card-b"><input id="glq" type="search" placeholder="ابحث بالعربية أو الفرنسية..." style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:10px"><div id="glos">${glosRows('')}</div></div></section></div>`}
+ <section class="card"><div class="card-h"><h2>قاموس المصطلحات AR/FR</h2></div><div class="card-b"><input id="glq" type="search" placeholder="ابحث بالعربية أو الفرنسية..." style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:10px"><div id="glos">${glosRows('')}</div></div></section></div>${ftsV()}`}
 function importV(){_csvBuf=null;return `<div class="page-h"><div><h1>استيراد الملفات والنسخ الاحتياطي</h1><p>انقل ملفاتك من Excel أو الدفاتر الورقية، وخذ نسخة احتياطية حقيقية قابلة للاسترجاع</p></div></div>
  <div class="g2e"><section class="card"><div class="card-h"><h2>استيراد من CSV / Excel</h2></div><div class="card-b"><p class="sub">الصيغة لكل سطر: <code dir="ltr">الرقم;اسم الموكل;الموضوع;النوع;الاتفاق</code><br>النوع: civil, realty, family, penal, admin, commercial, social</p>
  ${csvEncUI()}<textarea id="csvIn" rows="6" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--bg)" placeholder="2026/00900;أحمد مرابط;نزاع حدود;realty;150000&#10;2026/00901;سارة لعمامرة;شيك بدون رصيد;penal;200000"></textarea>
@@ -1349,7 +1417,7 @@ function importV(){_csvBuf=null;return `<div class="page-h"><div><h1>استير�
  <p class="sub">ملف JSON يحوي كل الملفات والموكلين ووصولات الأتعاب والأمانات وسجل العمليات.</p></div></section></div>`}
 
 function importFile(f){if(!f)return;const r=new FileReader();r.onload=()=>{let d0=null;try{d0=JSON.parse(r.result)}catch(_){d0=null}if(d0===null||typeof d0!=='object'){if(typeof importEncrypted==='function')importEncrypted(r.result,importData);else toast('⚠ ملف غير صالح');return}importData(d0)};r.readAsText(f)}
-function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays))S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-12'?'01-11':h});if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
+function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays))S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-12'?'01-11':h});if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
   if(d.clients){S.clients=d.clients;CL.length=0;d.clients.forEach(c=>CL.push(c))}
   (S.cases||[]).forEach(c=>{if(c.clientId!=null)c.cl=c.clientId-1;else if(typeof c.cl==='number')c.clientId=c.cl+1});
   try{applyRoles()}catch(_){}try{secPostImport(_pa)}catch(_){}toast('تم الاسترجاع — '+(d.cases?d.cases.length:0)+' ملف');chrome();render()}catch(err){toast('⚠ ملف غير صالح')}}
@@ -1500,7 +1568,7 @@ function openInvoice(invId){
  <div class="inv-totals"><div class="line"><span>${t('inv_ht')}</span><span>${money(calc.ht)}</span></div>${inv.withTVA?`<div class="line"><span>${tvaLabel}</span><span>${money(calc.tva)}</span></div>`:''}${inv.withTimbre?`<div class="line"><span>${t('inv_timbre')}</span><span>${money(calc.timbre)}</span></div>`:''}<div class="line grand"><span>${t('inv_ttc')}</span><span>${money(calc.ttc)}</span></div></div>
  <div class="inv-pay"><div><strong>${t('inv_pay_info')}:</strong> ${ml}</div><div><span class="chip-static ${inv.paid?'':'unpaid'}">${inv.paid?t('inv_paid'):t('inv_unpaid')}</span>${inv.paid&&inv.paidDate?' — '+fmt(inv.paidDate):''}</div></div>
  <div class="inv-legal"><b>${t('inv_decree')}</b> — ${S.tax.regime==='company'?t('inv_regime_company',cab.tva):t('inv_regime_ifu',S.tax.ifu)}</div>
- <div class="inv-legal">${t('inv_legal')}</div><div class="inv-sign"><div></div><div class="sig-box">${t('inv_sig')}</div></div><div class="inv-thanks">${t('inv_thanks')}</div></div>`;
+ <div class="inv-legal">${t('inv_legal')}</div><div class="inv-sign"><div>${cab.stampImg?'<img src="'+cab.stampImg+'" alt="" style="max-width:120px;max-height:105px;object-fit:contain;display:block">':''}</div><div class="sig-box">${cab.signatureImg?'<img src="'+cab.signatureImg+'" alt="" style="max-width:150px;max-height:60px;object-fit:contain;display:block;margin:0 auto 4px">':''}${t('inv_sig')}</div></div><div class="inv-thanks">${t('inv_thanks')}</div></div>`;
  el.classList.add('on');document.body.style.overflow='hidden'}
 function closeInvoice(){$('invoicePrint').classList.remove('on');document.body.style.overflow=''}
 
@@ -1528,7 +1596,7 @@ function newCase(){newCaseModal()} // V9-FIX-02: delegates to the dedicated moda
 // V9-FIX-02: helpers for party cards
 function pFull(p){return [tr(p.firstName),tr(p.lastName)].filter(Boolean).join(' ')}
 function pFullL(p,l){var f=_bi(p&&p.firstName),n=_bi(p&&p.lastName);return [f[l]||f.ar,n[l]||n.ar].filter(Boolean).join(' ')}
-function flatParty(role){return {kind:'',nif:'',firstNameFr:'',lastNameFr:'',role:role,roleLabel:'',firstName:'',lastName:'',birthDate:'',birthPlace:'',idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:''}}
+function flatParty(role){return {proc:'',kind:'',nif:'',firstNameFr:'',lastNameFr:'',role:role,roleLabel:'',firstName:'',lastName:'',birthDate:'',birthPlace:'',idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:''}}
 function partyCardHTML(i,p){const n=i+1,first=i===0,fid=k=>'pp'+i+'_'+k;
  const al=k=>` aria-label="${esc(t(k)+' — '+t('pr_party')+' '+n)}"`;
  const fld=(k,lab,inner,attr)=>`<div class="fld"${attr||''}><label for="${fid(k)}">${t(lab)}</label>${inner}</div>`;
@@ -1536,18 +1604,19 @@ function partyCardHTML(i,p){const n=i+1,first=i===0,fid=k=>'pp'+i+'_'+k;
  const blab=k=>`${esc(L.ar[k]||k)}<small class="sub" style="display:block;font-weight:400">${esc(L.fr[k]||k)}</small>`;
  const inpB=(k,lab,ltr)=>`<div class="fld"><label for="${fid(k)}">${blab(lab)}</label><input id="${fid(k)}" data-k="${k}" type="text" value="${esc(p[k]||'')}"${al(lab)}${ltr?' dir="ltr"':''}></div>`;
  const roleSel=`<select id="${fid('role')}" data-k="role"${al('pr_role')}${first?' disabled':''}>${['client','opponent','other'].map(r=>`<option value="${r}" ${p.role===r?'selected':''}>${t('pr_role_'+r)}</option>`).join('')}</select>`;
+ const procSel=`<select id="${fid('proc')}" data-k="proc"${al('pr_pc')}>${[['','—']].concat(PROC_KEYS.map(k=>[k,t('pr_pc_'+k)])).map(o=>`<option value="${o[0]}" ${(p.proc||'')===o[0]?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`;
  const idSel=`<select id="${fid('idType')}" data-k="idType"${al('pr_idtype')}>${['','nin','passport','license'].map(r=>`<option value="${r}" ${(p.idType||'')===r?'selected':''}>${r?t('pr_id_'+r):t('pr_id_none')}</option>`).join('')}</select>`;
  const rm=first?'':`<button type="button" class="btn sm" data-act="party-remove" data-i="${i}" aria-label="${esc(t('pr_remove_aria'))}" title="${esc(t('pr_remove_aria'))}">✕</button>`;
  return `<div class="pcard" data-party="${i}"><div class="pcard-h"><b>${t('pr_party')} ${n}${first?' — '+t('pr_role_client'):''}</b>${rm}</div>
-  <div class="nc-grid">${fld('role','pr_role',roleSel)}${fld('roleLabel','pr_role_free',`<input id="${fid('roleLabel')}" data-k="roleLabel" type="text" value="${esc(p.roleLabel||'')}"${al('pr_role_free')}>`,` data-rl${p.role==='other'?'':' hidden'}`)}
+  <div class="nc-grid">${fld('role','pr_role',roleSel)}${fld('proc','pr_pc',procSel)}${fld('roleLabel','pr_role_free',`<input id="${fid('roleLabel')}" data-k="roleLabel" type="text" value="${esc(p.roleLabel||'')}"${al('pr_role_free')}>`,` data-rl${p.role==='other'?'':' hidden'}`)}
   ${inpB('firstName','nc_first_ar')}${inpB('firstNameFr','nc_first_fr',1)}${inpB('lastName','nc_last_ar')}${inpB('lastNameFr','nc_last_fr',1)}${inp('birthDate','pr_birthdate','date',` max="${K(TODAY)}"`)}${inp('birthPlace','pr_birthplace')}
   ${fld('idType','pr_idtype',idSel,' ')}</div>
   <div class="nc-grid">${fld('kind','pr_kind',`<select id="${fid('kind')}" data-k="kind"${al('pr_kind')}><option value="natural" ${p.kind==='legal'?'':'selected'}>${t('pr_kind_natural')}</option><option value="legal" ${p.kind==='legal'?'selected':''}>${t('pr_kind_legal')}</option></select>`)}${fld('nif','pr_nif',`<input id="${fid('nif')}" data-k="nif" type="text" value="${esc(p.nif||'')}"${al('pr_nif')}>`,` data-nif${p.kind==='legal'?'':' hidden'}`)}</div>
   <div class="nc-grid idfields"${p.idType?'':' hidden'}>${inp('idNumber','pr_idnumber')}${inp('idIssueDate','pr_idissue','date')}${inp('idExpiryDate','pr_idexpiry','date')}</div>
   <div class="fld"><label for="${fid('address')}">${t('pr_address')}</label><input id="${fid('address')}" data-k="address" type="text" value="${esc(p.address||'')}"${al('pr_address')}></div></div>`}
 function readPartyDOM(){return [...$('modal').querySelectorAll('[data-party]')].map((card,i)=>{const g=k=>{const el=card.querySelector('[data-k="'+k+'"]');return el?el.value.trim():''};
- return {role:i===0?'client':(g('role')||'other'),roleLabel:g('roleLabel'),firstName:g('firstName'),lastName:g('lastName'),birthDate:g('birthDate'),birthPlace:g('birthPlace'),idType:g('idType'),idNumber:g('idNumber'),idIssueDate:g('idIssueDate'),idExpiryDate:g('idExpiryDate'),address:g('address'),kind:g('kind')==='legal'?'legal':'',nif:g('kind')==='legal'?g('nif'):'',firstNameFr:g('firstNameFr'),lastNameFr:g('lastNameFr')}})}
-function cleanParty(r,i){const b=blankParty(i===0?'client':(r.role||'other'));b.roleLabel=b.role==='other'?_bi(r.roleLabel):{ar:'',fr:''};b.firstName={ar:r.firstName||r.firstNameFr||'',fr:r.firstNameFr||r.firstName||''};b.lastName={ar:r.lastName||r.lastNameFr||'',fr:r.lastNameFr||r.lastName||''};
+ return {role:i===0?'client':(g('role')||'other'),proc:g('proc'),roleLabel:g('roleLabel'),firstName:g('firstName'),lastName:g('lastName'),birthDate:g('birthDate'),birthPlace:g('birthPlace'),idType:g('idType'),idNumber:g('idNumber'),idIssueDate:g('idIssueDate'),idExpiryDate:g('idExpiryDate'),address:g('address'),kind:g('kind')==='legal'?'legal':'',nif:g('kind')==='legal'?g('nif'):'',firstNameFr:g('firstNameFr'),lastNameFr:g('lastNameFr')}})}
+function cleanParty(r,i){const b=blankParty(i===0?'client':(r.role||'other'));b.roleLabel=b.role==='other'?_bi(r.roleLabel):{ar:'',fr:''};b.proc=normProc(r.proc);if(b.proc)b.role=procBase(b.proc);b.procLabel=b.proc?{ar:t('pr_pc_'+b.proc),fr:t('pr_pc_'+b.proc)}:{ar:'',fr:''};b.firstName={ar:r.firstName||r.firstNameFr||'',fr:r.firstNameFr||r.firstName||''};b.lastName={ar:r.lastName||r.lastNameFr||'',fr:r.lastNameFr||r.lastName||''};
  b.birthDate=r.birthDate||'';b.birthPlace=_bi(r.birthPlace);b.idType=r.idType||'';if(b.idType){b.idNumber=r.idNumber||'';b.idIssueDate=r.idIssueDate||'';b.idExpiryDate=r.idExpiryDate||''}b.address=_bi(r.address);b.kind=r.kind==='legal'?'legal':'natural';b.nif=b.kind==='legal'?(r.nif||''):'';return b}
 function newCaseModal(){lastFocus=document.activeElement;$('modal').className='modal lg';
  const as=U.filter(u=>u.id!=='m').map(u=>[u.id,tr(u.n)+' — '+t(u.rk)]);
@@ -1580,6 +1649,7 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
  list.addEventListener('change',e=>{const el=e.target,card=el.closest&&el.closest('[data-party]');if(!card)return;
   if(el.dataset.k==='idType')card.querySelector('.idfields').hidden=!el.value;
   if(el.dataset.k==='role')card.querySelector('[data-rl]').hidden=el.value!=='other';
+  if(el.dataset.k==='proc'){var pb=procBase(el.value);if(pb){var rs=card.querySelector('[data-k="role"]');if(rs){rs.value=pb;var rl2=card.querySelector('[data-rl]');if(rl2)rl2.hidden=pb!=='other'}}}
   if(el.dataset.k==='kind')card.querySelector('[data-nif]').hidden=el.value!=='legal'});
  $('f_no').focus();
  $('mf').addEventListener('submit',e=>{e.preventDefault();let ok=true;
@@ -1595,6 +1665,7 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
   const doCreate=()=>{closeModal();
   undoable(()=>{const id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
    S.cases.unshift({id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,createdAt:K(TODAY)});
+   try{var _sk=stampKindOf(+v.court),_sr=stampConsume(_sk,id,'تأسيس ملف '+v.no,!!v.ja);if(_sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
    cfLogAccept(id,v.no,conf)},'t_case');
   /* FIX4: the former single-clash toast is kept (medium-level warnings) and now lists the detected reasons */
   if(conf.length&&!blocking.length)setTimeout(()=>toast('⚠ '+t('cfx_title')+' — '+conf[0].reason+' — '+t('cf_check_before')),600)};
@@ -1688,9 +1759,9 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
  const trs=(S.trust||[]).filter(x=>x.c===c.id).map(x=>trustRow(x,false)).join('');
  const plat=(c.platformCaseNo||c.platformUsername)?`<div style="background:var(--info-soft);border-radius:12px;padding:12px 14px;margin:14px 0"><div style="font-size:12px;color:var(--info);font-weight:700;margin-bottom:6px">${t('d_platform')}</div>${c.platformCaseNo?`<div style="font-size:13px">${t('d_case_no')}: <b dir="ltr" style="display:inline-block">${esc(c.platformCaseNo)}</b></div>`:''}${c.platformUsername?`<div style="font-size:13px">${t('d_username')}: <b dir="ltr" style="display:inline-block">${esc(c.platformUsername)}</b></div>`:''}<button class="btn primary sm" style="margin-top:8px" data-act="open_cours" data-id="${c.id}">${ic('link')} ${t('d_open_cours')}</button></div>`:'';
  const ses=(c.sessions||[]).map(s=>`<div class="dlrow"><span class="chip info">${fmt(s.date)}</span><div style="flex:1"><strong>${esc(s.kind)}</strong><span class="sub">${esc(s.out)}${s.next?' — التالية: '+fmt(s.next):''}</span></div></div>`).join('')||`<p class="sub">—</p>`;
- const parts=(c.parties||[]).map(normParty).map(pp=>{/* V9-FIX-02 */const nm=pFull(pp)||'—',rl=pp.role==='other'?(tr(pp.roleLabel)||t('pr_role_other')):t('pr_role_'+pp.role);
+ const parts=(c.parties||[]).map(normParty).map(pp=>{/* V9-FIX-02 */const nm=pFull(pp)||'—',rl=pp.role==='other'?(tr(pp.roleLabel)||t('pr_role_other')):t('pr_role_'+pp.role),pl=pp.proc?procLbl(pp.proc):'';
   const row=(k,v)=>v?`<div class="pdet"><span>${t(k)}:</span> <b><bdi>${esc(v)}</bdi></b></div>`:'';
-  return `<div class="pcard-v"><div class="dlrow"><span class="avatar sm">${esc(nm.charAt(0))}</span><div style="flex:1"><strong>${esc(nm)}</strong></div><span class="chip mute">${esc(rl)}</span></div>${row('pr_birthdate',pp.birthDate?fmt(pp.birthDate):'')}${row('pr_birthplace',tr(pp.birthPlace))}${row('pr_idtype',pp.idType?t('pr_id_'+pp.idType):'')}${row('pr_idnumber',pp.idNumber)}${row('pr_idissue',pp.idIssueDate?fmt(pp.idIssueDate):'')}${row('pr_idexpiry',pp.idExpiryDate?fmt(pp.idExpiryDate):'')}${row('pr_address',tr(pp.address))}</div>`}).join('')||`<p class="sub">—</p>`;
+  return `<div class="pcard-v"><div class="dlrow"><span class="avatar sm">${esc(nm.charAt(0))}</span><div style="flex:1"><strong>${esc(nm)}</strong></div>${pl?`<span class="chip teal">${esc(pl)}</span>`:''}<span class="chip mute">${esc(rl)}</span></div>${row('pr_birthdate',pp.birthDate?fmt(pp.birthDate):'')}${row('pr_birthplace',tr(pp.birthPlace))}${row('pr_idtype',pp.idType?t('pr_id_'+pp.idType):'')}${row('pr_idnumber',pp.idNumber)}${row('pr_idissue',pp.idIssueDate?fmt(pp.idIssueDate):'')}${row('pr_idexpiry',pp.idExpiryDate?fmt(pp.idExpiryDate):'')}${row('pr_address',tr(pp.address))}</div>`}).join('')||`<p class="sub">—</p>`;
  const linked=(c.linked||[]).map(lid=>{const lc=byC(lid);return lc?`<button class="chip info" data-act="case" data-id="${lc.id}" style="cursor:pointer;border:0">${esc(lc.no)} — ${esc(tr(lc.title))}</button>`:''}).join(' ');
  const dlAuto=c.notif?DLK.map(([k,l,n])=>{const dd=addBiz(c.notif,n);return `<div style="font-size:13px;padding:3px 0">${l.split(' — ')[0]}: <b>${dd.getDate()} ${MON[S.lang][dd.getMonth()]} ${dd.getFullYear()}</b>${diff(K(dd))<0?' <span class="chip bad">انقضى</span>':''}</div>`}).join(''):`<p class="sub">لم يُسجَّل تاريخ تبليغ — <button class="btn sm" data-act="setnotif" data-id="${c.id}">تسجيل</button></p>`;
  const inst=S.installments.filter(x=>x.c===c.id&&!x.paid);
@@ -1752,7 +1823,7 @@ function caseHearingModal(cid){var c=byC(cid);if(!c)return;
 /* ===== V9.8: تصدير ملف القضية كاملاً (PDF) — بدون الملاحظات الداخلية ولا الأتعاب ===== */
 function exportCasePdf(cid){var c=byC(cid);if(!c)return;
  var cab=S.cabinet||{},cl=CL[c.cl]||{ar:'—',fr:'—'};
- var parties=(c.parties||[]).map(normParty).map(function(pp){var nm=pFull(pp)||'—';var rl=pp.role==='other'?(tr(pp.roleLabel)||t('pr_role_other')):t('pr_role_'+pp.role);
+ var parties=(c.parties||[]).map(normParty).map(function(pp){var nm=pFull(pp)||'—';var rl=pp.proc?procLbl(pp.proc):(pp.role==='other'?(tr(pp.roleLabel)||t('pr_role_other')):t('pr_role_'+pp.role));
   return '<tr><td>'+esc(nm)+'</td><td>'+esc(rl)+'</td><td>'+esc(tr(pp.address)||'—')+'</td><td dir="ltr">'+esc(pp.idNumber||'—')+'</td></tr>'}).join('');
  var sessions=(c.sessions||[]).map(function(x){return '<tr><td>'+esc(x.date)+'</td><td>'+esc(x.kind)+'</td><td>'+esc(x.out)+'</td><td>'+esc(x.next||'—')+'</td></tr>'}).join('');
  var docsAll=S.docs.filter(function(d){return d.c===c.id});
@@ -1831,7 +1902,7 @@ document.addEventListener('click',e=>{
     window.open('http://coursdesaffaires.mjustice.dz/affaire/index.php','_blank','noopener');break}
   case 'client':go('client',id);break;
   case 'stmt':printStatement(id);break;
-  case 'dlcalc':{const dd=$('dl_date');S.dlCalc.date=dd?dd.value:K(TODAY);S.dlCalc.skip=!!($('dl_skip')||{}).checked;S.dlCalc.abroad=!!($('dl_abroad')||{}).checked;S.dlCalc.caseId=+(($('dl_case')||{}).value||0)||null;S.dlCalc.result=calcDLTable();render();break}
+  case 'dlcalc':{const dd=$('dl_date');S.dlCalc.date=dd?dd.value:K(TODAY);S.dlCalc.skip=!!($('dl_skip')||{}).checked;S.dlCalc.abroad=!!($('dl_abroad')||{}).checked;S.dlCalc.dist=!!($('dl_dist')||{}).checked;if($('dl_vac_on')){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!$('dl_vac_on').checked}S.dlCalc.caseId=+(($('dl_case')||{}).value||0)||null;S.dlCalc.result=calcDLTable();render();break}
   // FIX-01: save calculated deadline to case
   case 'savedl':{const finalDate=el.dataset.final;const ruleId=el.dataset.rule;const cid=(S.dlCalc&&S.dlCalc.caseId)||(S.arg&&byC(S.arg)?S.arg:(S.cases[0]&&S.cases[0].id));if(!cid||!finalDate)break;undoable(()=>{(S.dls=S.dls||[]).push({c:cid,l:{ar:'أجل محسوب تلقائياً',fr:'Délai calculé'},d:finalDate,who:S.user,src:'calc',rule:ruleId||null})},'v7_save_dl');toast(t('v7_save_dl'));break}
   case 'addoffexp':addOffExp();break;
@@ -2159,6 +2230,307 @@ function licenseCard(){var st=_LIC.status(),warn=!st.licensed&&st.left<=7,
 })();
 
 
+/* ===== V9.10 i18n AR ===== */
+Object.assign(L.ar,{
+pr_pc:'الصفة الإجرائية',pr_pc_demandeur:'مدعي / طالب',pr_pc_defendeur:'مدعى عليه',pr_pc_mis_en_cause:'مدخل في الخصومة',pr_pc_interv_conserv:'متدخل فخري',pr_pc_interv_agressif:'متدخل هجومي',pr_pc_garant:'ضامن',pr_pc_assurance:'شركة تأمين',
+stamp_title:'إدارة الدمغة',stamp_sub:'مخزون الدمغات، الاقتطاع الآلي، والإعفاءات القانونية',
+stamp_inv:'مخزون الدمغات',stamp_court:'دمغات المحاكم',stamp_council:'دمغات المجالس',stamp_admin:'دمغات القضاء الإداري',
+stamp_buy:'شراء كتيب دمغة',stamp_buy_title:'شراء كتيب دمغة',stamp_kind:'الجهة القضائية',stamp_qty:'العدد',stamp_unit:'سعر الدمغة (دج)',stamp_total:'المبلغ الإجمالي',stamp_bought:'تم شراء الدمغات، وزيادة الرصيد، وخصم المبلغ من صندوق المكتب',stamp_moves:'حركة الدمغات',stamp_used:'مستهلكة',stamp_exempt:'معفى قانوناً',stamp_exempt_ja:'إعفاء — مساعدة قضائية',stamp_exempt_memo:'إعفاء — ليست عريضة تأسيس (مذكرة لاحقة)',stamp_auto:'تلقائي (حسب نوع الوثيقة)',stamp_force:'احتساب الدمغة (تأسيس أول)',stamp_skip:'بدون دمغة',stamp_taken:'اقتُطعت دمغة واحدة من المخزون',stamp_empty:'لا يوجد رصيد دمغة — اشترِ كتيباً من الإعدادات',stamp_low:'مخزون الدمغة منخفض',stamp_low_n:(k,n)=>`رصيد «${k}» بلغ ${n} — اشترِ كتيباً جديداً`,stamp_none:'لا حركة دمغة بعد',stamp_price_note:'الأسعار إرشادية — تُراجَع مع التعريفة السارية.',
+stamp_month:'الشهر',stamp_rep_used:'دمغات مستهلكة',stamp_rep_amount:'المبلغ المنفق',stamp_rep_cases:'التوزيع على الملفات',stamp_rep_buys:'المشتريات',stamp_rep_title:'تقارير الدمغة الشهرية',
+caseexp_title:'دفتر مصاريف الدعوى المستردة',caseexp_sub:'أتعاب الخبراء، التبليغ، حقوق التسجيل — منفصلة كلياً عن أتعاب المحامي وعن الأمانات',
+caseexp_new:'+ مصروف دعوى',caseexp_add_title:'مصروف دعوى قابل للاسترداد',caseexp_type:'نوع المصروف',caseexp_t_expert:'أتعاب خبير',caseexp_t_service:'تبليغ / مفوض قضائي',caseexp_t_registration:'حقوق تسجيل',caseexp_t_other:'مصاريف أخرى',caseexp_ref:'المرجع / رقم الوصل',caseexp_recovered:'استُرد من الموكل',caseexp_pending:'في انتظار الاسترداد',caseexp_total:'إجمالي مصاريف الدعوى',caseexp_tot_rec:'المسترد',caseexp_tot_pend:'المتبقي',caseexp_note:'يتحملها الموكل وتُفصل عن الأتعاب وعن الأمانات (التي تُودع لحساب الموكل).',caseexp_added:'تمت إضافة مصروف الدعوى',caseexp_empty:'لا مصاريف دعوى مسجّلة',caseexp_mark:'تسجيل الاسترداد',
+att_title:'مذكرة الحضور',att_sub:'تكليف محامٍ مساعد أو متربص بالحضور مع تقرير ما بعد الجلسة',att_add:'+ تكليف بالحضور',att_new:'تكليف بالحضور',att_who:'المكلّف بالحضور',att_report:'تقرير ما بعد الجلسة',att_report_btn:'تقرير',att_st:'الحالة',att_pending:'لم تنعقد بعد',att_attended:'حضر',att_subst:'أناب غيره',att_postponed:'أُجّلت',att_added:'تم تسجيل التكليف بالحضور',att_saved:'تم حفظ تقرير ما بعد الجلسة',att_none:'لا تكليفات حضور',att_need:'لا متربصون ولا محامون مساعدون',att_empty_report:'لم يُدوَّن تقرير بعد',
+fts_title:'البحث النصي الشامل',fts_ph:'ابحث في العرائض والوثائق والاجتهادات…',fts_none:'لا نتائج',fts_in_drafts:'عرائض ومسودات',fts_in_docs:'وثائق',fts_in_juris:'اجتهادات',fts_in_glos:'قاموس',fts_count:n=>`${n} نتيجة`,fts_note:'بحث نصي كامل داخل العرائض المؤرشفة والوثائق والاجتهادات دون اتصال.',
+sig_title:'الختم والتوقيع الرقمي',sig_sub:'ارفع صورة توقيعك وختم المكتب — تُخزَّن محلياً وتُدرَج في الوثائق والوصولات',sig_up:'صورة التوقيع',sig_stamp:'صورة الختم',sig_pick:'اختيار صورة (PNG)',sig_ok:'تم حفظ الصورة',sig_remove:'حذف',sig_none:'لم تُرفع بعد',sig_note:'تُخزَّن الصور داخل بيانات المكتب على هذا الجهاز (Base64) وتعمل دون اتصال.',sig_hide_export:'إخفاء الختم والتوقيع في تصدير ملف القضية',
+dg_save_pdf:'حفظ كـ PDF',dg_pdf_busy:'جارٍ توليد PDF…',dg_pdf_ok:'تم توليد PDF',dg_pdf_offline:'تعذّر تحميل مكتبة PDF — سيُفتح أمر الطباعة بدلاً منها',dg_pdf_name:'وثيقة',
+dg_pick_case:'ربط بملف القضية (تعبئة تلقائية)',dg_fill:'استيراد بيانات الملف',dg_filled:'تمت تعبئة بيانات الملف والأطراف',dg_t_admin:'عريضة افتتاح دعوى إدارية',dg_t_reenroll:'عريضة إعادة الإدراج بعد الخبرة',dg_t_execcopy:'طلب استخراج النسخة التنفيذية',dg_prior_admin:'مرجع التظلم الإداري المسبق',dg_prior_admin_hint:'رقم وتاريخ التظلم المسبق — شرط قبول الدعوى الإدارية',dg_stamp_lbl:'الدمغة',
+dl_dist:'التباعد الجغرافي (مقيم خارج مقر الجهة القضائية)',dl_dist_note:'+ شهر واحد استرشادي',dl_vac:'الراحة القضائية',dl_vac_from:'من',dl_vac_to:'إلى',dl_vac_on:'احتساب العطلة القضائية آلياً',dl_vac_note:'تُحتسب العطلة القضائية ضمن الأيام غير المفيدة عند تفعيل استثناء أيام الراحة والعطل.',dl_admin:'التظلم الإداري المسبق (4 أشهر)',dl_admin_note:'شرط قبول الدعوى الإدارية — يجب إثبات التظلم المسبق.',
+dl48_title:'آجال تنقضي خلال 48 ساعة',dl48_hint:'تنبيه استباقي — راجع هذه الآجال فوراً',dl48_none:'لا آجال حرجة خلال 48 ساعة',dl48_open:'فتح الملف',
+xp_s0:'استخراج النسخة التنفيذية',xp_s7:'إشكالات التنفيذ (التعرض)',xp_bailiff:'المفوض القضائي المكلف',exec_bailiff:'المفوض القضائي',
+aud_c:'محامٍ مساعد',aud_p:'محامٍ شريك'
+});
+/* ===== V9.10 i18n FR ===== */
+Object.assign(L.fr,{
+pr_pc:'Qualité procédurale',pr_pc_demandeur:'Demandeur',pr_pc_defendeur:'Défendeur',pr_pc_mis_en_cause:'Appelé en cause',pr_pc_interv_conserv:'Intervention conservatoire',pr_pc_interv_agressif:'Intervention agressive',pr_pc_garant:'Garant',pr_pc_assurance:'Compagnie d’assurance',
+stamp_title:'Droit de timbre',stamp_sub:'Stock de timbres, déduction automatique et exonérations légales',
+stamp_inv:'Stock de timbres',stamp_court:'Timbres tribunaux',stamp_council:'Timbres cours',stamp_admin:'Timbres juridiction administrative',
+stamp_buy:'Acheter un carnet',stamp_buy_title:'Acheter un carnet de timbres',stamp_kind:'Juridiction',stamp_qty:'Quantité',stamp_unit:'Prix unitaire (DA)',stamp_total:'Montant total',stamp_bought:'Timbres achetés, stock augmenté et montant déduit de la caisse du cabinet',stamp_moves:'Mouvements de timbres',stamp_used:'consommés',stamp_exempt:'Exonéré par la loi',stamp_exempt_ja:'Exonération — aide juridictionnelle',stamp_exempt_memo:'Exonération — écritures postérieures',stamp_auto:'Automatique (selon le document)',stamp_force:'Appliquer le timbre (écriture introductive)',stamp_skip:'Sans timbre',stamp_taken:'Un timbre déduit du stock',stamp_empty:'Aucun stock de timbre — achetez un carnet dans les paramètres',stamp_low:'Stock de timbres faible',stamp_low_n:(k,n)=>`Stock « ${k} » à ${n} — achetez un nouveau carnet`,stamp_none:'Aucun mouvement',stamp_price_note:'Prix indicatifs — à vérifier selon la tarification en vigueur.',
+stamp_month:'Mois',stamp_rep_used:'Timbres consommés',stamp_rep_amount:'Montant dépensé',stamp_rep_cases:'Répartition par dossier',stamp_rep_buys:'Achats',stamp_rep_title:'Rapport mensuel du timbre',
+caseexp_title:'Registre des frais répétibles',caseexp_sub:'Honoraires d’expert, signification, droits d’enregistrement — totalement distincts des honoraires et des séquestres',
+caseexp_new:'+ Frais de dossier',caseexp_add_title:'Frais de dossier répétible',caseexp_type:'Type de frais',caseexp_t_expert:'Honoraires d’expert',caseexp_t_service:'Signification / commissaire de justice',caseexp_t_registration:'Droits d’enregistrement',caseexp_t_other:'Autres frais',caseexp_ref:'Référence / n° de reçu',caseexp_recovered:'Récupéré auprès du client',caseexp_pending:'En attente de récupération',caseexp_total:'Total des frais de dossier',caseexp_tot_rec:'Récupéré',caseexp_tot_pend:'Restant',caseexp_note:'À la charge du client, séparés des honoraires et des séquestres (fonds détenus pour le compte du client).',caseexp_added:'Frais de dossier ajoutés',caseexp_empty:'Aucun frais de dossier',caseexp_mark:'Marquer récupéré',
+att_title:'Feuille de présence',att_sub:'Désigner un collaborateur ou un stagiaire pour l’audience, avec rapport post-audience',att_add:'+ Désignation',att_new:'Désignation à l’audience',att_who:'Chargé de l’audience',att_report:'Rapport post-audience',att_report_btn:'Rapport',att_st:'Statut',att_pending:'À venir',att_attended:'A assisté',att_subst:'Substitué',att_postponed:'Renvoi',att_added:'Désignation enregistrée',att_saved:'Rapport enregistré',att_none:'Aucune désignation',att_need:'Aucun collaborateur ni stagiaire',att_empty_report:'Rapport non encore saisi',
+fts_title:'Recherche plein texte',fts_ph:'Rechercher dans les écritures, documents et jurisprudence…',fts_none:'Aucun résultat',fts_in_drafts:'Écritures et brouillons',fts_in_docs:'Documents',fts_in_juris:'Jurisprudence',fts_in_glos:'Glossaire',fts_count:n=>`${n} résultat(s)`,fts_note:'Recherche plein texte hors ligne dans les écritures archivées, documents et jurisprudence.',
+sig_title:'Signature et cachet numériques',sig_sub:'Importez votre signature et le cachet du cabinet — stockés localement et intégrés aux documents et reçus',sig_up:'Image de la signature',sig_stamp:'Image du cachet',sig_pick:'Choisir une image (PNG)',sig_ok:'Image enregistrée',sig_remove:'Supprimer',sig_none:'Non importée',sig_note:'Images stockées en Base64 dans les données du cabinet sur cet appareil, fonctionnent hors ligne.',sig_hide_export:'Masquer signature et cachet dans l’export du dossier',
+dg_save_pdf:'Enregistrer en PDF',dg_pdf_busy:'Génération du PDF…',dg_pdf_ok:'PDF généré',dg_pdf_offline:'Bibliothèque PDF indisponible — ouverture de l’impression',dg_pdf_name:'Document',
+dg_pick_case:'Lier au dossier (remplissage automatique)',dg_fill:'Importer les données du dossier',dg_filled:'Données du dossier et des parties importées',dg_t_admin:'Requête introductive — juridiction administrative',dg_t_reenroll:'Réenrôlement après expertise',dg_t_execcopy:'Demande de copie exécutoire',dg_prior_admin:'Référence du recours préalable',dg_prior_admin_hint:'Numéro et date du recours préalable — condition de recevabilité',dg_stamp_lbl:'Timbre',
+dl_dist:'Délai de distance (résidence hors siège)',dl_dist_note:'+ 1 mois indicatif',dl_vac:'Vacances judiciaires',dl_vac_from:'Du',dl_vac_to:'Au',dl_vac_on:'Calculer les vacances judiciaires',dl_vac_note:'Les vacances judiciaires comptent parmi les jours non ouvrables lorsque l’option est activée.',dl_admin:'Recours administratif préalable (4 mois)',dl_admin_note:'Condition de recevabilité en matière administrative.',
+dl48_title:'Délais expirant dans 48 h',dl48_hint:'Alerte anticipée — à traiter immédiatement',dl48_none:'Aucun délai critique sous 48 h',dl48_open:'Ouvrir le dossier',
+xp_s0:'Extraction de la copie exécutoire',xp_s7:'Contestations d’exécution',xp_bailiff:'Commissaire de justice chargé',exec_bailiff:'Commissaire de justice',
+aud_c:'Collaborateur',aud_p:'Avocat associé'
+});
+/* ================= V9.10 — وحدة الدمغة ================= */
+var STAMP_PRICE={court:250,council:400,admin:300};
+var STAMP_KINDS=['court','council','admin'];
+var STAMP_FIRST_TYPES=['open','appeal','cassation','admin_open','recours_revision','intervention'];
+function stampBal(k){S.stampInventory=S.stampInventory||{court:0,council:0,admin:0};return +(S.stampInventory[k]||0)}
+function stampKindName(k){return t('stamp_'+k)}
+function stampKindOf(idx){var s=tr(COURTS[+(idx||0)]||COURTS[0])||'';if(/إداري|administratif|الدولة|État/i.test(s))return 'admin';if(/مجلس|Cour /i.test(s))return 'council';return 'court'}
+function stampLog(o){S.stampMoves=S.stampMoves||[];S.stampMoves.push(o);if(S.stampMoves.length>800)S.stampMoves.splice(0,S.stampMoves.length-800)}
+function stampLow(){var out=[];STAMP_KINDS.forEach(function(k){var n=stampBal(k);if(n<5)out.push({k:k,n:n})});return out}
+function stampConsume(kind,cid,label,exempt){
+ var o={id:'sb'+Date.now()+Math.floor(Math.random()*900),d:K(TODAY),at:new Date().toISOString(),type:'use',kind:kind,qty:1,caseId:cid?+cid:null,label:label||'',exempt:!!exempt};
+ if(exempt){stampLog(o);return {state:'exempt'}}
+ if(stampBal(kind)<1){o.denied=true;stampLog(o);return {state:'empty'}}
+ S.stampInventory[kind]=stampBal(kind)-1;stampLog(o);return {state:'ok'}}
+function stampCardV(){
+ var rows=STAMP_KINDS.map(function(k){var n=stampBal(k),low=n<5;
+  return '<div class="stamp-inv'+(low?' low':'')+'"><small>'+esc(stampKindName(k))+'</small><b>'+n+'</b>'+(low?'<small style="color:var(--bad);font-weight:700">'+esc(t('stamp_low'))+'</small>':'<small>&nbsp;</small>')+'</div>'}).join('');
+ var mv=(S.stampMoves||[]).slice(-6).reverse().map(function(x){var isBuy=x.type==='buy';
+  return '<div class="dlrow"><span class="chip '+(x.exempt?'exempt':isBuy?'stamp':x.denied?'bad':'mute')+'">'+(isBuy?'+'+x.qty:(x.exempt?t('stamp_exempt'):x.denied?'—':'−1'))+'</span><div style="flex:1"><strong>'+esc(stampKindName(x.kind))+'</strong><span class="sub">'+esc(x.label||'')+' · '+fmt(x.d)+'</span></div>'+(x.amount?'<b>'+money(x.amount)+'</b>':'')+'</div>'}).join('');
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('stamp_title')+'</h2><button class="btn sm primary" data-act="stampbuy">'+ic('plus')+t('stamp_buy')+'</button></div><div class="card-b">'
+  +'<p class="sub" style="margin:0 0 10px">'+t('stamp_sub')+'</p><div class="stamp-grid">'+rows+'</div>'
+  +'<h3 style="margin:10px 0 4px;font-size:15px">'+t('stamp_moves')+'</h3>'+(mv||'<p class="sub">'+t('stamp_none')+'</p>')
+  +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('stamp_price_note')+'</p></div></section>'}
+function stampBuyModal(){
+ modal('stamp_buy_title',[
+  {n:'kind',l:'stamp_kind',type:'select',opts:STAMP_KINDS.map(function(k){return [k,stampKindName(k)+' ('+stampBal(k)+')']}),v:'court'},
+  {n:'qty',l:'stamp_qty',type:'number',req:true,min:1,v:'50',chk:amtChk},
+  {n:'price',l:'stamp_unit',type:'number',req:true,min:1,v:String(STAMP_PRICE.court),chk:amtChk}
+ ],function(v){
+  var kind=STAMP_KINDS.indexOf(v.kind)>=0?v.kind:'court',qty=Math.max(1,Math.round(+v.qty||0)),price=Math.max(0,+v.price||0),total=qty*price;
+  undoable(function(){
+   S.stampInventory=S.stampInventory||{};S.stampInventory[kind]=stampBal(kind)+qty;
+   stampLog({id:'sb'+Date.now(),d:K(TODAY),at:new Date().toISOString(),type:'buy',kind:kind,qty:qty,amount:total,label:t('stamp_buy')});
+   S.officeExp=S.officeExp||[];S.officeExp.unshift({d:K(TODAY),t:(S.lang==='ar'?'شراء دمغة — ':'Achat de timbres — ')+stampKindName(kind)+' ('+qty+')',a:total});
+   if(S.cabinet)S.cabinet.stampLogVersion=1;
+  },'stamp_bought');try{render()}catch(_){}},'save')}
+function stampReportV(){
+ var mv=(S.stampMoves||[]),byM={},byCase={},buys={};
+ mv.forEach(function(x){var m=String(x.d||'').slice(0,7)||'—';
+  if(x.type==='buy'){buys[m]=(buys[m]||0)+(+x.amount||0);return}
+  if(x.exempt||x.denied)return;
+  byM[m]=byM[m]||{court:0,council:0,admin:0,amt:0};
+  byM[m][x.kind]=(byM[m][x.kind]||0)+1;byM[m].amt+=STAMP_PRICE[x.kind]||0;
+  if(x.caseId){byCase[x.caseId]=(byCase[x.caseId]||0)+1}});
+ var months=Object.keys(byM).concat(Object.keys(buys)).filter(function(v,i,a){return a.indexOf(v)===i}).sort().reverse();
+ var rows=months.map(function(m){var o=byM[m]||{court:0,council:0,admin:0,amt:0};
+  return '<tr><td dir="ltr">'+esc(m)+'</td><td>'+o.court+'</td><td>'+o.council+'</td><td>'+o.admin+'</td><td><b>'+(o.court+o.council+o.admin)+'</b></td><td>'+money(o.amt)+'</td><td>'+money(buys[m]||0)+'</td></tr>'}).join('');
+ var cr=Object.keys(byCase).map(function(cid){return {c:byC(+cid),n:byCase[cid]}}).filter(function(x){return x.c}).sort(function(a,b){return b.n-a.n});
+ var crows=cr.map(function(x){return '<button class="dlrow" data-act="case" data-id="'+x.c.id+'"><div style="flex:1"><strong>'+esc(x.c.no)+'</strong><span class="sub">'+esc(tr(x.c.title))+' — '+esc(tr(CL[x.c.cl]||{}))+'</span></div><span class="chip stamp">'+x.n+'</span></button>'}).join('');
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('stamp_rep_title')+'</h2></div><div class="card-b">'
+  +'<div style="overflow-x:auto"><table class="matrix"><thead><tr><th>'+t('stamp_month')+'</th><th>'+t('stamp_court')+'</th><th>'+t('stamp_council')+'</th><th>'+t('stamp_admin')+'</th><th>'+t('stamp_rep_used')+'</th><th>'+t('stamp_rep_amount')+'</th><th>'+t('stamp_rep_buys')+'</th></tr></thead><tbody>'+(rows||'<tr><td colspan="7">'+t('stamp_none')+'</td></tr>')+'</tbody></table></div>'
+  +'<h3 style="margin:16px 0 4px;font-size:15px">'+t('stamp_rep_cases')+'</h3>'+(crows||'<p class="sub">'+t('stamp_none')+'</p>')
+  +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('stamp_price_note')+'</p></div></section>'}
+function stampAlertHTML(){
+ var low=stampLow();if(!low.length)return '';
+ var txt=low.map(function(x){return t('stamp_low_n',stampKindName(x.k),x.n)}).join(' · ');
+ return '<div class="bar-off" style="border-color:var(--bad);color:var(--bad);background:var(--bad-soft);border-radius:12px;margin-bottom:16px;border:1px solid var(--bad)">'+ic('alert')+'<span style="flex:1">'+esc(txt)+'</span><button data-act="stampbuy" class="btn sm">'+t('stamp_buy')+'</button></div>'}
+
+/* ================= V9.10 — مصاريف الدعوى المستردة ================= */
+var CASE_EXP_TYPES=['expert','service','registration','other'];
+function caseExpensesV(){
+ var list=(S.caseExpenses||[]).filter(function(x){var c=byC(x.c);return c&&canSee(c)}).sort(function(a,b){return D(b.d)-D(a.d)});
+ var tot=list.reduce(function(a,x){return a+(+x.a||0)},0),rec=list.filter(function(x){return x.recovered}).reduce(function(a,x){return a+(+x.a||0)},0);
+ var rows=list.map(function(x){var c=byC(x.c);
+  return '<div class="row" style="grid-template-columns:auto 1.5fr 1fr 1fr auto auto"><div class="ficon" style="width:34px;height:38px">'+ic('coin')+'</div>'
+   +'<div><strong>'+esc(tr(c.title))+'</strong><small>'+esc(tr(CL[c.cl]||{}))+' · '+esc(c.no)+'</small></div>'
+   +'<span>'+esc(t('caseexp_t_'+x.type))+'</span><span class="sub">'+fmt(x.d)+(x.ref?' · '+esc(x.ref):'')+'</span>'
+   +'<strong>'+money(x.a)+'</strong>'
+   +'<button class="btn sm" data-act="cexptog" data-id="'+x.id+'"><span class="chip '+(x.recovered?'ok':'warn')+'">'+(x.recovered?t('caseexp_recovered'):t('caseexp_pending'))+'</span></button></div>'}).join('');
+ var kp=function(l,v){return '<div class="card kpi"><div><span>'+l+'</span><b class="sm">'+money(v)+'</b></div></div>'};
+ return '<div class="page-h" style="margin-bottom:8px"><div><h2 style="font-size:26px">'+t('caseexp_title')+'</h2><p>'+t('caseexp_sub')+'</p></div><button class="btn primary" data-act="cexpadd">'+t('caseexp_new')+'</button></div>'
+  +'<div class="kpis">'+kp(t('caseexp_total'),tot)+kp(t('caseexp_tot_rec'),rec)+kp(t('caseexp_tot_pend'),tot-rec)+'</div>'
+  +'<section class="card"><div class="card-b">'+(rows?'<div class="rows"><div class="row head" style="grid-template-columns:auto 1.5fr 1fr 1fr auto auto"><span></span><span>'+t('fl_case')+'</span><span>'+t('caseexp_type')+'</span><span>'+t('fl_date')+'</span><span>'+t('fl_amount')+'</span><span>'+t('caseexp_recovered')+'</span></div>'+rows+'</div>':'<div class="empty-big"><h3>'+t('caseexp_empty')+'</h3></div>')
+  +'<p class="note" style="margin-top:12px">'+t('caseexp_note')+'</p></div></section>'}
+function addCaseExpense(cid){
+ var cs=visCases();if(!cs.length){toast(t('empty_cases'));return}
+ modal('caseexp_add_title',[
+  {n:'c',l:'fl_case',type:'select',opts:cs.map(function(c){return [c.id,c.no+' — '+tr(c.title)]}),v:String(cid||cs[0].id)},
+  {n:'type',l:'caseexp_type',type:'select',opts:CASE_EXP_TYPES.map(function(k){return [k,t('caseexp_t_'+k)]}),v:'expert'},
+  {n:'a',l:'fl_amount',type:'number',req:true,min:1,chk:amtChk},
+  {n:'d',l:'fl_date',type:'date',req:true,v:K(TODAY)},
+  {n:'ref',l:'caseexp_ref',v:''}
+ ],function(v){
+  undoable(function(){S.caseExpenses=S.caseExpenses||[];S.caseExpenses.unshift({id:'ce'+Date.now(),c:+v.c,type:v.type,a:+v.a,d:v.d,ref:v.ref||'',recovered:false,by:S.user})},'caseexp_added');
+  try{render()}catch(_){}},'save')}
+
+/* ================= V9.10 — مذكرة الحضور ================= */
+function attendanceV(){
+ var list=(S.attendance||[]).filter(function(x){var c=byC(x.caseId);return c&&canSee(c)}).sort(function(a,b){return D(b.date)-D(a.date)});
+ var rows=list.map(function(x){var c=byC(x.caseId),u=byU(x.who);
+  return '<div class="fp-row"><span class="avatar sm">'+esc(u?tr(u.init):'?')+'</span><div><strong>'+esc(c.no)+' — '+esc(tr(c.title))+'</strong><span class="sub">'+fmt(x.date)+' · '+esc(u?tr(u.n):'—')+(x.kind?' · '+esc(x.kind):'')+'</span>'
+   +(x.report?'<div style="font-size:13.5px;margin-top:4px;white-space:pre-wrap">'+esc(x.report)+'</div>':'<span class="sub" style="color:var(--warn)">'+esc(t('att_empty_report'))+'</span>')+'</div>'
+   +'<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><span class="chip '+(x.status==='attended'?'ok':x.status==='postponed'?'warn':x.status==='subst'?'info':'mute')+'">'+esc(t('att_'+(x.status||'pending')))+'</span><button class="btn sm" data-act="attrep" data-id="'+x.id+'">'+t('att_report_btn')+'</button></div></div>'}).join('');
+ return '<section class="card"><div class="card-h"><h2>'+t('att_title')+'</h2><button class="btn sm primary" data-act="attadd">'+t('att_add')+'</button></div><div class="card-b">'
+  +'<p class="sub" style="margin:0 0 8px">'+t('att_sub')+'</p>'+(rows||'<p class="empty">'+t('att_none')+'</p>')+'</div></section>'}
+function attAdd(){
+ var cs=visCases();if(!cs.length){toast(t('empty_cases'));return}
+ var who=U.filter(function(u){return u.role==='trainee'||u.role==='collaborator'||u.role==='secretary'});
+ if(!who.length){toast(t('att_need'));return}
+ modal('att_new',[
+  {n:'c',l:'fl_case',type:'select',opts:cs.map(function(c){return [c.id,c.no+' — '+tr(c.title)]}),v:String(cs[0].id)},
+  {n:'who',l:'att_who',type:'select',opts:who.map(function(u){return [u.id,tr(u.n)+' — '+t(u.rk)]}),v:who[0].id},
+  {n:'date',l:'fl_date',type:'date',req:true,v:K(TODAY)},
+  {n:'kind',l:'fl_kind',v:S.lang==='ar'?'جلسة مرافعة':'Plaidoirie'}
+ ],function(v){
+  undoable(function(){S.attendance=S.attendance||[];S.attendance.unshift({id:'at'+Date.now(),caseId:+v.c,who:v.who,date:v.date,kind:v.kind||'',report:'',status:'pending',by:S.user})},'att_added');
+  try{S.roleTab='att';render()}catch(_){}},'save')}
+function attReport(id){
+ var x=(S.attendance||[]).filter(function(y){return y.id===id})[0];if(!x)return;
+ modal('att_report',[
+  {n:'status',l:'att_st',type:'select',opts:[['pending',t('att_pending')],['attended',t('att_attended')],['subst',t('att_subst')],['postponed',t('att_postponed')]],v:x.status||'pending'},
+  {n:'report',l:'att_report',type:'textarea',v:x.report||''}
+ ],function(v){undoable(function(){x.status=v.status;x.report=v.report;x.reportAt=K(TODAY)},'att_saved');try{render()}catch(_){}},'save')}
+/* ================= V9.10 — البحث النصي الشامل ================= */
+function ftsStrip(h){return String(h||'').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]*>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim()}
+function ftsSnip(txt,q){var t=String(txt||''),n=normName(t),k=normName(q);if(!k)return t.slice(0,180);var i=n.indexOf(k);if(i<0)return t.slice(0,180);var st=Math.max(0,i-60);return (st?'… ':'')+t.slice(st,i+Math.max(k.length,24)+110)+' …'}
+function ftsHi(s,q){var e=esc(s);if(!q)return e;var r=String(q).replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&');try{return e.replace(new RegExp('('+r+')','gi'),'<span class="hit">$1</span>')}catch(_){return e}}
+function ftsSearch(q){
+ var k=normName(q),out=[];if(!k)return out;
+ var hit=function(x){return normName(x).indexOf(k)>=0};
+ (S.drafts||[]).forEach(function(d){var body=ftsStrip(d.body);if(hit(d.title||'')||hit(body))out.push({g:'drafts',title:(d.title||t('dg_pdf_name')),meta:(d.type||'')+(d.at?' · '+d.at:''),snip:ftsSnip(body||d.title||'',q)})});
+ (S.docs||[]).forEach(function(d){var c=byC(d.c);if(!c||!canSee(c))return;if(hit(tr(d.n)))out.push({g:'docs',title:tr(d.n),meta:c.no+' · '+fmt(d.d),snip:tr(c.title)})});
+ (S.jurisprudence||[]).forEach(function(j){var body=(j.court||'')+' '+(j.kw||'')+' '+(j.text||'')+' '+(j.ref||'');if(hit(body))out.push({g:'juris',title:(j.court||'')+' — '+(j.ref||''),meta:String(j.year||''),snip:ftsSnip(j.text||'',q)})});
+ (S.glossary||[]).forEach(function(g){var body=(g.ar||'')+' '+(g.fr||'')+' '+(g.d||'');if(hit(body))out.push({g:'glos',title:(g.ar||'')+' — '+(g.fr||''),meta:'',snip:ftsSnip(g.d||'',q)})});
+ return out}
+function ftsBody(q){
+ if(!q)return '<p class="sub">'+t('fts_note')+'</p>';
+ var res=ftsSearch(q);if(!res.length)return '<p class="empty">'+t('fts_none')+'</p>';
+ var groups=[['drafts',t('fts_in_drafts')],['docs',t('fts_in_docs')],['juris',t('fts_in_juris')],['glos',t('fts_in_glos')]],h='<p class="sub" style="margin:0 0 8px">'+t('fts_count',res.length)+'</p>';
+ groups.forEach(function(g){var arr=res.filter(function(x){return x.g===g[0]});if(!arr.length)return;
+  h+='<h3 style="margin:14px 0 4px;font-size:15px">'+g[1]+' <span class="chip mute">'+arr.length+'</span></h3>';
+  h+=arr.slice(0,25).map(function(x){return '<div class="dlrow"><div style="flex:1;min-width:0"><strong>'+ftsHi(x.title,q)+'</strong>'+(x.meta?'<span class="sub">'+esc(x.meta)+'</span>':'')+'<div style="font-size:13.5px">'+ftsHi(x.snip,q)+'</div></div></div>'}).join('')});
+ return h}
+function ftsV(){
+ var q=S.ftsQuery||'';
+ return '<section class="card"><div class="card-h"><h2>'+t('fts_title')+'</h2></div><div class="card-b"><div class="fts-box">'
+  +'<input id="ftsq" type="search" value="'+esc(q)+'" placeholder="'+esc(t('fts_ph'))+'" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)">'
+  +'</div><div id="ftsres" style="margin-top:10px">'+ftsBody(q)+'</div></div></section>'}
+
+/* ================= V9.10 — التوقيع والختم الرقميان ================= */
+Object.assign(L.ar,{sign_sig:'التوقيع',sign_stamp:'الختم'});
+Object.assign(L.fr,{sign_sig:'Signature',sign_stamp:'Cachet'});
+function readImgPng(file,max,cb){
+ if(!file){cb('');return}max=max||600;
+ var r=new FileReader();
+ r.onload=function(){var img=new Image();img.onload=function(){try{var w=img.width||1,h=img.height||1;if(w>max||h>max){var k=Math.min(max/w,max/h);w=Math.round(w*k);h=Math.round(h*k)}var c=document.createElement('canvas');c.width=w;c.height=h;var ctx=c.getContext('2d');ctx.clearRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);cb(c.toDataURL('image/png'))}catch(_){cb('')}};img.onerror=function(){cb('')};img.src=r.result};
+ r.onerror=function(){cb('')};r.readAsDataURL(file)}
+function sigCardV(){var cab=S.cabinet||{};
+ function slot(k,label){var v=cab[k]||'';
+  return '<div class="u"><small style="color:var(--muted);display:block;margin-bottom:4px">'+label+'</small>'
+   +(v?'<img src="'+v+'" alt="">':'<div class="sub" style="padding:18px 0">'+t('sig_none')+'</div>')
+   +'<input type="file" accept="image/png,image/jpeg" data-sig="'+k+'" aria-label="'+esc(label)+'" style="width:100%;font-size:12px;margin-top:6px">'
+   +(v?'<button class="btn sm danger" data-act="sigdel" data-k="'+k+'" style="margin-top:6px">'+t('sig_remove')+'</button>':'')
+   +'</div>'}
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('sig_title')+'</h2></div><div class="card-b">'
+  +'<p class="sub" style="margin:0 0 10px">'+t('sig_sub')+'</p><div class="sig-up">'+slot('signatureImg',t('sig_up'))+slot('stampImg',t('sig_stamp'))+'</div>'
+  +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('sig_note')+'</p></div></section>'}
+function docSignBlock(){
+ var cab=S.cabinet||{},dg=S.docGen||{};
+ var sg=cab.signatureImg?'<img src="'+cab.signatureImg+'" alt="">':'';
+ var st=cab.stampImg?'<img src="'+cab.stampImg+'" alt="">':'';
+ var todayStr=new Date().toLocaleDateString(S.lang==='ar'?'ar-DZ-u-nu-latn':'fr-FR',{year:'numeric',month:'long',day:'numeric'});
+ return '<div class="doc-sign"><div style="font-size:13px">'+t('dg_place')+': <b>'+esc(dg.place||'الجزائر')+'</b><br>'+todayStr+'</div>'
+  +'<div style="display:flex;gap:26px;flex-wrap:wrap"><div class="sigbox">'+sg+esc(t('sign_sig'))+'</div><div class="sigbox">'+st+esc(t('sign_stamp'))+'</div></div></div>'}
+
+/* ================= V9.10 — تصدير PDF ================= */
+function ensureH2P(cb){
+ if(window.html2pdf){cb();return}
+ var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
+ var done=false;function fin(){if(done)return;done=true;cb()}
+ s.onload=fin;s.onerror=fin;document.head.appendChild(s);setTimeout(fin,7000)}
+function pdfDoc(){
+ var el=document.getElementById('dgPreview');if(!el){toast(t('dg_pick'));return}
+ if(typeof printDoc==='function'&&me().role==='trainee'){printDoc();return}
+ function run(){
+  if(!window.html2pdf){toast(t('dg_pdf_offline'));printDoc();return}
+  var dg=S.docGen||{},name='diwan-'+(dg.caseNo?String(dg.caseNo).replace(/[^0-9A-Za-z_-]/g,'_'):(dg.type||'doc'))+'-'+K(TODAY)+'.pdf';
+  var wrap=document.createElement('div');
+  wrap.setAttribute('dir',S.lang==='ar'?'rtl':'ltr');
+  wrap.style.cssText='position:fixed;top:0;inset-inline-start:-99999px;width:190mm;background:#fff;color:#0f1e2e;padding:6mm';
+  wrap.innerHTML=el.innerHTML;document.body.appendChild(wrap);
+  var fin=function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap)};
+  toast(t('dg_pdf_busy'));
+  try{
+   window.html2pdf().set({margin:[6,6,6,6],filename:name,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){toast(t('dg_pdf_ok'));fin()}).catch(function(){fin();toast(t('dg_pdf_offline'));printDoc()})
+  }catch(_){fin();toast(t('dg_pdf_offline'));printDoc()}}
+ ensureH2P(run)}
+
+/* ================= V9.10 — تعبئة الوثائق تلقائياً + الدمغة ================= */
+function dgAutofill(cid){
+ var c=byC(+cid);if(!c)return false;
+ var ps=(c.parties||[]).map(normParty);
+ var cl=ps.filter(function(p){return p.role==='client'})[0]||ps[0]||null;
+ var op=ps.filter(function(p){return p.role==='opponent'})[0]||null;
+ var dg=S.docGen,cab=S.cabinet||{},ci=0,i;
+ for(i=0;i<COURTS.length;i++){if(tr(COURTS[i])===tr(c.court)){ci=i;break}}
+ dg.caseId=String(c.id);dg.caseNo=c.no||'';dg.court=String(ci);dg.courtName=tr(COURTS[ci]);
+ if(cl){dg.pName=pFull(cl);dg.pAddr=tr(cl.address);dg.pQuality=cl.kind==='legal'?'legal':'natural';dg.pCompany=cl.kind==='legal'?pFull(cl):''}
+ if(op){dg.dName=pFull(op);dg.dAddr=tr(op.address);dg.dQuality=op.kind==='legal'?'legal':'natural';dg.dCompany=op.kind==='legal'?pFull(op):''}
+ dg.subject=tr(c.title);dg.lawyerName=tr(cab.name)||'';dg.lawyerAddr=tr(cab.address)||'';dg.lawyerPhone=cab.phone||'';
+ dg.priorAdmin=c.priorAdmin||c.adminRecourse||'';dg.refNo=dg.refNo||c.no||'';
+ if(c.judg)dg.judgment=tr(c.judg);
+ if(c.delibDate)dg.sessionDate=c.delibDate;
+ return true}
+function dgStampPlan(){
+ var dg=S.docGen||{},c=dg.caseId?byC(+dg.caseId):null,kind=stampKindOf(dg.court);
+ if(dg.stampFirst==='0')return {mode:'skip',kind:kind,c:c};
+ if(c&&c.judicialAid)return {mode:'exempt_ja',kind:kind,c:c};
+ var first=STAMP_FIRST_TYPES.indexOf(dg.type||'open')>=0;
+ if(dg.stampFirst==='1')first=true;
+ if(!first)return {mode:'exempt_memo',kind:kind,c:c};
+ return {mode:'use',kind:kind,c:c}}
+function dgStampBanner(){
+ var p=dgStampPlan(),n=stampBal(p.kind);
+ var cls=p.mode==='use'?(n>0?'stamp':'bad'):'exempt';
+ var txt=p.mode==='use'?t('stamp_taken'):p.mode==='exempt_ja'?t('stamp_exempt_ja'):p.mode==='exempt_memo'?t('stamp_exempt_memo'):t('stamp_skip');
+ return '<div class="note" style="margin:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="chip '+cls+'">'+t('dg_stamp_lbl')+'</span><span style="flex:1">'+esc(txt)+(p.mode==='use'?' — '+esc(stampKindName(p.kind))+' ('+n+')':'')+'</span></div>'}
+function stampOnDocPrint(){
+ var dg=S.docGen||{},p=dgStampPlan(),label=(dg.type||'open')+' '+(dg.caseNo||'');
+ if(p.mode==='use'){
+  var dup=(S.stampMoves||[]).some(function(m){return m.type==='use'&&!m.exempt&&m.d===K(TODAY)&&m.caseId===(p.c?p.c.id:null)&&m.label===label});
+  if(dup)return {state:'dup'};
+  var res=stampConsume(p.kind,p.c?p.c.id:null,label,false);
+  if(res.state==='ok')toast(t('stamp_taken'));else if(res.state==='empty')toast(t('stamp_empty'));
+  try{scheduleSave()}catch(_){}return res}
+ if(p.mode==='exempt_ja'||p.mode==='exempt_memo'){stampConsume(p.kind,null,label,true);try{scheduleSave()}catch(_){}}
+ return {state:'none'}}
+
+/* ================= V9.10 — تنبيه الآجال 48 ساعة ================= */
+function dl48(){return myDls().filter(function(x){var n=diff(x.d);return n>=0&&n<=2}).sort(function(a,b){return D(a.d)-D(b.d)})}
+function dl48Card(){
+ var list=dl48(),unit=S.lang==='ar'?'يوم':'j';
+ var rows=list.map(function(x){var c=byC(x.c),n=diff(x.d);
+  return '<button class="dlrow" data-act="case" data-id="'+x.c+'"><span class="left '+(n<=0?'bad':'warn')+'">'+n+'<small>'+unit+'</small></span><div style="flex:1"><strong>'+esc(tr(x.l))+'</strong><span class="sub">'+esc(c?tr(c.title):'')+' · '+fmt(x.d)+'</span></div><span class="chip '+(n<=0?'bad':'warn')+'">'+t('dl48_open')+'</span></button>'}).join('');
+ return '<section class="card" style="margin-bottom:20px'+(list.length?';border-color:var(--bad)':'')+'"><div class="card-h"><h2>'+t('dl48_title')+'</h2><span class="chip '+(list.length?'bad':'ok')+'">'+list.length+'</span></div><div class="card-b">'
+  +(list.length?'<p class="sub" style="margin:0 0 6px;color:var(--bad);font-weight:600">'+t('dl48_hint')+'</p>'+rows:'<p class="sub" style="margin:0">'+t('dl48_none')+'</p>')+'</div></section>'}
+
+/* ================= V9.10 — أحداث ================= */
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;
+ var a=el.dataset.act,id=+el.dataset.id;
+ if(a==='stampbuy'){stampBuyModal();return}
+ if(a==='cexpadd'){addCaseExpense(id||null);return}
+ if(a==='cexptog'){var x=(S.caseExpenses||[]).filter(function(y){return y.id===el.dataset.id})[0];if(x){x.recovered=!x.recovered;try{v9save()}catch(_){}render()}return}
+ if(a==='attadd'){attAdd();return}
+ if(a==='attrep'){attReport(el.dataset.id);return}
+ if(a==='sigdel'){if(S.cabinet)delete S.cabinet[el.dataset.k];try{v9save()}catch(_){}render();return}
+ if(a==='dgpdf'){pdfDoc();return}
+ if(a==='dgfill'){var sel=document.getElementById('dg_casepick');if(dgAutofill((sel&&sel.value)||S.docGen.caseId)){render();toast(t('dg_filled'))}return}
+ if(a==='roletab'){S.roleTab=el.dataset.v;render();return}
+ if(a==='reptabs'){S.repTab2=el.dataset.v;render();return}
+});
+document.addEventListener('change',function(e){
+ var el=e.target;if(!el||!el.dataset)return;
+ if(el.dataset.sig){var f=el.files&&el.files[0];if(!f)return;
+  readImgPng(f,600,function(d){if(!d){toast('⚠');return}S.cabinet=S.cabinet||{};S.cabinet[el.dataset.sig]=d;try{v9save()}catch(_){}render();toast(t('sig_ok'))});return}
+ if(el.id==='dg_casepick'){if(dgAutofill(el.value)){render();toast(t('dg_filled'))}return}
+ if(el.id==='dl_dist'){S.dlCalc.dist=!!el.checked;return}
+ if(el.id==='dl_vac_on'){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!el.checked;try{v9save()}catch(_){}return}
+});
+document.addEventListener('input',function(e){
+ if(e.target&&e.target.id==='ftsq'){S.ftsQuery=e.target.value;var box=document.getElementById('ftsres');if(box)box.innerHTML=ftsBody(S.ftsQuery);return}
+});
 if(!_LIC.gate()){chrome();render()}
 
 /* ===== v7 ADDON: storage, approvals, scanner, notifs, docs ===== */
@@ -2168,10 +2540,10 @@ if(!_LIC.gate()){chrome();render()}
 
 // FIX13R: STORE_KEY / SCHEMA / _saveTimer declarations moved above the first chrome()
 /* FIX3: scheduleSave/persistNow are defined in the FIX3 security block below (debounced, encrypted) */
-function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{}}}
+function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null}}
 function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(raw.indexOf(ENC_PREFIX)===0)return null;return normStore(JSON.parse(raw))}catch(e){return null}}
 function normStore(data){try{if(!data.clients&&data.cases){var clients=[],seen={};(data.cases||[]).forEach(function(c){if(c.clientId!=null)return;if(typeof c.cl==='number'){var src0=(CL)[c.cl]||{ar:'—',fr:'—',ph:'—'};var key=(src0.ar||'')+'|'+(src0.ph||'');if(seen[key]!=null)c.clientId=seen[key];else{var id=clients.length+1;clients.push(Object.assign({id:id},src0));seen[key]=id;c.clientId=id}}});data.clients=clients.length?clients:CL.map(function(x,i){return Object.assign({id:i+1},x)})}if(!data.dlHolidays)data.dlHolidays=DEFAULT_HOLIDAYS.slice();if(!data.dlRules)data.dlRules=DEFAULT_DLK.slice();if(!data.drafts)data.drafts=[];data.schemaVersion=SCHEMA;return data}catch(e){return null}}
-function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
+function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
 function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.tasks=[];S.dls=[];S.docs=[];S.pays=[];S.expenses=[];S.officeExp=[];S.invoices=[];S.trust=[];S.installments=[];S.audit=[];S.drafts=[];S.clients=[];CL.length=0;S.nextId=1;S.nextTask=1;S.nextInv=1;S.nextTrust=1;S.nextPay=1;S.isDemo=false;scheduleSave();chrome();render()}
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
@@ -2411,21 +2783,22 @@ function deliveriesCard(){var sv=S.processServers||[];
    +'<span class="chip '+(d.status==='delivered'?'ok':d.status==='returned'?'bad':'warn')+'">'+lbl+'</span></div>'}).join('')||'<p class="empty">—</p>';
  return '<section class="card" style="margin-top:16px"><div class="card-h"><h2>'+t('dv_title')+'</h2><button class="btn sm primary" data-act="newdelivery">+ '+t('dv_new')+'</button></div><div class="card-b">'+rows+'</div></section>'}
 /* ===== FIX6.1: execution path (only when c.stage===3) ===== */
-var EXEC_STEPS=[1,2,3,4,5,6];
+var EXEC_STEPS=[0,1,2,3,4,5,6,7];
 function execPathHTML(c){var ex=c.execution||{},canEdit=me().role!=='trainee';
  var rows=EXEC_STEPS.map(function(n){var s=ex['step'+n]||{},extra='';
   if(n===4&&s.type)extra=' · '+t('xp_t_'+s.type);
   if(n===6&&s.amount)extra=' · '+money(+s.amount);
+  if(s.bailiff)extra+=' · '+s.bailiff;
   var dl='';if(n===2&&s.date){var dd=K(addCalDays(s.date,15)),late=!s.done&&diff(dd)<0;dl='<div style="margin-top:4px"><span class="chip '+(late?'bad':'warn')+'">'+t('xp_deadline')+': '+fmt(dd)+'</span></div>'}
   return '<div class="dlrow"><span class="chip '+(s.done?'ok':'mute')+'" aria-label="'+t(s.done?'xp_done':'xp_todo')+'">'+(s.done?'✓':n)+'</span><div style="flex:1"><strong>'+t('xp_s'+n)+'</strong><span class="sub">'+[s.date?fmt(s.date):'',s.ref||'',s.notes||''].filter(Boolean).map(esc).join(' · ')+esc(extra)+'</span>'+dl+'</div>'
    +(canEdit?'<button class="btn sm" data-act="execstep" data-id="'+c.id+'" data-s="'+n+'">'+t('xp_edit')+'</button>':'')+'</div>'}).join('');
  return '<h3 style="margin-top:14px">'+t('xp_title')+'</h3><div class="exec-path">'+rows+'</div>'}
 function execStepModal(cid,n){var c=byC(cid);if(!c)return;var ex=(c.execution=c.execution||{}),s=ex['step'+n]||{};
- var f=[{n:'done',l:'xp_done',type:'checkbox',v:!!s.done},{n:'date',l:'exec_date',type:'date',v:s.date||''},{n:'ref',l:'fl_ref',v:s.ref||''}];
+ var f=[{n:'done',l:'xp_done',type:'checkbox',v:!!s.done},{n:'date',l:'exec_date',type:'date',v:s.date||''},{n:'ref',l:'fl_ref',v:s.ref||''},{n:'bailiff',l:'exec_bailiff',v:s.bailiff||''}];
  if(n===4)f.push({n:'type',l:'xp_type',type:'select',opts:[['third',t('xp_t_third')],['real',t('xp_t_real')],['salary',t('xp_t_salary')]],v:s.type||'third'});
  if(n===6)f.push({n:'amount',l:'xp_amount',type:'number',v:s.amount||''});
  f.push({n:'notes',l:'xp_notes',type:'textarea',v:s.notes||''});
- modal('xp_s'+n,f,function(v){var o={done:!!v.done,date:v.date,ref:v.ref,notes:v.notes,by:S.user};if(n===4)o.type=v.type;if(n===6)o.amount=Math.max(0,+v.amount||0);
+ modal('xp_s'+n,f,function(v){var o={done:!!v.done,date:v.date,ref:v.ref,bailiff:v.bailiff||'',notes:v.notes,by:S.user};if(n===4)o.type=v.type;if(n===6)o.amount=Math.max(0,+v.amount||0);
   c.execution['step'+n]=o;S.audit=S.audit||[];S.audit.unshift({w:S.user,what:t('xp_title')+' — '+c.no+' — '+t('xp_s'+n),d:cfStamp()});if(S.audit.length>200)S.audit.length=200;
   v9save();openDrawer(c.id);toast(t('xp_saved'))},'save')}
 document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;var a=el.dataset.act;
@@ -2523,7 +2896,8 @@ function shareSummary(c){
 /* ========== V9.5: Rôle d'audience + merged views ========== */
 function roleV(){
  S.roleDate=S.roleDate||K(TODAY);
- var d=S.roleDate;
+ var d=S.roleDate,rt=S.roleTab||'role';
+ var bar='<div class="merged-tabs"><button data-act="roletab" data-v="role" '+(rt==='role'?'aria-current="true"':'')+'>'+t('role_title')+'</button><button data-act="roletab" data-v="att" '+(rt==='att'?'aria-current="true"':'')+'>'+t('att_title')+'</button></div>';
  var list=visCases().filter(function(c){return c.next===d||(c.hearings||[]).some(function(h){return h.date===d})}).slice().sort(function(a,b){return (a.time||'').localeCompare(b.time||'')});
  var rows=list.map(function(c,i){
   var h=(c.hearings||[]).find(function(x){return x.date===d})||{};
@@ -2535,7 +2909,8 @@ function roleV(){
   var table=h.table||c.tableNo||c.enrollNo||'';
   return '<tr class="'+(h.done?'done':'')+'"><td>'+(i+1)+'</td><td dir="ltr">'+esc(c.time||'—')+'</td><td><b dir="ltr">'+esc(c.no)+'</b>'+(urgent?' <span class="chip urgent">'+t('role_urgent')+'</span>':'')+(delib?' <span class="chip delib">'+t('role_delib')+'</span>':'')+'<br><small>'+esc(tr(c.title))+'</small></td><td>'+esc(tr(CL[c.cl]||{}))+'</td><td>'+esc(judge)+'</td><td dir="ltr">'+esc(table)+'</td><td>'+esc(cause||'—')+(subst?'<br><small>'+t('role_sub_at')+': '+esc(subst)+'</small>':'')+'</td><td><button class="btn sm" data-act="rolemark" data-id="'+c.id+'">✓</button></td></tr>';
  }).join('')||'<tr><td colspan="8" class="empty">'+t('role_empty')+'</td></tr>';
- return '<div class="page-h"><div><h1>'+t('role_title')+'</h1><p>'+t('role_sub')+'</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input type="date" id="roleDate" value="'+d+'" style="padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)"><button class="btn primary" data-act="roleprint">'+t('role_print')+'</button></div></div><section class="card"><div class="card-b" style="overflow-x:auto"><table class="role-table matrix"><thead><tr><th>#</th><th>الوقت</th><th>الملف</th><th>الموكل</th><th>'+t('role_judge')+'</th><th>'+t('role_table')+'</th><th>'+t('role_cause')+'</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></section><div id="rolePrintArea" class="role-print-only" style="display:none"></div>';
+ if(rt==='att')return '<div class="page-h"><div><h1>'+t('att_title')+'</h1><p>'+t('att_sub')+'</p></div></div>'+bar+attendanceV();
+ return bar+'<div class="page-h"><div><h1>'+t('role_title')+'</h1><p>'+t('role_sub')+'</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><input type="date" id="roleDate" value="'+d+'" style="padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)"><button class="btn primary" data-act="roleprint">'+t('role_print')+'</button></div></div><section class="card"><div class="card-b" style="overflow-x:auto"><table class="role-table matrix"><thead><tr><th>#</th><th>الوقت</th><th>الملف</th><th>الموكل</th><th>'+t('role_judge')+'</th><th>'+t('role_table')+'</th><th>'+t('role_cause')+'</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></section><div id="rolePrintArea" class="role-print-only" style="display:none"></div>';
 }
 function printRole(){
  var d=S.roleDate||K(TODAY);
