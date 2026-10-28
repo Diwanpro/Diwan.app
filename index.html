@@ -2131,11 +2131,15 @@ al_summary:(x,y)=>`${x} délai(s) expirent demain et ${y} audience(s) aujourd'hu
 
 /* ================= V9.9 — نظام الفترة التجريبية والتفعيل (Trial & License) =================
    ملاحظة أمنية: التحقق يجري في المتصفح، فهو حاجز ضد النسخ العابر لا حماية مطلقة.
-   المفاتيح تُولَّد بـ tools/keygen.mjs (سرّي، غير مُرفَق بالمستودع). */
+   المفاتيح تُولَّد بمولّد داخلي سرّي لا يُرفع إلى المستودع ولا يُنشر على GitHub Pages.
+   جُدِّدت بذور التوليد SA/SB/SC في 2026 بعد أن صار المولّد القديم مقروءاً في تاريخ Git،
+   فصار كل مفتاح صادر بالبذور القديمة لاغياً (ومنها المفتاح التجريبي القديم).
+   بذرة SG بقيت دون تغيير عن قصد: عليها يتوقف معرّف الجهاز وتوقيع سجل التجربة والترخيص
+   المحفوظين محلياً، فتغييرها كان سيُفقد التفعيل ويُعيد بدء العدّاد على الأجهزة القائمة. */
 var _LK_ON=false;
 var _LIC=(function(){
  var _rev=function(b){try{var v=atob(b);return v.split('').reverse().join('')}catch(_){return ''}};
- var SA=_rev('N1J6fEF8OW5hd2lE'),SB=_rev('MlFrfEJ8OW5hd2lE'),SC=_rev('NU5tfEN8OW5hd2lE'),SG=_rev('NFB4fFN8OW5hd2lE'),
+ var SA=_rev('dDRacThSdnxBfDYyMDJ8bmF3aUQ='),SB=_rev('azZQbTNZd3xCfDYyMDJ8bmF3aUQ='),SC=_rev('ZjJCZDlLbnxDfDYyMDJ8bmF3aUQ='),SG=_rev('NFB4fFN8OW5hd2lE'),
      KT=_rev('MXZfbGFpcnRfbmF3aWQ='),KL=_rev('MXZfZXNuZWNpbF9uYXdpZA=='),CK=_rev('cnRfd2Q='),
      AL='0123456789ABCDEFGHJKMNPQRSTVWXYZ',DAYS=30,CMAX=(10*365*24*3600);
  var _booted=false,_fails=0,_lastTick=0;
