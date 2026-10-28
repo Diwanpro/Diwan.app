@@ -362,7 +362,7 @@ html[dir=ltr] .tl li{padding:0 0 14px 24px}
 @media (max-width:720px){.guide-frame{height:calc(100vh - 190px)}}
 @media (max-width:520px){.qh-grid{grid-template-columns:1fr}.fab{inset-inline-end:14px;padding:12px 16px;font-size:14px}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js" defer></script>
+<!-- V10.1: أُزيلت مكتبة html2pdf.js — التصدير عبر الطباعة الأصلية «حفظ كـ PDF» -->
 </head>
 <body>
 <a class="skip" href="#view" id="skipLink"></a>
@@ -1029,7 +1029,7 @@ function saveSubs(){S.subs=S.subs||{};
 
 function portalV(id){const c=byC(id||4)||S.cases[0],n=c.next?D(c.next):null,shared=S.docs.filter(d=>d.c===c.id&&d.sh),ptab=S.portalTab||'file';
  const tl=[c.next?`<li><strong>${tr(KIND[c.kind])}</strong><small>${fmt(c.next)} — ${c.time}</small></li>`:`<li><strong>${tr(KIND[c.kind])}</strong><small>${t('po_notify')}</small></li>`,c.judg?`<li><strong>${esc(tr(c.judg))}</strong></li>`:'',`<li><strong>${t('po_open')}</strong><small>${t('po_done')}</small></li>`].join('');
- return `<div class="page-h"><div><h1>${t('po_title')}</h1><p>${t('po_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="portalSel" class="btn" aria-label="${t('fl_client')}">${S.cases.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(tr(CL[x.cl]))} — ${esc(tr(x.title))}</option>`).join('')}</select><button class="btn" style="background:var(--ok);border-color:var(--ok);color:#fff" data-act="portalshare" data-id="${c.id}">${ic('download')} ${t('po_share_pdf')}</button></div></div>
+ return `<div class="page-h"><div><h1>${t('po_title')}</h1><p>${t('po_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="portalSel" class="btn" aria-label="${t('fl_client')}">${S.cases.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(tr(CL[x.cl]))} — ${esc(tr(x.title))}</option>`).join('')}</select><button class="btn" style="background:var(--ok);border-color:var(--ok);color:#fff" data-act="portalshare" data-id="${c.id}">${ic('print')} ${t('po_share_pdf')}</button><button class="btn" style="background:#25D366;border-color:#25D366;color:#fff" data-act="portalwa" data-id="${c.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:-3px"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.58-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.41z"/></svg> ${t('po_wa_send')}</button></div></div>
  <div class="portal"><section class="card expl"><div class="card-b"><h2 style="margin-bottom:8px">${t('po_see')}</h2><ul><li>${t('po_1')}</li><li>${t('po_2')}</li><li>${t('po_3')}</li><li>${t('po_4')}</li><li>${t('po_5')}</li></ul><p class="note">${t('po_note')}</p></div></section>
  <div class="phone"><div class="phone-t"><small>${t('po_hello')}</small><h2>${esc(tr(CL[c.cl]))}</h2><small>${t('po_no')} ${c.no}</small></div><div class="phone-b">
   <div class="merged-tabs" style="margin:0 0 10px;border-bottom:1px solid var(--line)"><button data-act="portaltab" data-v="file" ${ptab==='file'?'aria-current="true"':''}>${t('po_tab_file')}</button><button data-act="portaltab" data-v="timeline" ${ptab==='timeline'?'aria-current="true"':''}>${t('po_tab_timeline')}</button></div>
@@ -1390,7 +1390,7 @@ function printDoc(){
  }
  const el=document.getElementById('dgPreview');if(!el){toast(t('dg_pick'));return}
  try{stampOnDocPrint()}catch(_){}
- printHtmlIframe(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>${esc(t('dg_petition'))}</title>${PRINT_FONT_LINK}<style>body{font-family:${PRINT_FONT_STACK};padding:20mm 18mm;font-size:13px;line-height:1.7;color:#0f1e2e}h2,h3{font-family:${PRINT_FONT_STACK}}.doc-preview{max-width:180mm;margin:0 auto}.doc-preview p{white-space:pre-wrap;margin:8px 0}@page{size:A4;margin:15mm 14mm}@media print{body{padding:0}}</style></head><body>${el.innerHTML}</body></html>`)}
+ printHtmlIframe(dgPrintHTML())}
 
 
 /* ===== v6: وظائف وواجهات جديدة ===== */
@@ -2326,6 +2326,33 @@ po_share_ok_shared:'تم فتح واجهة المشاركة',po_share_docs_note:
 guide_title:'دليل الاستخدام',guide_sub:'الدليل التشغيلي الشامل — يعمل دون اتصال',guide_open:'فتح في نافذة جديدة',
 guide_missing:'إن لم يظهر الدليل أعلاه، تأكد من وجود ملف diwan_guide-1.html في جذر الموقع ثم أعد التحديث.'
 });
+/* ===== V10.1 i18n — تصدير بالطباعة الأصلية + واتساب بوابة الموكل ===== */
+Object.assign(L.ar,{
+ po_share_pdf:'طباعة / PDF',po_share_busy:'جارٍ تحضير نسخة الطباعة…',po_share_ok:'جاهزة للطباعة',
+ po_share_offline:'تعذّر فتح نافذة الطباعة — اسمح بالنوافذ المنبثقة ثم أعد المحاولة',
+ po_share_save_hint:function(n){return 'اختر «حفظ كـ PDF» في نافذة الطباعة — الاسم المقترح: '+n},
+ po_wa_send:'إرسال للموكل (واتساب)',
+ po_wa_nophone:'لا يوجد رقم هاتف مسجّل للموكل — أضفه في بطاقة الموكل ثم أعد المحاولة',
+ po_wa_msg:function(no){return 'مرحباً، نرفق لكم تحديثاً بخصوص ملفكم رقم '+(no||'')+'. يرجى الاطلاع على ملف PDF المرفق.'},
+ po_wa_ready:'فُتحت محادثة واتساب — أرفق ملف PDF الذي حفظته للتو',
+ po_wa_blocked:'حجب المتصفح فتح واتساب — احفظ ملف PDF من نافذة الطباعة ثم أرسله يدوياً',
+ dg_pdf_busy:'جارٍ تحضير نسخة الطباعة…',dg_pdf_ok:'جاهزة للطباعة',
+ dg_pdf_offline:'تعذّر فتح نافذة الطباعة — اسمح بالنوافذ المنبثقة ثم أعد المحاولة',
+ dg_pdf_save_hint:function(n){return 'اختر «حفظ كـ PDF» في نافذة الطباعة — الاسم المقترح: '+n+'.pdf'}
+});
+Object.assign(L.fr,{
+ po_share_pdf:'Imprimer / PDF',po_share_busy:'Préparation de la version imprimable…',po_share_ok:'Prêt à imprimer',
+ po_share_offline:'Impossible d’ouvrir l’impression — autorisez les pop-ups puis réessayez',
+ po_share_save_hint:function(n){return 'Choisissez « Enregistrer au format PDF » dans la fenêtre d’impression — nom suggéré : '+n},
+ po_wa_send:'Envoyer au client (WhatsApp)',
+ po_wa_nophone:'Aucun numéro de téléphone pour ce client — ajoutez-le dans sa fiche puis réessayez',
+ po_wa_msg:function(no){return 'Bonjour, veuillez trouver ci-joint une mise à jour concernant votre dossier n° '+(no||'')+'. Merci de consulter le PDF joint.'},
+ po_wa_ready:'Conversation WhatsApp ouverte — joignez le PDF que vous venez d’enregistrer',
+ po_wa_blocked:'Pop-up bloquée — enregistrez le PDF depuis la fenêtre d’impression puis envoyez-le manuellement',
+ dg_pdf_busy:'Préparation de la version imprimable…',dg_pdf_ok:'Prêt à imprimer',
+ dg_pdf_offline:'Impossible d’ouvrir l’impression — autorisez les pop-ups puis réessayez',
+ dg_pdf_save_hint:function(n){return 'Choisissez « Enregistrer au format PDF » — nom suggéré : '+n+'.pdf'}
+});
 /* ===== V10.0 i18n FR ===== */
 Object.assign(L.fr,{
 nav_guide:'Guide d’utilisation',
@@ -2528,28 +2555,26 @@ function docSignBlock(){
  return '<div class="doc-sign"><div style="font-size:13px">'+t('dg_place')+': <b>'+esc(dg.place||'الجزائر')+'</b><br>'+todayStr+'</div>'
   +'<div style="display:flex;gap:26px;flex-wrap:wrap"><div class="sigbox">'+sg+esc(t('sign_sig'))+'</div><div class="sigbox">'+st+esc(t('sign_stamp'))+'</div></div></div>'}
 
-/* ================= V9.10 — تصدير PDF ================= */
-function ensureH2P(cb){
- if(window.html2pdf){cb();return}
- var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
- var done=false;function fin(){if(done)return;done=true;cb()}
- s.onload=fin;s.onerror=fin;document.head.appendChild(s);setTimeout(fin,7000)}
+/* ================= V10.1 — تصدير PDF عبر الطباعة الأصلية =================
+   أُزيلت مكتبة html2pdf.js لأنها تنتج صفحات بيضاء للأصول المصوّرة خارج الشاشة.
+   الآن: نولّد وثيقة HTML مستقلة بتنسيق A4 ثم نطبعها عبر iframe مخفي → «حفظ كـ PDF». */
+function dgPrintHTML(){
+ var el=document.getElementById('dgPreview');if(!el)return '';
+ return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>'+esc(t('dg_petition'))+'</title>'
+  +(typeof PRINT_FONT_LINK!=='undefined'?PRINT_FONT_LINK:'')
+  +'<style>body{font-family:'+PRINT_FONT_STACK+';padding:20mm 18mm;font-size:13px;line-height:1.7;color:#0f1e2e;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+  +'h2,h3{font-family:'+PRINT_FONT_STACK+'}'
+  +'.doc-preview{max-width:180mm;margin:0 auto}.doc-preview p{white-space:pre-wrap;margin:8px 0}'
+  +'@page{size:A4;margin:15mm 14mm}@media print{body{padding:0}}</style></head><body>'+el.innerHTML+'</body></html>'}
 function pdfDoc(){
  var el=document.getElementById('dgPreview');if(!el){toast(t('dg_pick'));return}
  if(typeof printDoc==='function'&&me().role==='trainee'){printDoc();return}
- function run(){
-  if(!window.html2pdf){toast(t('dg_pdf_offline'));printDoc();return}
-  var dg=S.docGen||{},name='diwan-'+(dg.caseNo?String(dg.caseNo).replace(/[^0-9A-Za-z_-]/g,'_'):(dg.type||'doc'))+'-'+K(TODAY)+'.pdf';
-  var wrap=document.createElement('div');
-  wrap.setAttribute('dir',S.lang==='ar'?'rtl':'ltr');
-  wrap.style.cssText='position:fixed;top:0;inset-inline-start:-99999px;width:190mm;background:#fff;color:#0f1e2e;padding:6mm';
-  wrap.innerHTML=el.innerHTML;document.body.appendChild(wrap);
-  var fin=function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap)};
-  toast(t('dg_pdf_busy'));
-  try{
-   window.html2pdf().set({margin:[6,6,6,6],filename:name,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){toast(t('dg_pdf_ok'));fin()}).catch(function(){fin();toast(t('dg_pdf_offline'));printDoc()})
-  }catch(_){fin();toast(t('dg_pdf_offline'));printDoc()}}
- ensureH2P(run)}
+ try{stampOnDocPrint()}catch(_){}
+ var dg=S.docGen||{},suggest='diwan-'+(dg.caseNo?String(dg.caseNo).replace(/[^0-9A-Za-z_-]/g,'_'):(dg.type||'doc'))+'-'+K(TODAY);
+ toast(t('dg_pdf_busy'));
+ var ok=printHtmlIframe(dgPrintHTML());
+ if(ok===false){toast(t('dg_pdf_offline'));return}
+ setTimeout(function(){toast(t('dg_pdf_save_hint',suggest))},900)}
 
 /* ================= V9.10 — تعبئة الوثائق تلقائياً + الدمغة ================= */
 function dgAutofill(cid){
@@ -2906,37 +2931,42 @@ function portalShareHTML(c){
   +'<ul style="margin:6px 0 0;padding-inline-start:20px">'+(docs||'<li>'+t('po_nodocs')+'</li>')+'</ul>'
   +'<div style="background:#f6edd9;border:1px solid #e7d3a8;padding:8px 10px;border-radius:8px;font-size:11px;margin-top:16px">'+t('po_share_docs_note')+'</div>'
   +'<div style="margin-top:24px;text-align:center;color:#566677;font-size:11px">'+esc(tr(cab.name))+' — '+esc(K(TODAY))+'</div></div>'}
+/* ---------- 6) مشاركة بوابة الموكل — الطباعة الأصلية «حفظ كـ PDF» ---------- */
+function portalPrintHTML(c){
+ var name=portalShareFileName(c),lang=S.lang;
+ var css='body{margin:0;background:#fff;color:#0f1e2e;font-family:'+PRINT_FONT_STACK+';-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+  +'.po-share{max-width:182mm;margin:0 auto}img{max-width:100%}table{width:100%;border-collapse:collapse}'
+  +'tr,h1,h2,h3{page-break-inside:avoid}h1,h2,h3{page-break-after:avoid}'
+  +'@page{size:A4;margin:12mm}@media print{body{padding:0}}';
+ return '<!DOCTYPE html><html lang="'+lang+'" dir="'+(lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8">'
+  +'<meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(String(name).replace(/\.pdf$/,''))+'</title>'
+  +(typeof PRINT_FONT_LINK!=='undefined'?PRINT_FONT_LINK:'')+'<style>'+css+'</style></head><body><div class="po-share">'
+  +portalShareHTML(c)+'</div></body></html>'}
 function portalShare(cid){
  var c=byC(cid);if(!c)return;
- var html=portalShareHTML(c),name=portalShareFileName(c);
- function fallback(){
-  toast(t('po_share_offline'));
-  printHtmlIframe('<!DOCTYPE html><html lang="'+S.lang+'" dir="'+(S.lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8"><title>'+esc(name)+'</title>'
-   +(typeof PRINT_FONT_LINK!=='undefined'?PRINT_FONT_LINK:'')+'<style>body{padding:14mm;margin:0;background:#fff}@page{size:A4;margin:12mm}</style></head><body>'+html+'</body></html>')}
- function dl(blob){
-  try{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
-   setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(_){}},3000);toast(t('po_share_ok'))}catch(_){fallback()}}
- function run(){
-  if(!window.html2pdf){fallback();return}
-  var wrap=document.createElement('div');
-  wrap.setAttribute('dir',S.lang==='ar'?'rtl':'ltr');
-  wrap.style.cssText='position:fixed;top:0;inset-inline-start:-99999px;width:190mm;background:#fff;color:#0f1e2e;padding:6mm';
-  wrap.innerHTML=html.replace(/src="\.\/logo\.png"/g,'src="'+((typeof LOGO_SRC!=='undefined')?LOGO_SRC:'./logo.png')+'"');
-  document.body.appendChild(wrap);
-  var fin=function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap)};
-  toast(t('po_share_busy'));
-  try{
-   window.html2pdf().set({margin:[6,6,6,6],image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}})
-    .from(wrap).outputPdf('blob').then(function(blob){
-     fin();
-     var file=null;try{file=new File([blob],name,{type:'application/pdf'})}catch(_){file=null}
-     if(file&&navigator.canShare&&navigator.share){
-      try{if(navigator.canShare({files:[file]})){
-       navigator.share({files:[file],title:name}).then(function(){toast(t('po_share_ok_shared'))}).catch(function(){dl(blob)});
-       return}}catch(_){}}
-     dl(blob)}).catch(function(){fin();fallback()})
-  }catch(_){fin();fallback()}}
- ensureH2P(run)}
+ var name=portalShareFileName(c);
+ toast(t('po_share_busy'));
+ var ok=printHtmlIframe(portalPrintHTML(c));
+ if(ok===false){toast(t('po_share_offline'));return}
+ setTimeout(function(){toast(t('po_share_save_hint',name))},900)}
+/* ---------- V10.1: إرسال بوابة الموكل عبر واتساب ---------- */
+function waIntl(ph){
+ var d=String(ph||'').replace(/\D/g,'');
+ if(!d)return '';
+ if(d.indexOf('213')===0&&d.length>9)d=d.slice(3);
+ d=d.replace(/^0+/,'');
+ if(d.length<8||d.length>11)return '';
+ return '213'+d}
+function portalWhatsApp(cid){
+ var c=byC(cid);if(!c)return;
+ var cl=CL[c.cl]||{},ph=waIntl(cl.ph);
+ var win=null;if(ph){try{win=window.open('','_blank')}catch(_){}}
+ portalShare(cid);
+ if(!ph){toast(t('po_wa_nophone'));return}
+ var url='https://wa.me/'+ph+'?text='+encodeURIComponent(t('po_wa_msg',c.no));
+ if(!win){toast(t('po_wa_blocked'));return}
+ setTimeout(function(){try{win.location.href=url;win.focus()}catch(_){}},1100);
+ setTimeout(function(){toast(t('po_wa_ready'))},1500)}
 
 /* ---------- 7) دليل الاستخدام داخل التطبيق ---------- */
 function guideV(){
@@ -2958,6 +2988,7 @@ document.addEventListener('click',function(e){
  if(a==='invprint'){printAnnual();return}
  if(a==='expenc'){encBackupExport();return}
  if(a==='portalshare'){portalShare(id);return}
+ if(a==='portalwa'){portalWhatsApp(id);return}
  if(a==='guideopen'){try{window.open('./diwan_guide-1.html','_blank','noopener')}catch(_){}return}
 });
 document.addEventListener('input',function(e){
