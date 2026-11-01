@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ديوان v10.0.0 — نظام إدارة مكتب المحاماة (الجزائر)</title>
+<title>ديوان v10.3.2 — نظام إدارة مكتب المحاماة (الجزائر)</title>
 <link rel="icon" type="image/png" href="./logo.png">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0f8f86">
@@ -648,6 +648,7 @@ Object.assign(L.fr,{cabinet_title:'Données du cabinet',cabinet_sub:'Apparaissen
 /* ===== v6: ميزات إضافية ===== */
 Object.assign(L.ar,{nav_deadlines:'حاسبة الآجال القانونية',nav_cash:'دفتر الصندوق والربح',nav_audit:'سجل العمليات',nav_library:'الاجتهادات والقاموس',nav_import:'استيراد ونسخ احتياطي',nav_client:'ملف الموكل',dg_t5:'عريضة طعن بالنقض',dg_t6:'عريضة معارضة في الجلسة',link_case:'ربط بملف آخر',secret_file:'ملف سري',d_parties:'أطراف الملف',d_sessions:'سجل الجلسات',wa_msg:'السلام عليكم، نعلمكم من مكتب الأستاذ بن علي للمحاماة بأن جلستكم القادمة',stmt:'كشف حساب الموكل',m_party:'طرف جديد في الملف',m_session:'تسجيل جلسة',m_offexp:'مصروف مكتب',m_link:'ربط الملف',m_notif:'تاريخ التبليغ / صدور الحكم',fl_partyname:'اسم الطرف',fl_role:'صفته',fl_outcome:'ما دار في الجلسة',fl_kind:'نوع الجلسة',fl_next2:'الجلسة التالية',dlg_auto:'آجال محسوبة تلقائياً'});
 Object.assign(L.fr,{nav_deadlines:'Calculateur de délais',nav_cash:'Caisse et profit',nav_audit:"Journal d'activité",nav_library:'Jurisprudence & glossaire',nav_import:'Import & sauvegarde',nav_client:'Fiche client',dg_t5:'Pourvoi en cassation',dg_t6:'Opposition',link_case:'Lier à un dossier',secret_file:'Dossier confidentiel',d_parties:'Parties',d_sessions:'Historique audiences',wa_msg:'Bonjour, Cabinet Maître Ben Ali : votre prochaine audience',stmt:'Relevé de compte client',m_party:'Nouvelle partie',m_session:"Enregistrer audience",m_offexp:'Frais de cabinet',m_link:'Lier dossier',m_notif:'Date de signification',fl_partyname:'Nom',fl_role:'Qualité',fl_outcome:"Ce qui s'est passé",fl_kind:"Type d'audience",fl_next2:'Audience suivante',dlg_auto:'Délais calculés automatiquement'});
+/* DIWAN-ENGINE-START */
 const DEFAULT_HOLIDAYS=['01-01','01-12','05-01','07-05','11-01'];
 const DZ_HOLIDAYS=DEFAULT_HOLIDAYS;
 const DEFAULT_VACATION={on:false,from:'07-15',to:'08-31'};
@@ -655,6 +656,7 @@ const DEFAULT_DLK=[
  {id:'appeal',name:{ar:'استئناف مدني — شهر (م 336 ق.إ.م.إ)',fr:'Appel civil — 1 mois (art. 336 CPCA)'},n:1,unit:'month',abroadMonths:2},
  {id:'cassation',name:{ar:'طعن بالنقض — شهران (م 354 ق.إ.م.إ)',fr:'Pourvoi en cassation — 2 mois (art. 354 CPCA)'},n:2,unit:'month',abroadMonths:2},
  {id:'opposition',name:{ar:'معارضة — شهر (م 329 ق.إ.م.إ)',fr:'Opposition — 1 mois (art. 329 CPCA)'},n:1,unit:'month',abroadMonths:2},
+ /* القاعدتان التاليتان بلا رقم مادة في اسمهما: لم يُثبَّت مرجع صريح (استئناف الأمر الاستعجالي / التظلم الإداري المسبق) — يُراجَع مع النص الساري. */
  {id:'urgent',name:{ar:'استعجالي — استئناف الأمر الاستعجالي: 15 يوماً من تاريخ التبليغ',fr:'Référé — appel de l’ordonnance de référé : 15 jours à compter de la signification'},n:15,unit:'day',abroadMonths:0},
  {id:'appealg',name:{ar:'استئناف جنح — 10 أيام (م 418 ق.إ.ج)',fr:'Appel correctionnel — 10 jours (art. 418 CPP)'},n:10,unit:'day',abroadMonths:0},
  {id:'appenq',name:{ar:'استئناف أمر قاضي التحقيق — 3 أيام (م 173 ق.إ.ج)',fr:'Appel de l’ordonnance du juge d’instruction — 3 jours (art. 173 CPP)'},n:3,unit:'day',abroadMonths:0},
@@ -670,9 +672,18 @@ function addMonthsCal(from,n){const d=D(from),day=d.getDate();d.setMonth(d.getMo
 function addCalDays(from,n){const d=D(from);d.setDate(d.getDate()+n);return d}
 // FIX-03: respect skip flag for workday extension
 function extendToWorkday(d, skip){if(!skip) return {date:d, reason:''}; const x=new Date(d.getTime()); let reason=''; while(isNonWorking(x)){x.setDate(x.getDate()+1); reason='تمديد ليوم عمل'} return {date:x, reason}}
-/* يُحسب دائماً تاريخان: الأجل الأقصى القانوني (الأبكر) والتاريخ الآمن بعد مدّ العطلة (م 405 ق.إ.م.إ) */
-function calcDeadline(from,rule,abroad,skip){let start=D(from); start.setDate(start.getDate()+1); let end; if(rule.unit==='month'){end=addMonthsCal(K(start),rule.n); end.setDate(end.getDate()-1)} else {end=addCalDays(K(start),rule.n-1)} if(abroad){const am=rule.abroadMonths!=null?+rule.abroadMonths:2;if(am>0)end=addMonthsCal(K(end),am)} const safeExt=extendToWorkday(end,true), safe=K(safeExt.date), legal=K(end); const doSkip = skip!==undefined ? !!skip : !(S.dlCalc&&S.dlCalc.skip===false); const final=doSkip?safe:legal; return {orig:legal, safe, final, shifted:safe!==legal, reason:doSkip?(safeExt.reason||''):'', daysLeft:diff(final), warnHol:!doSkip&&isNonWorking(end), vac:isVacation(end), vacSafe:isVacation(safeExt.date)}}
+/* العقد: prudent = آخر يوم بحسب الحساب الخام (الأبكر) — maxLegal = بعد مدّ العطل وأيام الراحة (م 405).
+   الأشهر تُحسب من تاريخ التبليغ إلى مثله في الشهر التالي، وإن غاب اليوم المقابل فآخر يوم من الشهر. */
+function calcDeadline(from,rule,abroad,skip){
+ const n=+rule.n||0;
+ let end = rule.unit==='month' ? addMonthsCal(from,n) : addCalDays(from,n);
+ if(abroad){const am=rule.abroadMonths!=null?+rule.abroadMonths:2; if(am>0) end=addMonthsCal(K(end),am)}
+ const ext=extendToWorkday(end,true), prudent=K(end), maxLegal=K(ext.date);
+ return {prudent, maxLegal, orig:prudent, safe:maxLegal, final:prudent, shifted:maxLegal!==prudent,
+   reason:maxLegal!==prudent?'تمديد ليوم عمل':'', daysLeft:diff(prudent),
+   warnHol:isNonWorking(end), vac:isVacation(end), vacSafe:isVacation(ext.date)}}
 function addBiz(from,n,skip){const sk = skip!==undefined ? skip : !!(S.dlCalc&&S.dlCalc.skip); return extendToWorkday(addCalDays(from,n), sk).date}
+/* DIWAN-ENGINE-END */
 Object.assign(S,{audit:[{w:'m',what:'فتح النظام — بدء العمل',d:new Date().toLocaleString('fr-FR')}],officeExp:[{d:addDays(-32),t:'إيجار المكتب الشهري',a:40000},{d:addDays(-20),t:'كهرباء وماء',a:6500},{d:addDays(-6),t:'أجور السكرتيرة',a:30000},{d:addDays(-3),t:'اشتراك الإنترنت والهاتف',a:4500}],tax:{regime:'',ifu:null,ibs:null},jurisprudence:[{court:'المحكمة العليا — الغرفة المدنية',year:2024,ref:'قرار رقم 108976',kw:'تقادم، ملكية، حيازة',text:'حيث إن دعوى الملكية تقع تحت طائلة التقادم المكسب وفق المادة 827 من القانون المدني، ويترتب على انقضائه انتقال الملكية للحائز بشروط القانون...'},{court:'المحكمة العليا — الغرفة الاجتماعية',year:2023,ref:'قرار رقم 98451',kw:'فصل، تعويض، 11-90',text:'يكون فصل الأجير تعسفياً إذا خالف المستخدم الإجراءات الشكلية المنصوص عليها في المادة 12 من القانون 11-90 المعدل والمتمم...'},{court:'مجلس قضاء قسنطينة',year:2024,ref:'حكم رقم 2210',kw:'شيك، صورية، 665',text:'تقوم قرينة الصورية بمجرد إثبات تقديم شيك بدون رصيد وفق المادة 665 من التجاري، ويبقى إثبات الحقيقة على من يتمسك بها...'}],glossary:[{ar:'أجل',fr:'Délai',d:'مدة زمنية قانونية لإجراء ما تحسب من تاريخ معين ولا يجوز تجاوزها.'},{ar:'استئناف',fr:'Appel',d:'طريق عادي للطعن في الأحكام أمام مجلس القضاء خلال شهر.'},{ar:'نقض',fr:'Cassation',d:'طريق غير عادي أمام المحكمة العليا لمخالفة القانون خلال شهرين.'},{ar:'معارضة',fr:'Opposition',d:'طعن في الأحكام الغيابية خلال شهر واحد من التبليغ (المادة 329 ق.إ.م.إ).'},{ar:'حائز',fr:'Possesseur',d:'من يملك الشيء بيده بشكل فعلي.'},{ar:'تقادم مكسب',fr:'Usucapion',d:'كسب الملكية بالحيازة المتواصلة المدة القانونية.'},{ar:'إنابة قضائية',fr:'Commissaire de justice',d:'المكلف بالتبليغ والتنفيذ (المفوض القضائي).'},{ar:'قسمة',fr:'Partage',d:'تقسيم المال الشائع بين الشركاء قضاءً أو اتفاقاً.'},{ar:'إحالة',fr:'Renvoi',d:'تأجيل الدعوى إلى جلسة لاحقة لاستكمال الإجراءات.'},{ar:'مداولة',fr:'Délibéré',d:'فترة تأمل القاضي قبل النطق بالحكم.'}],installments:[{c:4,amount:50000,due:addDays(10),paid:false},{c:8,amount:35000,due:addDays(-4),paid:false}],dlMovableHolidays:[],dlCalc:{date:K(TODAY),skip:true,result:null}});
 Object.assign(CL[0],{nin:'1080123456',birth:'1978-03-14',addr:'حي 200 مسكن، ميلة'});Object.assign(CL[1],{nin:'1090654321',birth:'1985-07-02',addr:'وسط المدينة، ميلة'});Object.assign(CL[2],{nin:'1070987654',birth:'1990-11-20',addr:'عين التين، ميلة'});Object.assign(CL[3],{addr:'المنطقة الصناعية، قسنطينة',birth:'—'});Object.assign(CL[4],{nin:'1050678901',birth:'1988-09-09',addr:'ميلة'});Object.assign(CL[5],{nin:'1060543210',birth:'1975-01-30',addr:'شلغوم العيد'});Object.assign(CL[6],{nin:'1040321654',birth:'1992-05-25',addr:'شلغوم العيد'});Object.assign(CL[7],{addr:'ميلة'});
 /* V9-FIX-02 */
@@ -1409,22 +1420,22 @@ function printDoc(){
 /* ===== v6: وظائف وواجهات جديدة ===== */
 const addCal=(f,n)=>{const d=D(f);d.setDate(d.getDate()+n);return d};
 function calcDLTable(){const base=S.dlCalc.date;if(!base)return '';const rules=S.dlRules||DEFAULT_DLK;const abroad=!!(S.dlCalc&&S.dlCalc.abroad);
- return rules.map(rule=>{const r=calcDeadline(base,rule,abroad,!!(S.dlCalc&&S.dlCalc.skip));const n=r.daysLeft;const cls=n<0||n<=3?'bad':n<=7?'warn':'ok';const name=typeof rule.name==='object'?tr(rule.name):(rule.name||rule.id);
+ return rules.map(rule=>{const r=calcDeadline(base,rule,abroad);const n=r.daysLeft;const cls=n<0||n<=3?'bad':n<=7?'warn':'ok';const name=typeof rule.name==='object'?tr(rule.name):(rule.name||rule.id);
  const note=[`${rule.n} ${rule.unit==='month'?'شهر':'يوم'} — ${t('v7_dl_verify')}`,r.shifted?t('dl_safe_shift'):'',r.warnHol?'⚠ أجل ينقضي في عطلة — تحقق من العرف القضائي':'',r.vacSafe?'⚠ '+t('dl_vac'):''].filter(Boolean).join(' · ');
- return `<tr><td style="text-align:start"><strong>${esc(name)}</strong><br><small class="sub">${esc(note)}</small></td><td>${fmt(r.orig)}</td><td><strong>${fmt(r.safe)}</strong></td><td><span class="chip ${cls}">${n}</span></td><td><button class="btn sm" data-act="savedl" data-rule="${rule.id}" data-final="${r.final}">${t('v7_save_dl')}</button></td></tr>`}).join('')}
+ return `<tr><td style="text-align:start"><strong>${esc(name)}</strong><br><small class="sub">${esc(note)}</small></td><td><strong>${r.prudent}</strong></td><td>${r.maxLegal}</td><td><span class="chip ${cls}">${n}</span></td><td><button class="btn sm" data-act="savedl" data-rule="${rule.id}" data-final="${r.prudent}">${t('v7_save_dl')}</button></td></tr>`}).join('')}
 
 function deadlinesV(){
  // FIX-01 + FIX-02: case selector + abroad checkbox
  const caseOpts = visCases().map(c=>`<option value="${c.id}" ${(S.dlCalc.caseId||0)===c.id?'selected':''}>${esc(c.no)} — ${esc(tr(c.title))}</option>`).join('');
- return `<div class="page-h"><div><h1>حاسبة الآجال القانونية</h1><p>أدخل تاريخ التبليغ أو صدور الحكم — تُحسب الآجال تقويمياً، وإذا صادف آخر يوم أجل عطلة رسمية أو نهاية أسبوع، يُمَدّ الأجل إلى أول يوم عمل تالٍ (المادة 405 ق.إ.م.إ). يُعرض لكل أجل تاريخان: الأجل الأقصى القانوني والتاريخ الآمن الموصى به — الأرقام استرشادية ولا تُغني عن مراجعة النص الساري.</p></div></div>
+ return `<div class="page-h"><div><h1>حاسبة الآجال القانونية</h1><p>أدخل تاريخ التبليغ أو صدور الحكم — تُحسب الآجال تقويمياً، وإذا صادف آخر يوم أجل عطلة رسمية أو نهاية أسبوع، يُمَدّ الأجل إلى أول يوم عمل تالٍ (المادة 405 ق.إ.م.إ). يُعرض لكل أجل تاريخان: التاريخ الاحترازي (الأبكر، وهو المعتمد في التنبيه والحفظ) والأجل الأقصى بعد المدّ — الأرقام استرشادية ولا تُغني عن مراجعة النص الساري.</p></div></div>
  <section class="card" style="max-width:760px"><div class="card-b">
   <div class="fld"><label for="dl_case">${t('fl_case')}</label><select id="dl_case">${caseOpts}</select></div>
   <div class="fld"><label for="dl_date">تاريخ التبليغ / صدور الحكم</label><input type="date" id="dl_date" value="${S.dlCalc.date||''}"></div>
-  <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_skip" ${S.dlCalc.skip?'checked':''}><label for="dl_skip" style="margin:0">${t('dl_skip_lbl')} <small>${t('dl_skip_note')}</small></label></div>
+   <p class="note" style="margin:0 0 10px">${t('dl_skip_note')}</p>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_abroad" ${S.dlCalc.abroad?'checked':''}><label for="dl_abroad" style="margin:0">${t('v7_abroad')}</label></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_vac_on" ${(S.dlVacation&&S.dlVacation.on!==false)?'checked':''}><label for="dl_vac_on" style="margin:0">${t('dl_vac_on')} <small>${S.dlVacation?(S.dlVacation.from+' → '+S.dlVacation.to):''} — ${t('dl_vac_note')}</small></label></div>
   <button class="btn primary" data-act="dlcalc">احسب الآجال</button>
-  ${S.dlCalc.result?`<table class="matrix" style="margin-top:18px"><thead><tr><th style="text-align:start">نوع الأجل</th><th>${t('dl_col_legal')}</th><th>${t('dl_col_safe')}</th><th>المتبقي</th><th></th></tr></thead><tbody>${S.dlCalc.result}</tbody></table>`:''}
+  ${S.dlCalc.result?`<table class="matrix" style="margin-top:18px"><thead><tr><th style="text-align:start">نوع الأجل</th><th>${t('dl_col_prudent')}</th><th>${t('dl_col_legal')}</th><th>المتبقي</th><th></th></tr></thead><tbody>${S.dlCalc.result}</tbody></table>`:''}
   <p class="note warn" style="margin-top:14px">${t('dl_legal_note')}</p>
  </div></section>`}
 function cashV(){const inF=S.pays.reduce((a,p)=>a+p.a,0),off=S.officeExp.reduce((a,e)=>a+e.a,0),cexp=S.expenses.reduce((a,e)=>a+e.a,0),profit=inF-off-cexp;
@@ -1524,7 +1535,7 @@ function scheduleReminders(){if(typeof Notification==='undefined')return;if(Noti
 
 /* ============== chrome ============== */
 const $=id=>document.getElementById(id);
-function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.0.0 — '+t('appSub');
+function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.3.2 — '+t('appSub');
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
@@ -1787,7 +1798,7 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
   const row=(k,v)=>v?`<div class="pdet"><span>${t(k)}:</span> <b><bdi>${esc(v)}</bdi></b></div>`:'';
   return `<div class="pcard-v"><div class="dlrow"><span class="avatar sm">${esc(nm.charAt(0))}</span><div style="flex:1"><strong>${esc(nm)}</strong></div>${pl?`<span class="chip teal">${esc(pl)}</span>`:''}<span class="chip mute">${esc(rl)}</span></div>${row('pr_birthdate',pp.birthDate?fmt(pp.birthDate):'')}${row('pr_birthplace',tr(pp.birthPlace))}${row('pr_idtype',pp.idType?t('pr_id_'+pp.idType):'')}${row('pr_idnumber',pp.idNumber)}${row('pr_idissue',pp.idIssueDate?fmt(pp.idIssueDate):'')}${row('pr_idexpiry',pp.idExpiryDate?fmt(pp.idExpiryDate):'')}${row('pr_address',tr(pp.address))}</div>`}).join('')||`<p class="sub">—</p>`;
  const linked=(c.linked||[]).map(lid=>{const lc=byC(lid);return lc?`<button class="chip info" data-act="case" data-id="${lc.id}" style="cursor:pointer;border:0">${esc(lc.no)} — ${esc(tr(lc.title))}</button>`:''}).join(' ');
- const dlAuto=c.notif?DLK.map(([k,l,n])=>{const dd=addBiz(c.notif,n);return `<div style="font-size:13px;padding:3px 0">${l.split(' — ')[0]}: <b>${dd.getDate()} ${MON[S.lang][dd.getMonth()]} ${dd.getFullYear()}</b>${diff(K(dd))<0?' <span class="chip bad">انقضى</span>':''}</div>`}).join(''):`<p class="sub">لم يُسجَّل تاريخ تبليغ — <button class="btn sm" data-act="setnotif" data-id="${c.id}">تسجيل</button></p>`;
+ const dlAuto=c.notif?DLK.map(rule=>{const dd=calcDeadline(c.notif,rule,false).prudent;return `<div style="font-size:13px;padding:3px 0">${tr(rule.name).split(' — ')[0]}: <b>${fmt(dd)}</b>${diff(dd)<0?' <span class="chip bad">انقضى</span>':''}</div>`}).join(''):`<p class="sub">لم يُسجَّل تاريخ تبليغ — <button class="btn sm" data-act="setnotif" data-id="${c.id}">تسجيل</button></p>`;
  const inst=S.installments.filter(x=>x.c===c.id&&!x.paid);
  const wa2=(()=>{const ph=CL[c.cl].ph;if(!ph||ph==='—')return '';const u='https://wa.me/213'+ph.replace(/\D/g,'').replace(/^0/,'');const msg=encodeURIComponent(t('wa_msg')+(c.next?' بتاريخ '+fmt(c.next)+' الساعة '+(c.time||''):''));return `<a class="btn" href="${u}?text=${msg}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`})();
  dr.innerHTML=`<button class="btn sm close" data-act="closeDrawer">${t('close')}</button> ${c.secret?`<span class="chip bad">${t('secret_file')}</span> `:''}${typeChip(c.type)} ${stChip(c.st)}<h2>${esc(tr(c.title))}</h2><div class="sub" dir="ltr" style="text-align:start">${esc(c.no)}</div>
@@ -1827,10 +1838,11 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
  const cb=dr.querySelector('.close');if(cb)cb.focus()}
 /* ===== V9.8: متابعة التبليغ والآجال المنبثقة عنه ===== */
 function sigDL(c){var base=c.signifDate||c.notif;if(!base)return '<p class="sub" style="margin:8px 0 0">'+t('sig_dl_none')+'</p>';
- var appeal=addMonthsCal(base,1),opp=addBiz(base,10);
+ var RD=function(id){return DEFAULT_DLK.filter(function(x){return x.id===id})[0]||DEFAULT_DLK[0]};
+ var aDL=calcDeadline(base,RD('appeal'),false), oDL=calcDeadline(base,RD('opposition'),false);
  var st=x=>{var dd=diff(x);return dd<0?'<span class="chip bad">'+t('sig_dl_past')+'</span>':dd<=7?'<span class="chip warn">'+t('inDays',dd)+'</span>':'<span class="chip mute">'+t('inDays',dd)+'</span>'};
- return '<div style="margin-top:8px"><div class="kv"><span>'+t('sig_dl_appeal')+'</span><b>'+K(appeal).split('-').reverse().join('/')+' '+st(K(appeal))+'</b></div>'
-  +'<div class="kv"><span>'+t('sig_dl_opp')+'</span><b>'+K(opp).split('-').reverse().join('/')+' '+st(K(opp))+'</b></div>'
+ return '<div style="margin-top:8px"><div class="kv"><span>'+t('sig_dl_appeal')+'</span><b>'+aDL.prudent.split('-').reverse().join('/')+' '+st(aDL.prudent)+'</b></div>'
+  +'<div class="kv"><span>'+t('sig_dl_opp')+'</span><b>'+oDL.prudent.split('-').reverse().join('/')+' '+st(oDL.prudent)+'</b></div>'
   +'<p class="sub" style="margin:4px 0 0;font-size:12px">'+t('sig_dl_hint')+'</p></div>'}
 
 function caseHearingModal(cid){var c=byC(cid);if(!c)return;
@@ -1928,7 +1940,7 @@ document.addEventListener('click',e=>{
     window.open('http://coursdesaffaires.mjustice.dz/affaire/index.php','_blank','noopener');break}
   case 'client':go('client',id);break;
   case 'stmt':printStatement(id);break;
-  case 'dlcalc':{const dd=$('dl_date');S.dlCalc.date=dd?dd.value:K(TODAY);S.dlCalc.skip=!!($('dl_skip')||{}).checked;S.dlCalc.abroad=!!($('dl_abroad')||{}).checked;if($('dl_vac_on')){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!$('dl_vac_on').checked}S.dlCalc.caseId=+(($('dl_case')||{}).value||0)||null;S.dlCalc.result=calcDLTable();render();break}
+  case 'dlcalc':{const dd=$('dl_date');S.dlCalc.date=dd?dd.value:K(TODAY);S.dlCalc.abroad=!!($('dl_abroad')||{}).checked;if($('dl_vac_on')){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!$('dl_vac_on').checked}S.dlCalc.caseId=+(($('dl_case')||{}).value||0)||null;S.dlCalc.result=calcDLTable();render();break}
   // FIX-01: save calculated deadline to case
   case 'savedl':{const finalDate=el.dataset.final;const ruleId=el.dataset.rule;const cid=(S.dlCalc&&S.dlCalc.caseId)||(S.arg&&byC(S.arg)?S.arg:(S.cases[0]&&S.cases[0].id));if(!cid||!finalDate)break;undoable(()=>{(S.dls=S.dls||[]).push({c:cid,l:{ar:'أجل محسوب تلقائياً',fr:'Délai calculé'},d:finalDate,who:S.user,src:'calc',rule:ruleId||null})},'v7_save_dl');toast(t('v7_save_dl'));break}
   case 'addoffexp':addOffExp();break;
@@ -2094,7 +2106,7 @@ Object.assign(L.ar,{
 dg_t_rev:'التماس إعادة النظر',dg_t_interv:'عريضة تدخل',dg_t_exc:'الدفع بعدم القبول / التقادم',dg_t_mainlevee:'رفع اليد عن الحجز',dg_t_desist:'تنازل عن الدعوى / صلح',dg_prior_ref:'مرجع القرار / الحكم السابق',
 fl_rolenumber:'رقم الجدول (N° du rôle)',fl_judgename:'القاضي المقرر / الغرفة',fl_substname:'إنابة زميل (اسم الزميل)',fl_delibdate:'تاريخ النطق بالحكم / المداولة',fl_huissier:'المفوض القضائي',fl_signifstatus:'حالة التبليغ',fl_signifdate:'تاريخ التبليغ',
 signif_done:'تم التبليغ',signif_refused:'رفض الاستلام',signif_absent:'غير موجود بالعنوان',signif_set_date:'تاريخ التبليغ',
-hear_track:'الجلسة والتبليغ',hear_edit:'تحديث',sig_dl_appeal:'أجل الاستئناف (شهر)',sig_dl_opp:'أجل المعارضة (10 أيام)',sig_dl_none:'لم يُسجَّل تاريخ تبليغ بعد — الآجال تُحسب من تاريخ التبليغ.',sig_dl_past:'انقضى',sig_dl_hint:'⚠ آجال استرشادية تُحسب من تاريخ التبليغ؛ تُراجَع مع النص الساري قبل أي إجراء.',
+hear_track:'الجلسة والتبليغ',hear_edit:'تحديث',sig_dl_appeal:'أجل الاستئناف (شهر)',sig_dl_opp:'أجل المعارضة (شهر — م 329)',sig_dl_none:'لم يُسجَّل تاريخ تبليغ بعد — الآجال تُحسب من تاريخ التبليغ.',sig_dl_past:'انقضى',sig_dl_hint:'⚠ آجال استرشادية تُحسب من تاريخ التبليغ؛ تُراجَع مع النص الساري قبل أي إجراء.',
 inv_decree:'صادر وفقاً للمرسوم التنفيذي 05-468 المؤرخ في 19/12/2005 المتعلق بالوثائق المثبتة للمعاملات التجارية',
 inv_regime_company:n=>`النظام الجبائي: شركة محاماة — TVA ${n}% مطبقة على الأتعاب`,
 inv_regime_ifu:n=>`النظام الجبائي: محامٍ حر — IFU ${n}% (بدون TVA، مع الطابع الجبائي)`,inv_regime_free:'النظام الجبائي: محامٍ حر — IRG/BNC حسب الجدول التصاعدي (بدون TVA، مع الطابع الجبائي)',inv_regime_none:'النظام الجبائي: غير محدد في الإعدادات — يُستكمل بناءً على توجيه المحاسب',
@@ -2114,7 +2126,7 @@ Object.assign(L.fr,{
 dg_t_rev:'Requête civile en révision',dg_t_interv:'Intervention volontaire',dg_t_exc:'Exception d\'irrecevabilité / Prescription',dg_t_mainlevee:'Mainlevée de saisie',dg_t_desist:'Désistement / Transaction',dg_prior_ref:'Référence de la décision antérieure',
 fl_rolenumber:'N° du rôle',fl_judgename:'Juge rapporteur / Chambre',fl_substname:'Substitution (confrère)',fl_delibdate:'Mise en délibéré / prononcé',fl_huissier:'Commissaire de justice',fl_signifstatus:'État de la signification',fl_signifdate:'Date de signification',
 signif_done:'Signifié',signif_refused:'Refus de réception',signif_absent:'Destinataire absent',signif_set_date:'Date de signification',
-hear_track:'Audience et signification',hear_edit:'Mettre à jour',sig_dl_appeal:'Délai d\'appel (1 mois)',sig_dl_opp:'Délai d\'opposition (10 jours)',sig_dl_none:'Aucune date de signification enregistrée — les délais courent à compter de la signification.',sig_dl_past:'écoulé',sig_dl_hint:'⚠ Délais indicatifs calculés depuis la signification ; à vérifier avec le texte en vigueur.',
+hear_track:'Audience et signification',hear_edit:'Mettre à jour',sig_dl_appeal:'Délai d\'appel (1 mois)',sig_dl_opp:'Délai d\'opposition (1 mois — art. 329)',sig_dl_none:'Aucune date de signification enregistrée — les délais courent à compter de la signification.',sig_dl_past:'écoulé',sig_dl_hint:'⚠ Délais indicatifs calculés depuis la signification ; à vérifier avec le texte en vigueur.',
 inv_decree:'Émis conformément au décret exécutif 05-468 du 19/12/2005 relatif aux documents probants des transactions commerciales',
 inv_regime_company:n=>`Régime fiscal : société d'avocats — TVA ${n}% sur les honoraires`,
 inv_regime_ifu:n=>`Régime fiscal : avocat libéral — IFU ${n}% (sans TVA, timbre fiscal applicable)`,inv_regime_free:'Régime fiscal : avocat libéral — IRG/BNC au barème progressif (sans TVA, timbre applicable)',inv_regime_none:'Régime fiscal : non défini dans les paramètres — à compléter selon votre comptable',
@@ -2398,7 +2410,7 @@ guide_missing:'Si le guide ne s’affiche pas, vérifiez la présence du fichier
 });
 
 Object.assign(L.ar,{
-dl_skip_lbl:'تمديد الأجل إلى أول يوم عمل تالٍ (مفعّل افتراضياً)',dl_col_legal:'الأجل الأقصى القانوني',dl_col_safe:'التاريخ الآمن الموصى به',dl_safe_shift:'مُدّ إلى أول يوم عمل',
+dl_col_legal:'الأجل الأقصى بعد المدّ (م 405)',dl_col_prudent:'التاريخ الاحترازي (الأبكر)',dl_safe_shift:'مُدّ إلى أول يوم عمل',
 dl_skip_note:'الآجال تُحسب تقويمياً، وإذا صادف آخر يوم أجل عطلة رسمية أو نهاية أسبوع، يُمَدّ الأجل إلى أول يوم عمل تالٍ (المادة 405 ق.إ.م.إ).',
 dl_legal_note:'⚠ آجال استرشادية وفق النصوص السارية: استئناف مدني شهر (م 336 ق.إ.م.إ)، نقض شهران (م 354)، معارضة شهر (م 329)، استعجالي 15 يوماً، استئناف الجنح 10 أيام (م 418 ق.إ.ج)، استئناف أمر قاضي التحقيق 3 أيام (م 173)، نقض جزائي 8 أيام (م 498)، التظلم الإداري المسبق 4 أشهر. راجع النص قبل الاحتجاج بالأجل — البرنامج أداة مساعدة لا مرجعاً وحيداً.',
 dl_abroad_m:'تأجيل الخارج (شهور)',
@@ -2415,7 +2427,7 @@ hr_irg_note:'نسبة IRG تقديرية تُضبط يدوياً؛ تُحسب ش
 bk_never:'لم تأخذ نسخة احتياطية بعد — بياناتك محفوظة على هذا الجهاز فقط',
 bk_days:n=>`لم تأخذ نسخة احتياطية منذ ${n} أيام`,bk_now:'تصدير الآن'});
 Object.assign(L.fr,{
-dl_skip_lbl:'Report du délai au premier jour ouvrable suivant (activé par défaut)',dl_col_legal:'Délai légal maximal',dl_col_safe:'Date sûre recommandée',dl_safe_shift:'reporté au 1er jour ouvrable',
+dl_col_legal:'Délai maximal après report (art. 405)',dl_col_prudent:'Date prudentielle (la plus proche)',dl_safe_shift:'reporté au 1er jour ouvrable',
 dl_skip_note:'Les délais sont calculés en jours calendaires ; si le dernier jour tombe un week-end ou un jour férié, le délai est reporté au premier jour ouvrable suivant (art. 405 CPCA).',
 dl_legal_note:'⚠ Délais indicatifs selon les textes en vigueur : appel civil 1 mois (art. 336 CPCA), cassation 2 mois (art. 354), opposition 1 mois (art. 329), référé 15 jours, appel correctionnel 10 jours (art. 418 CPP), appel de l’ordonnance du juge d’instruction 3 jours (art. 173), pourvoi pénal 8 jours (art. 498), recours administratif préalable 4 mois. Vérifiez le texte avant toute décision — le logiciel est une aide, pas une référence unique.',
 dl_abroad_m:'Délai supplémentaire (mois)',
@@ -2790,15 +2802,15 @@ function qhApply(kind,custom,cidIn,noteIn){
  var note=String(noteIn!=null?noteIn:(QH.note||'')).trim(),today=K(TODAY);
  var label={dh:t('qh_kind_dh'),dl:t('qh_kind_dl'),rr:t('qh_kind_rr'),other:t('qh_kind_other')}[kind]||kind;
  var next=null;
- if(kind==='dh')next=K(addCalDays(today,15));
- else if(kind==='rr')next=K(addCalDays(today,8));
- else if(kind==='other')next=custom||K(addCalDays(today,15));
+ if(kind==='dh')next=K(addCalDays(today,15)); // DIWAN-ALLOW-DATE-MATH: اقتراح موعد إجراء إداري (جلسة/تسليم) — ليس أجلاً قانونياً من قواعد DLK
+ else if(kind==='rr')next=K(addCalDays(today,8)); // DIWAN-ALLOW-DATE-MATH: اقتراح موعد إجراء إداري (جلسة/تسليم) — ليس أجلاً قانونياً من قواعد DLK
+ else if(kind==='other')next=custom||K(addCalDays(today,15)); // DIWAN-ALLOW-DATE-MATH: اقتراح موعد إجراء إداري (جلسة/تسليم) — ليس أجلاً قانونياً من قواعد DLK
  undoable(function(){
   c.sessions=c.sessions||[];
   c.sessions.unshift({date:today,kind:label,out:note||label,next:next||''});
   c.hearings=c.hearings||[];
   c.hearings.push({date:today,done:true,time:c.time,cause:label});
-  if(kind==='dl'){c.delibDate=c.delibDate||K(addCalDays(today,15));c.next=null}
+  if(kind==='dl'){c.delibDate=c.delibDate||K(addCalDays(today,15));c.next=null} // DIWAN-ALLOW-DATE-MATH: اقتراح موعد إجراء إداري (جلسة/تسليم) — ليس أجلاً قانونياً من قواعد DLK
   else{c.next=next}
   if(note){c.notes=c.notes||[];c.notes.unshift({w:S.user,t:{ar:'تقرير جلسة — '+note,fr:'Rapport d’audience — '+note},d:today})}
  },'qh_done');
@@ -2810,7 +2822,7 @@ function qhOtherModal(){
  var note=qhCaptureNote(),cid=QH.id;
  var c=cid?byC(cid):null;
  modal('qh_other_title',[
-  {n:'date',l:'qh_date',type:'date',req:true,v:K(addCalDays(K(TODAY),15))},
+  {n:'date',l:'qh_date',type:'date',req:true,v:K(addCalDays(K(TODAY),15))}, // DIWAN-ALLOW-DATE-MATH: اقتراح موعد إجراء إداري (جلسة/تسليم) — ليس أجلاً قانونياً من قواعد DLK
   {n:'time',l:'qh_time',v:(c&&c.time)||''}
  ],function(v){
   var cc=cid?byC(cid):null;
@@ -3308,7 +3320,7 @@ function execPathHTML(c){var ex=c.execution||{},canEdit=me().role!=='trainee';
   if(n===4&&s.type)extra=' · '+t('xp_t_'+s.type);
   if(n===6&&s.amount)extra=' · '+money(+s.amount);
   if(s.bailiff)extra+=' · '+s.bailiff;
-  var dl='';if(n===2&&s.date){var dd=K(addCalDays(s.date,15)),late=!s.done&&diff(dd)<0;dl='<div style="margin-top:4px"><span class="chip '+(late?'bad':'warn')+'">'+t('xp_deadline')+': '+fmt(dd)+'</span></div>'}
+  var dl='';if(n===2&&s.date){var dd=K(addCalDays(s.date,15)),late=!s.done&&diff(dd)<0;dl='<div style="margin-top:4px"><span class="chip '+(late?'bad':'warn')+'">'+t('xp_deadline')+': '+fmt(dd)+'</span></div>'} // DIWAN-ALLOW-DATE-MATH: مهلة داخلية لمتابعة إجراء الخبرة (15 يوماً) وليست من قواعد الآجال
   return '<div class="dlrow"><span class="chip '+(s.done?'ok':'mute')+'" aria-label="'+t(s.done?'xp_done':'xp_todo')+'">'+(s.done?'✓':n)+'</span><div style="flex:1"><strong>'+t('xp_s'+n)+'</strong><span class="sub">'+[s.date?fmt(s.date):'',s.ref||'',s.notes||''].filter(Boolean).map(esc).join(' · ')+esc(extra)+'</span>'+dl+'</div>'
    +(canEdit?'<button class="btn sm" data-act="execstep" data-id="'+c.id+'" data-s="'+n+'">'+t('xp_edit')+'</button>':'')+'</div>'}).join('');
  return '<h3 style="margin-top:14px">'+t('xp_title')+'</h3><div class="exec-path">'+rows+'</div>'}
