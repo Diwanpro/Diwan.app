@@ -587,7 +587,7 @@ const S={
  casesScope:'mine',taskFilter:'open',taskWho:'all',sortBy:'no',sortDir:-1,
  feesTab:'overview',reportTab:'overview',
  perms:{secFees:false,secContacts:true,traineeAll:false},
- invites:[],nextId:9,nextTask:9,nextInv:4,nextTrust:4,nextPay:1,welcomed:false,isDemo:true,clients:null,dlHolidays:null,dlRules:null,dlMovableHolidays:[],drafts:[],scans:[],pinHash:null,lastBackup:null,schemaVersion:9,apprTab:'pending',receiptSeq:{year:TODAY.getFullYear(),next:1},invoiceSeq:{year:TODAY.getFullYear(),next:4},license:{no:'',issued:'',expires:'',bar:'',status:'active'},processServers:[],services:[],experts:[],expertTasks:[],seizures:[],feesCalc:[],employees:[],payroll:[],auth:{sessions:[],log:[]},extraLawyers:[],intakeLog:[],deliveries:[],userPasswords:{},appointments:[],qrRegistry:[],smsLog:[],notifSent:{},stampInventory:{court:12,council:8,admin:4},stampMoves:[],caseExpenses:[],attendance:[],dlVacation:{on:true,from:'07-15',to:'08-31'},ftsQuery:'',
+ invites:[],nextId:9,nextTask:9,nextInv:4,nextTrust:4,nextPay:1,welcomed:false,isDemo:true,clients:null,dlHolidays:null,dlRules:null,dlMovableHolidays:[],drafts:[],scans:[],pinHash:null,lastBackup:null,schemaVersion:9,apprTab:'pending',receiptSeq:{year:TODAY.getFullYear(),next:1},invoiceSeq:{year:TODAY.getFullYear(),next:4},license:{no:'',issued:'',expires:'',bar:'',status:'active'},processServers:[],services:[],experts:[],expertTasks:[],seizures:[],feesCalc:[],employees:[],payroll:[],auth:{sessions:[],log:[]},extraLawyers:[],intakeLog:[],deliveries:[],userPasswords:{},appointments:[],qrRegistry:[],smsLog:[],notifSent:{},stampInventory:{court:12,council:8,admin:4},stampMoves:[],caseExpenses:[],attendance:[],dlVacation:{on:false,from:'07-15',to:'08-31'},ftsQuery:'',
  cabinet:{name:{ar:'مكتب الأستاذ بن علي للمحاماة',fr:'Cabinet Maître Ben Ali'},address:{ar:'15 شارع الاستقلال، ميلة 43000، الجزائر',fr:'15 rue de l’Indépendance, Mila 43000, Algérie'},nif:'000 1234 5678912',nis:'000 1234 5678913',rc:'19/00-1234567B20',ai:'123456789012345',phone:'+213 31 55 66 77',email:'contact@benali-avocat.dz',bank:{ar:'BADR — حساب 002 12345 0000123456 78',fr:'BADR — compte 002 12345 0000123456 78'},tva:19,timbre:100,timbreFixed:true},
  docGen:DG0(),
  cases:[
@@ -648,11 +648,18 @@ Object.assign(L.fr,{cabinet_title:'Données du cabinet',cabinet_sub:'Apparaissen
 /* ===== v6: ميزات إضافية ===== */
 Object.assign(L.ar,{nav_deadlines:'حاسبة الآجال القانونية',nav_cash:'دفتر الصندوق والربح',nav_audit:'سجل العمليات',nav_library:'الاجتهادات والقاموس',nav_import:'استيراد ونسخ احتياطي',nav_client:'ملف الموكل',dg_t5:'عريضة طعن بالنقض',dg_t6:'عريضة معارضة في الجلسة',link_case:'ربط بملف آخر',secret_file:'ملف سري',d_parties:'أطراف الملف',d_sessions:'سجل الجلسات',wa_msg:'السلام عليكم، نعلمكم من مكتب الأستاذ بن علي للمحاماة بأن جلستكم القادمة',stmt:'كشف حساب الموكل',m_party:'طرف جديد في الملف',m_session:'تسجيل جلسة',m_offexp:'مصروف مكتب',m_link:'ربط الملف',m_notif:'تاريخ التبليغ / صدور الحكم',fl_partyname:'اسم الطرف',fl_role:'صفته',fl_outcome:'ما دار في الجلسة',fl_kind:'نوع الجلسة',fl_next2:'الجلسة التالية',dlg_auto:'آجال محسوبة تلقائياً'});
 Object.assign(L.fr,{nav_deadlines:'Calculateur de délais',nav_cash:'Caisse et profit',nav_audit:"Journal d'activité",nav_library:'Jurisprudence & glossaire',nav_import:'Import & sauvegarde',nav_client:'Fiche client',dg_t5:'Pourvoi en cassation',dg_t6:'Opposition',link_case:'Lier à un dossier',secret_file:'Dossier confidentiel',d_parties:'Parties',d_sessions:'Historique audiences',wa_msg:'Bonjour, Cabinet Maître Ben Ali : votre prochaine audience',stmt:'Relevé de compte client',m_party:'Nouvelle partie',m_session:"Enregistrer audience",m_offexp:'Frais de cabinet',m_link:'Lier dossier',m_notif:'Date de signification',fl_partyname:'Nom',fl_role:'Qualité',fl_outcome:"Ce qui s'est passé",fl_kind:"Type d'audience",fl_next2:'Audience suivante',dlg_auto:'Délais calculés automatiquement'});
-const DEFAULT_HOLIDAYS=['01-01','01-11','05-01','07-05'];
+const DEFAULT_HOLIDAYS=['01-01','01-12','05-01','07-05','11-01'];
 const DZ_HOLIDAYS=DEFAULT_HOLIDAYS;
-const DEFAULT_VACATION={on:true,from:'07-15',to:'08-31'};
-const DEFAULT_DLK=[{id:'appeal',name:{ar:'استئناف مدني (م 579 ق.إ.م.إ)',fr:'Appel civil (art. 579 CPCA)'},n:1,unit:'month',abroadMonths:2},{id:'cassation',name:{ar:'طعن بالنقض (م 541)',fr:'Pourvoi (art. 541)'},n:2,unit:'month',abroadMonths:2},{id:'opposition',name:{ar:'معارضة (م 155)',fr:'Opposition (art. 155)'},n:10,unit:'day',abroadMonths:2},{id:'appealg',name:{ar:'استئناف جنح (م 455 ق.إ.ج)',fr:'Appel correctionnel (art. 455 CPP)'},n:10,unit:'day',abroadMonths:0},
- {id:'prelitigation',name:{ar:'التظلم الإداري المسبق (م 817 ق.إ.م.إ)',fr:'Recours administratif préalable (art. 817 CPCA)'},n:4,unit:'month',abroadMonths:0,distMonths:0}];
+const DEFAULT_VACATION={on:false,from:'07-15',to:'08-31'};
+const DEFAULT_DLK=[
+ {id:'appeal',name:{ar:'استئناف مدني — شهر (م 336 ق.إ.م.إ)',fr:'Appel civil — 1 mois (art. 336 CPCA)'},n:1,unit:'month',abroadMonths:2},
+ {id:'cassation',name:{ar:'طعن بالنقض — شهران (م 354 ق.إ.م.إ)',fr:'Pourvoi en cassation — 2 mois (art. 354 CPCA)'},n:2,unit:'month',abroadMonths:2},
+ {id:'opposition',name:{ar:'معارضة — شهر (م 329 ق.إ.م.إ)',fr:'Opposition — 1 mois (art. 329 CPCA)'},n:1,unit:'month',abroadMonths:2},
+ {id:'urgent',name:{ar:'استعجالي — 15 يوماً',fr:'Référé / urgence — 15 jours'},n:15,unit:'day',abroadMonths:0},
+ {id:'appealg',name:{ar:'استئناف جنح — 10 أيام (م 455 ق.إ.ج)',fr:'Appel correctionnel — 10 jours (art. 455 CPP)'},n:10,unit:'day',abroadMonths:0},
+ {id:'appenq',name:{ar:'استئناف أمر قاضي التحقيق — 3 أيام',fr:'Appel de l’ordonnance du juge d’instruction — 3 jours'},n:3,unit:'day',abroadMonths:0},
+ {id:'casspen',name:{ar:'نقض جزائي — 8 أيام',fr:'Pourvoi en cassation pénale — 8 jours'},n:8,unit:'day',abroadMonths:0},
+ {id:'prelitigation',name:{ar:'التظلم الإداري المسبق — 4 أشهر',fr:'Recours administratif préalable — 4 mois'},n:4,unit:'month',abroadMonths:0,distMonths:0}];
 const DLK=DEFAULT_DLK;
 function isHoliday(d){const md=String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');return ((typeof S!=='undefined'&&S.dlHolidays)||DEFAULT_HOLIDAYS).includes(md)}
 function isMovableHoliday(x){const k=typeof x==='string'?x.slice(0,10):K(x);return ((typeof S!=='undefined'&&S.dlMovableHolidays)||[]).includes(k)}
@@ -970,7 +977,7 @@ function taxV(){
  const row=(l,v,big)=>`<div class="tax-row ${big?'big':''}"><span>${l}</span><strong>${money(v)}</strong></div>`;
  return `<div class="kpis">${kp('teal','bills',t('tax_collected'),totHT,t('tab_invoices'))}${kp('info','coin',t('tax_tva_due'),totTVA,t('tax_2026'))}${kp('brass','tax',t('tax_timbre'),totTimbre,t('tax_2026'))}${kp('bad','chart',t('tax_net'),net,t('tax_expenses')+': '+money(totExp))}</div>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('tax_g50')}</h2></div><div class="card-b">${row(t('tax_collected'),totHT)}${row(t('tax_tva_due'),totTVA)}${row(t('tax_timbre'),totTimbre)}${row(t('tax_total')+' G50',totTVA+totTimbre,true)}<p class="sub" style="margin-top:10px">${t('tax_g50_note')}</p><p class="note warn" style="margin-top:10px">⚠ G50 ليس جمع وصولات — يشمل CNAS وIRG وTAP — راجع محاسبك. الأرقام هنا للعرض فقط.</p></div></section>
- <section class="card"><div class="card-h"><h2>${t('tax_ifu')} / ${t('tax_ibs')}</h2></div><div class="card-b">${row(t('tax_net'),net)}${row(t('tax_ifu_rate'),ifu)}${row(t('tax_ibs_rate'),ibs)}<p class="sub" style="margin-top:10px">${t('tax_ibs_note')}</p></div></section></div>
+ <section class="card"><div class="card-h"><h2>${t('tax_ifu')} / ${(S.tax&&S.tax.regime==='company')?t('tax_ibs'):t('tax_bnc')}</h2></div><div class="card-b">${row(t('tax_net'),net)}${row(t('tax_ifu_rate'),ifu)}${(S.tax&&S.tax.regime==='company')?row(t('tax_ibs_rate'),ibs):`<div class="tax-row"><span>${t('tax_bnc_scale')}</span><strong>${t('tax_bnc_prog')}</strong></div>`}<p class="sub" style="margin-top:10px">${(S.tax&&S.tax.regime==='company')?t('tax_ibs_note'):t('tax_bnc_note')}</p></div></section></div>
  <div class="note warn" style="margin-top:16px">${ic('info')} ${t('tax_note')}</div>`}
 
 function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filter(c=>c.as.includes(u.id)).length;return `<div class="dlrow">${av(u.id)}<div style="flex:1"><strong>${tr(u.n)}</strong><span class="sub">${t(u.rk)}</span></div><div style="text-align:end"><b>${n}</b> <span class="sub" style="display:inline">${t('tm_assigned')}</span>${(isM()&&u.id!=='m'&&S.userPasswords&&S.userPasswords[u.id])?` <button class="btn sm" data-act="pwreset" data-id="${u.id}">${t('sec_reset_btn')}</button>`:''}</div></div>`}).join('');
@@ -995,10 +1002,10 @@ function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<s
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_notif')}</h2></div><div class="card-b">${kv(t('st_digest'),t('on'))}${kv(t('st_banner'),t('on'))}</div></section>
  <section class="card"><div class="card-h"><h2>${t('st_lang')}</h2></div><div class="card-b"><div class="kv"><span>${t('lang_btn')}</span><button class="btn sm" data-act="lang">${ic('refresh')}${t('lang_btn')}</button></div><div class="kv"><span>${t('theme')}</span><button class="btn sm" data-act="theme">${t('theme')}</button></div></div></section></div>
  <div class="g2e" style="margin-top:20px"><section class="card"><div class="card-h"><h2>النظام الجبائي</h2></div><div class="card-b">
- <div class="fld"><label>وضع المحامي</label><select id="taxreg"><option value="free" ${S.tax.regime==='free'?'selected':''}>محامٍ حر (IFU)</option><option value="company" ${S.tax.regime==='company'?'selected':''}>شركة محاماة (IBS)</option></select></div>
+ <div class="fld"><label>${t('tax_regime')}</label><select id="taxreg"><option value="free" ${S.tax.regime==='free'?'selected':''}>محامٍ حر (IFU)</option><option value="company" ${S.tax.regime==='company'?'selected':''}>شركة محاماة (IBS)</option></select></div>
  <div class="fld"><label>نسبة IFU (%)</label><input id="ifuR" type="number" min="0" value="${S.tax.ifu}"></div>
- <div class="fld"><label>نسبة IBS (%)</label><input id="ibsR" type="number" min="0" value="${S.tax.ibs}"></div>
- <p class="sub">⚠ تُضبط هذه النسب مع محاسب معتمد قبل الاعتماد عليها في التصريح — لا تعتمد أرقاماً افتراضية في الإنتاج.</p>
+ <div class="fld"><label>${t('tax_ibs_rate')} — ${t('tax_company_only')}</label><input id="ibsR" type="number" min="0" value="${S.tax.ibs}"></div>
+ <p class="sub">${t('tax_bnc_note')}</p><p class="sub">⚠ تُضبط هذه النسب مع محاسب معتمد قبل الاعتماد عليها في التصريح — لا تعتمد أرقاماً افتراضية في الإنتاج.</p>
  <button class="btn primary" data-act="savetax">حفظ النسب</button></div></section>
  <section class="card"><div class="card-h"><h2>نسخ احتياطي فعلي</h2></div><div class="card-b">
  <button class="btn" data-act="exportfull">${ic('download')} تصدير JSON</button>
@@ -1406,13 +1413,13 @@ function deadlinesV(){
  <section class="card" style="max-width:760px"><div class="card-b">
   <div class="fld"><label for="dl_case">${t('fl_case')}</label><select id="dl_case">${caseOpts}</select></div>
   <div class="fld"><label for="dl_date">تاريخ التبليغ / صدور الحكم</label><input type="date" id="dl_date" value="${S.dlCalc.date||''}"></div>
-  <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_skip" ${S.dlCalc.skip?'checked':''}><label for="dl_skip" style="margin:0">استثناء أيام الراحة والعطل — <small>خيار استرشادي فقط — ليس قاعدة قانونية، الآجال تقويمية</small></label></div>
+  <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_skip" ${S.dlCalc.skip?'checked':''}><label for="dl_skip" style="margin:0">${t('dl_skip_lbl')} <small>${t('dl_skip_note')}</small></label></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_abroad" ${S.dlCalc.abroad?'checked':''}><label for="dl_abroad" style="margin:0">${t('v7_abroad')}</label></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_dist" ${S.dlCalc.dist?'checked':''}><label for="dl_dist" style="margin:0">${t('dl_dist')} <small>${t('dl_dist_note')}</small></label></div>
   <div class="fld" style="display:flex;align-items:center;gap:10px"><input class="chk" type="checkbox" id="dl_vac_on" ${(S.dlVacation&&S.dlVacation.on!==false)?'checked':''}><label for="dl_vac_on" style="margin:0">${t('dl_vac_on')} <small>${S.dlVacation?(S.dlVacation.from+' → '+S.dlVacation.to):''} — ${t('dl_vac_note')}</small></label></div>
   <button class="btn primary" data-act="dlcalc">احسب الآجال</button>
   ${S.dlCalc.result?`<table class="matrix" style="margin-top:18px"><thead><tr><th style="text-align:start">نوع الأجل</th><th>حسب الأيام العادية</th><th>مع استثناء العطل</th><th>المتبقي</th><th></th></tr></thead><tbody>${S.dlCalc.result}</tbody></table>`:''}
-  <p class="note warn" style="margin-top:14px">⚠ آجال استرشادية وفق القانون الساري: الاستئناف المدني شهر (م 579 ق.إ.م.إ)، النقض شهران (م 541)، المعارضة 10 أيام (م 155)، استئناف الجنح 10 أيام (م 455 ق.إ.ج) — تُراجَع دائماً مع النص قبل الاحتجاج بالأجل. الأرقام استرشادية — احتسب يدوياً وفق النص الساري ولا تعتمد على البرنامج كمرجع وحيد.</p>
+  <p class="note warn" style="margin-top:14px">${t('dl_legal_note')}</p>
  </div></section>`}
 function cashV(){const inF=S.pays.reduce((a,p)=>a+p.a,0),off=S.officeExp.reduce((a,e)=>a+e.a,0),cexp=S.expenses.reduce((a,e)=>a+e.a,0),profit=inF-off-cexp;
  const kpi=(l,v,c)=>`<div class="card kpi"><div><span>${l}</span><b class="sm" style="color:${c||'inherit'}">${money(v)}</b></div></div>`;
@@ -1437,7 +1444,7 @@ function importV(){_csvBuf=null;return `<div class="page-h"><div><h1>استير�
  <p class="sub">ملف JSON يحوي كل الملفات والموكلين ووصولات الأتعاب والأمانات وسجل العمليات.</p></div></section></div>`}
 
 function importFile(f){if(!f)return;const r=new FileReader();r.onload=()=>{let d0=null;try{d0=JSON.parse(r.result)}catch(_){d0=null}if(d0===null||typeof d0!=='object'){if(typeof importEncrypted==='function')importEncrypted(r.result,importData);else toast('⚠ ملف غير صالح');return}importData(d0)};r.readAsText(f)}
-function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays))S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-12'?'01-11':h});if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
+function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays)){S.dlHolV2=false;try{holList()}catch(_){}}if(Array.isArray(S.dlRules)){S.dlRulesV2=false;try{dlRulesList()}catch(_){}}if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
   if(d.clients){S.clients=d.clients;CL.length=0;d.clients.forEach(c=>CL.push(c))}
   (S.cases||[]).forEach(c=>{if(c.clientId!=null)c.cl=c.clientId-1;else if(typeof c.cl==='number')c.clientId=c.cl+1});
   try{applyRoles()}catch(_){}try{secPostImport(_pa)}catch(_){}toast('تم الاسترجاع — '+(d.cases?d.cases.length:0)+' ملف');chrome();render()}catch(err){toast('⚠ ملف غير صالح')}}
@@ -1488,6 +1495,9 @@ function jaV(){const rows=visCases().filter(c=>c.judicialAid||c.jaStatus).map(c=
 // FEAT-CRUD-01: expertsV() moved to the v9 block
 // FEAT-CRUD-04: execV() moved to the v9 block
 function courtfeesV(){return `<div class="page-h"><div><h1>${t('cf_title')}</h1></div></div>
+ <div role="alert" style="background:#fdecea;border:2px solid var(--bad);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start">
+  <span style="font-size:20px;line-height:1.1">⚠️</span>
+  <div><strong style="color:var(--bad);display:block;margin-bottom:4px">${t('cf_warn_top_t')}</strong><span class="sub" style="margin:0;color:#7a1c16">${t('cf_warn_top')}</span></div></div>
  <section class="card" style="max-width:560px"><div class="card-b">
   <div class="fld"><label>نوع القضية</label><select id="cf_type"><option value="civil">مدني</option><option value="realty">عقاري</option><option value="family">أسرة</option><option value="penal">جزائي</option><option value="admin">إداري</option></select></div>
   <div class="fld"><label>المبلغ المتنازع عليه (دج)</label><input type="number" id="cf_amount" value="100000" min="0"></div>
@@ -1555,7 +1565,7 @@ function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;d
  }else ab.innerHTML='';
  let offH=S.online?'':`<div class="bar-off" role="status">${ic('alert')}<span style="flex:1">${t('offbar')}</span><button data-act="net">${t('backOnline')}</button></div>`;
  // FIX-12: backup reminder + F-01 license
- if(S.lastBackup&&diff(S.lastBackup)<-7){offH+=`<div class="bar-off" role="status">${ic('download')}<span style="flex:1">لم تأخذ نسخة احتياطية منذ ${-diff(S.lastBackup)} أيام</span><button data-act="exportfull">تصدير الآن</button></div>`}
+ if(!S.lastBackup||diff(S.lastBackup)<-7){offH+=`<div class="bar-off" role="status">${ic('download')}<span style="flex:1">${S.lastBackup?t('bk_days',-diff(S.lastBackup)):t('bk_never')}</span><button data-act="exportfull">${t('bk_now')}</button></div>`}
  if(S.license&&S.license.expires){const de=diff(S.license.expires);if(de<60){offH+=`<div class="bar-off" role="status">${ic('alert')}<span style="flex:1">بطاقة الإجازة ${de<0?'منتهية':'تنتهي خلال '+de+' يوم'}</span><button data-act="go" data-v="license">${t('lic_renew')}</button></div>`}}
  $('offBar').innerHTML=offH;
  const my=myCases(),th=my.filter(c=>c.next===K(TODAY)).length,ot=myTasks().filter(x=>!x.done).length;
@@ -2320,7 +2330,7 @@ bk_enc_title:'كلمة مرور النسخة الاحتياطية',bk_enc_pass:'
 bk_enc_pw_hint:'8 خانات على الأقل مع حرف ورقم — تُطلب عند الاسترجاع ولا يمكن استرجاعها إن فُقدت',
 bk_enc_ok:'تم إنشاء النسخة الاحتياطية المشفّرة',bk_enc_busy:'جارٍ التشفير…',bk_enc_err:'تعذّر التشفير — افتح الملف في متصفح حديث',
 bk_enc_mismatch:'كلمتا المرور غير متطابقتين',
-bk_enc_note:'الملف مشفّر بـ AES-GCM-256 بمفتاح مشتق بـ PBKDF2 (200 ألف دورة). لاسترجاعه: الإعدادات ← «استرجاع نسخة سابقة» ثم اختر الملف وأدخل كلمة المرور نفسها.',
+bk_enc_note:'الملف مشفّر بـ AES-GCM-256 بمفتاح مشتق بـ PBKDF2 (600 ألف دورة). لاسترجاعه: الإعدادات ← «استرجاع نسخة سابقة» ثم اختر الملف وأدخل كلمة المرور نفسها.',
 po_ident:'بيانات القضية',po_parties:'الأطراف',po_hearings:'سجل الجلسات',po_hear_none:'لا جلسات مسجّلة',
 po_shared_note:'تظهر هنا الوثائق التي شاركها المكتب معك فقط.',po_role:'الصفة',
 po_no_secret:'لا تعرض بوابة الموكل الأتعاب ولا الأمانات ولا الملاحظات الداخلية إطلاقاً.',
@@ -2383,7 +2393,7 @@ bk_enc_title:'Mot de passe de la sauvegarde',bk_enc_pass:'Mot de passe',bk_enc_p
 bk_enc_pw_hint:'8 caractères min., une lettre et un chiffre — demandé à la restauration, irrécupérable',
 bk_enc_ok:'Sauvegarde chiffrée créée',bk_enc_busy:'Chiffrement…',bk_enc_err:'Chiffrement impossible — ouvrez le fichier dans un navigateur récent',
 bk_enc_mismatch:'Les mots de passe ne correspondent pas',
-bk_enc_note:'Fichier chiffré en AES-GCM-256 avec clé dérivée PBKDF2 (200 000 tours). Pour restaurer : Paramètres → « Restaurer une sauvegarde », choisissez le fichier et saisissez le même mot de passe.',
+bk_enc_note:'Fichier chiffré en AES-GCM-256 avec clé dérivée PBKDF2 (600 000 tours). Pour restaurer : Paramètres → « Restaurer une sauvegarde », choisissez le fichier et saisissez le même mot de passe.',
 po_ident:'Données du dossier',po_parties:'Parties',po_hearings:'Historique des audiences',po_hear_none:'Aucune audience enregistrée',
 po_shared_note:'Seuls les documents partagés par le cabinet apparaissent ici.',po_role:'Qualité',
 po_no_secret:'Le portail client n’affiche jamais les honoraires, les séquestres ni les notes internes.',
@@ -2394,8 +2404,45 @@ guide_title:'Guide d’utilisation',guide_sub:'Guide opérationnel complet — f
 guide_missing:'Si le guide ne s’affiche pas, vérifiez la présence du fichier diwan_guide-1.html à la racine du site puis rechargez.'
 });
 
+Object.assign(L.ar,{
+dl_skip_lbl:'استثناء أيام الراحة والعطل (معطّل افتراضياً)',
+dl_skip_note:'الآجال في القانون الجزائري تقويمية، والعطلة القضائية لا توقفها — فعّل هذا الخيار بمسؤولية فقط.',
+dl_legal_note:'⚠ آجال استرشادية وفق النصوص السارية: استئناف مدني شهر (م 336 ق.إ.م.إ)، نقض شهران (م 354)، معارضة شهر (م 329)، استعجالي 15 يوماً، استئناف الجنح 10 أيام (م 455 ق.إ.ج)، استئناف أمر قاضي التحقيق 3 أيام، نقض جزائي 8 أيام، التظلم الإداري المسبق 4 أشهر. راجع النص قبل الاحتجاج بالأجل — البرنامج أداة مساعدة لا مرجعاً وحيداً.',
+dl_abroad_m:'تأجيل الخارج (شهور)',
+mvhol_title:'الأعياد الدينية المتغيرة (فطر، أضحى، مولد، عاشوراء)',
+mvhol_lbl:'تاريخ عيد متغير',mvhol_add:'إضافة',
+mvhol_note:'أدخل تاريخ كل عيد في سنته؛ تُستثنى هذه الأيام عند تفعيل استثناء أيام الراحة، ويظهر تنبيه إن انقضى أجل فيها.',
+stamp_prices_h:'أسعار الدمغة (دج) — قابلة للتعديل',stamp_prices_save:'حفظ الأسعار',stamp_prices_saved:'حُفظت أسعار الدمغة',
+tax_regime:'وضع المحامي',tax_company_only:'للشركات فقط',tax_bnc:'IRG / الأرباح غير التجارية (BNC)',
+tax_bnc_scale:'IRG / BNC (جدول تصاعدي)',tax_bnc_prog:'حسب الشريحة',
+tax_bnc_note:'المحامي الحر يخضع لضريبة IRG على الأرباح غير التجارية وفق جدول تصاعدي لا نسبة واحدة؛ لذلك لا يحتسب التطبيق مبلغاً بديلاً — يُراجَع مع محاسب معتمد.',
+cf_warn_top_t:'هذه الحاسبة استرشادية فقط',cf_warn_top:'يرجى مراجعة جدول التعريفة الرسمية بوزارة العدل قبل الاعتماد على أي رقم.',
+hr_cnas_col:'CNAS',hr_irg:'IRG',hr_cfg_saved:'حُفظت نسب الاقتطاع',
+hr_irg_note:'نسبة IRG تقديرية تُضبط يدوياً؛ تُحسب شرائحها الفعلية من الجدول الساري — راجع محاسبك.',
+bk_never:'لم تأخذ نسخة احتياطية بعد — بياناتك محفوظة على هذا الجهاز فقط',
+bk_days:n=>`لم تأخذ نسخة احتياطية منذ ${n} أيام`,bk_now:'تصدير الآن'});
+Object.assign(L.fr,{
+dl_skip_lbl:'Exclure les jours de repos et fériés (désactivé par défaut)',
+dl_skip_note:'Les délais algériens sont calendaires et les vacances judiciaires ne les suspendent pas — n’activez cette option qu’en connaissance de cause.',
+dl_legal_note:'⚠ Délais indicatifs selon les textes en vigueur : appel civil 1 mois (art. 336 CPCA), cassation 2 mois (art. 354), opposition 1 mois (art. 329), référé 15 jours, appel correctionnel 10 jours (art. 455 CPP), appel de l’ordonnance du juge d’instruction 3 jours, pourvoi pénal 8 jours, recours administratif préalable 4 mois. Vérifiez le texte avant toute décision — le logiciel est une aide, pas une référence unique.',
+dl_abroad_m:'Délai supplémentaire (mois)',
+mvhol_title:'Fêtes religieuses mobiles (Aïd el-Fitr, Aïd el-Adha, Mawlid, Achoura)',
+mvhol_lbl:'Date d’une fête mobile',mvhol_add:'Ajouter',
+mvhol_note:'Saisissez la date de chaque fête pour son année ; ces jours sont exclus lorsque l’exclusion des jours de repos est activée, et une alerte s’affiche si un délai y expire.',
+stamp_prices_h:'Prix du timbre (DA) — modifiables',stamp_prices_save:'Enregistrer les prix',stamp_prices_saved:'Prix du timbre enregistrés',
+tax_regime:'Régime de l’avocat',tax_company_only:'sociétés uniquement',tax_bnc:'IRG / Bénéfices non commerciaux (BNC)',
+tax_bnc_scale:'IRG / BNC (barème progressif)',tax_bnc_prog:'selon la tranche',
+tax_bnc_note:'L’avocat libéral relève de l’IRG sur bénéfices non commerciaux selon un barème progressif, non d’un taux unique ; l’application n’affiche donc pas de montant de substitution — à vérifier avec un comptable.',
+cf_warn_top_t:'Ce calculateur est purement indicatif',cf_warn_top:'Consultez le tableau tarifaire officiel du Ministère de la Justice avant de retenir un montant.',
+hr_cnas_col:'CNAS',hr_irg:'IRG',hr_cfg_saved:'Taux de retenue enregistrés',
+hr_irg_note:'Taux d’IRG estimé, à ajuster manuellement ; les tranches réelles relèvent du barème en vigueur — à vérifier avec un comptable.',
+bk_never:'Aucune sauvegarde effectuée — vos données n’existent que sur cet appareil',
+bk_days:n=>`Dernière sauvegarde il y a ${n} jours`,bk_now:'Exporter maintenant'});
+
 /* ================= V9.10 — وحدة الدمغة ================= */
-var STAMP_PRICE={court:250,council:400,admin:300};
+var STAMP_PRICE_DEF={court:250,council:400,admin:300};
+function stampPrices(){S.stampPrices=Object.assign({},STAMP_PRICE_DEF,S.stampPrices||{});return S.stampPrices}
+function stampPrice(k){return Math.max(0,Math.round(+(stampPrices()[k]||0)))}
 var STAMP_KINDS=['court','council','admin'];
 var STAMP_FIRST_TYPES=['open','appeal','cassation','admin_open','recours_revision','intervention'];
 function stampBal(k){S.stampInventory=S.stampInventory||{court:0,council:0,admin:0};return +(S.stampInventory[k]||0)}
@@ -2415,13 +2462,15 @@ function stampCardV(){
   return '<div class="dlrow"><span class="chip '+(x.exempt?'exempt':isBuy?'stamp':x.denied?'bad':'mute')+'">'+(isBuy?'+'+x.qty:(x.exempt?t('stamp_exempt'):x.denied?'—':'−1'))+'</span><div style="flex:1"><strong>'+esc(stampKindName(x.kind))+'</strong><span class="sub">'+esc(x.label||'')+' · '+fmt(x.d)+'</span></div>'+(x.amount?'<b>'+money(x.amount)+'</b>':'')+'</div>'}).join('');
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('stamp_title')+'</h2><button class="btn sm primary" data-act="stampbuy">'+ic('plus')+t('stamp_buy')+'</button></div><div class="card-b">'
   +'<p class="sub" style="margin:0 0 10px">'+t('stamp_sub')+'</p><div class="stamp-grid">'+rows+'</div>'
-  +'<h3 style="margin:10px 0 4px;font-size:15px">'+t('stamp_moves')+'</h3>'+(mv||'<p class="sub">'+t('stamp_none')+'</p>')
+  +'<h3 style="margin:10px 0 4px;font-size:15px">'+t('stamp_moves')+'</h3>'+(mv||'<p class="sub">'+t('stamp_none')+'</p>')+'<h3 style="margin:14px 0 6px;font-size:15px">'+t('stamp_prices_h')+'</h3>'
+  +'<div class="stamp-grid">'+STAMP_KINDS.map(function(k){return '<div class="fld" style="margin:0"><label for="sp_'+k+'">'+esc(stampKindName(k))+'</label><input id="sp_'+k+'" data-stamp-price="'+k+'" type="number" min="0" step="10" value="'+stampPrice(k)+'"></div>'}).join('')+'</div>'
+  +'<button class="btn sm primary" data-act="stampsave" style="margin-top:10px">'+t('stamp_prices_save')+'</button>'
   +'<p class="sub" style="margin-top:10px;font-size:12px">'+t('stamp_price_note')+'</p></div></section>'}
 function stampBuyModal(){
  modal('stamp_buy_title',[
   {n:'kind',l:'stamp_kind',type:'select',opts:STAMP_KINDS.map(function(k){return [k,stampKindName(k)+' ('+stampBal(k)+')']}),v:'court'},
   {n:'qty',l:'stamp_qty',type:'number',req:true,min:1,v:'50',chk:amtChk},
-  {n:'price',l:'stamp_unit',type:'number',req:true,min:1,v:String(STAMP_PRICE.court),chk:amtChk}
+  {n:'price',l:'stamp_unit',type:'number',req:true,min:1,v:String(stampPrice('court')),chk:amtChk}
  ],function(v){
   var kind=STAMP_KINDS.indexOf(v.kind)>=0?v.kind:'court',qty=Math.max(1,Math.round(+v.qty||0)),price=Math.max(0,+v.price||0),total=qty*price;
   undoable(function(){
@@ -2436,7 +2485,7 @@ function stampReportV(){
   if(x.type==='buy'){buys[m]=(buys[m]||0)+(+x.amount||0);return}
   if(x.exempt||x.denied)return;
   byM[m]=byM[m]||{court:0,council:0,admin:0,amt:0};
-  byM[m][x.kind]=(byM[m][x.kind]||0)+1;byM[m].amt+=STAMP_PRICE[x.kind]||0;
+  byM[m][x.kind]=(byM[m][x.kind]||0)+1;byM[m].amt+=stampPrice(x.kind);
   if(x.caseId){byCase[x.caseId]=(byCase[x.caseId]||0)+1}});
  var months=Object.keys(byM).concat(Object.keys(buys)).filter(function(v,i,a){return a.indexOf(v)===i}).sort().reverse();
  var rows=months.map(function(m){var o=byM[m]||{court:0,council:0,admin:0,amt:0};
@@ -2851,7 +2900,7 @@ function encBackupExport(){
   if(!snap){toast(t('bk_enc_err'));return}
   toast(t('bk_enc_busy'));
   encryptJSON(snap,v.p1).then(function(b64){
-   var blob=new Blob([ENC_PREFIX+b64],{type:'text/plain'});
+   var blob=new Blob([b64],{type:'text/plain'});
    var a=document.createElement('a');a.href=URL.createObjectURL(blob);
    a.download='diwan-backup-enc-'+K(TODAY)+'.txt';a.click();
    setTimeout(function(){try{URL.revokeObjectURL(a.href)}catch(_){}},3000);
@@ -3014,7 +3063,7 @@ if(!_LIC.gate()){chrome();render()}
 // FIX13R: STORE_KEY / SCHEMA / _saveTimer declarations moved above the first chrome()
 /* FIX3: scheduleSave/persistNow are defined in the FIX3 security block below (debounced, encrypted) */
 function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null,colleagues:S.colleagues||[]}}
-function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(raw.indexOf(ENC_PREFIX)===0)return null;return normStore(JSON.parse(raw))}catch(e){return null}}
+function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(isEncPayload(raw))return null;return normStore(JSON.parse(raw))}catch(e){return null}}
 function normStore(data){try{if(!data.clients&&data.cases){var clients=[],seen={};(data.cases||[]).forEach(function(c){if(c.clientId!=null)return;if(typeof c.cl==='number'){var src0=(CL)[c.cl]||{ar:'—',fr:'—',ph:'—'};var key=(src0.ar||'')+'|'+(src0.ph||'');if(seen[key]!=null)c.clientId=seen[key];else{var id=clients.length+1;clients.push(Object.assign({id:id},src0));seen[key]=id;c.clientId=id}}});data.clients=clients.length?clients:CL.map(function(x,i){return Object.assign({id:i+1},x)})}if(!data.dlHolidays)data.dlHolidays=DEFAULT_HOLIDAYS.slice();if(!data.dlRules)data.dlRules=DEFAULT_DLK.slice();if(!data.drafts)data.drafts=[];data.schemaVersion=SCHEMA;return data}catch(e){return null}}
 function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
 function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.tasks=[];S.dls=[];S.docs=[];S.pays=[];S.expenses=[];S.officeExp=[];S.invoices=[];S.trust=[];S.installments=[];S.audit=[];S.drafts=[];S.clients=[];CL.length=0;S.nextId=1;S.nextTask=1;S.nextInv=1;S.nextTrust=1;S.nextPay=1;S.isDemo=false;scheduleSave();chrome();render()}
@@ -3022,7 +3071,7 @@ function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.t
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
 /* ===== FIX3 (security): AES-GCM-256 at-rest encryption, PBKDF2 passwords, lock screen ===== */
-var ENC_PREFIX='DWNENC1:',STORE_KEY_V8='diwan_v8_data',PBKDF2_IT=200000,PW_IT=150000,UNLOCK_LOCK_KEY='diwan_unlock_lock';
+var ENC_PREFIX='DWNENC1:',ENC_PREFIX2='DWNENC2:',STORE_KEY_V8='diwan_v8_data',PBKDF2_IT=600000,PBKDF2_IT_LEGACY=200000,PW_IT=600000,PW_IT_LEGACY=150000,UNLOCK_LOCK_KEY='diwan_unlock_lock';
 var _loadedFromV8=false,_savePending=false,_saveBusy=false,_saveDirty=false,_plainWarned=false,_unlockFails=0;
 /* the manager password (and the derived-key context) live ONLY in this closure — never in localStorage */
 var _SEC=(function(){var _pass=null,_ctx=null;return {ready:false,
@@ -3034,16 +3083,21 @@ function secB64d(b){var s=atob(String(b).replace(/\s+/g,'')),u=new Uint8Array(s.
 function secCmp(a,b){a=String(a);b=String(b);if(a.length!==b.length)return false;var r=0;for(var i=0;i<a.length;i++)r|=a.charCodeAt(i)^b.charCodeAt(i);return r===0}
 function secBi(k){var a=L.ar[k],f=L.fr[k];return (typeof a==='string'?a:k)+' — '+(typeof f==='string'?f:k)}
 /* --- crypto primitives --- */
-function deriveKey(pass,salt){return crypto.subtle.importKey('raw',new TextEncoder().encode(String(pass)),'PBKDF2',false,['deriveKey']).then(function(km){return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:PBKDF2_IT,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])})}
+function deriveKey(pass,salt,it){return crypto.subtle.importKey('raw',new TextEncoder().encode(String(pass)),'PBKDF2',false,['deriveKey']).then(function(km){return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:(+it||PBKDF2_IT),hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])})}
 /* encryptJSON → Promise<base64(salt16 | iv12 | ciphertext)>. Optional ctx caches {salt,key} so repeated saves skip the 200k-round KDF (fresh random IV every time). */
+/* V10.3 — DWNENC2 يحمل عدد دورات PBKDF2 (4 بايت) ثم الملح والمتجه، فترفع التكرارات
+   إلى 600 ألف دون أن تُفقد النسخ القديمة (DWNENC1 يُفكّ بـ 200 ألف دورة). */
+function isEncPayload(x){x=String(x||'').trim();return x.indexOf(ENC_PREFIX2)===0||x.indexOf(ENC_PREFIX)===0}
 function encryptJSON(obj,pass,ctx){var salt=(ctx&&ctx.salt)||crypto.getRandomValues(new Uint8Array(16));
- var kp=(ctx&&ctx.key)?Promise.resolve(ctx.key):deriveKey(pass,salt);
- return kp.then(function(key){if(ctx){ctx.salt=salt;ctx.key=key}var iv=crypto.getRandomValues(new Uint8Array(12));
-  return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(obj))).then(function(ct){var c=new Uint8Array(ct),o=new Uint8Array(28+c.length);o.set(salt,0);o.set(iv,16);o.set(c,28);return secB64e(o)})})}
-function decryptJSON(b64,pass,ctx){var u;try{u=secB64d(b64)}catch(e){return Promise.reject(new Error('bad-format'))}
+ var kp=(ctx&&ctx.key&&ctx.it===PBKDF2_IT)?Promise.resolve(ctx.key):deriveKey(pass,salt,PBKDF2_IT);
+ return kp.then(function(key){if(ctx){ctx.salt=salt;ctx.key=key;ctx.it=PBKDF2_IT}var iv=crypto.getRandomValues(new Uint8Array(12));
+  return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(obj))).then(function(ct){var c=new Uint8Array(ct),o=new Uint8Array(32+c.length);new DataView(o.buffer).setUint32(0,PBKDF2_IT,false);o.set(salt,4);o.set(iv,20);o.set(c,32);return ENC_PREFIX2+secB64e(o)})})}
+function decryptJSON(payload,pass,ctx){var s=String(payload||'').trim(),u,it=PBKDF2_IT_LEGACY;
+ try{if(s.indexOf(ENC_PREFIX2)===0){u=secB64d(s.slice(ENC_PREFIX2.length));if(u.length<49)return Promise.reject(new Error('bad-format'));it=new DataView(u.buffer).getUint32(0,false);u=u.slice(4)}
+  else{if(s.indexOf(ENC_PREFIX)===0)s=s.slice(ENC_PREFIX.length);u=secB64d(s)}}catch(e){return Promise.reject(new Error('bad-format'))}
  if(u.length<45)return Promise.reject(new Error('bad-format'));
  var salt=u.slice(0,16),iv=u.slice(16,28),ct=u.slice(28);
- return deriveKey(pass,salt).then(function(key){return crypto.subtle.decrypt({name:'AES-GCM',iv:iv},key,ct).then(function(pt){if(ctx){ctx.salt=salt;ctx.key=key}return JSON.parse(new TextDecoder().decode(pt))})})}
+ return deriveKey(pass,salt,it).then(function(key){return crypto.subtle.decrypt({name:'AES-GCM',iv:iv},key,ct).then(function(pt){if(ctx){ctx.salt=salt;ctx.key=key;ctx.it=it}return JSON.parse(new TextDecoder().decode(pt))})})}
 /* per-user password record {salt,hash,it} — PBKDF2-SHA256 with a random salt per user */
 function hashPass(pass,rec){var salt=(rec&&rec.salt)?secB64d(rec.salt):crypto.getRandomValues(new Uint8Array(16)),it=(rec&&rec.it)||PW_IT;
  return crypto.subtle.importKey('raw',new TextEncoder().encode(String(pass)),'PBKDF2',false,['deriveBits']).then(function(km){return crypto.subtle.deriveBits({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},km,256)}).then(function(bits){return {salt:secB64e(salt),hash:secB64e(new Uint8Array(bits)),it:it}})}
@@ -3060,7 +3114,7 @@ function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return; /* 
  if(!_SEC.avail()){try{localStorage.setItem(STORE_KEY,JSON.stringify(snap))}catch(e){secWarnStore()}if(!_plainWarned){_plainWarned=true;try{toast(t('sec_nocrypto'))}catch(_){}}return}
  if(!_SEC.hasPass())return;
  _saveBusy=true;var ctx=_SEC.getCtx();if(!ctx){ctx={};_SEC.setCtx(ctx)}
- encryptJSON(snap,_SEC.getPass(),ctx).then(function(b){localStorage.setItem(STORE_KEY,ENC_PREFIX+b)}).catch(function(){secWarnStore()}).then(function(){_saveBusy=false;if(_saveDirty){_saveDirty=false;persistNow()}})}
+ encryptJSON(snap,_SEC.getPass(),ctx).then(function(b){localStorage.setItem(STORE_KEY,b)}).catch(function(){secWarnStore()}).then(function(){_saveBusy=false;if(_saveDirty){_saveDirty=false;persistNow()}})}
 function secFlush(){if(_savePending||_saveDirty)persistNow()}
 window.addEventListener('beforeunload',secFlush);window.addEventListener('pagehide',secFlush);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')secFlush()});
@@ -3073,7 +3127,7 @@ function secFinishBoot(persist){try{applyRoles()}catch(_){}try{if(typeof syncPar
  try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}
  _SEC.ready=true;if(persist)persistNow();try{chrome();render()}catch(e){console.warn('boot render',e)}}
 function secBoot(){var raw=null;try{raw=localStorage.getItem(STORE_KEY)}catch(_){}
- if(raw&&raw.indexOf(ENC_PREFIX)===0){
+ if(raw&&isEncPayload(raw)){
   if(!_SEC.avail()){secOverlay('<div class="modal"><h2>🔒 البيانات مشفّرة<br><small class="sub">Données chiffrées</small></h2><p>هذا المتصفح لا يدعم فك التشفير (crypto.subtle). افتح الملف في متصفح حديث (Chrome / Edge / Firefox). لم تُمسّ بياناتك.<br>Ce navigateur ne permet pas le déchiffrement. Ouvrez le fichier dans un navigateur récent. Vos données n’ont pas été modifiées.</p></div>');return}
   secShowUnlock(raw);return}
  var data=loadStore();if(data)applyStore(data);else secDemoInit();
@@ -3094,7 +3148,7 @@ function secShowUnlock(raw){var o=secOverlay('<div class="modal"><h2>🔒 ديو
  function showLock(){var ms=lockLeft();if(ms>0){var s=Math.ceil(ms/1000);msg.textContent='محاولات كثيرة — انتظر '+s+' ث · Trop d’essais — patientez '+s+' s';btn.disabled=true;tick=setTimeout(showLock,1000)}else{btn.disabled=false;if(tick){tick=null;msg.textContent=''}}}
  showLock();
  f.addEventListener('submit',function(e){e.preventDefault();if(lockLeft()>0)return;var p=inp.value.trim();if(!p)return;btn.disabled=true;var ctx={};
-  var job=raw?decryptJSON(raw.slice(ENC_PREFIX.length),p,ctx):verifyPass((S.userPasswords||{}).m,p).then(function(ok){if(!ok)throw new Error('bad-pass');return null});
+  var job=raw?decryptJSON(raw,p,ctx):verifyPass((S.userPasswords||{}).m,p).then(function(ok){if(!ok)throw new Error('bad-pass');return null});
   job.then(function(d){
    var okp;try{
     if(d){d=normStore(d);if(!d)throw new Error('bad-data');applyStore(d)}
@@ -3133,11 +3187,11 @@ function secChangePassword(){if(!_SEC.avail()){toast(t('sec_nocrypto'));return}
   verifyPass(old,v.cur).then(function(ok){if(!ok){toast(t('sec_chg_bad'));return}
    return hashPass(v.p1).then(function(nr){S.userPasswords=S.userPasswords||{};S.userPasswords[uid]=nr;
     if(uid!=='m')return;
-    var ctx={};return encryptJSON(snapV7(),v.p1,ctx).then(function(b){localStorage.setItem(STORE_KEY,ENC_PREFIX+b);_SEC.setPass(v.p1);_SEC.setCtx(ctx)}).catch(function(e){S.userPasswords[uid]=old;throw e})
+    var ctx={};return encryptJSON(snapV7(),v.p1,ctx).then(function(b){localStorage.setItem(STORE_KEY,b);_SEC.setPass(v.p1);_SEC.setCtx(ctx)}).catch(function(e){S.userPasswords[uid]=old;throw e})
    }).then(function(){authLog('pwchange',uid);toast(t('sec_chg_ok'))})
   }).catch(function(){toast(t('v7_storage_fail'))})},'sec_set')}
 /* --- import of an encrypted backup file --- */
-function importEncrypted(txt,cb){var s=String(txt||'').trim();if(s.indexOf(ENC_PREFIX)===0)s=s.slice(ENC_PREFIX.length);
+function importEncrypted(txt,cb){var s=String(txt||'').trim();
  if(!_SEC.avail()||s.length<60||!/^[A-Za-z0-9+\/=\s]+$/.test(s)){toast('⚠ ملف غير صالح');return}
  modal('sec_imp_title',[{n:'pw',l:'sec_pw',type:'password',req:true}],function(v){decryptJSON(s,v.pw).then(function(d){cb(d)}).catch(function(){toast(t('sec_imp_bad'))})},'sec_enter')}
 /* ===== FIX4: conflict of interests ===== */
@@ -3718,8 +3772,20 @@ function uid(){return Date.now()*1000+Math.floor(Math.random()*1000)}
 function v9save(){try{scheduleSave()}catch(_){}}
 function syncClient(i){try{if(S.clients&&S.clients[i]&&S.clients[i]!==CL[i])Object.assign(S.clients[i],CL[i],{id:S.clients[i].id})}catch(_){}}
 function validMD(s){var m=/^(\d{2})-(\d{2})$/.exec(s||'');if(!m)return false;var mo=+m[1],d=+m[2],dim=[31,29,31,30,31,30,31,31,30,31,30,31];return mo>=1&&mo<=12&&d>=1&&d<=dim[mo-1]}
-function dlRulesList(){if(!Array.isArray(S.dlRules))S.dlRules=DEFAULT_DLK.map(function(x){return {id:x.id,name:Object.assign({},x.name),n:x.n,unit:x.unit,abroadMonths:x.abroadMonths}});return S.dlRules}
-function holList(){if(!Array.isArray(S.dlHolidays))S.dlHolidays=DEFAULT_HOLIDAYS.slice();return S.dlHolidays}
+function dlRuleCopy(x){return {id:x.id,name:{ar:x.name.ar,fr:x.name.fr},n:x.n,unit:x.unit,abroadMonths:x.abroadMonths,distMonths:x.distMonths}}
+function dlMigrateRules(){var byId={};DEFAULT_DLK.forEach(function(x){byId[x.id]=x});
+ if(!Array.isArray(S.dlRules))S.dlRules=DEFAULT_DLK.map(dlRuleCopy);
+ if(!S.dlRulesV2){S.dlRules.forEach(function(r){var d=r&&byId[r.id];if(!d)return;
+   r.name={ar:d.name.ar,fr:d.name.fr};r.n=d.n;r.unit=d.unit;r.abroadMonths=d.abroadMonths;if(d.distMonths!=null)r.distMonths=d.distMonths});
+  DEFAULT_DLK.forEach(function(d){if(!S.dlRules.some(function(r){return r&&r.id===d.id}))S.dlRules.push(dlRuleCopy(d))});
+  S.dlRulesV2=true;try{v9save()}catch(_){}}
+ return S.dlRules}
+function dlRulesList(){return dlMigrateRules()}
+function holList(){if(!Array.isArray(S.dlHolidays))S.dlHolidays=DEFAULT_HOLIDAYS.slice();
+ if(!S.dlHolV2){S.dlHolidays=S.dlHolidays.map(function(h){return h==='01-11'?'11-01':h});
+  DEFAULT_HOLIDAYS.forEach(function(h){if(S.dlHolidays.indexOf(h)<0)S.dlHolidays.push(h)});
+  S.dlHolidays=S.dlHolidays.filter(function(h,i,a){return a.indexOf(h)===i}).sort();S.dlHolV2=true;try{v9save()}catch(_){}}
+ return S.dlHolidays}
 function dlResetResult(){if(S.dlCalc)S.dlCalc.result=''}
 
 /* ---------- FIX14-UI: deadline rules + holidays card (rendered inside settingsV) ---------- */
@@ -3727,14 +3793,14 @@ function dlrCard(){ // FIX14-UI
  var rules=dlRulesList(),hol=holList().slice().sort(),mov=(S.dlMovableHolidays=S.dlMovableHolidays||[]).slice().sort();var movChips=mov.map(function(h){return `<span class="chip mute" style="display:inline-flex;gap:6px;align-items:center"><span dir="ltr">${esc(h)}</span><button class="btn sm" data-act="movdel" data-v="${esc(h)}" aria-label="${t('v9_del')}" style="padding:0 6px">×</button></span>`}).join('')||'<span class="sub">—</span>';
  var rows=rules.map(function(r,i){
   var nm=typeof r.name==='object'?(r.name[S.lang]||r.name.ar||''):(r.name||r.id||'');
-  return `<tr><td><input data-dlr="name" data-i="${i}" value="${esc(nm)}" aria-label="${t('dlr_name')}" style="width:100%"></td><td><input data-dlr="n" data-i="${i}" type="number" min="1" step="1" value="${+r.n||1}" aria-label="${t('dlr_n')}" style="width:80px"></td><td><select data-dlr="unit" data-i="${i}" aria-label="${t('dlr_unit')}"><option value="day" ${r.unit==='day'?'selected':''}>${t('unit_day')}</option><option value="month" ${r.unit==='month'?'selected':''}>${t('unit_month')}</option></select></td><td><input data-dlr="abroad" data-i="${i}" type="number" min="0" step="1" value="${r.abroadMonths!=null?+r.abroadMonths:2}" aria-label="تأجيل الخارج (شهور)" style="width:70px"></td><td><button class="btn sm danger" data-act="dlrdel" data-id="${i}">${t('v9_del')}</button></td></tr>`}).join('');
+  return `<tr><td><input data-dlr="name" data-i="${i}" value="${esc(nm)}" aria-label="${t('dlr_name')}" style="width:100%"></td><td><input data-dlr="n" data-i="${i}" type="number" min="1" step="1" value="${+r.n||1}" aria-label="${t('dlr_n')}" style="width:80px"></td><td><select data-dlr="unit" data-i="${i}" aria-label="${t('dlr_unit')}"><option value="day" ${r.unit==='day'?'selected':''}>${t('unit_day')}</option><option value="month" ${r.unit==='month'?'selected':''}>${t('unit_month')}</option></select></td><td><input data-dlr="abroad" data-i="${i}" type="number" min="0" step="1" value="${r.abroadMonths!=null?+r.abroadMonths:2}" aria-label="${t('dl_abroad_m')}" style="width:70px"></td><td><button class="btn sm danger" data-act="dlrdel" data-id="${i}">${t('v9_del')}</button></td></tr>`}).join('');
  var chips=hol.map(function(h){return `<span class="chip mute" style="display:inline-flex;gap:6px;align-items:center"><span dir="ltr">${esc(h)}</span><button class="btn sm" data-act="holdel" data-v="${esc(h)}" aria-label="${t('v9_del')}" style="padding:0 6px">×</button></span>`}).join('')||'<span class="sub">—</span>';
  return `<section class="card" style="margin-top:20px" id="dlrCard"><div class="card-h"><h2>${t('dlr_title')}</h2><button class="btn sm" data-act="dlradd">${t('dlr_add')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('dlr_sub')}</p>
-  <div style="overflow-x:auto"><table class="matrix"><thead><tr><th style="text-align:start">${t('dlr_name')}</th><th>${t('dlr_n')}</th><th>${t('dlr_unit')}</th><th>تأجيل الخارج (شهور)</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="sub">—</td></tr>'}</tbody></table></div>
+  <div style="overflow-x:auto"><table class="matrix"><thead><tr><th style="text-align:start">${t('dlr_name')}</th><th>${t('dlr_n')}</th><th>${t('dlr_unit')}</th><th>${t('dl_abroad_m')}</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="sub">—</td></tr>'}</tbody></table></div>
   <h3 style="margin:18px 0 8px;font-size:15px">${t('hol_title')}</h3>
   <div style="display:flex;gap:6px;flex-wrap:wrap">${chips}</div>
   <div style="display:flex;gap:8px;margin-top:10px;align-items:center"><input id="holNew" maxlength="5" dir="ltr" placeholder="${t('hol_ph')}" aria-label="${t('hol_title')}" style="max-width:140px"><button class="btn sm" data-act="holadd">${t('hol_add')}</button></div>
-  <h3 style="margin:18px 0 8px;font-size:15px">الأعياد المتغيرة (فطر، أضحى، مولد، عاشوراء)</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${movChips}</div><div style="display:flex;gap:8px;margin-top:10px;align-items:center"><input id="movNew" type="date" dir="ltr" aria-label="تاريخ عيد متغير" style="max-width:170px"><button class="btn sm" data-act="movadd">إضافة</button></div><p class="sub" style="margin:8px 0 0">الحساب تقويمي: لا تُستثنى هذه الأعياد، لكن يظهر تنبيه إن انقضى الأجل فيها.</p>
+  <h3 style="margin:18px 0 8px;font-size:15px">${t('mvhol_title')}</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${movChips}</div><div style="display:flex;gap:8px;margin-top:10px;align-items:center"><input id="movNew" type="date" dir="ltr" aria-label="${t('mvhol_lbl')}" style="max-width:170px"><button class="btn sm" data-act="movadd">${t('mvhol_add')}</button></div><p class="sub" style="margin:8px 0 0">${t('mvhol_note')}</p>
    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn primary" data-act="dlrsave">${t('dlr_save')}</button><button class="btn" data-act="dlrreset">${t('dlr_reset')}</button></div></div></section>`}
 
 /* ---------- FIX12-F: audit filters ---------- */
@@ -3791,18 +3857,25 @@ function servicesV(){ // FEAT-CRUD-02
 
 /* ---------- FEAT-CRUD-03: HR + monthly payroll (also resolves S.payroll) ---------- */
 function hrMonthKey(){return K(TODAY).slice(0,7)}
-function hrCnas(g){return Math.round((+g||0)*0.09)}
+function hrCfg(){S.payrollCfg=Object.assign({cnas:9,irg:0},S.payrollCfg||{});return S.payrollCfg}
+function hrCnas(g){return Math.round((+g||0)*(+hrCfg().cnas||0)/100)}
+function hrIrg(g){return Math.round((+g||0)*(+hrCfg().irg||0)/100)}
+function hrLine(e){var g=+e.salary||0,c=hrCnas(g),i=hrIrg(g);return {name:e.name,gross:g,cnas:c,irg:i,net:Math.max(0,g-c-i)}}
+function hrCfgUI(){var c=hrCfg();return '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">'
+ +'<div class="fld" style="margin:0;max-width:160px"><label for="hr_cnas_r">'+t('hr_cnas_col')+' (%)</label><input id="hr_cnas_r" type="number" min="0" max="100" step="0.5" value="'+(+c.cnas||0)+'"></div>'
+ +'<div class="fld" style="margin:0;max-width:160px"><label for="hr_irg_r">'+t('hr_irg')+' (%)</label><input id="hr_irg_r" type="number" min="0" max="100" step="0.5" value="'+(+c.irg||0)+'"></div>'
+ +'<button class="btn sm primary" data-act="savepaycfg">'+t('save')+'</button></div><p class="note">'+t('hr_irg_note')+'</p>'}
 function hrV(){ // FEAT-CRUD-03
  var emps=S.employees||[];
  var staff=emps.map(function(e,i){return `<div class="dlrow"><div style="flex:1"><strong>${esc(e.name)}</strong><span class="sub">${esc(e.role||'')} · ${esc(e.cnasNo||'—')} · ${fmt(e.hireDate)}</span></div><b>${money(e.salary||0)}</b><button class="btn sm danger" data-act="empdel" data-id="${i}">${t('v9_del')}</button></div>`}).join('')||'<p class="empty">—</p>';
- var tg=0,td=0,tn=0;
- var lines=emps.map(function(e){var g=+e.salary||0,d=hrCnas(g),n=g-d;tg+=g;td+=d;tn+=n;return `<tr><td style="text-align:start">${esc(e.name)}</td><td>${money(g)}</td><td>${money(d)}</td><td><b>${money(n)}</b></td></tr>`}).join('');
+ var tg=0,tc=0,ti=0,tn=0;
+ var lines=emps.map(function(e){var l=hrLine(e);tg+=l.gross;tc+=l.cnas;ti+=l.irg;tn+=l.net;return `<tr><td style="text-align:start">${esc(e.name)}</td><td>${money(l.gross)}</td><td>${money(l.cnas)}</td><td>${money(l.irg)}</td><td><b>${money(l.net)}</b></td></tr>`}).join('');
  var mk=hrMonthKey(),ym=mk.split('-'),label=MON[S.lang][+ym[1]-1]+' '+ym[0],done=(S.payroll||[]).some(function(p){return p.month===mk});
- var pay=emps.length?`<div style="overflow-x:auto"><table class="matrix"><thead><tr><th style="text-align:start">${t('hr_name')}</th><th>${t('hr_gross')}</th><th>${t('hr_ded')}</th><th>${t('hr_net')}</th></tr></thead><tbody>${lines}<tr><td style="text-align:start"><b>${t('hr_total')}</b></td><td><b>${money(tg)}</b></td><td><b>${money(td)}</b></td><td><b>${money(tn)}</b></td></tr></tbody></table></div><div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn primary" data-act="hrvalidate">${t('hr_validate')}</button>${done?`<span class="chip ok">${t('hr_validated')}</span>`:''}</div>`:'<p class="empty">—</p>';
+ var pay=emps.length?`<div style="overflow-x:auto"><table class="matrix"><thead><tr><th style="text-align:start">${t('hr_name')}</th><th>${t('hr_gross')}</th><th>${t('hr_cnas_col')}</th><th>${t('hr_irg')}</th><th>${t('hr_net')}</th></tr></thead><tbody>${lines}<tr><td style="text-align:start"><b>${t('hr_total')}</b></td><td><b>${money(tg)}</b></td><td><b>${money(tc)}</b></td><td><b>${money(ti)}</b></td><td><b>${money(tn)}</b></td></tr></tbody></table></div><div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn primary" data-act="hrvalidate">${t('hr_validate')}</button>${done?`<span class="chip ok">${t('hr_validated')}</span>`:''}</div>`:'<p class="empty">—</p>';
  var hist=(S.payroll||[]).filter(function(p){return p&&p.month}).slice().sort(function(a,b){return a.month<b.month?1:-1}).map(function(p){var m=p.month.split('-');return `<div class="dlrow"><div style="flex:1"><strong>${MON[S.lang][+m[1]-1]} ${m[0]}</strong><span class="sub">${(p.lines||[]).length} · ${fmt(p.at)}</span></div><b>${money((p.totals&&p.totals.net)||0)}</b></div>`}).join('');
  return `<div class="page-h"><div><h1>${t('hr_title')}</h1></div><button class="btn primary" data-act="newemployee">${t('hr_emp_add')}</button></div>
  <section class="card"><div class="card-h"><h2>${t('hr_staff_h')}</h2></div><div class="card-b">${staff}<p class="note">${t('hr_cnas')} · ${t('hr_casnos')}</p></div></section>
- <section class="card" style="margin-top:16px"><div class="card-h"><h2>${t('hr_payroll')} — ${label}</h2></div><div class="card-b">${pay}<p class="note warn" style="margin-top:12px">${t('hr_note')}</p></div></section>
+ <section class="card" style="margin-top:16px"><div class="card-h"><h2>${t('hr_payroll')} — ${label}</h2></div><div class="card-b">${hrCfgUI()}${pay}<p class="note warn" style="margin-top:12px">${t('hr_note')}</p></div></section>
  ${hist?`<section class="card" style="margin-top:16px"><div class="card-h"><h2>${t('hr_hist')}</h2></div><div class="card-b">${hist}</div></section>`:''}`}
 
 /* ---------- FEAT-CRUD-04: enforcement / seizures ---------- */
@@ -3917,6 +3990,8 @@ document.addEventListener('click',function(e){
     (S.processServers=S.processServers||[]).push({id:uid(),name:v.name,court:v.court,phone:v.phone});v9save();render();toast(t('svc_srv_added'))});break}
   case 'bailiffdel':{if(!confirm(t('v9_confirm')))break;(S.processServers||[]).splice(id,1);v9save();render();break}
   case 'svcstat':{var sv=(S.services||[]).find(function(x){return x.id===id});if(sv&&(el.dataset.v==='delivered'||el.dataset.v==='returned')){sv.status=el.dataset.v;v9save();render()}break}
+  case 'stampsave':{var pr={};STAMP_KINDS.forEach(function(k){var ip=document.querySelector('[data-stamp-price="'+k+'"]');pr[k]=Math.max(0,Math.round(+((ip||{}).value)||0))});S.stampPrices=pr;v9save();render();toast(t('stamp_prices_saved'));break}
+  case 'savepaycfg':{var cr=$('hr_cnas_r'),ir=$('hr_irg_r');S.payrollCfg={cnas:Math.max(0,Math.min(100,+(cr&&cr.value)||0)),irg:Math.max(0,Math.min(100,+(ir&&ir.value)||0))};v9save();render();toast(t('hr_cfg_saved'));break}
   /* ---- FEAT-CRUD-03 ---- */
   case 'newemployee':{
    modal('hr_emp_title',[{n:'name',l:'hr_name',req:true},{n:'role',l:'hr_role'},{n:'salary',l:'hr_salary',type:'number',min:0,req:true,chk:function(v){return (isNaN(+v)||+v<=0)?'err_salary':''}},{n:'cnasNo',l:'hr_cnasno'},{n:'hireDate',l:'hr_hire',type:'date',v:K(TODAY)}],function(v){
@@ -3924,8 +3999,8 @@ document.addEventListener('click',function(e){
   case 'empdel':{if(!confirm(t('v9_confirm')))break;(S.employees||[]).splice(id,1);v9save();render();break}
   case 'hrvalidate':{
    var emps=S.employees||[];if(!emps.length)break;var mk=hrMonthKey();
-   var lines=emps.map(function(x){var g=+x.salary||0,d=hrCnas(g);return {name:x.name,gross:g,ded:d,net:g-d}});
-   var totals=lines.reduce(function(s,l){return {gross:s.gross+l.gross,ded:s.ded+l.ded,net:s.net+l.net}},{gross:0,ded:0,net:0});
+   var lines=emps.map(hrLine);
+   var totals=lines.reduce(function(s,l){return {gross:s.gross+l.gross,cnas:s.cnas+l.cnas,irg:s.irg+l.irg,ded:s.cnas+l.cnas+l.irg,net:s.net+l.net}},{gross:0,cnas:0,irg:0,ded:0,net:0});
    S.payroll=(S.payroll||[]).filter(function(p){return p.month!==mk});S.payroll.push({month:mk,at:K(TODAY),lines:lines,totals:totals});
    v9save();render();toast(t('hr_validated'));break}
   /* ---- FEAT-CRUD-04 ---- */
