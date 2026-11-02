@@ -1,7 +1,7 @@
-/* Diwan v10.3.3 — Service Worker (offline-first app shell) */
+/* Diwan v10.3.4 — Service Worker (offline-first app shell) */
 'use strict';
 
-var CACHE = 'diwan-v10.3.3';
+var CACHE = 'diwan-v10.3.4';
 var PRECACHE = [
   './',
   './index.html',
