@@ -44,9 +44,11 @@ html[dir=rtl] .rf{transform:scaleX(-1)}
 .grp{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:6px 12px;border-radius:8px}
 .grp:hover{background:rgba(255,255,255,.05)}
 .grp:focus-visible{outline:2px solid #2bc0b4;outline-offset:1px}
-.grp::after{content:"▾";font-size:10px;color:#7f98af;transition:transform .15s}
-.grp.collapsed::after{transform:rotate(-90deg)}
-.nav.collapsed{display:none}
+.grp::after{content:"▾";font-size:12px;color:#9db4c9;transition:transform .22s ease}
+.grp.collapsed::after{transform:rotate(180deg)}
+#nav>.nav{max-height:600px;opacity:1;overflow:hidden;transition:max-height .26s ease,opacity .2s ease}
+#nav>.nav.collapsed{max-height:0;opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#nav>.nav{transition:none!important}}
 .nav button{display:flex;align-items:center;gap:12px;background:none;border:0;color:#cddbe8;padding:10px 12px;border-radius:12px;text-align:start;position:relative;font-weight:500}
 .nav button:hover{background:rgba(255,255,255,.07)}
 .nav button[aria-current=page]{background:rgba(43,192,180,.16);color:#8ae8df}
@@ -436,7 +438,7 @@ quick_receipt_btn:'استلام دفعة نقدية',quick_receipt_title:'وصل
 aging_title:'أعمار الديون',aging_0_30:'0–30 يوماً',aging_31_60:'31–60',aging_61_90:'61–90',aging_90_plus:'90+',aging_days:'أيام',aging_no_data:'لا بيانات',pwa_install_hint:'يمكن تثبيت ديوان على الشاشة الرئيسية',
 nav_appointments:'المواعيد',
 
-g_work:'العمل اليومي',/* V9-FIX-04 */g_fin:'المالية والأتعاب',g_legal:'القضايا والخصوم',g_admin:'الإدارة والصلاحيات',g_data:'البيانات والتقارير',g_about:'المساعدة والمشروع',
+g_work:'🏠 العمل اليومي',/* Accordion */g_fin:'💰 المالية والأتعاب',g_legal:'⚖️ الأدوات القانونية',g_admin:'⚙️ الإدارة والتقارير',g_help:'🌐 المساعدة والبوابات',
 search_ph:'ابحث عن ملف أو موكل أو رقم (Ctrl+K)',no_results:'لا نتائج',
 online:'متصل',offline:'دون اتصال',syncing:'جاري المزامنة…',pendingN:n=>`${n} تغييرات معلّقة`,
 offbar:'أنت دون اتصال. تابع عملك، وستُزامَن تغييراتك عند عودة الاتصال.',backOnline:'محاكاة عودة الاتصال',syncedN:n=>`تمت مزامنة ${n} تغييرات`,
@@ -508,7 +510,7 @@ quick_receipt_btn:'Encaisser un paiement',quick_receipt_title:'Reçu de paiement
 aging_title:'Ancienneté des créances',aging_0_30:'0–30 j',aging_31_60:'31–60',aging_61_90:'61–90',aging_90_plus:'90+',aging_days:'jours',aging_no_data:'Aucune donnée',pwa_install_hint:'Installer Diwan sur l\'écran d\'accueil',
 nav_appointments:'Rendez-vous',
 
-g_work:'Travail quotidien',/* V9-FIX-04 */g_fin:'Finances et honoraires',g_legal:'Affaires et parties',g_admin:'Administration et droits',g_data:'Données et rapports',g_about:'Aide et projet',
+g_work:'🏠 Travail quotidien',g_fin:'💰 Finances et honoraires',g_legal:'⚖️ Outils juridiques',g_admin:'⚙️ Administration et rapports',g_help:'🌐 Aide et portails',
 search_ph:'Rechercher dossier, client ou n° (Ctrl+K)',no_results:'Aucun résultat',online:'En ligne',offline:'Hors ligne',syncing:'Synchronisation…',pendingN:n=>`${n} modif(s) en attente`,
 offbar:'Hors ligne. Modifications synchronisées au retour.',backOnline:'Simuler retour',syncedN:n=>`${n} modif(s) synchronisée(s)`,savedOnline:'Enregistré',savedLocal:'Enregistré localement',
 r_m:'Avocat (administrateur)',r_s:'Secrétariat',r_t:'Stagiaire',viewAs:'Voir avec les droits',lang_btn:'العربية',theme:'Changer thème',notif:'Notifications',digest:'Résumé du matin',on:'Activé',
@@ -586,7 +588,7 @@ const S={
  lang:'ar',user:'m',view:'dash',arg:null,online:true,pending:0,syncing:false,
  calY:TODAY.getFullYear(),calM:TODAY.getMonth(),calSel:null,notif:false,
  casesScope:'mine',taskFilter:'open',taskWho:'all',sortBy:'no',sortDir:-1,
- feesTab:'overview',reportTab:'overview',
+ feesTab:'overview',reportTab:'overview',collapsedGroups:{w:false,f:true,l:true,a:true,h:true},
  perms:{secFees:false,secContacts:true,traineeAll:false},
  invites:[],nextId:9,nextTask:9,nextInv:4,nextTrust:4,nextPay:1,welcomed:false,isDemo:true,clients:null,dlHolidays:null,dlRules:null,dlMovableHolidays:[],drafts:[],scans:[],pinHash:null,lastBackup:null,schemaVersion:9,apprTab:'pending',receiptSeq:{year:TODAY.getFullYear(),next:1},invoiceSeq:{year:TODAY.getFullYear(),next:4},license:{no:'',issued:'',expires:'',bar:'',status:'active'},processServers:[],services:[],experts:[],expertTasks:[],seizures:[],feesCalc:[],employees:[],payroll:[],auth:{sessions:[],log:[]},extraLawyers:[],intakeLog:[],deliveries:[],userPasswords:{},appointments:[],qrRegistry:[],smsLog:[],notifSent:{},stampInventory:{court:12,council:8,admin:4},stampMoves:[],caseExpenses:[],attendance:[],dlVacation:{on:false,from:'07-15',to:'08-31'},ftsQuery:'',
  cabinet:{name:{ar:'مكتب الأستاذ بن علي للمحاماة',fr:'Cabinet Maître Ben Ali'},address:{ar:'15 شارع الاستقلال، ميلة 43000، الجزائر',fr:'15 rue de l’Indépendance, Mila 43000, Algérie'},nif:'000 1234 5678912',nis:'000 1234 5678913',rc:'19/00-1234567B20',ai:'123456789012345',phone:'+213 31 55 66 77',email:'contact@benali-avocat.dz',bank:{ar:'BADR — حساب 002 12345 0000123456 78',fr:'BADR — compte 002 12345 0000123456 78'},tva:19,tvaEnabled:false,timbre:100,timbreFixed:true},
@@ -744,25 +746,22 @@ function myDls(){return (S.dls||[]).filter(x=>{const c=byC(x.c);return c&&canSee
 function myTasks(){return (S.tasks||[]).filter(x=>(isM()||x.who===S.user)&&(!byC(x.c)||canSee(byC(x.c))))}
 function canFees(){const r=me().role;return r==='manager'||r==='partner'||r==='collaborator'||(r==='secretary'&&S.perms.secFees)}
 const NAVS=()=>{const r=me().role,a=[];
- // V9.5: simplified nav (~14 screens) — merges via tabs inside views
- // groups: w work / f finance / l legal / a admin / d data / x about
+ // Five navigation groups: daily, finance, legal tools, admin/reports, help/portals.
  a.push(['dash','home','nav_dash','w']);
- a.push(['role','cal','nav_role','w']); /* رول الجلسات — أولوية الصباح */
- a.push(['cases','cases','nav_cases','w'],['cal','cal','nav_cal','w'],['tasks','tasks',r==='manager'?'nav_tasks':'nav_mytasks','w'],['appointments','cal','nav_appointments','w']);
+ a.push(['cases','cases','nav_cases','w'],['role','cal','nav_role','w'],['cal','cal','nav_cal','w'],['tasks','tasks',r==='manager'?'nav_tasks':'nav_mytasks','w'],['appointments','cal','nav_appointments','w']);
  if(r!=='trainee')a.push(['clients','users','nav_clients','w']);
- a.push(['docs','file','nav_docs','w']); /* includes scan tab */
- a.push(['docgen','pen','nav_docgen','w']); /* includes approvals for trainee/manager */
- a.push(['deadlines','clock','nav_deadlines','w']);
- if(canFees())a.push(['fees','coin','nav_fees','f']); /* tabs: fees, cash */
+ if(r!=='trainee')a.push(['reminders','clock','nav_reminders','w']);
+ if(canFees())a.push(['fees','coin','nav_fees','f'],['receipts','bills','tab_invoices','f'],['trust','shield','tab_trust','f'],['cash','tax','nav_cash','f']);
+ a.push(['docgen','pen','nav_docgen','l']);
+ a.push(['deadlines','clock','nav_deadlines','l']);
+ a.push(['library','book','nav_library','l']);
+ a.push(['docs','file','nav_docs','l']); /* documents and scanner */
  if(r==='manager'||r==='partner'||r==='collaborator')a.push(['procedures','link','nav_procedures','l']); /* services+experts+exec+ja */
- /* v9.7: kyc hidden from nav */
- if(r==='manager')a.push(['team','team','nav_team','a'],['settings','sliders','nav_settings','a']); /* team includes hr+accounts+license */
- if(r==='manager')a.push(['reports','chart','nav_reports','d']); /* tabs: overview, audit, library, import, qr */
- if(r!=='trainee')a.push(['reminders','bell','nav_reminders','x']);
- if(r==='manager'||r==='partner')a.push(['portal','phone','nav_portal','x']);
- a.push(['links','link','nav_links','x'],['guide','book','nav_guide','x'],['landing','info','nav_landing','x'],['faq','shield','nav_faq','x']);
+ if(r==='manager')a.push(['team','team','nav_team','a'],['reports','chart','nav_reports','a'],['settings','sliders','nav_settings','a'],['license','shield','nav_license','a']);
+ if(r==='manager'||r==='partner')a.push(['portal','phone','nav_portal','h']);
+ a.push(['links','link','nav_links','h'],['guide','book','nav_guide','h'],['landing','info','nav_landing','h'],['faq','shield','nav_faq','h']);
  return a};
-const allowed=v=>NAVS().some(n=>n[0]===v);
+const allowed=v=>NAVS().some(n=>n[0]===v)||v==='finance-expenses'||v==='finance-recoverable';
 const caseBal=cid=>(S.trust||[]).filter(x=>x.c===cid).reduce((a,x)=>a+(x.type==='deposit'?x.amount:-x.amount),0);
 
 function paidOf(cid){return (S.pays||[]).filter(p=>p.c===cid||p.caseId===cid).reduce((a,p)=>a+(+p.a||+p.amount||0),0)}
@@ -1522,7 +1521,8 @@ function qrV(){const cards=visCases().slice(0,8).map(c=>`<div class="card client
  return `<div class="page-h"><div><h1>${t('qr_title')}</h1></div><button class="btn primary" data-act="qrgen">${t('qr_gen')}</button> <button class="btn" data-act="qrprint">${t('qr_print')}</button></div>
  <div class="cards" id="qrCards">${cards||'<p class="empty">—</p>'}</div><p class="note">diwan://case/&lt;رقم الملف&gt; — يُحمَّل qrcode عبر CDN عند الحاجة.</p>`}
 
-const VIEWS={dash,client:()=>clientV(S.arg),deadlines:deadlinesV,cash:cashV,audit:auditV,library:libraryV,import:importV,cases:casesV,cal:calV,tasks:tasksV,clients:clientsV,docs:docsV95,fees:feesV95,reports:reportsV95,team:teamV95,settings:settingsV,portal:()=>portalV(S.arg),landing:landingV,faq:landingV,links:legalLinksV,docgen:docGenV95,scan:typeof scanV==='function'?scanV:()=>'',approvals:typeof approvalsV==='function'?approvalsV:()=>'',license:licenseV,ja:jaV,services:servicesV,experts:expertsV,exec:execV,kyc:kycV,reminders:remindersV,hr:hrV,accounts:accountsV,qr:qrV,role:roleV,procedures:proceduresV,guide:typeof guideV==='function'?guideV:()=>'',appointments:typeof appointmentsV==='function'?appointmentsV:()=>'<p>—</p>'};
+function financeNavV(){var tabByView={fees:'overview',receipts:'invoices',trust:'trust',cash:'cash','finance-expenses':'expenses','finance-recoverable':'recoverable'};if(tabByView[S.view])S.feesTab=tabByView[S.view];return feesV95()}
+const VIEWS={dash,client:()=>clientV(S.arg),deadlines:deadlinesV,cash:cashV,audit:auditV,library:libraryV,import:importV,cases:casesV,cal:calV,tasks:tasksV,clients:clientsV,docs:docsV95,fees:financeNavV,receipts:financeNavV,trust:financeNavV,cash:financeNavV,'finance-expenses':financeNavV,'finance-recoverable':financeNavV,reports:reportsV95,team:teamV95,settings:settingsV,portal:()=>portalV(S.arg),landing:landingV,faq:landingV,links:legalLinksV,docgen:docGenV95,scan:typeof scanV==='function'?scanV:()=>'',approvals:typeof approvalsV==='function'?approvalsV:()=>'',license:licenseV,ja:jaV,services:servicesV,experts:expertsV,exec:execV,kyc:kycV,reminders:remindersV,hr:hrV,accounts:accountsV,qr:qrV,role:roleV,procedures:proceduresV,guide:typeof guideV==='function'?guideV:()=>'',appointments:typeof appointmentsV==='function'?appointmentsV:()=>'<p>—</p>'};
 
 
 // FIX-12 + FIX-10 + FIX-11 helpers
@@ -1547,8 +1547,8 @@ function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;d
  $('themeBtn').setAttribute('aria-label',t('theme'));$('bellBtn').setAttribute('aria-label',t('notif'));$('menuBtn').setAttribute('aria-label',t('nav_more'));
  const navs=NAVS();let h='',g='';
  // V9-FIX-04
- const grpMap={w:'g_work',f:'g_fin',l:'g_legal',a:'g_admin',d:'g_data',x:'g_about'};
- navs.forEach(n=>{if(n[3]!==g){if(g)h+='</div>';g=n[3];const cc=S.collapsedGroups&&S.collapsedGroups[g]?'collapsed':'';h+=`<div class="grp ${cc}" role="button" tabindex="0" aria-expanded="${cc?'false':'true'}" data-act="grp-toggle" data-g="${g}">${t(grpMap[g]||'g_work')}</div><div class="nav ${cc}">`}
+ const grpMap={w:'g_work',f:'g_fin',l:'g_legal',a:'g_admin',h:'g_help'};
+ navs.forEach(n=>{if(n[3]!==g){if(g)h+='</div>';g=n[3];const cc=S.collapsedGroups&&S.collapsedGroups[g]?'collapsed':'';h+=`<div class="grp ${cc}" role="button" tabindex="0" aria-expanded="${cc?'false':'true'}" data-act="grp-toggle" data-g="${g}">${t(grpMap[g]||'g_work')}</div><div class="nav ${cc}" ${cc?'inert':''}>`}
   const badge=n[0]==='cal'?urgent().length:0;
   h+=`<button data-act="go" data-v="${n[0]}" ${n[0]===S.view?'aria-current="page"':''}>${ic(n[1])}<span>${t(n[2])}</span>${badge?`<span class="badge">${badge}</span>`:''}</button>`});
  if(g)h+='</div>';
@@ -1962,7 +1962,7 @@ document.addEventListener('click',e=>{
   case 'newtrustdep':newTrustOp('deposit');break;
   case 'newtrustwd':newTrustOp('withdraw');break;
   case 'editcabinet':editCabinet();break;
-  case 'feestab':S.feesTab=el.dataset.v;render();break;
+  case 'feestab':{S.feesTab=el.dataset.v;var fv={overview:'fees',invoices:'receipts',trust:'trust',cash:'cash',expenses:'finance-expenses',recoverable:'finance-recoverable'};if(fv[S.feesTab]&&['fees','receipts','trust','cash','finance-expenses','finance-recoverable'].includes(S.view))S.view=fv[S.feesTab];chrome();render();break}
   case 'reporttab':S.reportTab=el.dataset.v;render();break;
   case 'dgprint':printDoc();break;
   case 'quicklegal':{const c=byC(id);if(c)window.open('https://www.google.com/search?q='+encodeURIComponent(tr(c.title)+' الجزائر'),'_blank','noopener');break}
@@ -1992,7 +1992,7 @@ document.addEventListener('click',e=>{
   case 'togglesecret':{const cc=byC(id);cc.secret=!cc.secret;toast(cc.secret?'أصبح الملف سرياً — لا يراه إلا المدير':'أُلغيت سرية الملف');closeDrawer();chrome();render();break}
   case 'menu':$('side').classList.add('on');$('scrim').classList.add('on');break;
   // V9-FIX-04
-  case 'grp-toggle':{S.collapsedGroups=S.collapsedGroups||{};S.collapsedGroups[el.dataset.g]=!S.collapsedGroups[el.dataset.g];chrome();break}
+  case 'grp-toggle':{S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);var g=el.dataset.g;if(Object.prototype.hasOwnProperty.call(S.collapsedGroups,g)){S.collapsedGroups[g]=!S.collapsedGroups[g];scheduleSave();chrome()}break}
   case 'lang':S.lang=S.lang==='ar'?'fr':'ar';chrome();render();break;
   case 'wlang':S.lang=el.dataset.v;showWelcome();break;
   case 'wstart':endWelcome();chrome();render();break;
@@ -3106,10 +3106,11 @@ if(!_LIC.gate()){chrome();render()}
 
 // FIX13R: STORE_KEY / SCHEMA / _saveTimer declarations moved above the first chrome()
 /* FIX3: scheduleSave/persistNow are defined in the FIX3 security block below (debounced, encrypted) */
-function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null,colleagues:S.colleagues||[]}}
+function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.clients||CL.map(function(x,i){return Object.assign({id:i+1},x)}),tasks:S.tasks,dls:S.dls,docs:S.docs,pays:S.pays,expenses:S.expenses,officeExp:S.officeExp,invoices:S.invoices,trust:S.trust,installments:S.installments,audit:S.audit,cabinet:S.cabinet,perms:S.perms,tax:S.tax,jurisprudence:S.jurisprudence,glossary:S.glossary,drafts:S.drafts||[],dlHolidays:S.dlHolidays||DEFAULT_HOLIDAYS,dlRules:S.dlRules||DEFAULT_DLK,dlMovableHolidays:S.dlMovableHolidays||[],nextId:S.nextId,nextTask:S.nextTask,nextInv:S.nextInv,nextTrust:S.nextTrust,nextPay:S.nextPay||1,user:S.user,lang:S.lang,lastBackup:S.lastBackup||null,isDemo:S.isDemo!==false,receiptSeq:S.receiptSeq,invoiceSeq:S.invoiceSeq,license:S.license,processServers:S.processServers||[],services:S.services||[],experts:S.experts||[],expertTasks:S.expertTasks||[],seizures:S.seizures||[],feesCalc:S.feesCalc||[],employees:S.employees||[],payroll:S.payroll||[],auth:forExport?secExportAuth():(S.auth||{sessions:[],log:[]}),qrRegistry:S.qrRegistry||[],smsLog:S.smsLog||[],notifSent:S.notifSent||{},extraLawyers:S.extraLawyers||[],intakeLog:S.intakeLog||[],deliveries:S.deliveries||[],appointments:S.appointments||[],userPasswords:S.userPasswords||{},stampInventory:S.stampInventory||null,stampMoves:S.stampMoves||[],caseExpenses:S.caseExpenses||[],attendance:S.attendance||[],dlVacation:S.dlVacation||null,subs:S.subs||null,colleagues:S.colleagues||[],collapsedGroups:S.collapsedGroups||{w:false,f:true,l:true,a:true,h:true}}}
 function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(isEncPayload(raw))return null;return normStore(JSON.parse(raw))}catch(e){return null}}
 function normStore(data){try{if(!data.clients&&data.cases){var clients=[],seen={};(data.cases||[]).forEach(function(c){if(c.clientId!=null)return;if(typeof c.cl==='number'){var src0=(CL)[c.cl]||{ar:'—',fr:'—',ph:'—'};var key=(src0.ar||'')+'|'+(src0.ph||'');if(seen[key]!=null)c.clientId=seen[key];else{var id=clients.length+1;clients.push(Object.assign({id:id},src0));seen[key]=id;c.clientId=id}}});data.clients=clients.length?clients:CL.map(function(x,i){return Object.assign({id:i+1},x)})}if(!data.dlHolidays)data.dlHolidays=DEFAULT_HOLIDAYS.slice();if(!data.dlRules)data.dlRules=DEFAULT_DLK.slice();if(!data.drafts)data.drafts=[];data.schemaVersion=SCHEMA;return data}catch(e){return null}}
-function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;migrateParties()/* V9-FIX-02 */}
+function normalizeSidebarGroups(value){var v=value&&typeof value==='object'?value:{};return {w:typeof v.w==='boolean'?v.w:false,f:typeof v.f==='boolean'?v.f:true,l:typeof v.l==='boolean'?v.l:true,a:typeof v.a==='boolean'?v.a:true,h:typeof v.h==='boolean'?v.h:(typeof v.x==='boolean'?v.x:true)}}
+function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues','collapsedGroups'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);migrateParties()/* V9-FIX-02 */}
 function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.tasks=[];S.dls=[];S.docs=[];S.pays=[];S.expenses=[];S.officeExp=[];S.invoices=[];S.trust=[];S.installments=[];S.audit=[];S.drafts=[];S.clients=[];CL.length=0;S.nextId=1;S.nextTask=1;S.nextInv=1;S.nextTrust=1;S.nextPay=1;S.isDemo=false;scheduleSave();chrome();render()}
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
@@ -3165,7 +3166,7 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 /* --- overlay (lock screen) --- */
 function secOverlay(html){var o=document.getElementById('lockOv');if(!o){o=document.createElement('div');o.id='lockOv';o.className='lockov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);Array.prototype.forEach.call(document.body.children,function(el){if(el!==o&&el.tagName!=='SCRIPT'){try{el.inert=true}catch(_){}}})}o.innerHTML=html;return o}
 function secCloseOverlay(){var o=document.getElementById('lockOv');if(o&&o.parentNode)o.parentNode.removeChild(o);Array.prototype.forEach.call(document.body.children,function(el){try{el.inert=false}catch(_){}})}
-function secDemoInit(){S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
+function secDemoInit(){S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
 function secFinishBoot(persist){try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
  setTimeout(function(){if(S.isDemo){var dn=document.getElementById('demoNote');if(dn)dn.innerHTML=t('v7_demo_bar')+' <button class="btn sm" data-act="cleardemo">'+t('v7_start_empty')+'</button>'}},300);
  try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}
@@ -3516,7 +3517,7 @@ function docsV95(){
  return html.replace(/(<div class="page-h">[\s\S]*?<\/div>)/,'$1'+bar);
 }
 function feesV95(){
- var tab=S.feesTab||'overview';
+ var tab=S.feesTab==='cash'?'cash':'overview';
  var tabs=[['overview',t('fee_tab_overview')],['cash',t('fee_tab_cash')]];
  var bar='<div class="merged-tabs">'+tabs.map(function(x){return '<button data-act="feestab" data-v="'+x[0]+'" '+(tab===x[0]?'aria-current="true"':'')+'>'+x[1]+'</button>'}).join('')+'</div>';
  if(tab==='cash'&&typeof cashV==='function')return '<div class="page-h"><div><h1>'+t('nav_fees')+'</h1></div></div>'+bar+cashV().replace(/<div class="page-h">[\s\S]*?<\/div>/,'');
