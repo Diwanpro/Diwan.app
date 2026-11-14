@@ -303,6 +303,7 @@ html[dir=ltr] .tl li{padding:0 0 14px 24px}
 .drawer-tabs button{background:none;border:0;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;font-size:13.5px}
 .drawer-tabs button[aria-current=true]{color:var(--teal-ink);border-bottom-color:var(--teal)}
 .drawer-pane[hidden]{display:none!important}
+.case-feature-pane{padding:12px 0}.legal-ref-box{width:100%;min-height:190px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.checklist-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:7px 0;background:var(--surface)}.checklist-row input{accent-color:var(--teal);width:18px;height:18px}.checklist-row.done span{text-decoration:line-through;color:var(--muted)}.diff-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.diff-col{border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg)}.diff-del{background:var(--bad-soft);color:var(--bad);text-decoration:line-through}.diff-add{background:var(--ok-soft);color:var(--ok)}@media(max-width:600px){.diff-cols{grid-template-columns:1fr}}
 .chip.urgent{background:var(--bad-soft);color:var(--bad);font-weight:700}
 .chip.delib{background:var(--info-soft);color:var(--info)}
 .chip.collab{background:#f0e6f6;color:#8e44ad}
@@ -1107,7 +1108,7 @@ function docGenV(){
  const caseOpts='<option value="">—</option>'+visCases().map(c=>`<option value="${c.id}" ${String(dg.caseId||'')===String(c.id)?'selected':''}>${esc(c.no)} — ${esc(tr(c.title))}</option>`).join('');
  const Q=[['natural',t('dg_party_natural')],['legal',t('dg_party_legal')]];
  const hr='<div style="height:1px;background:var(--line);margin:14px 0"></div>';
- return `<div class="page-h"><div><h1>${t('dg_title')}</h1><p>${t('dg_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="dgdraft">${t('dg_save_draft')}</button><button class="btn" data-act="dgsend">${t('dg_send_appr')}</button><button class="btn primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button><button class="btn primary" data-act="dgpdf">${ic('download')} ${t('dg_save_pdf')}</button></div></div>
+ return `<div class="page-h"><div><h1>${t('dg_title')}</h1><p>${t('dg_sub')}</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="saveversion">حفظ كنسخة جديدة</button><button class="btn" data-act="dgdraft">${t('dg_save_draft')}</button><button class="btn" data-act="dgsend">${t('dg_send_appr')}</button><button class="btn primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button><button class="btn primary" data-act="dgpdf">${ic('download')} ${t('dg_save_pdf')}</button></div></div>
  <div class="dg-grid"><section class="card"><div class="card-b" style="max-height:calc(100vh - 200px);overflow:auto">
   ${field(t('dg_type'),'type',{select:[['open',t('dg_t_open')],['appeal',t('dg_t_appeal')],['cassation',t('dg_t_cass')],['reply',t('dg_t_reply')],['defense',t('dg_t_defense')],['poa',t('dg_t_poa')],['fee',t('dg_t_fee')],['rcpt_s',t('dg_t_rcpt_s')],['rcpt_f',t('dg_t_rcpt_f')],['rcpt_u',t('dg_t_rcpt_u')],['docs',t('dg_t_docs')],['recv',t('dg_t_recv')],['hand',t('dg_t_hand')],['adjourn',t('dg_t_adjourn')],['copy',t('dg_t_copy')],['noappeal',t('dg_t_noappeal')],['notice',t('dg_t_notice')],['fee_notice',t('dg_t_fee_notice')],['recours_revision',t('dg_t_rev')],['intervention',t('dg_t_interv')],['exception',t('dg_t_exc')],['mainlevee',t('dg_t_mainlevee')],['desistement',t('dg_t_desist')],['admin_open',t('dg_t_admin')],['reenroll',t('dg_t_reenroll')],['execcopy',t('dg_t_execcopy')]]})}${hr}
   <div class="fld" style="margin-bottom:12px"><label for="dg_casepick">${t('dg_pick_case')}</label><select id="dg_casepick">${caseOpts}</select><div class="hint"><button type="button" class="btn sm" data-act="dgfill">${ic('download')} ${t('dg_fill')}</button></div></div>
@@ -1136,7 +1137,7 @@ function docGenV(){
   ${field(t('dg_lawyer_name'),'lawyerName')}${field(t('dg_lawyer_addr'),'lawyerAddr')}${field(t('dg_lawyer_phone'),'lawyerPhone',{ph:'05XX XX XX XX'})}${field(t('dg_place'),'place',{ph:'الجزائر'})}
   <div style="margin-top:16px"><button type="button" class="btn" data-act="dgreset">${ic('refresh')} ${t('dg_reset')}</button></div>
  </div></section>
- <section class="card"><div class="card-h"><h2>${t('dg_preview')}</h2><button class="btn sm primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button></div><div class="card-b"><div id="dgPreview">${dgRender()}</div>${dgStampBanner()}<p class="sub" style="margin-top:12px">${t('dg_hint')}</p></div></section></div>`}
+ <section class="card"><div class="card-h"><h2>${t('dg_preview')}</h2><button class="btn sm primary" data-act="dgprint">${ic('print')} ${t('dg_print')}</button></div><div class="card-b"><div id="dgPreview">${dgRender()}</div>${dgStampBanner()}<p class="sub" style="margin-top:12px">${t('dg_hint')}</p><div style="border-top:1px solid var(--line);margin-top:16px;padding-top:12px"><h3>تاريخ النسخ</h3>${versionHistoryHTML(dg.caseId)}</div></div></section></div>`}
 function dgRender(){
  const d=S.docGen||{}, q=(v,f)=>{const s=(v==null||v===''||v===undefined)?'':String(v);return esc(s||f||'—')};
  const party=(name,addr,quality,company)=>{let s='<b>'+q(name)+'</b>';if(addr)s+='<br>'+t('dg_address')+': '+q(addr);if(quality==='legal'&&company)s+='<br>'+q(company);else if(quality==='legal')s+='<br><small>('+(S.lang==='ar'?'شخص معنوي':'Personne morale')+')</small>';return s};
@@ -1701,7 +1702,7 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
   const conf=detectConflict({parties:keep}),blocking=conf.filter(x=>x.severity==='critical'||x.severity==='high');
   const doCreate=()=>{closeModal();
   undoable(()=>{const id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
-   S.cases.unshift({id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,createdAt:K(TODAY)});
+   S.cases.unshift({id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
    try{var _sk=stampKindOf(+v.court),_sr=stampConsume(_sk,id,'تأسيس ملف '+v.no,!!v.ja);if(_sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
    cfLogAccept(id,v.no,conf)},'t_case');
   /* FIX4: the former single-clash toast is kept (medium-level warnings) and now lists the detected reasons */
@@ -1784,8 +1785,32 @@ function editCabinet(){const cab=S.cabinet;
   {n:'email',l:'cabinet_email',type:'email',req:true,v:cab.email,chk:v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)?'':'err_email'},{n:'bank',l:'cabinet_bank',req:true,v:tr(cab.bank)},{n:'tva',l:'cabinet_tva',type:'number',req:true,v:String(cab.tva),min:0},{n:'tvaEnabled',l:'cabinet_tva_enabled',type:'checkbox',v:!!cab.tvaEnabled,hint:t('cabinet_tva')+' '+cab.tva+'%'},{n:'timbre',l:'cabinet_timbre',type:'number',req:true,v:String(cab.timbre),min:0,hint:'مبلغ ثابت لكل وصل — ليس نسبة / Montant fixe par reçu, pas un taux — '+t('cabinet_timbre_hint')}],
  v=>{Object.assign(S.cabinet,{name:{ar:v.name,fr:v.name},address:{ar:v.addr,fr:v.addr},nif:v.nif,nis:v.nis,rc:v.rc,ai:v.ai,phone:v.phone,email:v.email,bank:{ar:v.bank,fr:v.bank},tva:+v.tva,tvaEnabled:!!v.tvaEnabled,timbre:+v.timbre,timbreFixed:true});chrome();render();toast(t('cabinet_saved'))})}
 
+/* Case legal references, checklists and offline document version history */
+function checklistDefaults(type){
+ const common=['التأكد من الهوية والصفة','التحقق من الوكالة والوثائق'];
+ const byType={realty:['التحقق من عقد الملكية','التحقق من محضر المعاينة'],family:['نسخة عقد الزواج أو الحالة المدنية','جمع وثائق الدخل والإقامة'],penal:['نسخة من محضر الضبطية القضائية','جمع أدلة الدفاع والشهود'],commercial:['التحقق من السجل التجاري','مراجعة الفواتير والعقود'],admin:['نسخة القرار الإداري المطعون فيه','التحقق من احترام آجال الطعن'],civil:['جمع المستندات المؤيدة للطلب','التحقق من التبليغات']};
+ return (byType[type]||common).map((text,i)=>({id:uid(),text,done:false}));
+}
+function plainDocText(){var box=document.createElement('div');box.innerHTML=typeof dgRender==='function'?dgRender():'';return (box.innerText||box.textContent||'').replace(/\u00a0/g,' ').replace(/[ \t]+\n/g,'\n').trim()}
+function caseDocVersions(cid){var c=byC(+cid);return c?(c.docVersions||(c.docVersions=[])):[]}
+function versionHistoryHTML(cid){var c=byC(+cid);if(!c)return '<p class="sub">اختر ملفاً لحفظ النسخ.</p>';var vs=caseDocVersions(cid);
+ var opts='<option value="">اختر نسخة</option>'+vs.map(function(v){return '<option value="'+v.id+'">'+esc(new Date(v.at).toLocaleString(S.lang==='ar'?'ar-DZ':'fr-FR'))+'</option>'}).join('');
+ var rows=vs.slice().reverse().map(function(v){return '<div class="dlrow"><div style="flex:1"><b>'+esc(new Date(v.at).toLocaleString(S.lang==='ar'?'ar-DZ':'fr-FR'))+'</b><span class="sub">'+esc(v.type||'وثيقة')+' · '+esc(v.text.slice(0,100))+(v.text.length>100?'…':'')+'</span></div></div>'}).join('')||'<p class="empty">لا توجد نسخ محفوظة لهذا الملف.</p>';
+ var cmp=S.docVersionCompare||{}, result=cmp.left&&cmp.right?renderVersionDiff(vs.find(function(x){return String(x.id)===String(cmp.left)}),vs.find(function(x){return String(x.id)===String(cmp.right)})):'';
+ return '<div class="fld"><label>تاريخ النسخ — '+esc(c.no)+'</label><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="versionA" class="btn">'+opts+'</select><select id="versionB" class="btn">'+opts+'</select><button class="btn" data-act="compareversions" data-id="'+c.id+'">مقارنة النسختين</button></div></div><div style="margin-top:10px">'+rows+'</div>'+result;
+}
+function renderVersionDiff(a,b){if(!a||!b)return '<p class="note warn">اختر نسختين للمقارنة.</p>';var aa=a.text.split(/(\s+)/),bb=b.text.split(/(\s+)/),n=aa.length,m=bb.length;
+ // LCS word diff; cap work for unusually large generated documents.
+ if(n*m>250000){return '<p class="note warn">النص كبير للمقارنة التفصيلية؛ قارن النسختين المحفوظتين يدوياً.</p><div class="diff-cols"><div class="diff-col">'+esc(a.text)+'</div><div class="diff-col">'+esc(b.text)+'</div></div>'}
+ var dp=Array.from({length:n+1},function(){return new Uint32Array(m+1)});for(var i=n-1;i>=0;i--)for(var j=m-1;j>=0;j--)dp[i][j]=aa[i]===bb[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+ var left='',right='';for(var x=0,y=0;x<n||y<m;){if(x<n&&y<m&&aa[x]===bb[y]){left+=esc(aa[x]);right+=esc(bb[y]);x++;y++}else if(x<n&&(y===m||dp[x+1][y]>=dp[x][y+1]))left+='<del class="diff-del">'+esc(aa[x++])+'</del>';else right+='<ins class="diff-add">'+esc(bb[y++])+'</ins>'}
+ return '<div class="diff-cols" style="margin-top:12px"><div><b>النسخة الأولى</b><div class="diff-col">'+left+'</div></div><div><b>النسخة الثانية</b><div class="diff-col">'+right+'</div></div></div>';
+}
+function saveDocVersion(){var cid=+(S.docGen&&S.docGen.caseId);var c=byC(cid);if(!c){toast('اختر ملف القضية أولاً لحفظ نسخة');return}var text=plainDocText();if(!text){toast('لا يوجد نص لحفظه');return}c.docVersions=c.docVersions||[];c.docVersions.push({id:uid(),at:new Date().toISOString(),type:S.docGen.type,text:text,fields:JSON.parse(JSON.stringify(S.docGen))});S.docVersionCompare=null;scheduleSave();toast('تم حفظ نسخة الوثيقة');render()}
+function addChecklistItem(cid){var c=byC(cid);if(!c)return;var text=prompt('أدخل عنصر قائمة التحقق:');if(!text||!text.trim())return;c.checklists=c.checklists||[];c.checklists.push({id:uid(),text:text.trim(),done:false});scheduleSave();openDrawer(cid)}
+
 /* ============== DRAWER ============== */
-function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]||1)*100),showFees=canFees(),dr=$('drawer');
+function openDrawer(id){const c=byC(id);if(c){var _init=false;if(c.legalRefs==null){c.legalRefs='';_init=true}if(!c.docVersions){c.docVersions=[];_init=true}if(!c.checklists){c.checklists=checklistDefaults(c.type);_init=true}if(_init)scheduleSave()}const m=isM(),p=Math.round(c.fee[1]/(c.fee[0]||1)*100),showFees=canFees(),dr=$('drawer');
  const poa=c.hasPOA?`<span class="chip ok">${t('d_poa_yes')}</span>`:`<span class="chip bad">${t('d_poa_no')}</span>`;
  const lim=c.lim?`<span class="chip ${diff(c.lim)<180?'warn':'mute'}">${fmt(c.lim)} (${t('inDays',diff(c.lim))})</span>`:`<span class="chip mute">—</span>`;
  const notes=(c.notes||[]).map(n=>`<li>${av(n.w,true)}<div style="flex:1"><div>${esc(tr(n.t))}</div><small class="sub">${fmt(n.d)}</small></div></li>`).join('')||`<li class="sub">—</li>`;
@@ -1803,8 +1828,12 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
  const dlAuto=c.notif?DLK.map(rule=>{const dd=calcDeadline(c.notif,rule,false).prudent;return `<div style="font-size:13px;padding:3px 0">${tr(rule.name).split(' — ')[0]}: <b>${fmt(dd)}</b>${diff(dd)<0?' <span class="chip bad">انقضى</span>':''}</div>`}).join(''):`<p class="sub">لم يُسجَّل تاريخ تبليغ — <button class="btn sm" data-act="setnotif" data-id="${c.id}">تسجيل</button></p>`;
  const inst=S.installments.filter(x=>x.c===c.id&&!x.paid);
  const wa2=(()=>{const ph=CL[c.cl].ph;if(!ph||ph==='—')return '';const u='https://wa.me/213'+ph.replace(/\D/g,'').replace(/^0/,'');const msg=encodeURIComponent(t('wa_msg')+(c.next?' بتاريخ '+fmt(c.next)+' الساعة '+(c.time||''):''));return `<a class="btn" href="${u}?text=${msg}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`})();
- dr.innerHTML=`<button class="btn sm close" data-act="closeDrawer">${t('close')}</button> ${c.secret?`<span class="chip bad">${t('secret_file')}</span> `:''}${typeChip(c.type)} ${stChip(c.st)}<h2>${esc(tr(c.title))}</h2><div class="sub" dir="ltr" style="text-align:start">${esc(c.no)}</div>
+ dr.innerHTML=`<button class="btn sm close" data-act="closeDrawer">${t('close')}</button> <button class="btn sm" data-act="quicklegal" data-id="${c.id}">🔍 بحث قانوني</button> ${c.secret?`<span class="chip bad">${t('secret_file')}</span> `:''}${typeChip(c.type)} ${stChip(c.st)}<h2>${esc(tr(c.title))}</h2><div class="sub" dir="ltr" style="text-align:start">${esc(c.no)}</div>
  <div style="margin-top:16px">${stepper(c.stage)}</div>${plat}
+ <div class="drawer-tabs" role="tablist" aria-label="أقسام ملف القضية"><button role="tab" data-act="casetab" data-id="${c.id}" data-v="details" aria-current="${(S.caseDrawerTab||'details')==='details'}">تفاصيل القضية</button><button role="tab" data-act="casetab" data-id="${c.id}" data-v="legal" aria-current="${S.caseDrawerTab==='legal'}">السندات القانونية</button><button role="tab" data-act="casetab" data-id="${c.id}" data-v="checklist" aria-current="${S.caseDrawerTab==='checklist'}">قائمة التحقق</button></div>
+ <section class="case-feature-pane" ${S.caseDrawerTab==='legal'?'':'hidden'}><h3>السندات القانونية</h3><p class="sub">أضف نصوصاً قانونية أو روابط يستند إليها المحامي. تُحفظ محلياً ضمن بيانات القضية.</p><textarea class="legal-ref-box" data-act="legalrefs" data-id="${c.id}" aria-label="السندات القانونية" placeholder="أدخل النص القانوني أو الرابط...">${esc(c.legalRefs||'')}</textarea></section>
+ <section class="case-feature-pane" ${S.caseDrawerTab==='checklist'?'':'hidden'}><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3>قائمة التحقق</h3>${m?`<button class="btn sm primary" data-act="checkadd" data-id="${c.id}">+ إضافة عنصر</button>`:''}</div>${(c.checklists||[]).map(function(item){return '<div class="checklist-row '+(item.done?'done':'')+'"><input type="checkbox" data-act="checktoggle" data-id="'+c.id+'" data-item="'+item.id+'" '+(item.done?'checked':'')+' aria-label="'+esc(item.text)+'"><span style="flex:1">'+esc(item.text)+'</span>'+(m?'<button class="btn sm" data-act="checkdelete" data-id="'+c.id+'" data-item="'+item.id+'" aria-label="حذف '+esc(item.text)+'">حذف</button>':'')+'</div>'}).join('')||'<p class="empty">لا توجد عناصر.</p>'}</section>
+ <div data-case-details ${S.caseDrawerTab==='details'?'':'hidden'}>
  <dl class="dl-list"><dt>${t('d_client')}</dt><dd>${esc(tr(CL[c.cl]))} <button class="btn sm" data-act="client" data-id="${c.cl}" style="margin-inline-start:6px">${t('nav_client')}</button></dd><dt>${t('d_opp')}</dt><dd>${esc(tr(c.opp))}</dd><dt>${t('d_court')}</dt><dd>${esc(tr(c.court))}</dd>
  <dt>${t('d_next')}</dt><dd>${c.next?fmt(c.next)+' — '+c.time+' ('+tr(KIND[c.kind])+')':tr(KIND[c.kind])}</dd><dt>${t('d_poa')}</dt><dd>${poa}</dd><dt>${t('d_lim')}</dt><dd>${lim}</dd>
  <dt>${t('d_judg')}</dt><dd>${c.judg?esc(tr(c.judg)):t('d_none_yet')}</dd><dt>${t('d_team')}</dt><dd>${avs(c.as)}</dd>${(lwList().length||(c.lawyerId&&c.lawyerId!=='m'))?`<dt>${t('lw_resp')}</dt><dd>${esc(lawyerName(c.lawyerId))}${m?` <button class="btn sm" data-act="setlawyer" data-id="${c.id}" style="margin-inline-start:6px">${t('lw_edit_btn')}</button>`:''}</dd>`:''}
@@ -1835,7 +1864,7 @@ function openDrawer(id){const c=byC(id),m=isM(),p=Math.round(c.fee[1]/(c.fee[0]|
  <h3 style="margin-top:14px">${t('d_docs')}</h3><div>${docs||`<p class="empty">${t('d_nodocs')}</p>`}</div>
  <h3 style="margin-top:14px">${t('d_hist')}</h3><ul class="hist">${[['s','h1','10:12'],['t','h2','09:40'],['m','h3','08:05']].map(h=>`<li>${av(h[0],true)}<span style="flex:1">${t(h[1])} <span class="sub" style="display:inline">· ${h[2]}</span></span>${m?`<button class="btn sm" data-act="restore">${t('d_restore')}</button>`:''}</li>`).join('')}</ul>
  ${inst.length?`<div class="note warn" style="margin-top:14px">⚠ أقساط مستحقة: ${inst.map(x=>money(x.amount)+' ('+fmt(x.due)+(diff(x.due)<0?' — متأخرة':'')+')').join('، ')}</div>`:''}
- <p class="note">${t('d_notes_hint')}</p>`;
+ <p class="note">${t('d_notes_hint')}</p></div>`;
  dr.classList.add('on');dr.setAttribute('aria-hidden','false');$('scrim').classList.add('on');
  const cb=dr.querySelector('.close');if(cb)cb.focus()}
 /* ===== V9.8: متابعة التبليغ والآجال المنبثقة عنه ===== */
@@ -1936,6 +1965,12 @@ document.addEventListener('click',e=>{
   case 'feestab':S.feesTab=el.dataset.v;render();break;
   case 'reporttab':S.reportTab=el.dataset.v;render();break;
   case 'dgprint':printDoc();break;
+  case 'quicklegal':{const c=byC(id);if(c)window.open('https://www.google.com/search?q='+encodeURIComponent(tr(c.title)+' الجزائر'),'_blank','noopener');break}
+  case 'casetab':S.caseDrawerTab=el.dataset.v;S.caseDrawerId=id;openDrawer(id);break
+  case 'checkadd':if(isM())addChecklistItem(id);break
+  case 'checkdelete':{if(!isM())break;const c=byC(id);if(c){c.checklists=(c.checklists||[]).filter(x=>String(x.id)!==String(el.dataset.item));scheduleSave();openDrawer(id)}break}
+  case 'saveversion':saveDocVersion();break
+  case 'compareversions':{S.docVersionCompare={left:(document.getElementById('versionA')||{}).value,right:(document.getElementById('versionB')||{}).value};render();break}
   case 'dgreset':S.docGen=DG0();render();break;
   case 'open_cours':{const c=byC(id);
     if(c&&c.platformUsername&&navigator.clipboard){navigator.clipboard.writeText(c.platformUsername).then(()=>toast(t('d_copied'))).catch(()=>{})}
@@ -1986,6 +2021,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
  const d=e.target.dataset||{};
+ if(d.act==='checktoggle'){const c=byC(+d.id),it=c&&(c.checklists||[]).find(x=>String(x.id)===String(d.item));if(it){it.done=!!e.target.checked;scheduleSave();e.target.closest('.checklist-row').classList.toggle('done',it.done)}return}
  if(e.target.id==='roleSel'){secSwitchRole(e.target.value)} // FIX3: password-gated role switch ()
  if(d.act==='task'){const x=S.tasks.find(k=>k.id===+d.id);undoable(()=>{x.done=e.target.checked})}
  if(d.act==='perm'){S.perms[d.k]=e.target.checked;chrome();render();toast(t('savedOnline'))}
@@ -1997,6 +2033,7 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{
  const d=e.target.dataset||{};
+ if(d.act==='legalrefs'){const c=byC(+d.id);if(c){c.legalRefs=e.target.value;scheduleSave()}return}
  if(d.dg){S.docGen[d.dg]=e.target.value;const pv=$('dgPreview');if(pv)pv.innerHTML=dgRender()}
 });
 $('scrim').addEventListener('click',()=>{closeModal();closeDrawer()});
@@ -2705,6 +2742,7 @@ document.addEventListener('change',function(e){
  if(el.dataset.sig){var f=el.files&&el.files[0];if(!f)return;
   readImgPng(f,600,function(d){if(!d){toast('⚠');return}S.cabinet=S.cabinet||{};S.cabinet[el.dataset.sig]=d;try{v9save()}catch(_){}render();toast(t('sig_ok'))});return}
  if(el.id==='dg_casepick'){if(dgAutofill(el.value)){render();toast(t('dg_filled'))}return}
+ if(el.id==='versionA'||el.id==='versionB')return;
  if(el.id==='dl_vac_on'){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!el.checked;try{v9save()}catch(_){}return}
 });
 document.addEventListener('input',function(e){
