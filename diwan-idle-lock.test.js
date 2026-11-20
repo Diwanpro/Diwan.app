@@ -902,6 +902,21 @@ describe('interrupted migration recovery', () => {
     assert.equal(e.store.has('diwan_v9_migration_backup'), false);
   });
 
+  test('encrypted v8 source survives a crash after the v8 migration marker', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const encryptedLegacy = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v8_data', encryptedLegacy);
+    e.store.set('diwan_v9_migration_pending', 'v8');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.deepEqual(e.calls.blocked, []);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+
   test('primary marker written before backup can recover from the still-valid primary', async () => {
     const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
     e.store.set('diwan_v9_data', fixture.raw);
