@@ -3496,7 +3496,7 @@ function conflictReviewCard(){
 /* Deterministic fictional dataset for the isolated professional preview.
    This action is opt-in and replaces the current local demo records after confirmation. */
 function resetPreviewDemo(){
- if(!isM()||S.isDemo===false)return;
+ if(!isM())return;
  if(!confirm('سيتم استبدال جميع سجلات المعاينة المحلية ببيانات وهمية جديدة. لن يؤثر ذلك في نطاق/موقع آخر. هل تتابع؟\nToutes les données locales de démonstration seront remplacées. Continuer ?'))return;
  var party=function(role,arFirst,arLast,frFirst,frLast,kind){
   return {role:role,proc:'',procLabel:{ar:'',fr:''},roleLabel:{ar:'',fr:''},kind:kind||'natural',nif:'',firstName:{ar:arFirst,fr:frFirst},lastName:{ar:arLast,fr:frLast},birthDate:'',birthPlace:{ar:'',fr:''},idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:{ar:'عنوان تجريبي — لا وجود له',fr:'Adresse fictive — inexistante'}};
@@ -3556,7 +3556,7 @@ function resetPreviewDemo(){
  scheduleSave();chrome();render();toast('تمت إعادة تهيئة بيانات المعاينة الوهمية / Jeu de démonstration réinitialisé');
 }
 function previewDemoCard(){
- if(!isM()||S.isDemo===false)return '';
+ if(!isM())return '';
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>بيانات المعاينة / Données de démonstration</h2><span class="chip warn">DEMO</span></div><div class="card-b"><p class="sub">كل السجلات أسماء وبيانات افتراضية، ولا يجوز استخدامها في ملف حقيقي. / Toutes les données sont fictives.</p><p class="sub">إعادة التهيئة تستبدل سجلات هذا المتصفح فقط، ولا تمس نطاقاً أو جهازاً آخر. / Réinitialise uniquement les données locales de ce navigateur.</p><button class="btn primary" data-act="reset-preview-demo">إعادة تهيئة بيانات المعاينة / Réinitialiser la démo</button></div></section>'
 }
 
