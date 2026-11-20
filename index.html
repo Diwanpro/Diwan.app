@@ -3201,15 +3201,12 @@ function secPersistBootSnapshot(snap){
  if(marker!==null||backup!==null){
   if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0)return Promise.reject(secMigrationError('migration-recovery'));
   /* A pending marker is a recoverable transaction, not a permanent boot lock. Keep every surviving source until a new encrypted snapshot is read back and decrypted. */
-  var recoverySource=primary;
   if(primary!==null&&!isEncPayload(primary)){
    if(marker==='v8'||marker==='v8-cleanup')return Promise.reject(secMigrationError('migration-recovery'));
    if(backup!==null&&backup!==primary&&marker!=='primary')return Promise.reject(secMigrationError('migration-recovery'));
-   if(backup===null&&marker==='primary')return Promise.reject(secMigrationError('migration-recovery'));
   }else if(primary===null){
    if(marker==='primary'&&backup===null)return Promise.reject(secMigrationError('migration-recovery'));
    if(legacy===null&&backup===null)return Promise.reject(secMigrationError('migration-recovery'));
-   recoverySource=backup!==null?backup:legacy;
   }
   return secWriteEncryptedAndVerify(snap,{}).then(function(saved){
    var written=localStorage.getItem(STORE_KEY);
