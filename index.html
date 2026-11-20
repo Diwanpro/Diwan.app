@@ -3301,7 +3301,7 @@ function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='functi
  if(marker!==null||backup!==null){
   if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0){secProtectionBlock('migration-recovery');return}
   /* Prefer a primary ciphertext: it must be authenticated, never silently replaced by a plaintext fallback. */
-  if(primary!==null&&isEncPayload(primary)){raw=primary;_legacyV8PendingCleanup=legacy!==null||backup!==null||marker!==null;secShowUnlock(raw);return}
+  if(primary!==null&&isEncPayload(primary)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}raw=primary;_legacyV8PendingCleanup=legacy!==null||backup!==null||marker!==null;secShowUnlock(raw);return}
   /* Recoverable plaintext states are accepted only as valid, credentialed data. A v8 marker cannot legitimately coexist with a plaintext primary. */
   if(primary!==null){
    if(marker==='v8'||marker==='v8-cleanup'){secProtectionBlock('migration-recovery');return}
@@ -3319,7 +3319,7 @@ function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='functi
   var candidate=backup!==null?backup:legacy;
   if(candidate===null){secProtectionBlock('migration-recovery');return}
   /* A crash may leave the v8 marker before an encrypted v8 source is copied to the primary slot. Authenticate that ciphertext through the normal unlock path. */
-  if(backup===null&&legacy!==null&&marker==='v8'&&isEncPayload(legacy)){_loadedFromV8=true;secShowUnlock(legacy);return}
+  if(backup===null&&legacy!==null&&marker==='v8'&&isEncPayload(legacy)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}_loadedFromV8=true;secShowUnlock(legacy);return}
   try{data=normStore(JSON.parse(candidate))}catch(_){}
   if(!secStoreDataValid(data)){secProtectionBlock('migration-recovery');return}
   _loadedFromV8=(backup===null&&legacy!==null);secShowUnlock(null,data);return
