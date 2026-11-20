@@ -61,7 +61,7 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(HTML, /item\.status='rejected';item\.reviewedAt=new Date\(\)\.toISOString\(\);item\.reviewedBy=S\.user/);
     assert.match(HTML, /item\.status='approved';item\.reviewedAt=new Date\(\)\.toISOString\(\);item\.reviewedBy=S\.user/);
     assert.match(HTML, /createIntakeCase\(item\.draft,item\.parties,item\.reasons,true\)/);
-    assert.match(HTML, /اعتماد بعد مراجعة سرية لتعارض المصالح/);
+    assert.match(HTML, /اعتماد ملف بعد مراجعة سرية لتعارض المصالح/);
   });
 
   test('pending review queue survives encrypted snapshots and store restoration', () => {
