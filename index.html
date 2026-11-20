@@ -1538,7 +1538,20 @@ function scheduleReminders(){if(typeof Notification==='undefined')return;if(Noti
 
 /* ============== chrome ============== */
 const $=id=>document.getElementById(id);
-function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.3.4 — '+t('appSub');
+var _secWorkspaceState=[];
+function secSetWorkspaceVisible(visible){
+ var body=document&&document.body;if(!body)return;
+ if(!visible){Array.prototype.forEach.call(body.children,function(el){if(el.id==='lockOv'||el.tagName==='SCRIPT')return;
+  var state=_secWorkspaceState.find(function(x){return x.el===el});if(!state){state={el:el,hidden:!!el.hidden,inert:!!el.inert,display:el.style?el.style.display:'',ariaHidden:el.getAttribute?el.getAttribute('aria-hidden'):null};_secWorkspaceState.push(state)}
+  el.hidden=true;if(el.style)el.style.display='none';try{el.inert=true}catch(_){}try{el.setAttribute('aria-hidden','true')}catch(_){}
+ });return}
+ _secWorkspaceState.forEach(function(x){x.el.hidden=x.hidden;if(x.el.style)x.el.style.display=x.display;try{x.el.inert=x.inert}catch(_){}try{if(x.ariaHidden===null)x.el.removeAttribute('aria-hidden');else x.el.setAttribute('aria-hidden',x.ariaHidden)}catch(_){}});_secWorkspaceState=[]
+}
+function secWorkspaceReady(){if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready){secSetWorkspaceVisible(false);return false}
+ if(typeof secProtectionIssue!=='function'){secSetWorkspaceVisible(false);secProtectionBlock('verifier');return false}
+ var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}secSetWorkspaceVisible(true);return true}
+function secResumeAfterLicense(){try{if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready)secBoot();else{chrome();render()}}catch(_){secProtectionBlock('init')}}
+function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.3.4 — '+t('appSub');
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
@@ -1580,7 +1593,7 @@ function chrome(){if(window._LK_ON)return;document.documentElement.lang=S.lang;d
  $('bellDot').textContent=th+ur.length+(ot?1:0);
  try{scheduleReminders()}catch(_){}try{_LIC.tick()}catch(_){}
  $('notif').innerHTML=`<h3>${t('digest')}</h3><ul><li>${ic('cal')} <b>${th}</b> ${t('n_hear')}</li><li>${ic('alert')} <b>${ur.length}</b> ${t('n_dl')}</li><li>${ic('tasks')} <b>${ot}</b> ${t('n_task')}</li></ul>`}
-function render(){if(window._LK_ON)return;if(!allowed(S.view))S.view='dash';$('view').innerHTML=VIEWS[S.view]();
+function render(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;if(!allowed(S.view))S.view='dash';$('view').innerHTML=VIEWS[S.view]();
  if(S.view==='cases'){caseRows();['fq','ft','fs'].forEach(i=>$(i).addEventListener('input',caseRows))}
  if(S.view==='portal')$('portalSel').addEventListener('change',e=>{S.arg=+e.target.value;render()});
  if(S.view==='tasks'&&$('tw'))$('tw').addEventListener('change',e=>{S.taskWho=e.target.value;render()});
@@ -2255,9 +2268,8 @@ var _LIC=(function(){
    _LK_ON=false;_fails=0;
    try{secCloseOverlay()}catch(_){}
    try{toast(t('lck_ok'))}catch(_){}
-   var wasBooted=_booted;
-   if(!wasBooted){_booted=true;try{secBoot()}catch(_){try{chrome();render()}catch(__){}}}
-   else{try{chrome();render()}catch(_){}}
+   if(!_booted)_booted=true;
+   secResumeAfterLicense();
   });
  }
  function show(mode){var o=secOverlay(lockHtml(mode));bind(o,mode);return o}
@@ -3119,9 +3131,10 @@ function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.t
 var ENC_PREFIX='DWNENC1:',ENC_PREFIX2='DWNENC2:',STORE_KEY_V8='diwan_v8_data',PBKDF2_IT=600000,PBKDF2_IT_LEGACY=200000,PW_IT=600000,PW_IT_LEGACY=150000,UNLOCK_LOCK_KEY='diwan_unlock_lock';
 var _loadedFromV8=false,_savePending=false,_saveBusy=false,_saveDirty=false,_plainWarned=false,_unlockFails=0;
 /* the manager password (and the derived-key context) live ONLY in this closure — never in localStorage */
-var _SEC=(function(){var _pass=null,_ctx=null;return {ready:false,
+var _SEC=(function(){var _pass=null,_ctx=null,_verified=false;return {ready:false,
  avail:function(){return !!(window.crypto&&window.crypto.subtle&&window.TextEncoder&&window.Uint8Array)},
- setPass:function(p){_pass=p;_ctx=null},hasPass:function(){return _pass!==null},getPass:function(){return _pass},
+ setPass:function(p){_pass=p;_ctx=null;_verified=false},hasPass:function(){return _pass!==null},getPass:function(){return _pass},
+ markVerified:function(){_verified=true},consumeVerified:function(){var ok=_verified;_verified=false;return ok},clearVerified:function(){_verified=false},
  setCtx:function(c){_ctx=c},getCtx:function(){return _ctx}}})();
 function secB64e(u){var s='',i,C=0x8000;for(i=0;i<u.length;i+=C)s+=String.fromCharCode.apply(null,u.subarray(i,i+C));return btoa(s)}
 function secB64d(b){var s=atob(String(b).replace(/\s+/g,'')),u=new Uint8Array(s.length),i;for(i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u}
@@ -3147,6 +3160,9 @@ function decryptJSON(payload,pass,ctx){var s=String(payload||'').trim(),u,it=PBK
 function hashPass(pass,rec){var salt=(rec&&rec.salt)?secB64d(rec.salt):crypto.getRandomValues(new Uint8Array(16)),it=(rec&&rec.it)||PW_IT;
  return crypto.subtle.importKey('raw',new TextEncoder().encode(String(pass)),'PBKDF2',false,['deriveBits']).then(function(km){return crypto.subtle.deriveBits({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},km,256)}).then(function(bits){return {salt:secB64e(salt),hash:secB64e(new Uint8Array(bits)),it:it}})}
 function verifyPass(rec,pass){if(!rec||!rec.hash||!rec.salt)return Promise.resolve(false);return hashPass(pass,rec).then(function(r){return secCmp(r.hash,rec.hash)})}
+function secPassRecordValid(rec){if(!rec||typeof rec.hash!=='string'||typeof rec.salt!=='string')return false;try{return secB64d(rec.salt).length===16&&secB64d(rec.hash).length===32}catch(_){return false}}
+function secStoreDataValid(data){return !!(data&&typeof data==='object'&&!Array.isArray(data)&&Array.isArray(data.cases)&&(data.userPasswords==null||(typeof data.userPasswords==='object'&&!Array.isArray(data.userPasswords))))}
+function secProtectionIssue(){if(!_SEC||typeof _SEC.avail!=='function'||!_SEC.avail())return 'crypto';if(typeof _SEC.hasPass!=='function'||!_SEC.hasPass())return 'key';var user=S&&S.user;if(!user||!U||!U.some(function(u){return u.id===user}))return 'user';var rec=S&&S.userPasswords&&S.userPasswords[user];if(!rec)return 'credential';if(!secPassRecordValid(rec))return 'corrupt-credential';if(typeof verifyPass!=='function')return 'verifier';return ''}
 function secPwChk(v){v=String(v||'');return (v.length>=8&&/\p{L}/u.test(v)&&/\p{Nd}/u.test(v))?'':'sec_pw_weak'}
 function secExportAuth(){var a=Object.assign({},S.auth||{sessions:[],log:[]});delete a.lock;delete a.fails;return a}
 function secPostImport(prev){if(prev&&S.auth&&S.auth!==prev){if(prev.lock)S.auth.lock=prev.lock;if(prev.fails)S.auth.fails=prev.fails}if(typeof syncPartnersU==='function')syncPartnersU();v9save()}
@@ -3154,9 +3170,10 @@ function secPostImport(prev){if(prev&&S.auth&&S.auth!==prev){if(prev.lock)S.auth
 function scheduleSave(){_savePending=true;clearTimeout(_saveTimer);_saveTimer=setTimeout(persistNow,400)}
 function secWarnStore(){if(!_storageWarned){_storageWarned=true;try{toast(t('v7_storage_fail'))}catch(_){}}}
 function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return; /* locked / booting: never overwrite stored data */
+var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return}
  _savePending=false;if(_saveBusy){_saveDirty=true;return}
  var snap;try{snap=snapV7()}catch(e){return}
- if(!_SEC.avail()){try{localStorage.setItem(STORE_KEY,JSON.stringify(snap))}catch(e){secWarnStore()}if(!_plainWarned){_plainWarned=true;try{toast(t('sec_nocrypto'))}catch(_){}}return}
+ if(!_SEC.avail()){secProtectionBlock('crypto');return}
  if(!_SEC.hasPass())return;
  _saveBusy=true;var ctx=_SEC.getCtx();if(!ctx){ctx={};_SEC.setCtx(ctx)}
  encryptJSON(snap,_SEC.getPass(),ctx).then(function(b){localStorage.setItem(STORE_KEY,b)}).catch(function(){secWarnStore()}).then(function(){_saveBusy=false;if(_saveDirty){_saveDirty=false;persistNow()}})}
@@ -3164,20 +3181,48 @@ function secFlush(){if(_savePending||_saveDirty)persistNow()}
 window.addEventListener('beforeunload',secFlush);window.addEventListener('pagehide',secFlush);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')secFlush()});
 /* --- overlay (lock screen) --- */
-function secOverlay(html){var o=document.getElementById('lockOv');if(!o){o=document.createElement('div');o.id='lockOv';o.className='lockov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);Array.prototype.forEach.call(document.body.children,function(el){if(el!==o&&el.tagName!=='SCRIPT'){try{el.inert=true}catch(_){}}})}o.innerHTML=html;return o}
-function secCloseOverlay(){var o=document.getElementById('lockOv');if(o&&o.parentNode)o.parentNode.removeChild(o);Array.prototype.forEach.call(document.body.children,function(el){try{el.inert=false}catch(_){}})}
-function secDemoInit(){S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
-function secFinishBoot(persist){try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
+function secOverlay(html){secSetWorkspaceVisible(false);var o=document.getElementById('lockOv');if(!o){o=document.createElement('div');o.id='lockOv';o.className='lockov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);Array.prototype.forEach.call(document.body.children,function(el){if(el!==o&&el.tagName!=='SCRIPT'){try{el.inert=true}catch(_){}}})}o.innerHTML=html;return o}
+function secCloseOverlay(){var o=document.getElementById('lockOv');if(o&&o.parentNode)o.parentNode.removeChild(o);if(typeof _SEC!=='undefined'&&_SEC&&_SEC.ready)secSetWorkspaceVisible(true);else secSetWorkspaceVisible(false)}
+function secProtectionBlock(reason){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var msg={
+ crypto:'هذا المتصفح لا يوفّر WebCrypto اللازم لحماية بيانات المكتب. لم تُفتح مساحة العمل ولم تُحذف أو تُعدّل بيانات التخزين. استخدم متصفحاً حديثاً وسياقاً آمناً ثم أعد التحميل. لا تمسح بيانات الموقع. لا يمكن استعادة البيانات المشفّرة دون كلمة المرور اللازمة.\nThis browser cannot provide WebCrypto required for office data protection. The workspace remains closed and stored data was not changed. Use a modern browser in a secure context and reload. Do not clear site data. Encrypted data cannot be recovered without its password.',
+ 'crypto-encrypted':"البيانات الموجودة مشفّرة وWebCrypto غير متاح. لم تُفتح مساحة العمل أو تُعدّل البيانات. استخدم متصفحاً يدعم WebCrypto وأدخل كلمة المرور الأصلية؛ لا تمسح بيانات الموقع. لا يمكن استعادة البيانات دون كلمة المرور/المفتاح اللازمين.<br>Stored data is encrypted but WebCrypto is unavailable. The workspace remains closed and data was not changed. Use a WebCrypto-capable browser and the original password; do not clear site data. The data cannot be recovered without its required password/key.",
+ 'crypto-legacy':"عُثر على بيانات قديمة غير مشفّرة، لكن لا يمكن حمايتها أو فتحها بأمان دون WebCrypto. بقيت البيانات كما هي. استخدم متصفحاً يدعم WebCrypto ثم أعد التحميل لإكمال إعداد كلمة المرور؛ لا تمسح بيانات الموقع.<br>Unencrypted legacy data was found, but it cannot be safely opened or protected without WebCrypto. It remains unchanged. Use a WebCrypto-capable browser and reload to set up a password; do not clear site data.",
+ 'crypto-setup':'يلزم متصفح يدعم WebCrypto لإعداد كلمة مرور المدير. لم تُنشأ مساحة عمل ولم تُعدّل بيانات التخزين. استخدم متصفحاً حديثاً ثم أعد التحميل.\nA browser with WebCrypto is required to set up the manager password. No workspace was opened and stored data was not changed. Use a modern browser and reload.',
+ key:'مفتاح حماية التخزين غير متاح. لم تُفتح مساحة العمل ولم تُعدّل البيانات. أعد تحميل التطبيق وأدخل كلمة مرور المدير؛ لا يمكن استعادة البيانات المشفّرة دون كلمة المرور الأصلية.<br>The storage protection key is unavailable. The workspace remains closed and data was not changed. Reload the app and enter the manager password; encrypted data cannot be recovered without the original password.',
+ storage:'تعذر الوصول إلى التخزين المحلي. لم تُحذف البيانات. لا تمسح بيانات الموقع؛ أعد المحاولة في المتصفح نفسه أو استخدم نسخة احتياطية موثوقة.\nLocal storage could not be accessed. Data was not deleted. Do not clear site data; retry in this browser or use a trusted backup.',
+ 'corrupt-store':'تعذر قراءة بيانات المكتب الموجودة. لم تُستبدل البيانات أو تُحذف. لا تبدأ إعداداً جديداً ولا تمسح بيانات الموقع؛ استخدم نسخة احتياطية موثوقة أو اطلب مساعدة المسؤول.\nExisting office data could not be read. It was not replaced or deleted. Do not start a new setup or clear site data; use a trusted backup or contact the administrator.',
+ 'corrupt-credential':'سجل اعتماد المدير تالف أو غير صالح. لم يُستبدل السجل ولم تُفتح مساحة العمل. لا يمكن استعادة بيانات مشفّرة دون كلمة المرور/المفتاح الأصلي؛ استخدم نسخة احتياطية موثوقة أو اطلب مساعدة المسؤول.\nThe manager credential record is damaged or invalid. It was not replaced and the workspace remains closed. Encrypted data cannot be recovered without the original password/key; use a trusted backup or contact the administrator.',
+ 'legacy-credential':'بيانات المكتب القديمة موجودة لكنها لا تحتوي اعتماد مدير صالحاً. لم تُفتح المساحة ولم تُنشأ كلمة مرور جديدة ولم تُعدّل البيانات. يلزم مسار استرداد/ترحيل موثوق قبل المتابعة؛ لا تمسح بيانات الموقع.<br>Existing legacy office data has no valid manager credential. The workspace remains closed; no password was created and the data was not changed. A trusted recovery/migration process is required; do not clear site data.',
+ 'encrypted-credential':'فُكّت البيانات الموجودة لكن سجل اعتماد المدير مفقود. لم تُفتح المساحة ولم يُنشأ اعتماد بديل أو تُعدّل البيانات. يلزم استرداد موثوق؛ لا تحذف بيانات الموقع.<br>Stored data decrypted but its manager credential is missing. The workspace remains closed; no replacement credential was created and data was not changed. Trusted recovery is required; do not clear site data.',
+ 'credential-mismatch':'كلمة المرور فكّت البيانات، لكنها لا تطابق سجل اعتماد المدير الموجود. لم تُفتح مساحة العمل ولم يُعدّل التخزين. لا تُعد إعداد كلمة مرور؛ اطلب استرداداً موثوقاً.<br>The password decrypted the data but does not match its stored manager credential. The workspace remains closed and storage was not changed. Do not re-enroll; use trusted recovery.',
+ credential:'بيانات اعتماد المستخدم النشط غير موجودة. لم تُفتح مساحة العمل ولم يُنشأ اعتماد بديل. استعد سجل الاعتماد عبر مسار إداري موثوق.\nThe active user\'s credential is missing. The workspace remains closed and no replacement credential was created. Restore the credential through a trusted administrative process.',
+ verifier:'خدمة التحقق من كلمة المرور غير متاحة. لم تُفتح مساحة العمل ولم يتم تجاوز المصادقة. أعد التحميل في متصفح مدعوم؛ إذا استمرت المشكلة، اطلب مساعدة المسؤول.\nPassword verification is unavailable. The workspace remains closed and authentication was not bypassed. Reload in a supported browser; contact the administrator if the problem persists.',
+ user:'تعذر تحديد المستخدم النشط والتحقق من اعتماده. مساحة العمل مغلقة؛ أعد تحميل التطبيق أو اطلب مساعدة المسؤول.\nThe active user and its credential could not be validated. The workspace remains closed; reload the app or contact the administrator.',
+ init:'تعذر إكمال تهيئة التطبيق. لم تُستبدل بيانات التخزين. أعد التحميل؛ وإذا استمرت المشكلة، استخدم نسخة احتياطية موثوقة أو اطلب مساعدة المسؤول.\nApplication initialization failed. Stored data was not replaced. Reload; if the issue persists, use a trusted backup or contact the administrator.'
+ }[reason]||'تعذر تهيئة الحماية. لم تُفتح مساحة العمل ولم تُعدّل بيانات التخزين. أعد التحميل أو اطلب مساعدة المسؤول.\nProtection could not be initialized. The workspace remains closed and stored data was not changed. Reload or contact the administrator.';
+ secOverlay('<div class="modal"><h2>🔒 تعذر فتح مساحة العمل بأمان<br><small class="sub">Workspace security unavailable</small></h2><p style="white-space:pre-line">'+msg+'</p></div>')}
+function secDemoInit(){ S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
+function secFinishBoot(persist){var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}if(typeof _SEC.consumeVerified!=='function'||!_SEC.consumeVerified()){secProtectionBlock('verifier');return false}try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
  setTimeout(function(){if(S.isDemo){var dn=document.getElementById('demoNote');if(dn)dn.innerHTML=t('v7_demo_bar')+' <button class="btn sm" data-act="cleardemo">'+t('v7_start_empty')+'</button>'}},300);
  try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}
- _SEC.ready=true;try{migrateV3()}catch(_){}if(persist)persistNow();try{chrome();render()}catch(e){console.warn('boot render',e)}}
-function secBoot(){var raw=null;try{raw=localStorage.getItem(STORE_KEY)}catch(_){}
- if(raw&&isEncPayload(raw)){
-  if(!_SEC.avail()){secOverlay('<div class="modal"><h2>🔒 البيانات مشفّرة<br><small class="sub">Données chiffrées</small></h2><p>هذا المتصفح لا يدعم فك التشفير (crypto.subtle). افتح الملف في متصفح حديث (Chrome / Edge / Firefox). لم تُمسّ بياناتك.<br>Ce navigateur ne permet pas le déchiffrement. Ouvrez le fichier dans un navigateur récent. Vos données n’ont pas été modifiées.</p></div>');return}
-  secShowUnlock(raw);return}
- var data=loadStore();if(data)applyStore(data);else secDemoInit();
- if(!_SEC.avail()){_plainWarned=true;secFinishBoot(false);try{toast(t('sec_nocrypto'))}catch(_){}return}
- if(S.userPasswords&&S.userPasswords.m){secShowUnlock(null);return}
+ _SEC.ready=true;if(!secWorkspaceReady())return false;try{migrateV3()}catch(_){}if(persist)persistNow();try{chrome();render()}catch(e){secProtectionBlock('init');return false}if(typeof bumpIdle==='function')bumpIdle();return !!(_SEC.ready&&!secProtectionIssue())}
+function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var raw=null,data=null;_loadedFromV8=false;
+ try{raw=localStorage.getItem(STORE_KEY);if(raw===null){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=raw!==null}}catch(_){secProtectionBlock('storage');return}
+ if(raw!==null&&isEncPayload(raw)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}secShowUnlock(raw);return}
+ if(raw!==null){
+  if(!_SEC.avail()){secProtectionBlock('crypto-legacy');return}
+  try{data=normStore(JSON.parse(raw))}catch(_){}
+  if(!secStoreDataValid(data)){secProtectionBlock('corrupt-store');return}
+  var legacyRec=data.userPasswords&&data.userPasswords.m;
+  if(legacyRec&&!secPassRecordValid(legacyRec)){secProtectionBlock('corrupt-credential');return}
+  if(!legacyRec){secProtectionBlock('legacy-credential');return}
+  secShowUnlock(null,data);return
+ }else{
+  if(!_SEC.avail()){secProtectionBlock('crypto-setup');return}
+  secDemoInit()
+ }
+ var rec=S.userPasswords&&S.userPasswords.m;
+ if(rec){if(!secPassRecordValid(rec)){secProtectionBlock('corrupt-credential');return}secShowUnlock(null);return}
  secShowSetup()}
 function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد كلمة مرور المدير<br><small class="sub">Définir le mot de passe du gérant</small></h2><p class="sub" style="margin:0 0 12px">تُستعمل كلمة المرور هذه لتشفير بيانات المكتب على هذا الجهاز ولا يمكن استرجاعها — احتفظ بنسخة احتياطية.<br>Ce mot de passe chiffre les données du cabinet sur cet appareil ; il est irrécupérable — conservez une sauvegarde.</p><form id="lkForm" novalidate><div class="fld"><label for="lkP1">كلمة المرور / Mot de passe</label><input id="lkP1" type="password" autocomplete="new-password"></div><div class="fld"><label for="lkP2">تأكيد / Confirmation</label><input id="lkP2" type="password" autocomplete="new-password"><div class="hint">8 خانات على الأقل مع حرف ورقم · 8 caractères min., une lettre et un chiffre</div></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">تعيين / Définir</button></div></form></div>');
  var f=o.querySelector('#lkForm'),msg=o.querySelector('#lkMsg'),btn=o.querySelector('#lkBtn');o.querySelector('#lkP1').focus();
@@ -3185,31 +3230,40 @@ function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد
   if(secPwChk(p1)){msg.textContent=secBi('sec_pw_weak');return}
   if(p1!==p2){msg.textContent=secBi('sec_mismatch');return}
   btn.disabled=true;
-  hashPass(p1).then(function(rec){S.userPasswords=S.userPasswords||{};S.userPasswords.m=rec;S.user='m';_SEC.setPass(p1);secCloseOverlay();secFinishBoot(true);authLog('pwset','m')})
+  hashPass(p1).then(function(rec){S.userPasswords=S.userPasswords||{};S.userPasswords.m=rec;S.user='m';_SEC.setPass(p1);_SEC.markVerified();secCloseOverlay();if(secFinishBoot(true))authLog('pwset','m')})
    .catch(function(){btn.disabled=false;msg.textContent=secBi('sec_err_generic')})})}
-function secShowUnlock(raw){var o=secOverlay('<div class="modal"><h2>🔒 ديوان — فتح التطبيق<br><small class="sub">Diwan — Déverrouillage</small></h2><form id="lkForm" novalidate><div class="fld"><label for="lkPw">كلمة مرور المدير / Mot de passe du gérant</label><input id="lkPw" type="password" autocomplete="current-password"></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">فتح / Ouvrir</button></div></form><small class="lk-note">لا يمكن استرجاع البيانات المشفّرة دون كلمة المرور — احتفظ بنسخة احتياطية (تصدير كامل).<br>Les données chiffrées sont irrécupérables sans le mot de passe — conservez une sauvegarde (export complet).</small></div>');
+function secShowUnlock(raw,pendingData){var o=secOverlay('<div class="modal"><h2>🔒 ديوان — فتح التطبيق<br><small class="sub">Diwan — Déverrouillage</small></h2><form id="lkForm" novalidate><div class="fld"><label for="lkPw">كلمة مرور المدير / Mot de passe du gérant</label><input id="lkPw" type="password" autocomplete="current-password"></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">فتح / Ouvrir</button></div></form><small class="lk-note">لا يمكن استرجاع البيانات المشفّرة دون كلمة المرور — احتفظ بنسخة احتياطية (تصدير كامل).<br>Les données chiffrées sont irrécupérables sans le mot de passe — conservez une sauvegarde (export complet).</small></div>');
  var f=o.querySelector('#lkForm'),inp=o.querySelector('#lkPw'),msg=o.querySelector('#lkMsg'),btn=o.querySelector('#lkBtn'),tick=null;inp.focus();
  function lockLeft(){var lk=0;try{lk=+localStorage.getItem(UNLOCK_LOCK_KEY)||0}catch(_){}return Math.max(0,lk-Date.now())}
  function showLock(){var ms=lockLeft();if(ms>0){var s=Math.ceil(ms/1000);msg.textContent='محاولات كثيرة — انتظر '+s+' ث · Trop d’essais — patientez '+s+' s';btn.disabled=true;tick=setTimeout(showLock,1000)}else{btn.disabled=false;if(tick){tick=null;msg.textContent=''}}}
  showLock();
- f.addEventListener('submit',function(e){e.preventDefault();if(lockLeft()>0)return;var p=inp.value.trim();if(!p)return;btn.disabled=true;var ctx={};
-  var job=raw?decryptJSON(raw,p,ctx):verifyPass((S.userPasswords||{}).m,p).then(function(ok){if(!ok)throw new Error('bad-pass');return null});
-  job.then(function(d){
-   var okp;try{
-    if(d){d=normStore(d);if(!d)throw new Error('bad-data');applyStore(d)}
-    _SEC.setPass(p);if(ctx.key)_SEC.setCtx(ctx);
-    S.user='m';_unlockFails=0;try{localStorage.removeItem(UNLOCK_LOCK_KEY)}catch(_){}
-    okp=(S.userPasswords&&S.userPasswords.m)?Promise.resolve():hashPass(p).then(function(r){S.userPasswords=S.userPasswords||{};S.userPasswords.m=r});
-   }catch(err){btn.disabled=false;msg.textContent=secBi('sec_err_generic');console.warn('unlock',err);return}
-   okp.then(function(){secCloseOverlay();secFinishBoot(true);authLog('login','m')})
-  },function(){
-   _unlockFails++;btn.disabled=false;inp.value='';inp.focus();
-   if(_unlockFails>=5){_unlockFails=0;try{localStorage.setItem(UNLOCK_LOCK_KEY,String(Date.now()+60000))}catch(_){}showLock()}
-   else msg.textContent=secBi('sec_wrong_gen')+' ('+(5-_unlockFails)+')'})})}
+ function failedPassword(){_unlockFails++;btn.disabled=false;inp.value='';inp.focus();
+  if(_unlockFails>=5){_unlockFails=0;try{localStorage.setItem(UNLOCK_LOCK_KEY,String(Date.now()+60000))}catch(_){}showLock()}
+  else msg.textContent=secBi('sec_wrong_gen')+' ('+(5-_unlockFails)+')'}
+ function verifierUnavailable(){btn.disabled=false;secProtectionBlock('verifier')}
+ function decryptFailed(err){if(err&&(err.message==='bad-format'||err.name==='SyntaxError')){btn.disabled=false;secProtectionBlock('corrupt-store')}else failedPassword()}
+ f.addEventListener('submit',function(e){e.preventDefault();if(lockLeft()>0)return;var p=inp.value.trim();if(!p)return;btn.disabled=true;var ctx={},d=null,managerRec=null;
+  var job;try{job=raw?decryptJSON(raw,p,ctx):Promise.resolve(null)}catch(err){decryptFailed(err);return}
+  Promise.resolve(job).then(function(data){
+   try{
+    if(raw||pendingData){if(raw){if(!secStoreDataValid(data)){secProtectionBlock('corrupt-store');return}d=normStore(data)}else d=normStore(pendingData);if(!secStoreDataValid(d)){secProtectionBlock('corrupt-store');return}managerRec=d.userPasswords&&d.userPasswords.m}
+    else managerRec=S.userPasswords&&S.userPasswords.m;
+    if(!managerRec){secProtectionBlock(raw?'encrypted-credential':'credential');return}
+    if(!secPassRecordValid(managerRec)){secProtectionBlock('corrupt-credential');return}
+    if(typeof verifyPass!=='function'){verifierUnavailable();return}
+   }catch(_){secProtectionBlock(raw?'corrupt-store':'verifier');return}
+   var verified;try{verified=verifyPass(managerRec,p)}catch(_){verifierUnavailable();return}
+   Promise.resolve(verified).then(function(ok){
+    if(ok!==true){if(raw){btn.disabled=false;secProtectionBlock('credential-mismatch')}else failedPassword();return}
+    try{if(raw||pendingData)applyStore(d);_SEC.setPass(p);_SEC.markVerified();if(ctx.key)_SEC.setCtx(ctx);S.user='m';_unlockFails=0;try{localStorage.removeItem(UNLOCK_LOCK_KEY)}catch(_){}
+     secCloseOverlay();if(secFinishBoot(true))authLog('login','m')
+    }catch(_){secProtectionBlock('init')}
+   },function(){verifierUnavailable()})
+  },function(err){decryptFailed(err)})})}
 /* --- role switch gated by per-user password (3.2) --- */
 function secDoSwitch(nv,k){S.user=nv;authLog(k||'switch',nv);var r=(me()||{}).role;S.casesScope=(r==='manager'||r==='partner')?'all':'mine';S.taskWho='all';closeDrawer();chrome();render()}
 function secSwitchRole(nv){var sel=$('roleSel');if(nv===S.user)return;var u=byU(nv);if(!u){if(sel)sel.value=S.user;return}
- if(!_SEC.avail()){secDoSwitch(nv);toast(t('sec_nocrypto'));return}
+ if(!_SEC.avail()){secProtectionBlock('crypto');return}
  S.auth=S.auth||{sessions:[],log:[]};S.auth.lock=S.auth.lock||{};S.auth.fails=S.auth.fails||{};
  if(sel)sel.value=S.user; /* never switch silently: the selector snaps back until the password is accepted */
  var left=(S.auth.lock[nv]||0)-Date.now();if(left>0){toast(t('sec_locked',Math.ceil(left/1000)));return}
@@ -3225,7 +3279,7 @@ function secSwitchRole(nv){var sel=$('roleSel');if(nv===S.user)return;var u=byU(
    else{toast(t('sec_wrong',5-n));setTimeout(function(){secSwitchRole(nv)},60)}
    v9save()}).catch(function(){toast(t('sec_err_generic'))})},'sec_enter')}
 /* --- change password (settings only) — re-encrypts storage with the new key (3.3) --- */
-function secChangePassword(){if(!_SEC.avail()){toast(t('sec_nocrypto'));return}
+function secChangePassword(){if(!_SEC.avail()){secProtectionBlock('crypto');return}
  modal('sec_chg_title',[{n:'cur',l:'sec_cur_pw',type:'password',req:true},{n:'p1',l:'sec_new_pw',type:'password',req:true,chk:secPwChk,hint:esc(t('sec_pw_hint'))},{n:'p2',l:'sec_confirm_pw',type:'password',req:true}],function(v){
   if(v.p1!==v.p2){toast(t('sec_mismatch'));return}
   var uid=S.user,old=(S.userPasswords||{})[uid];
@@ -3614,7 +3668,7 @@ if(typeof VIEWS!=='undefined'){VIEWS.scan=scanV;VIEWS.approvals=approvalsV;VIEWS
 
 /* Boot load store — FIX3: encrypted boot (unlock / first-run setup) lives in secBoot() */
 (function(){
- try{if(_LIC.gate())return;_LIC.booted();secBoot()}catch(e){console.warn('v9 boot',e)}
+ try{if(_LIC.gate())return;_LIC.booted();secBoot()}catch(e){console.warn('v9 boot',e);try{secProtectionBlock('init')}catch(_){}}
 })();
 
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='scanInput'&&e.target.files){Promise.all([].slice.call(e.target.files).map(function(f){return compressImg(f)})).then(function(arr){_scanPages=_scanPages.concat(arr);render()}).catch(function(){toast('⚠')})}});
@@ -4100,9 +4154,9 @@ document.addEventListener('input',function(e){
  if(e.target.id==='audQ'){S.audQ=e.target.value;audRefresh()} // FIX12-F
 });
 
-/* FIX13R-boot: the stored data is applied by the boot IIFE above — apply saved roles and re-render once */
-try{applyRoles()}catch(_){}
-try{chrome();render()}catch(err){console.warn('v9 boot render',err)}
+/* FIX13R-boot: render the stored workspace only after secure boot has completed */
+if(_SEC.ready){try{applyRoles()}catch(_){}
+ try{chrome();render()}catch(err){console.warn('v9 boot render',err);secProtectionBlock('init')}}
 
 
 /* V9.5 event handlers */
@@ -4129,7 +4183,7 @@ document.addEventListener('click',function(e){
  
  if(a==='setshare'){openShareModal(id);return}
  if(a==='setsharec'){openShareModal(+el.dataset.id);return}
-if(a==='panic'){S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'🔒 قفل فوري (Panic)',d:new Date().toLocaleString('fr-FR')});if(S.audit.length>200)S.audit.length=200;try{v9save()}catch(_){try{scheduleSave()}catch(__){}}lockIdle(true);toast(t('panic_ok'));return}
+if(a==='panic'){panicLockIdle();return}
  if(a==='tstart'){timerStart(id);return}
  if(a==='tstop'){timerStop();return}
  if(a==='tmanual'){timerManual(id);return}
@@ -4147,18 +4201,66 @@ document.addEventListener('change',function(e){
  if(e.target&&e.target.id==='roleDate'){S.roleDate=e.target.value;render()}
 });
 
-/* Idle auto-lock (V9.5) */
-var _idleT=null,_idleMs=10*60*1000;
-function bumpIdle(){if(_idleT)clearTimeout(_idleT);_idleT=setTimeout(function(){lockIdle(true)},_idleMs)}
-function lockIdle(on){var el=$('idleLock');if(!el)return;el.classList.toggle('on',!!on);if(on){var inp=$('idlePw');if(inp){inp.value='';setTimeout(function(){inp.focus()},100)}}else bumpIdle()}
+/* Idle auto-lock (V9.5) — unlock only after verifying the active user's stored password hash. */
+var _idleT=null,_idleMs=10*60*1000,_idleLocked=false,_idleVerified=false,_idleInertState=[],_idleEpoch=0;
+function idleCanLock(){return !!(_SEC&&_SEC.ready&&typeof secProtectionIssue==='function'&&!secProtectionIssue())}
+function idleInvalidate(){if(_idleT)clearTimeout(_idleT);_idleT=null;_idleEpoch=(_idleEpoch||0)+1}
+function bumpIdle(){idleInvalidate();if(_SEC&&_SEC.ready){var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return}}if(!_idleLocked&&idleCanLock()){var epoch=_idleEpoch;_idleT=setTimeout(function(){if(epoch!==_idleEpoch)return;_idleT=null;if(!_idleLocked&&idleCanLock())lockIdle(true)},_idleMs)}}
+function idleSetInert(on){
+ if(on){
+  _idleInertState=[];
+  Array.prototype.forEach.call(document.body.children,function(el){
+   if(el.id==='idleLock'||el.tagName==='SCRIPT')return;
+   _idleInertState.push({el:el,inert:!!el.inert,ariaHidden:el.getAttribute('aria-hidden')});
+   el.inert=true;el.setAttribute('aria-hidden','true');
+  });
+ }else{
+  _idleInertState.forEach(function(x){x.el.inert=x.inert;if(x.ariaHidden===null)x.el.removeAttribute('aria-hidden');else x.el.setAttribute('aria-hidden',x.ariaHidden)});
+  _idleInertState=[];
+ }
+}
+function lockIdle(on){
+ var el=$('idleLock');if(!el)return;
+ on=!!on;
+ if(on&&!idleCanLock()){idleInvalidate();return}
+ if(!on&&!_idleVerified)return; // No caller may dismiss the overlay without a successful credential check.
+ if(on===_idleLocked)return;
+ _idleLocked=on;el.classList.toggle('on',on);el.setAttribute('aria-hidden',on?'false':'true');
+ if(on){
+  _idleVerified=false;idleSetInert(true);
+  var inp=$('idlePw');if(inp){inp.value='';setTimeout(function(){inp.focus()},100)}
+ }else{idleSetInert(false);_idleVerified=false;bumpIdle()}
+}
+function panicLockIdle(){
+ if(!idleCanLock()){toast(t('sec_err_generic'));return false}
+ S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'🔒 قفل فوري (Panic)',d:new Date().toLocaleString('fr-FR')});if(S.audit.length>200)S.audit.length=200;
+ try{v9save()}catch(_){try{scheduleSave()}catch(__){}}
+ lockIdle(true);toast(t('panic_ok'));return true
+}
+function idleInteractionGuard(e){
+ if(!_idleLocked)return;
+ var lock=$('idleLock'),inside=!!(lock&&(e.target===lock||lock.contains(e.target)));
+ var auth=$('lockOv'),insideAuth=!!((!_SEC||!_SEC.ready)&&auth&&(e.target===auth||auth.contains(e.target)));
+ if(inside||insideAuth)return;
+ if(e.cancelable)e.preventDefault();
+ e.stopImmediatePropagation();
+}
+['click','change','input','submit','keydown','keyup','keypress','pointerdown','pointerup','touchstart','contextmenu'].forEach(function(ev){document.addEventListener(ev,idleInteractionGuard,true)});
 function tryIdleUnlock(){
- var inp=$('idlePw');var pw=inp?inp.value:'';
- /* Accept any non-empty if no crypto pin set; otherwise try sec verify if available */
- if(!pw){toast('—');return}
+ var lock=$('idleLock'),inp=$('idlePw');
+ if(!lock||!lock.classList.contains('on')||!_idleLocked)return Promise.resolve(false);
+ var pw=inp?String(inp.value||''):'';
+ if(!pw){toast(t('sec_wrong_gen'));return Promise.resolve(false)}
+ var user=S&&S.user,record=S&&S.userPasswords&&S.userPasswords[user];
+ if(!idleCanLock()){
+  toast(t('sec_err_generic'));return Promise.resolve(false);
+ }
  try{
-  if(typeof verifyUserPassword==='function'){verifyUserPassword(S.user,pw).then(function(ok){if(ok)lockIdle(false);else toast('⚠')}).catch(function(){lockIdle(false)})}
-  else lockIdle(false);
- }catch(_){lockIdle(false)}
+  return Promise.resolve(verifyPass(record,pw)).then(function(ok){
+   if(ok===true){_idleVerified=true;lockIdle(false);return true}
+   toast(t('sec_wrong_gen'));return false;
+  },function(){toast(t('sec_err_generic'));return false});
+ }catch(_){toast(t('sec_err_generic'));return Promise.resolve(false)}
 }
 ['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){document.addEventListener(ev,bumpIdle,{passive:true})});
 bumpIdle();
