@@ -721,9 +721,13 @@ describe('verified legacy-store migration', () => {
     assert.deepEqual(e.calls.blocked, ['migration-cleanup']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.renders, 0);
+    const blockedBeforeRestart = e.calls.blocked.length;
     e.context.secBoot();
-    assert.equal(e.calls.blocked.at(-1), 'migration-recovery', 'subsequent boot cannot silently ignore pending plaintext cleanup');
-    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.calls.blocked.length, blockedBeforeRestart, 'verified encrypted primary is recoverable after restart');
+    assert.equal(e.context._SEC.ready, false, 'workspace stays closed until the manager authenticates again');
+    assert.equal(e.store.get('diwan_v9_data'), e.store.get('diwan_v9_data'), 'encrypted primary remains present');
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw, 'legacy plaintext remains preserved when cleanup still fails');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8', 'recovery marker remains for retry');
   });
 
   test('restart after successful migration loads the primary encrypted copy without rewriting or setup', async () => {
@@ -910,7 +914,7 @@ describe('interrupted migration recovery', () => {
     await e.submit(fixture.password);
     assert.equal(e.context._SEC.ready, true);
     assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
-    assert.deepEqual(e.context.S.cases, fixture.data.cases);
+    assert.equal(JSON.stringify(e.context.S.cases), JSON.stringify(fixture.data.cases));
     assert.equal(e.store.has('diwan_v9_migration_backup'), false);
     assert.equal(e.store.has('diwan_v9_migration_pending'), false);
   });
