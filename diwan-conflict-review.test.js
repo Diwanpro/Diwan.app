@@ -86,6 +86,15 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(HTML, /S\.cases=\[\s*\{id:1,no:'DEMO-2026-001'/);
   });
 
+  test('responsible-lawyer changes require a reason and are audited; sensitive matters need confirmation', () => {
+    assert.match(HTML, /if\(a==='setlawyer'\)\{\s*if\(!isM\(\)\)return/);
+    assert.match(HTML, /n:'reason',l:'lw_change_reason',type:'textarea',req:true/);
+    assert.match(HTML, /if\(c\.secret&&!confirm\(t\('lw_change_sensitive_confirm'\)\)\)return/);
+    assert.match(HTML, /var oldLawyer=c\.lawyerId\|\|'m',newLawyer=v\.lw\|\|'m',reason=String\(v\.reason\|\|' '\)\.trim\(\)/);
+    assert.match(HTML, /تغيير المحامي المسؤول — '\+c\.no\+' — '\+lawyerName\(oldLawyer\)\+' → '\+lawyerName\(newLawyer\)\+' — السبب: '\+reason/);
+    assert.match(HTML, /أعضاء الفريق لم يتغيروا تلقائياً/);
+  });
+
   test('preview app identity and service-worker cache are explicitly isolated', () => {
     assert.match(MANIFEST.name, /نسخة المعاينة المهنية/);
     assert.match(MANIFEST.short_name, /تجريبي/);
