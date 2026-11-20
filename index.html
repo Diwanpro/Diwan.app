@@ -3458,8 +3458,8 @@ function cfStamp(){return new Date().toLocaleString('fr-FR')}
 function cfPhraseOk(v){var s=String(v||'').replace(/\s+/g,' ').trim().replace(/[’']/g,'’').toLowerCase();return s===CF_PHRASE_AR||s===CF_PHRASE_FR}
 function cfLogReject(conf,meta){try{S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'رفض قبول ملف لتعارض المصالح — '+((meta&&meta.no)||'')+' — '+conf.map(function(x){return x.reason}).join(' | '),d:cfStamp()});if(S.audit.length>200)S.audit.length=200;
  S.intakeLog=S.intakeLog||[];S.intakeLog.push({caseId:null,caseNo:(meta&&meta.no)||'',decision:'rejected',reasons:conf,at:new Date().toISOString(),by:S.user});v9save();toast(t('cf_rejected'))}catch(_){}}
-function cfLogAccept(id,no,conf){try{S.intakeLog=S.intakeLog||[];S.intakeLog.push({caseId:id,caseNo:no,decision:'accepted',reasons:conf,at:new Date().toISOString(),by:S.user});
- if(conf.some(function(x){return x.severity==='critical'||x.severity==='high'})){S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'قبول ملف رغم تعارض المصالح — '+no+' — '+conf.map(function(x){return x.reason}).join(' | '),d:cfStamp()});if(S.audit.length>200)S.audit.length=200}}catch(_){}}
+function cfLogAccept(id,no,conf,reviewApproved){try{S.intakeLog=S.intakeLog||[];S.intakeLog.push({caseId:id,caseNo:no,decision:reviewApproved?'review_approved':'accepted',reasons:conf,at:new Date().toISOString(),by:S.user});
+ if(reviewApproved){S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'اعتماد ملف بعد مراجعة سرية لتعارض المصالح — '+no,d:cfStamp()});if(S.audit.length>200)S.audit.length=200}}catch(_){}}
 /* mandatory confirmation: the lawyer must type the phrase literally; any other way out (reject / Esc / scrim) is logged as a rejection */
 function conflictConfirm(conf,meta,onAccept){var rows=conf.map(function(x){return '<li style="margin-bottom:6px"><span class="chip '+((x.severity==='critical'||x.severity==='high')?'bad':'warn')+'">'+esc(t('cf_sev_'+x.severity))+'</span> '+esc(x.reason)+'</li>'}).join('');
  $('modal').className='modal';
@@ -3474,13 +3474,13 @@ function conflictConfirm(conf,meta,onAccept){var rows=conf.map(function(x){retur
 
 /* Create a matter only after conflict screening has no findings, or after an authorized
    confidential reviewer explicitly approves a pending review. */
-function createIntakeCase(v,keep,conf){
+function createIntakeCase(v,keep,conf,reviewApproved){
  var cl0=keep[0]||{},op0=keep.find(function(p,i){return i>0&&p.role==='opponent'}),clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
  closeModal();
  undoable(function(){var id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
   S.cases.unshift({id:id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
   try{var sk=stampKindOf(+v.court),sr=stampConsume(sk,id,'تأسيس ملف '+v.no,!!v.ja);if(sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
-  cfLogAccept(id,v.no,conf)
+  cfLogAccept(id,v.no,conf,!!reviewApproved)
  },'t_case');
 }
 function conflictReviewCard(){
@@ -3493,7 +3493,7 @@ function conflictReviewCard(){
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>المراجعة السرية لتعارض المصالح / Revue confidentielle des conflits</h2><span class="chip '+(pending.length?'warn':'ok')+'">'+pending.length+'</span></div><div class="card-b">'+(rows||'<p class="empty">لا توجد حالات معلقة / Aucune demande en attente</p>')+'</div></section>'
 }
 
-function intakeLogCard(){var rows=(S.intakeLog||[]).slice(-30).reverse().map(function(x){var ok=x.decision==='accepted',rs=(x.reasons||[]).map(function(r){return esc((r.reason||'')+'')}).join('<br>');
+function intakeLogCard(){var rows=(S.intakeLog||[]).slice(-30).reverse().map(function(x){var ok=x.decision==='accepted'||x.decision==='review_approved',rs=(x.reasons||[]).map(function(r){return esc((r.reason||'')+'')}).join('<br>');
   return '<div class="dlrow">'+av(x.by)+'<div style="flex:1"><strong>'+esc(x.caseNo||'—')+'</strong> <span class="chip '+(ok?'ok':'bad')+'">'+t(ok?'cf_log_acc':'cf_log_rej')+'</span><span class="sub">'+(rs||t('cf_log_none'))+'</span></div><small class="sub" dir="ltr" style="text-align:start">'+esc(new Date(x.at).toLocaleString('fr-FR'))+'</small></div>'}).join('')||'<p class="empty">—</p>';
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('cf_log_title')+'</h2></div><div class="card-b">'+rows+'</div></section>'}
 
@@ -3619,7 +3619,7 @@ document.addEventListener('click',function(e){
  if(!confirm('تأكيد الاعتماد بعد مراجعة سرية مستقلة؟ / Confirmer l’autorisation après revue confidentielle ?'))return;
  item.status='approved';item.reviewedAt=new Date().toISOString();item.reviewedBy=S.user;
  S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'اعتماد بعد مراجعة سرية لتعارض المصالح — '+item.draft.no,d:cfStamp()});
- createIntakeCase(item.draft,item.parties,item.reasons);
+ createIntakeCase(item.draft,item.parties,item.reasons,true);
  v9save();render();toast('تم اعتماد الملف بعد المراجعة / Dossier autorisé après revue');
 });
 
