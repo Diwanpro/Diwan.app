@@ -986,6 +986,17 @@ describe('interrupted migration recovery', () => {
     assert.equal(e.writes(), 0);
   });
 
+  test('orphaned backup without primary or transaction marker cannot open workspace', () => {
+    const e = makeUnlockEnv(), backup = '{"cases":[{"id":"orphan"}],"user":"m","userPasswords":{}}';
+    e.store.set('diwan_v9_migration_backup', backup);
+    e.context.secBoot();
+    assert.deepEqual(e.calls.blocked, ['migration-recovery']);
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.store.get('diwan_v9_migration_backup'), backup);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+  });
+
   test('unknown marker fails closed and leaves all candidate bytes unchanged', () => {
     const e = makeUnlockEnv(), primary = '{"cases":[]}';
     e.store.set('diwan_v9_data', primary);
