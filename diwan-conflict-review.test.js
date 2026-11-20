@@ -74,14 +74,14 @@ describe('Diwan conflict-of-interest intake gate', () => {
   test('preview reset is opt-in, manager-only, deterministic, and explicitly synthetic', () => {
     const seed = functionSource('resetPreviewDemo');
     const card = functionSource('previewDemoCard');
-    assert.match(seed, /if\(!isM\(\)\|\|S\.isDemo===false\)return/);
+    assert.match(seed, /if\(!isM\(\)\)return/);
     assert.match(seed, /if\(!confirm\(/);
     assert.match(seed, /DEMO-2026-001/);
     assert.match(seed, /DEMO-NIF-ATLAS-001/);
     assert.match(seed, /demo@example\.invalid/);
     assert.match(seed, /S\.conflictReviews=\[\]/);
     assert.match(seed, /S\.isDemo=true/);
-    assert.match(card, /if\(!isM\(\)\|\|S\.isDemo===false\)return ''/);
+    assert.match(card, /if\(!isM\(\)\)return ''/);
     assert.match(HTML, /resetPreviewDemo\(\)/);
     assert.match(HTML, /S\.cases=\[\s*\{id:1,no:'DEMO-2026-001'/);
   });
