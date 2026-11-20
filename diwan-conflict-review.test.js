@@ -58,7 +58,7 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(HTML, /find\(function\(x\)\{return x\.id===el\.dataset\.id&&x\.status==='pending'\}\)/);
     assert.match(HTML, /item\.status='rejected';item\.reviewedAt=new Date\(\)\.toISOString\(\);item\.reviewedBy=S\.user/);
     assert.match(HTML, /item\.status='approved';item\.reviewedAt=new Date\(\)\.toISOString\(\);item\.reviewedBy=S\.user/);
-    assert.match(HTML, /createIntakeCase\(item\.draft,item\.parties,item\.reasons\)/);
+    assert.match(HTML, /createIntakeCase\(item\.draft,item\.parties,item\.reasons,true\)/);
     assert.match(HTML, /اعتماد بعد مراجعة سرية لتعارض المصالح/);
   });
 
