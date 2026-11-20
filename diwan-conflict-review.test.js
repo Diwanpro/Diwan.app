@@ -85,6 +85,7 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(seed, /S\.isDemo=true/);
     assert.match(card, /if\(!isM\(\)\)return ''/);
     assert.match(HTML, /resetPreviewDemo\(\)/);
+    assert.doesNotMatch(HTML, /if\(!isM\(\)\|\|S\.isDemo===false\)return;\s*resetPreviewDemo\(\)/, 'reset must remain available after the demo data have been cleared');
     assert.match(HTML, /S\.cases=\[\s*\{id:1,no:'DEMO-2026-001'/);
   });
 
