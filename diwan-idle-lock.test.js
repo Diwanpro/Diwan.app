@@ -1,4 +1,4 @@
-/* DIWAN-FIX-01 — fail-closed idle-lock regression tests.
+/* DIWAN-FIX-01 — fail-closed idle-lock and interrupted-migration recovery regression tests.
  * Run with: node --test diwan-idle-lock.test.js
  * The tested functions are extracted verbatim from index.html; browser DOM is
  * represented by small test doubles, while password hashing uses Node WebCrypto.
@@ -136,7 +136,7 @@ function makeBootEnv(initialStore, cryptoAvailable) {
     persistNow() { calls.persisted++; }, chrome() { calls.chrome++; }, render() { calls.renders++; },
   };
   vm.createContext(context);
-  for (const name of ['deriveKey', 'encryptJSON', 'decryptJSON', 'secCmp', 'hashPass', 'verifyPass', 'secPassRecordValid', 'secStoreDataValid', 'secProtectionIssue', 'secWarnStore', 'secWriteEncryptedAndVerify', 'secMigrationError', 'secSetChecked', 'secRemoveChecked', 'secCleanupLegacyV8AfterVerified', 'secPersistBootSnapshot', 'idleCanLock', 'idleInvalidate', 'bumpIdle', 'secProtectionBlock', 'secBoot', 'secFinishBoot', 'secSwitchRole']) {
+  for (const name of ['deriveKey', 'encryptJSON', 'decryptJSON', 'secCmp', 'hashPass', 'verifyPass', 'secPassRecordValid', 'secStoreDataValid', 'secProtectionIssue', 'secWarnStore', 'secWriteEncryptedAndVerify', 'secMigrationError', 'secSetChecked', 'secRemoveChecked', 'secCleanupLegacyV8AfterVerified', 'secCleanupMigrationRecovery', 'secPersistBootSnapshot', 'idleCanLock', 'idleInvalidate', 'bumpIdle', 'secProtectionBlock', 'secBoot', 'secFinishBoot', 'secSwitchRole']) {
     vm.runInContext(extractFunction(name), context, { filename: 'index.html:' + name });
   }
   const block = context.secProtectionBlock;
@@ -681,7 +681,7 @@ describe('verified legacy-store migration', () => {
     assert.equal(e.context._SEC.ready, true);
   });
 
-  test('failed primary write preserves plaintext v8 and does not expose or report successful boot', async () => {
+  test('failed primary write preserves plaintext v8 and keeps a retry marker without exposing the workspace', async () => {
     const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
     e.store.set('diwan_v8_data', fixture.raw);
     const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
@@ -689,14 +689,14 @@ describe('verified legacy-store migration', () => {
     e.context.secBoot(); await e.submit(fixture.password);
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
     assert.equal(e.store.has('diwan_v9_data'), false);
-    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8');
     assert.deepEqual(e.calls.blocked, ['migration-save']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.renders, 0);
     assert.equal(e.calls.auth, undefined);
   });
 
-  test('unverifiable ciphertext write is removed while the original v8 data remains intact', async () => {
+  test('unverifiable ciphertext write is removed while v8 data and a retry marker remain intact', async () => {
     const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
     e.store.set('diwan_v8_data', fixture.raw);
     const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
@@ -704,7 +704,7 @@ describe('verified legacy-store migration', () => {
     e.context.secBoot(); await e.submit(fixture.password);
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
     assert.equal(e.store.has('diwan_v9_data'), false);
-    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8');
     assert.deepEqual(e.calls.blocked, ['migration-save']);
     assert.equal(e.calls.renders, 0);
   });
@@ -721,9 +721,14 @@ describe('verified legacy-store migration', () => {
     assert.deepEqual(e.calls.blocked, ['migration-cleanup']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.renders, 0);
+    const encryptedPrimary = e.store.get('diwan_v9_data');
+    const blockedBeforeRestart = e.calls.blocked.length;
     e.context.secBoot();
-    assert.equal(e.calls.blocked.at(-1), 'migration-recovery', 'subsequent boot cannot silently ignore pending plaintext cleanup');
-    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.calls.blocked.length, blockedBeforeRestart, 'verified encrypted primary is recoverable after restart');
+    assert.equal(e.context._SEC.ready, false, 'workspace stays closed until the manager authenticates again');
+    assert.equal(e.store.get('diwan_v9_data'), encryptedPrimary, 'encrypted primary remains present');
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw, 'legacy plaintext remains preserved when cleanup still fails');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8', 'original recovery marker remains for retry');
   });
 
   test('restart after successful migration loads the primary encrypted copy without rewriting or setup', async () => {
@@ -871,6 +876,139 @@ describe('verified legacy-store migration', () => {
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.renders, 0);
     assert.equal(e.calls.auth, undefined);
+  });
+});
+
+describe('interrupted migration recovery', () => {
+  async function legacyFixture(e, password, cases = [{ id: 915, title: 'Recoverable legacy record' }]) {
+    const record = await e.context.hashPass(password);
+    const data = { cases, user: 'm', userPasswords: { m: record } };
+    return { data, raw: JSON.stringify(data), password };
+  }
+
+  test('v8 marker resumes after password verification and preserves legacy until ciphertext verifies', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    e.store.set('diwan_v8_data', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'v8');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.deepEqual(e.calls.blocked, []);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.has('diwan_v9_migration_backup'), false);
+  });
+
+  test('encrypted v8 source survives a crash after the v8 migration marker', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const encryptedLegacy = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v8_data', encryptedLegacy);
+    e.store.set('diwan_v9_migration_pending', 'v8');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.deepEqual(e.calls.blocked, []);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+
+  test('primary marker written before backup can recover from the still-valid primary', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    e.store.set('diwan_v9_data', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'primary');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.deepEqual(e.calls.blocked, []);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.has('diwan_v9_migration_backup'), false);
+  });
+
+  test('invalid interrupted primary recovers from verified backup without setup or data loss', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const damaged = '{"cases":';
+    e.store.set('diwan_v9_data', damaged);
+    e.store.set('diwan_v9_migration_backup', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'primary');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.calls.applied, 0, 'backup data is not applied before authentication');
+    assert.deepEqual(e.calls.blocked, []);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(JSON.stringify(e.context.S.cases), JSON.stringify(fixture.data.cases));
+    assert.equal(e.store.has('diwan_v9_migration_backup'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+
+  test('encrypted primary with cleanup marker is authenticated before stale plaintext is removed', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const encrypted = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', encrypted);
+    e.store.set('diwan_v8_data', fixture.raw);
+    e.store.set('diwan_v9_migration_backup', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'v8-cleanup');
+    e.context.secBoot();
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    await e.submit(fixture.password);
+    assert.equal(e.context._SEC.ready, true);
+    assert.equal(e.store.get('diwan_v9_data'), encrypted);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_backup'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+
+  test('wrong manager password during encrypted-primary recovery preserves every recovery copy', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const encrypted = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', encrypted);
+    e.store.set('diwan_v8_data', fixture.raw);
+    e.store.set('diwan_v9_migration_backup', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'v8-cleanup');
+    e.context.secBoot();
+    await e.submit('IncorrectManager8');
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.store.get('diwan_v9_data'), encrypted);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.store.get('diwan_v9_migration_backup'), fixture.raw);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8-cleanup');
+    assert.equal(e.calls.applied, 0);
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.writes(), 0);
+  });
+
+  test('orphaned backup without primary or transaction marker cannot open workspace', () => {
+    const e = makeUnlockEnv(), backup = '{"cases":[{"id":"orphan"}],"user":"m","userPasswords":{}}';
+    e.store.set('diwan_v9_migration_backup', backup);
+    e.context.secBoot();
+    assert.deepEqual(e.calls.blocked, ['migration-recovery']);
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.store.get('diwan_v9_migration_backup'), backup);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+  });
+
+  test('unknown marker fails closed and leaves all candidate bytes unchanged', () => {
+    const e = makeUnlockEnv(), primary = '{"cases":[]}';
+    e.store.set('diwan_v9_data', primary);
+    e.store.set('diwan_v9_migration_backup', '{"cases":[{"id":"backup"}]}');
+    e.store.set('diwan_v9_migration_pending', 'unknown-state');
+    e.context.secBoot();
+    assert.deepEqual(e.calls.blocked, ['migration-recovery']);
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.store.get('diwan_v9_data'), primary);
+    assert.equal(e.store.get('diwan_v9_migration_backup'), '{"cases":[{"id":"backup"}]}');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'unknown-state');
   });
 });
 
