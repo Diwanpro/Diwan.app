@@ -1,7 +1,7 @@
-/* Diwan v10.3.4 — Service Worker (offline-first app shell) */
+/* Diwan professional preview — isolated offline-first app shell */
 'use strict';
 
-var CACHE = 'diwan-v10.3.4';
+var CACHE = 'diwan-preview-professional-20261120';
 var PRECACHE = [
   './',
   './index.html',
