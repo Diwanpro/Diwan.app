@@ -3690,9 +3690,8 @@ document.addEventListener('click',function(e){
   v9save();render();toast('تم رفض القبول / Admission refusée');return
  }
  if(!confirm('تأكيد الاعتماد بعد مراجعة سرية مستقلة؟ / Confirmer l’autorisation après revue confidentielle ?'))return;
- item.status='approved';item.reviewedAt=new Date().toISOString();item.reviewedBy=S.user;
- S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'اعتماد بعد مراجعة سرية لتعارض المصالح — '+item.draft.no,d:cfStamp()});
  createIntakeCase(item.draft,item.parties,item.reasons,true);
+ item.status='approved';item.reviewedAt=new Date().toISOString();item.reviewedBy=S.user;
  v9save();render();toast('تم اعتماد الملف بعد المراجعة / Dossier autorisé après revue');
 });
 
