@@ -79,7 +79,9 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(seed, /DEMO-2026-001/);
     assert.match(seed, /DEMO-NIF-ATLAS-001/);
     assert.match(seed, /demo@example\.invalid/);
-    assert.match(seed, /S\.conflictReviews=\[\]/);\n    assert.match(seed, /S\.processServers=\[\];S\.services=\[\];S\.experts=\[\]/);\n    assert.match(seed, /S\.deliveries=\[\];S\.qrRegistry=\[\];S\.smsLog=\[\]/);
+    assert.match(seed, /S\.conflictReviews=\[\]/);
+    assert.match(seed, /S\.processServers=\[\];S\.services=\[\];S\.experts=\[\]/);
+    assert.match(seed, /S\.deliveries=\[\];S\.qrRegistry=\[\];S\.smsLog=\[\]/);
     assert.match(seed, /S\.isDemo=true/);
     assert.match(card, /if\(!isM\(\)\)return ''/);
     assert.match(HTML, /resetPreviewDemo\(\)/);
