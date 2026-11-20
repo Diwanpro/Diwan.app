@@ -87,7 +87,7 @@ describe('Diwan conflict-of-interest intake gate', () => {
   test('case creation is factored into a single path for clean intake and approved review', () => {
     const src = functionSource('createIntakeCase');
     assert.match(src, /S\.cases\.unshift\(/);
-    assert.match(src, /cfLogAccept\(id,v\.no,conf\)/);
+    assert.match(src, /cfLogAccept\(id,v\.no,conf,!!reviewApproved\)/);
     assert.match(src, /undoable\(/);
   });
 });
