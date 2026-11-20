@@ -3128,8 +3128,8 @@ function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.t
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
 /* ===== FIX3 (security): AES-GCM-256 at-rest encryption, PBKDF2 passwords, lock screen ===== */
-var ENC_PREFIX='DWNENC1:',ENC_PREFIX2='DWNENC2:',STORE_KEY_V8='diwan_v8_data',PBKDF2_IT=600000,PBKDF2_IT_LEGACY=200000,PW_IT=600000,PW_IT_LEGACY=150000,UNLOCK_LOCK_KEY='diwan_unlock_lock';
-var _loadedFromV8=false,_savePending=false,_saveBusy=false,_saveDirty=false,_plainWarned=false,_unlockFails=0;
+var ENC_PREFIX='DWNENC1:',ENC_PREFIX2='DWNENC2:',STORE_KEY_V8='diwan_v8_data',MIGRATION_PENDING_KEY='diwan_v9_migration_pending',MIGRATION_BACKUP_KEY='diwan_v9_migration_backup',PBKDF2_IT=600000,PBKDF2_IT_LEGACY=200000,PW_IT=600000,PW_IT_LEGACY=150000,UNLOCK_LOCK_KEY='diwan_unlock_lock';
+var _loadedFromV8=false,_legacyV8PendingCleanup=false,_savePending=false,_saveBusy=false,_saveDirty=false,_savePromise=null,_plainWarned=false,_unlockFails=0;
 /* the manager password (and the derived-key context) live ONLY in this closure — never in localStorage */
 var _SEC=(function(){var _pass=null,_ctx=null,_verified=false;return {ready:false,
  avail:function(){return !!(window.crypto&&window.crypto.subtle&&window.TextEncoder&&window.Uint8Array)},
@@ -3169,14 +3169,61 @@ function secPostImport(prev){if(prev&&S.auth&&S.auth!==prev){if(prev.lock)S.auth
 /* --- persistence: debounced, serialized, encrypted --- */
 function scheduleSave(){_savePending=true;clearTimeout(_saveTimer);_saveTimer=setTimeout(persistNow,400)}
 function secWarnStore(){if(!_storageWarned){_storageWarned=true;try{toast(t('v7_storage_fail'))}catch(_){}}}
-function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return; /* locked / booting: never overwrite stored data */
-var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return}
- _savePending=false;if(_saveBusy){_saveDirty=true;return}
- var snap;try{snap=snapV7()}catch(e){return}
- if(!_SEC.avail()){secProtectionBlock('crypto');return}
- if(!_SEC.hasPass())return;
+function secWriteEncryptedAndVerify(snap,cache){
+ var expected,pass,ctx=cache||{};try{expected=JSON.stringify(snap);pass=_SEC.getPass()}catch(e){return Promise.reject(e)}
+ if(!_SEC||!_SEC.avail()||!pass)return Promise.reject(new Error('crypto-unavailable'));
+ return Promise.resolve().then(function(){return encryptJSON(snap,pass,ctx)}).then(function(blob){
+  if(!isEncPayload(blob))throw new Error('not-encrypted');localStorage.setItem(STORE_KEY,blob);
+  var stored=localStorage.getItem(STORE_KEY);if(stored!==blob)throw new Error('write-not-verifiable');
+  return decryptJSON(stored,pass,{}).then(function(check){if(!secStoreDataValid(check)||JSON.stringify(check)!==expected)throw new Error('encrypted-copy-mismatch');return {raw:blob,ctx:ctx}})
+ })
+}
+function secMigrationError(reason){var e=new Error(reason);e.reason=reason;return e}
+function secSetChecked(key,value){localStorage.setItem(key,value);if(localStorage.getItem(key)!==value)throw new Error('storage-write-not-verifiable')}
+function secRemoveChecked(key){localStorage.removeItem(key);if(localStorage.getItem(key)!==null)throw new Error('storage-remove-not-verifiable')}
+function secCleanupLegacyV8AfterVerified(expectedPrimary){
+ try{var legacy=localStorage.getItem(STORE_KEY_V8);if(legacy===null){_legacyV8PendingCleanup=false;return Promise.resolve(true)}var primary=localStorage.getItem(STORE_KEY);if(primary!==expectedPrimary||!isEncPayload(primary))throw secMigrationError('migration-recovery');if(localStorage.getItem(MIGRATION_PENDING_KEY)!==null||localStorage.getItem(MIGRATION_BACKUP_KEY)!==null)throw secMigrationError('migration-recovery');secSetChecked(MIGRATION_PENDING_KEY,'v8-cleanup');secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_PENDING_KEY);_legacyV8PendingCleanup=false;return Promise.resolve(true)}catch(e){return Promise.reject(e&&e.reason?e:secMigrationError('migration-cleanup'))}
+}
+function secPersistBootSnapshot(snap){
+ var primary=null,legacy=null,marker=null,backup=null;try{primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);marker=localStorage.getItem(MIGRATION_PENDING_KEY);backup=localStorage.getItem(MIGRATION_BACKUP_KEY)}catch(e){return Promise.reject(secMigrationError('storage'))}
+ if(marker!==null||backup!==null)return Promise.reject(secMigrationError('migration-recovery'));
+ if(_loadedFromV8){
+  if(primary!==null||legacy===null)return Promise.reject(secMigrationError('migration-recovery'));
+  try{secSetChecked(MIGRATION_PENDING_KEY,'v8')}catch(e){try{secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){}return Promise.reject(secMigrationError('migration-save'))}
+  return secWriteEncryptedAndVerify(snap,{}).then(function(saved){
+   try{secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
+   _loadedFromV8=false;_SEC.setCtx(saved.ctx);return true
+  },function(err){
+   try{var current=localStorage.getItem(STORE_KEY);if(current!==null)secRemoveChecked(STORE_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){throw secMigrationError('migration-recovery')}
+   throw secMigrationError('migration-save')
+  })
+ }
+ if(primary!==null&&!isEncPayload(primary)){
+  try{secSetChecked(MIGRATION_PENDING_KEY,'primary');secSetChecked(MIGRATION_BACKUP_KEY,primary)}catch(e){try{if(localStorage.getItem(MIGRATION_BACKUP_KEY)===primary)secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){}return Promise.reject(secMigrationError('migration-save'))}
+  return secWriteEncryptedAndVerify(snap,{}).then(function(saved){
+   try{if(legacy!==null)secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
+   _legacyV8PendingCleanup=false;_SEC.setCtx(saved.ctx);return true
+  },function(err){
+   try{if(localStorage.getItem(STORE_KEY)!==primary)secSetChecked(STORE_KEY,primary);secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){throw secMigrationError('migration-recovery')}
+   throw secMigrationError('migration-save')
+  })
+ }
+ return secWriteEncryptedAndVerify(snap,_SEC.getCtx()).then(function(saved){_SEC.setCtx(saved.ctx);return true},function(){
+  try{var current=localStorage.getItem(STORE_KEY);if(primary!==null&&current!==primary)secSetChecked(STORE_KEY,primary);else if(primary===null&&current!==null)secRemoveChecked(STORE_KEY)}catch(e){return Promise.reject(secMigrationError('migration-recovery'))}
+  return Promise.reject(secMigrationError('migration-save'))
+ })
+}
+function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return Promise.resolve(false); /* locked / booting: never overwrite stored data */
+ var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return Promise.resolve(false)}
+ _savePending=false;if(_saveBusy){_saveDirty=true;return _savePromise||Promise.resolve(false)}
+ var snap,prior=null;try{snap=snapV7();prior=localStorage.getItem(STORE_KEY)}catch(e){secWarnStore();return Promise.resolve(false)}
+ if(!_SEC.avail()){secProtectionBlock('crypto');return Promise.resolve(false)}if(!_SEC.hasPass())return Promise.resolve(false);
  _saveBusy=true;var ctx=_SEC.getCtx();if(!ctx){ctx={};_SEC.setCtx(ctx)}
- encryptJSON(snap,_SEC.getPass(),ctx).then(function(b){localStorage.setItem(STORE_KEY,b)}).catch(function(){secWarnStore()}).then(function(){_saveBusy=false;if(_saveDirty){_saveDirty=false;persistNow()}})}
+ _savePromise=secWriteEncryptedAndVerify(snap,ctx).then(function(){return true},function(){
+  try{var current=localStorage.getItem(STORE_KEY);if(prior!==null&&current!==prior){localStorage.setItem(STORE_KEY,prior);if(localStorage.getItem(STORE_KEY)!==prior)throw new Error('restore-failed')}else if(prior===null&&current!==null){localStorage.removeItem(STORE_KEY);if(localStorage.getItem(STORE_KEY)!==null)throw new Error('restore-failed')}}catch(e){secProtectionBlock('migration-recovery')}
+  secWarnStore();return false
+ }).then(function(ok){_saveBusy=false;_savePromise=null;if(_saveDirty){_saveDirty=false;return persistNow().then(function(next){return ok&&next})}return ok});return _savePromise
+}
 function secFlush(){if(_savePending||_saveDirty)persistNow()}
 window.addEventListener('beforeunload',secFlush);window.addEventListener('pagehide',secFlush);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')secFlush()});
@@ -3195,6 +3242,9 @@ function secProtectionBlock(reason){_SEC.ready=false;if(_SEC&&typeof _SEC.clearV
  'legacy-credential':'بيانات المكتب القديمة موجودة لكنها لا تحتوي اعتماد مدير صالحاً. لم تُفتح المساحة ولم تُنشأ كلمة مرور جديدة ولم تُعدّل البيانات. يلزم مسار استرداد/ترحيل موثوق قبل المتابعة؛ لا تمسح بيانات الموقع.<br>Existing legacy office data has no valid manager credential. The workspace remains closed; no password was created and the data was not changed. A trusted recovery/migration process is required; do not clear site data.',
  'encrypted-credential':'فُكّت البيانات الموجودة لكن سجل اعتماد المدير مفقود. لم تُفتح المساحة ولم يُنشأ اعتماد بديل أو تُعدّل البيانات. يلزم استرداد موثوق؛ لا تحذف بيانات الموقع.<br>Stored data decrypted but its manager credential is missing. The workspace remains closed; no replacement credential was created and data was not changed. Trusted recovery is required; do not clear site data.',
  'credential-mismatch':'كلمة المرور فكّت البيانات، لكنها لا تطابق سجل اعتماد المدير الموجود. لم تُفتح مساحة العمل ولم يُعدّل التخزين. لا تُعد إعداد كلمة مرور؛ اطلب استرداداً موثوقاً.<br>The password decrypted the data but does not match its stored manager credential. The workspace remains closed and storage was not changed. Do not re-enroll; use trusted recovery.',
+ 'migration-save':'تعذر حفظ نسخة مشفّرة والتحقق منها. لم تُفتح مساحة العمل؛ احتُفظ بالبيانات القديمة ولم يُعلن اكتمال الترحيل. لا تمسح بيانات الموقع؛ أعد المحاولة بعد التأكد من توفر مساحة تخزين، أو اطلب مساعدة موثوقة.\nThe encrypted copy could not be saved and verified. The workspace remains closed; legacy data was retained and migration was not reported complete. Do not clear site data; retry when storage is available or seek trusted recovery help.',
+ 'migration-cleanup':'حُفظت نسخة مشفّرة وتحققنا منها، لكن تعذر تأكيد إزالة النسخة القديمة. مساحة العمل مغلقة لأن البيانات القديمة قد تبقى كنص واضح. لا تمسح بيانات الموقع؛ اطلب إجراء استرداد موثوقاً لإزالة النسخة القديمة بعد التحقق من النسخة المشفّرة.\nAn encrypted copy was saved and verified, but removal of the legacy copy could not be confirmed. The workspace remains closed because old plaintext may remain. Do not clear site data; use trusted recovery to remove the old copy after verifying the encrypted one.',
+ 'migration-recovery':'تعذر إكمال الترحيل أو استعادة حالة تخزين مؤكدة. لم تُفتح مساحة العمل، وقد توجد نسخ احتياطية مؤقتة. لا تحذف أي بيانات ولا تبدأ إعداداً جديداً؛ اطلب مساعدة استرداد موثوقة.\nMigration or storage recovery could not be confirmed. The workspace remains closed and temporary recovery copies may exist. Do not delete data or start a new setup; seek trusted recovery assistance.',
  credential:'بيانات اعتماد المستخدم النشط غير موجودة. لم تُفتح مساحة العمل ولم يُنشأ اعتماد بديل. استعد سجل الاعتماد عبر مسار إداري موثوق.\nThe active user\'s credential is missing. The workspace remains closed and no replacement credential was created. Restore the credential through a trusted administrative process.',
  verifier:'خدمة التحقق من كلمة المرور غير متاحة. لم تُفتح مساحة العمل ولم يتم تجاوز المصادقة. أعد التحميل في متصفح مدعوم؛ إذا استمرت المشكلة، اطلب مساعدة المسؤول.\nPassword verification is unavailable. The workspace remains closed and authentication was not bypassed. Reload in a supported browser; contact the administrator if the problem persists.',
  user:'تعذر تحديد المستخدم النشط والتحقق من اعتماده. مساحة العمل مغلقة؛ أعد تحميل التطبيق أو اطلب مساعدة المسؤول.\nThe active user and its credential could not be validated. The workspace remains closed; reload the app or contact the administrator.',
@@ -3202,12 +3252,14 @@ function secProtectionBlock(reason){_SEC.ready=false;if(_SEC&&typeof _SEC.clearV
  }[reason]||'تعذر تهيئة الحماية. لم تُفتح مساحة العمل ولم تُعدّل بيانات التخزين. أعد التحميل أو اطلب مساعدة المسؤول.\nProtection could not be initialized. The workspace remains closed and stored data was not changed. Reload or contact the administrator.';
  secOverlay('<div class="modal"><h2>🔒 تعذر فتح مساحة العمل بأمان<br><small class="sub">Workspace security unavailable</small></h2><p style="white-space:pre-line">'+msg+'</p></div>')}
 function secDemoInit(){ S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
-function secFinishBoot(persist){var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}if(typeof _SEC.consumeVerified!=='function'||!_SEC.consumeVerified()){secProtectionBlock('verifier');return false}try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
+function secFinishBoot(persist){return Promise.resolve().then(function(){var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}if(typeof _SEC.consumeVerified!=='function'||!_SEC.consumeVerified()){secProtectionBlock('verifier');return false}try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
  setTimeout(function(){if(S.isDemo){var dn=document.getElementById('demoNote');if(dn)dn.innerHTML=t('v7_demo_bar')+' <button class="btn sm" data-act="cleardemo">'+t('v7_start_empty')+'</button>'}},300);
- try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}
- _SEC.ready=true;if(!secWorkspaceReady())return false;try{migrateV3()}catch(_){}if(persist)persistNow();try{chrome();render()}catch(e){secProtectionBlock('init');return false}if(typeof bumpIdle==='function')bumpIdle();return !!(_SEC.ready&&!secProtectionIssue())}
-function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var raw=null,data=null;_loadedFromV8=false;
- try{raw=localStorage.getItem(STORE_KEY);if(raw===null){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=raw!==null}}catch(_){secProtectionBlock('storage');return}
+ try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}try{migrateV3()}catch(_){}
+ function exposeWorkspace(){_SEC.ready=true;if(!secWorkspaceReady())return false;try{chrome();render()}catch(e){secProtectionBlock('init');return false}if(typeof bumpIdle==='function')bumpIdle();return !!(_SEC.ready&&!secProtectionIssue())}
+ var mustPersist=!!(persist||_savePending||_saveDirty);if(!mustPersist)return exposeWorkspace();clearTimeout(_saveTimer);_saveTimer=null;_savePending=false;var snap;try{snap=snapV7()}catch(e){secProtectionBlock('migration-save');return false}
+ return secPersistBootSnapshot(snap).then(function(){_savePending=false;_saveDirty=false;return exposeWorkspace()},function(e){secProtectionBlock(e&&e.reason||'migration-save');return false})}).catch(function(){secProtectionBlock('init');return false})}
+function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var raw=null,data=null,primary=null,legacy=null;_loadedFromV8=false;_legacyV8PendingCleanup=false;
+ try{if(localStorage.getItem(MIGRATION_PENDING_KEY)!==null||localStorage.getItem(MIGRATION_BACKUP_KEY)!==null){secProtectionBlock('migration-recovery');return}primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);if(primary!==null){raw=primary;_legacyV8PendingCleanup=legacy!==null}else{raw=legacy;_loadedFromV8=legacy!==null}}catch(_){secProtectionBlock('storage');return}
  if(raw!==null&&isEncPayload(raw)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}secShowUnlock(raw);return}
  if(raw!==null){
   if(!_SEC.avail()){secProtectionBlock('crypto-legacy');return}
@@ -3230,7 +3282,7 @@ function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد
   if(secPwChk(p1)){msg.textContent=secBi('sec_pw_weak');return}
   if(p1!==p2){msg.textContent=secBi('sec_mismatch');return}
   btn.disabled=true;
-  hashPass(p1).then(function(rec){S.userPasswords=S.userPasswords||{};S.userPasswords.m=rec;S.user='m';_SEC.setPass(p1);_SEC.markVerified();secCloseOverlay();if(secFinishBoot(true))authLog('pwset','m')})
+  hashPass(p1).then(function(rec){S.userPasswords=S.userPasswords||{};S.userPasswords.m=rec;S.user='m';_SEC.setPass(p1);_SEC.markVerified();return secFinishBoot(true).then(function(ok){if(ok){secCloseOverlay();authLog('pwset','m')}else btn.disabled=false})})
    .catch(function(){btn.disabled=false;msg.textContent=secBi('sec_err_generic')})})}
 function secShowUnlock(raw,pendingData){var o=secOverlay('<div class="modal"><h2>🔒 ديوان — فتح التطبيق<br><small class="sub">Diwan — Déverrouillage</small></h2><form id="lkForm" novalidate><div class="fld"><label for="lkPw">كلمة مرور المدير / Mot de passe du gérant</label><input id="lkPw" type="password" autocomplete="current-password"></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">فتح / Ouvrir</button></div></form><small class="lk-note">لا يمكن استرجاع البيانات المشفّرة دون كلمة المرور — احتفظ بنسخة احتياطية (تصدير كامل).<br>Les données chiffrées sont irrécupérables sans le mot de passe — conservez une sauvegarde (export complet).</small></div>');
  var f=o.querySelector('#lkForm'),inp=o.querySelector('#lkPw'),msg=o.querySelector('#lkMsg'),btn=o.querySelector('#lkBtn'),tick=null;inp.focus();
@@ -3256,7 +3308,7 @@ function secShowUnlock(raw,pendingData){var o=secOverlay('<div class="modal"><h2
    Promise.resolve(verified).then(function(ok){
     if(ok!==true){if(raw){btn.disabled=false;secProtectionBlock('credential-mismatch')}else failedPassword();return}
     try{if(raw||pendingData)applyStore(d);_SEC.setPass(p);_SEC.markVerified();if(ctx.key)_SEC.setCtx(ctx);S.user='m';_unlockFails=0;try{localStorage.removeItem(UNLOCK_LOCK_KEY)}catch(_){}
-     secCloseOverlay();if(secFinishBoot(true))authLog('login','m')
+     var needsEncryptedSave=!!(pendingData||_loadedFromV8);var cleanup=(!needsEncryptedSave&&_legacyV8PendingCleanup&&raw)?secCleanupLegacyV8AfterVerified(raw):Promise.resolve(true);cleanup.then(function(){return secFinishBoot(needsEncryptedSave)}).then(function(ok){if(ok){secCloseOverlay();authLog('login','m')}},function(err){secProtectionBlock(err&&err.reason||'migration-cleanup')})
     }catch(_){secProtectionBlock('init')}
    },function(){verifierUnavailable()})
   },function(err){decryptFailed(err)})})}

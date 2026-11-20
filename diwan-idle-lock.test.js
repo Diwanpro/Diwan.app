@@ -108,14 +108,15 @@ function makeBootEnv(initialStore, cryptoAvailable) {
   let tid = 0, bootVerified = false; const timers = new Map();
   const context = {
     console, crypto: webcrypto, TextEncoder, TextDecoder, Uint8Array, DataView, Promise, Date, Buffer,
-    STORE_KEY: 'diwan_v9_data', STORE_KEY_V8: 'diwan_v8_data', _loadedFromV8: false, PW_IT: 600000,
+    btoa(s) { return Buffer.from(s, 'binary').toString('base64'); }, atob(s) { return Buffer.from(s, 'base64').toString('binary'); },
+    STORE_KEY: 'diwan_v9_data', STORE_KEY_V8: 'diwan_v8_data', _legacyV8PendingCleanup: false, MIGRATION_PENDING_KEY: 'diwan_v9_migration_pending', MIGRATION_BACKUP_KEY: 'diwan_v9_migration_backup', _loadedFromV8: false, PW_IT: 600000,
     PBKDF2_IT: 600000, PBKDF2_IT_LEGACY: 200000, PW_IT_LEGACY: 150000, ENC_PREFIX: 'DWNENC1:', ENC_PREFIX2: 'DWNENC2:', UNLOCK_LOCK_KEY: 'diwan_unlock_lock',
-    _SEC: { ready: true, avail() { return cryptoAvailable !== false; }, hasPass() { return true; }, markVerified() { bootVerified = true; }, consumeVerified() { const ok = bootVerified; bootVerified = false; return ok; }, clearVerified() { bootVerified = false; } }, _secWorkspaceState: [],
+    _SEC: { ready: true, avail() { return cryptoAvailable !== false; }, hasPass() { return true; }, getPass() { return 'TestManager9'; }, setPass() {}, setCtx() {}, getCtx() { return null; }, markVerified() { bootVerified = true; }, consumeVerified() { const ok = bootVerified; bootVerified = false; return ok; }, clearVerified() { bootVerified = false; } }, _secWorkspaceState: [],
     secWorkspaceReady() { return !!context._SEC.ready; },
     S: { user: 'm', userPasswords: {}, cases: [], isDemo: false },
     U: [{ id: 'm', role: 'manager' }],
     _idleT: null, _idleMs: 600000, _idleLocked: false, _idleVerified: false, _idleInertState: [], _idleEpoch: 0,
-    _saveTimer: null, _savePending: false, _saveBusy: false, _saveDirty: false,
+    _saveTimer: null, _savePending: false, _saveBusy: false, _saveDirty: false, _savePromise: null, _storageWarned: false, toast() {},
     snapV7() { return { cases: [] }; },
     setTimeout(fn, ms) { const id = ++tid; timers.set(id, { fn, ms }); return id; },
     clearTimeout(id) { timers.delete(id); },
@@ -135,7 +136,7 @@ function makeBootEnv(initialStore, cryptoAvailable) {
     persistNow() { calls.persisted++; }, chrome() { calls.chrome++; }, render() { calls.renders++; },
   };
   vm.createContext(context);
-  for (const name of ['secCmp', 'hashPass', 'verifyPass', 'secPassRecordValid', 'secStoreDataValid', 'secProtectionIssue', 'idleCanLock', 'idleInvalidate', 'bumpIdle', 'secProtectionBlock', 'secBoot', 'secFinishBoot', 'secSwitchRole']) {
+  for (const name of ['deriveKey', 'encryptJSON', 'decryptJSON', 'secCmp', 'hashPass', 'verifyPass', 'secPassRecordValid', 'secStoreDataValid', 'secProtectionIssue', 'secWarnStore', 'secWriteEncryptedAndVerify', 'secMigrationError', 'secSetChecked', 'secRemoveChecked', 'secCleanupLegacyV8AfterVerified', 'secPersistBootSnapshot', 'idleCanLock', 'idleInvalidate', 'bumpIdle', 'secProtectionBlock', 'secBoot', 'secFinishBoot', 'secSwitchRole']) {
     vm.runInContext(extractFunction(name), context, { filename: 'index.html:' + name });
   }
   const block = context.secProtectionBlock;
@@ -162,8 +163,8 @@ function makeGuardEnv() {
   return { context, body, roots, calls };
 }
 
-function makeUnlockEnv() {
-  const e = makeBootEnv({}, true), c = e.context;
+function makeUnlockEnv(initialStore = {}) {
+  const e = makeBootEnv(initialStore, true), c = e.context;
   let pass = null, cryptoContext = null, verified = false;
   c.ENC_PREFIX = 'DWNENC1:'; c.ENC_PREFIX2 = 'DWNENC2:';
   c.PBKDF2_IT = 600000; c.PBKDF2_IT_LEGACY = 200000; c.PW_IT_LEGACY = 150000;
@@ -177,13 +178,16 @@ function makeUnlockEnv() {
   c._storageWarned = false;
   let writes = 0; const storageSet = c.localStorage.setItem.bind(c.localStorage);
   c.localStorage.setItem = (key, value) => { writes++; return storageSet(key, value); };
+  const setupFields = { '#lkForm': { addEventListener(type, fn) { if (type === 'submit') fields.setupSubmit = fn; } },
+    '#lkP1': { value: '', focus() { this.focused = true; } }, '#lkP2': { value: '' }, '#lkMsg': { textContent: '' }, '#lkBtn': { disabled: false } };
   const fields = { '#lkForm': { addEventListener(type, fn) { if (type === 'submit') fields.submit = fn; } },
-    '#lkPw': { value: '', focus() { this.focused = true; } }, '#lkMsg': { textContent: '' }, '#lkBtn': { disabled: false } };
-  c.secOverlay = html => { e.calls.overlays.push(html); return { querySelector(sel) { return fields[sel]; } }; };
-  for (const name of ['deriveKey','decryptJSON','encryptJSON','persistNow','secShowUnlock'])
+    '#lkPw': { value: '', focus() { this.focused = true; } }, '#lkMsg': { textContent: '' }, '#lkBtn': { disabled: false },
+    '#lkP1': setupFields['#lkP1'], '#lkP2': setupFields['#lkP2'] };
+  c.secOverlay = html => { e.calls.overlays.push(html); const setup = /إعداد كلمة مرور المدير/.test(html); return { querySelector(sel) { return (setup ? setupFields : fields)[sel]; } }; };
+  for (const name of ['deriveKey','decryptJSON','encryptJSON','persistNow','secShowUnlock','secShowSetup','secPwChk'])
     vm.runInContext(extractFunction(name), c, { filename: 'index.html:' + name });
-  return { ...e, fields, writes: () => writes, async encrypt(payload, password) { return await c.encryptJSON(payload, password, {}); },
-    async submit(password) { const before = writes; fields['#lkPw'].value = password; fields.submit({ preventDefault() {} }); await waitFor(() => fields['#lkBtn'].disabled === false || c._SEC.ready || e.calls.blocked.length > 0); if (c._SEC.ready) await waitFor(() => writes > before && /^DWNENC[12]:/.test(e.store.get('diwan_v9_data') || '')); } };
+  return { ...e, fields, setupFields, writes: () => writes, async encrypt(payload, password) { return await c.encryptJSON(payload, password, {}); },
+    async submit(password) { fields['#lkPw'].value = password; fields.submit({ preventDefault() {} }); await waitFor(() => fields['#lkBtn'].disabled === false || c._SEC.ready || e.calls.blocked.length > 0); if (c._SEC.ready) await waitFor(() => !!e.calls.auth); } };
 }
 
 async function waitFor(predicate) {
@@ -214,6 +218,7 @@ describe('idle-lock source-path assertions', () => {
 
   test('boot invalidates idle timers and completed boot restarts eligibility checks', () => {
     assert.match(extractFunction('secBoot'), /_SEC\.ready=false;[\s\S]*?clearVerified\(\)[\s\S]*?idleInvalidate\(\)/);
+    assert.match(extractFunction('secFinishBoot'), /secPersistBootSnapshot\(snap\)/);
     assert.match(extractFunction('secFinishBoot'), /_SEC\.ready=true[\s\S]*if\(typeof bumpIdle==='function'\)bumpIdle\(\)/);
   });
 
@@ -438,35 +443,35 @@ describe('boot preserves data and blocks unsafe workspace states', () => {
     const e = makeBootEnv({}, true);
     e.context.S.userPasswords.m = await e.context.hashPass('FirstRunPass1');
     e.context.S.user = 'm'; e.context._SEC.markVerified();
-    e.context.secFinishBoot(true);
+    await e.context.secFinishBoot(true);
     assert.equal(e.context._SEC.ready, true);
     assert.equal(e.calls.renders, 1);
     assert.equal([...e.timers.values()].filter(x => x.ms === 600000).length, 1);
   });
 
-  test('finish boot exposes and arms the workspace only with a valid active credential', () => {
+  test('finish boot exposes and arms the workspace only with a valid active credential', async () => {
     const e = makeBootEnv({}, true);
     e.context.S.userPasswords.m = goodRecord;
-    e.context._SEC.markVerified(); e.context.secFinishBoot(true);
+    e.context._SEC.markVerified(); await e.context.secFinishBoot(true);
     assert.equal(e.context._SEC.ready, true);
-    assert.equal(e.calls.persisted, 1);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC2:/);
     assert.equal(e.calls.renders, 1);
     assert.equal([...e.timers.values()].filter(x => x.ms === 600000).length, 1);
   });
 
-  test('a structurally valid record without a successful authentication proof cannot finish boot', () => {
+  test('a structurally valid record without a successful authentication proof cannot finish boot', async () => {
     const e = makeBootEnv({}, true); e.context.S.userPasswords.m = goodRecord;
-    e.context.secFinishBoot(true);
+    await e.context.secFinishBoot(true);
     assert.deepEqual(e.calls.blocked, ['verifier']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.persisted, 0);
     assert.equal(e.calls.renders, 0);
   });
 
-  test('finish boot without an encryption key remains blocked and does not persist or render', () => {
+  test('finish boot without an encryption key remains blocked and does not persist or render', async () => {
     const e = makeBootEnv({}, true); e.context.S.userPasswords.m = goodRecord;
     e.context._SEC.hasPass = () => false;
-    e.context.secFinishBoot(true);
+    await e.context.secFinishBoot(true);
     assert.deepEqual(e.calls.blocked, ['key']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.persisted, 0);
@@ -474,9 +479,9 @@ describe('boot preserves data and blocks unsafe workspace states', () => {
     assert.equal([...e.timers.values()].filter(x => x.ms === 600000).length, 0);
   });
 
-  test('finish boot with missing credential remains blocked and does not persist or render', () => {
+  test('finish boot with missing credential remains blocked and does not persist or render', async () => {
     const e = makeBootEnv({}, true);
-    e.context.secFinishBoot(true);
+    await e.context.secFinishBoot(true);
     assert.deepEqual(e.calls.blocked, ['credential']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.persisted, 0);
@@ -504,9 +509,9 @@ describe('production encrypted boot unlock verifies the stored manager credentia
     assert.equal(e.context._SEC.getPass(), password);
     assert.equal(await e.context.verifyPass(e.context.S.userPasswords.m, e.context._SEC.getPass()), true);
     assert.deepEqual(e.calls.auth, [['login', 'm']]);
-    assert.equal(e.writes(), 1);
+    assert.equal(e.writes(), 0, 'an already-encrypted primary store opens without an unnecessary rewrite');
     const saved = e.store.get('diwan_v9_data');
-    assert.match(saved, /^DWNENC[12]:/);
+    assert.equal(saved, fixture.raw);
     assert.equal((await e.context.decryptJSON(saved, password, {})).userPasswords.m.hash, fixture.record.hash);
   });
 
@@ -618,8 +623,254 @@ describe('production encrypted boot unlock verifies the stored manager credentia
     assert.equal(e.calls.applied, 1);
     assert.equal(e.context._SEC.ready, true);
     assert.equal(e.context._SEC.getPass(), password);
-    assert.equal(e.writes(), 1);
+    assert.equal(e.writes(), 3, 'primary legacy migration marks, backs up, then writes encrypted data');
     assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/);
+    assert.equal(e.store.has('diwan_v9_migration_backup'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+});
+
+describe('verified legacy-store migration', () => {
+  async function legacyFixture(e, password, cases = [{ id: 804, title: 'Synthetic legacy record' }]) {
+    const record = await e.context.hashPass(password);
+    const data = { cases, user: 'm', userPasswords: { m: record } };
+    return { data, raw: JSON.stringify(data), password };
+  }
+
+  test('plaintext v8 authenticates, writes and verifies ciphertext before removing the v8 key', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    e.store.set('diwan_v8_data', fixture.raw);
+    const order = [], setItem = e.context.localStorage.setItem.bind(e.context.localStorage), removeItem = e.context.localStorage.removeItem.bind(e.context.localStorage), decrypt = e.context.decryptJSON.bind(e.context);
+    e.context.localStorage.setItem = (key, value) => {
+      if (key === 'diwan_v9_data') { assert.equal(e.store.get('diwan_v8_data'), fixture.raw); order.push('encrypted-write'); }
+      return setItem(key, value);
+    };
+    e.context.decryptJSON = (payload, password, ctx) => Promise.resolve(decrypt(payload, password, ctx)).then(data => {
+      if (payload === e.store.get('diwan_v9_data') && e.store.get('diwan_v8_data') === fixture.raw) order.push('encrypted-copy-verified');
+      return data;
+    });
+    e.context.localStorage.removeItem = key => {
+      if (key === 'diwan_v8_data') { assert.match(e.store.get('diwan_v9_data'), /^DWNENC[12]:/); order.push('legacy-remove'); }
+      return removeItem(key);
+    };
+    e.context.secBoot();
+    assert.equal(e.context._loadedFromV8, true);
+    assert.equal(e.calls.applied, 0, 'legacy data stays pending until authentication');
+    await e.submit(fixture.password);
+    assert.deepEqual(order, ['encrypted-write', 'encrypted-copy-verified', 'legacy-remove']);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    const saved = e.store.get('diwan_v9_data');
+    assert.match(saved, /^DWNENC2:/);
+    assert.equal(JSON.stringify(await e.context.decryptJSON(saved, fixture.password, {})), JSON.stringify(e.context.snapV7()));
+    assert.equal(e.context._SEC.ready, true);
+    assert.equal(e.calls.renders, 1);
+  });
+
+  test('encrypted v8 is unlocked then re-encrypted and verified at the primary key', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const encryptedV8 = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v8_data', encryptedV8);
+    e.context.secBoot();
+    assert.equal(e.context._loadedFromV8, true);
+    assert.equal(e.calls.setup, 0);
+    await e.submit(fixture.password);
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC2:/);
+    assert.equal(JSON.stringify((await e.context.decryptJSON(e.store.get('diwan_v9_data'), fixture.password, {})).cases), JSON.stringify(fixture.data.cases));
+    assert.equal(e.context._SEC.ready, true);
+  });
+
+  test('failed primary write preserves plaintext v8 and does not expose or report successful boot', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    e.store.set('diwan_v8_data', fixture.raw);
+    const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
+    e.context.localStorage.setItem = (key, value) => { if (key === 'diwan_v9_data') throw new Error('quota'); return setItem(key, value); };
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.deepEqual(e.calls.blocked, ['migration-save']);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.calls.renders, 0);
+    assert.equal(e.calls.auth, undefined);
+  });
+
+  test('unverifiable ciphertext write is removed while the original v8 data remains intact', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    e.store.set('diwan_v8_data', fixture.raw);
+    const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
+    e.context.localStorage.setItem = (key, value) => setItem(key, key === 'diwan_v9_data' ? value + 'corrupt' : value);
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.deepEqual(e.calls.blocked, ['migration-save']);
+    assert.equal(e.calls.renders, 0);
+  });
+
+  test('failure to remove plaintext v8 blocks workspace and leaves a recovery marker', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    e.store.set('diwan_v8_data', fixture.raw);
+    const removeItem = e.context.localStorage.removeItem.bind(e.context.localStorage);
+    e.context.localStorage.removeItem = key => { if (key === 'diwan_v8_data') throw new Error('remove denied'); return removeItem(key); };
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC2:/, 'verified encrypted copy is retained');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8');
+    assert.deepEqual(e.calls.blocked, ['migration-cleanup']);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.calls.renders, 0);
+    e.context.secBoot();
+    assert.equal(e.calls.blocked.at(-1), 'migration-recovery', 'subsequent boot cannot silently ignore pending plaintext cleanup');
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+  });
+
+  test('restart after successful migration loads the primary encrypted copy without rewriting or setup', async () => {
+    const first = makeUnlockEnv(), fixture = await legacyFixture(first, 'LegacyManager9');
+    first.store.set('diwan_v8_data', fixture.raw);
+    first.context.secBoot(); await first.submit(fixture.password);
+    const migrated = first.store.get('diwan_v9_data'), second = makeUnlockEnv(Object.fromEntries(first.store));
+    second.context.secBoot();
+    assert.equal(second.context._loadedFromV8, false);
+    assert.equal(second.calls.setup, 0);
+    await second.submit(fixture.password);
+    assert.equal(second.context._SEC.ready, true);
+    assert.equal(JSON.stringify(second.context.S.cases), JSON.stringify(fixture.data.cases));
+    assert.equal(second.store.get('diwan_v9_data'), migrated);
+    assert.equal(second.writes(), 0, 'already-encrypted primary data is not rewritten on ordinary unlock');
+    assert.equal(second.store.has('diwan_v8_data'), false);
+  });
+
+  test('an already-encrypted primary is authenticated before stale v8 plaintext is deleted', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const primary = await e.encrypt(fixture.data, fixture.password), legacy = fixture.raw;
+    e.store.set('diwan_v9_data', primary); e.store.set('diwan_v8_data', legacy);
+    const events = [], decrypt = e.context.decryptJSON.bind(e.context), removeItem = e.context.localStorage.removeItem.bind(e.context.localStorage);
+    e.context.decryptJSON = (payload, password, ctx) => Promise.resolve(decrypt(payload, password, ctx)).then(data => { if (payload === primary) events.push('primary-decrypted'); return data; });
+    e.context.localStorage.removeItem = key => { if (key === 'diwan_v8_data') { assert.equal(e.store.get('diwan_v9_data'), primary); events.push('stale-v8-remove'); } return removeItem(key); };
+    e.context.secBoot();
+    assert.equal(e.context._legacyV8PendingCleanup, true);
+    await e.submit(fixture.password);
+    assert.deepEqual(events, ['primary-decrypted', 'stale-v8-remove']);
+    assert.equal(e.store.get('diwan_v9_data'), primary, 'valid primary ciphertext is not rewritten');
+    assert.equal(e.store.has('diwan_v8_data'), false);
+    assert.equal(e.context._SEC.ready, true);
+    assert.equal(e.calls.renders, 1);
+  });
+
+  test('schema migration on an encrypted primary waits for verified persistence before rendering', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const prior = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', prior);
+    const order = [], setItem = e.context.localStorage.setItem.bind(e.context.localStorage), decrypt = e.context.decryptJSON.bind(e.context);
+    let afterWrite = false;
+    e.context.migrateV3 = () => { e.context._savePending = true; order.push('schema-migration'); };
+    e.context.localStorage.setItem = (key, value) => { if (key === 'diwan_v9_data' && value !== prior) { order.push('write'); afterWrite = true; } return setItem(key, value); };
+    e.context.decryptJSON = (payload, password, ctx) => Promise.resolve(decrypt(payload, password, ctx)).then(data => { if (afterWrite && payload === e.store.get('diwan_v9_data')) order.push('verified'); return data; });
+    e.context.render = () => order.push('render');
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.deepEqual(order, ['schema-migration', 'write', 'verified', 'render']);
+    assert.equal(e.context._SEC.ready, true);
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC2:/);
+  });
+
+  test('failed schema-migration write restores the prior encrypted store and keeps boot closed', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const prior = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', prior);
+    let writes = 0; const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
+    e.context.migrateV3 = () => { e.context._savePending = true; };
+    e.context.localStorage.setItem = (key, value) => {
+      if (key === 'diwan_v9_data' && ++writes === 1) return setItem(key, value + 'bad-readback');
+      return setItem(key, value);
+    };
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.equal(e.store.get('diwan_v9_data'), prior);
+    assert.equal(e.context._SEC.ready, false);
+    assert.deepEqual(e.calls.blocked, ['migration-save']);
+    assert.equal(e.calls.renders, 0);
+    assert.equal(e.calls.auth, undefined);
+  });
+
+  test('failed cleanup of stale v8 after primary unlock still blocks workspace', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const primary = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', primary); e.store.set('diwan_v8_data', fixture.raw);
+    const removeItem = e.context.localStorage.removeItem.bind(e.context.localStorage);
+    e.context.localStorage.removeItem = key => { if (key === 'diwan_v8_data') throw new Error('remove denied'); return removeItem(key); };
+    e.context.secBoot(); await e.submit(fixture.password);
+    assert.equal(e.store.get('diwan_v9_data'), primary);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8-cleanup');
+    assert.deepEqual(e.calls.blocked, ['migration-cleanup']);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.calls.renders, 0);
+  });
+
+  test('wrong password for encrypted v8 leaves it byte-for-byte unchanged and never creates primary data', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const raw = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v8_data', raw);
+    e.context.secBoot(); await e.submit('IncorrectManager8');
+    assert.equal(e.store.get('diwan_v8_data'), raw);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.calls.renders, 0);
+    assert.equal(e.calls.auth, undefined);
+  });
+
+  test('first-run setup displays workspace only after the encrypted copy has been read back and decrypted', async () => {
+    const e = makeUnlockEnv(), order = [];
+    const setItem = e.context.localStorage.setItem.bind(e.context.localStorage), decrypt = e.context.decryptJSON.bind(e.context);
+    e.context.localStorage.setItem = (key, value) => { if (key === 'diwan_v9_data') order.push('write'); return setItem(key, value); };
+    e.context.decryptJSON = (payload, password, ctx) => Promise.resolve(decrypt(payload, password, ctx)).then(data => {
+      if (payload === e.store.get('diwan_v9_data')) order.push('verify'); return data;
+    });
+    e.context.chrome = () => order.push('chrome'); e.context.render = () => order.push('render');
+    e.context.secShowSetup();
+    e.setupFields['#lkP1'].value = 'FirstRunPass1'; e.setupFields['#lkP2'].value = 'FirstRunPass1';
+    e.fields.setupSubmit({ preventDefault() {} });
+    await waitFor(() => !!e.calls.auth || e.calls.blocked.length > 0);
+    assert.deepEqual(e.calls.blocked, []);
+    assert.ok(order.indexOf('write') >= 0);
+    assert.ok(order.indexOf('verify') > order.indexOf('write'));
+    assert.ok(order.indexOf('chrome') > order.indexOf('verify'));
+    assert.ok(order.indexOf('render') > order.indexOf('verify'));
+    assert.match(e.store.get('diwan_v9_data'), /^DWNENC2:/);
+    assert.equal(e.context._SEC.ready, true);
+    assert.deepEqual(e.calls.auth, [['pwset', 'm']]);
+  });
+
+  test('persistNow restores the previous encrypted primary when readback verification fails', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
+    const prior = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', prior);
+    Object.assign(e.context.S, fixture.data); e.context.S.user = 'm'; e.context._SEC.setPass(fixture.password); e.context._SEC.ready = true;
+    let writes = 0; const storeSet = e.context.localStorage.setItem.bind(e.context.localStorage);
+    e.context.localStorage.setItem = (key, value) => {
+      if (key === 'diwan_v9_data' && ++writes === 1) return storeSet(key, value + 'unverifiable');
+      return storeSet(key, value);
+    };
+    const saved = await e.context.persistNow();
+    assert.equal(saved, false);
+    assert.equal(e.store.get('diwan_v9_data'), prior, 'rollback retains the previous recoverable ciphertext');
+    assert.equal(e.context._SEC.ready, true);
+  });
+
+  test('setup remains closed and reports failure if encrypted persistence fails', async () => {
+    const e = makeUnlockEnv();
+    const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
+    e.context.localStorage.setItem = (key, value) => { if (key === 'diwan_v9_data') throw new Error('quota'); return setItem(key, value); };
+    e.context.secShowSetup();
+    e.setupFields['#lkP1'].value = 'FirstRunPass1'; e.setupFields['#lkP2'].value = 'FirstRunPass1';
+    e.fields.setupSubmit({ preventDefault() {} });
+    await waitFor(() => e.calls.blocked.length > 0 || e.calls.auth);
+    assert.deepEqual(e.calls.blocked, ['migration-save']);
+    assert.equal(e.store.has('diwan_v9_data'), false);
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.calls.renders, 0);
+    assert.equal(e.calls.auth, undefined);
   });
 });
 
