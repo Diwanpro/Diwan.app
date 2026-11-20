@@ -3518,7 +3518,6 @@ function resetPreviewDemo(){
   {ar:'شركة الواحة للخدمات',fr:'SARL El Waha Services',ph:'DEMO-PHONE-004',nif:'DEMO-NIF-WAHA-002'},
   {ar:'ليلى بن صالح',fr:'Leila Ben Salah',ph:'DEMO-PHONE-005',nif:'—'}
  ].forEach(function(c){CL.push(c)});
- var now=K(TODAY);
  S.cases=[
   {id:1,no:'DEMO-2026-001',title:{ar:'نزاع مدني حول تنفيذ عقد أشغال',fr:'Litige civil — exécution d’un contrat de travaux'},type:'civil',court:COURTS[0],cl:0,opp:{ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction'},stage:0,st:'active',next:addDays(3),time:'09:30',kind:'plead',fee:[120000,45000],judg:null,docs:2,as:['m','c','t'],hasPOA:true,judicialAid:false,lawyerId:'m',lim:addDays(60),notes:[],contacts:[],hours:2,sessions:[],parties:[client1,opp1],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-001',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'محضر تجريبي',signifStatus:'done',signifDate:addDays(-10),legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-30)},
   {id:2,no:'DEMO-2026-002',title:{ar:'مطالبة بتعويض مدني',fr:'Demande d’indemnisation civile'},type:'civil',court:COURTS[1],cl:2,opp:{ar:'نادية بلقاسم',fr:'Nadia Belkacem'},stage:0,st:'active',next:addDays(7),time:'10:00',kind:'plead',fee:[90000,30000],judg:null,docs:1,as:['m','p'],hasPOA:true,judicialAid:false,lawyerId:'p',lim:addDays(90),notes:[],contacts:[],hours:1,sessions:[],parties:[client2,opp2],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-002',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-12)},
@@ -3548,7 +3547,7 @@ function resetPreviewDemo(){
  S.invoices=[{id:1,no:'DEMO-INV-001',caseId:1,date:addDays(-4),items:[{desc:{ar:'دفعة أتعاب تجريبية',fr:'Acompte fictif sur honoraires'},qty:1,price:30000}],withTVA:false,withTimbre:false,paid:true,paidDate:addDays(-4),method:'cash'}];
  S.trust=[{id:1,c:1,type:'deposit',amount:12000,date:addDays(-3),ref:'DEMO-AM-001',note:{ar:'أمانة افتراضية لمصاريف خبير',fr:'Provision fictive pour expertise'}}];
  S.installments=[];S.audit=[{w:'m',what:'إعادة تهيئة بيانات المعاينة الوهمية',d:new Date().toLocaleString('fr-FR')}];S.drafts=[];S.intakeLog=[];S.conflictReviews=[];
- S.appointments=[];S.caseExpenses=[];S.stampMoves=[];S.nextId=5;S.nextTask=5;S.nextInv=2;S.nextTrust=2;S.nextPay=2;
+ S.appointments=[];S.caseExpenses=[];S.stampMoves=[];S.processServers=[];S.services=[];S.experts=[];S.expertTasks=[];S.seizures=[];S.feesCalc=[];S.employees=[];S.payroll=[];S.deliveries=[];S.qrRegistry=[];S.smsLog=[];S.notifSent={};S.subs={};S.attendance=[];S.tax={regime:'',ifuOn:false,ifu:null,ibs:null};S.docGen=DG0();S.nextId=5;S.nextTask=5;S.nextInv=2;S.nextTrust=2;S.nextPay=2;
  S.receiptSeq={year:TODAY.getFullYear(),next:2};S.invoiceSeq={year:TODAY.getFullYear(),next:2};S.isDemo=true;
  S.cabinet={name:{ar:'مكتب ديوان التجريبي',fr:'Cabinet Diwan — démonstration'},address:{ar:'عنوان افتراضي — غير حقيقي',fr:'Adresse fictive — non réelle'},nif:'DEMO-NIF-000',nis:'DEMO-NIS-000',rc:'DEMO-RC-000',ai:'DEMO-AI-000',phone:'DEMO-PHONE-000',email:'demo@example.invalid',bank:{ar:'بيانات بنكية وهمية غير قابلة للاستخدام',fr:'Coordonnées bancaires fictives inutilisables'},tva:0,tvaEnabled:false,timbre:0,timbreFixed:true};
  S.stampInventory={court:12,council:8,admin:4};
