@@ -1,0 +1,25 @@
+name: Diwan regression tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - 'review/diwan-fix-01f-*'
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run idle-lock and migration regression tests
+        run: node --test diwan-idle-lock.test.js diwan-deadlines.test.js
