@@ -728,7 +728,7 @@ describe('verified legacy-store migration', () => {
     assert.equal(e.context._SEC.ready, false, 'workspace stays closed until the manager authenticates again');
     assert.equal(e.store.get('diwan_v9_data'), encryptedPrimary, 'encrypted primary remains present');
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw, 'legacy plaintext remains preserved when cleanup still fails');
-    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8', 'recovery marker remains for retry');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8-cleanup', 'recovery marker remains for retry');
   });
 
   test('restart after successful migration loads the primary encrypted copy without rewriting or setup', async () => {
@@ -950,6 +950,25 @@ describe('interrupted migration recovery', () => {
     assert.equal(e.store.has('diwan_v8_data'), false);
     assert.equal(e.store.has('diwan_v9_migration_backup'), false);
     assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+  });
+
+  test('wrong manager password during encrypted-primary recovery preserves every recovery copy', async () => {
+    const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'RecoveryManager9');
+    const encrypted = await e.encrypt(fixture.data, fixture.password);
+    e.store.set('diwan_v9_data', encrypted);
+    e.store.set('diwan_v8_data', fixture.raw);
+    e.store.set('diwan_v9_migration_backup', fixture.raw);
+    e.store.set('diwan_v9_migration_pending', 'v8-cleanup');
+    e.context.secBoot();
+    await e.submit('IncorrectManager8');
+    assert.equal(e.context._SEC.ready, false);
+    assert.equal(e.store.get('diwan_v9_data'), encrypted);
+    assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
+    assert.equal(e.store.get('diwan_v9_migration_backup'), fixture.raw);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8-cleanup');
+    assert.equal(e.calls.applied, 0);
+    assert.equal(e.calls.setup, 0);
+    assert.equal(e.writes(), 0);
   });
 
   test('unknown marker fails closed and leaves all candidate bytes unchanged', () => {
