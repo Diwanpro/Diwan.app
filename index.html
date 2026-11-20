@@ -3184,9 +3184,47 @@ function secRemoveChecked(key){localStorage.removeItem(key);if(localStorage.getI
 function secCleanupLegacyV8AfterVerified(expectedPrimary){
  try{var legacy=localStorage.getItem(STORE_KEY_V8);if(legacy===null){_legacyV8PendingCleanup=false;return Promise.resolve(true)}var primary=localStorage.getItem(STORE_KEY);if(primary!==expectedPrimary||!isEncPayload(primary))throw secMigrationError('migration-recovery');if(localStorage.getItem(MIGRATION_PENDING_KEY)!==null||localStorage.getItem(MIGRATION_BACKUP_KEY)!==null)throw secMigrationError('migration-recovery');secSetChecked(MIGRATION_PENDING_KEY,'v8-cleanup');secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_PENDING_KEY);_legacyV8PendingCleanup=false;return Promise.resolve(true)}catch(e){return Promise.reject(e&&e.reason?e:secMigrationError('migration-cleanup'))}
 }
+function secCleanupMigrationRecovery(expectedPrimary){
+ try{
+  var primary=localStorage.getItem(STORE_KEY),legacy=localStorage.getItem(STORE_KEY_V8),marker=localStorage.getItem(MIGRATION_PENDING_KEY),backup=localStorage.getItem(MIGRATION_BACKUP_KEY);
+  if(primary!==expectedPrimary||!isEncPayload(primary))throw secMigrationError('migration-recovery');
+  if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0)throw secMigrationError('migration-recovery');
+  /* The caller reaches this only after decrypting the exact primary and verifying the manager password. */
+  if(legacy!==null)secRemoveChecked(STORE_KEY_V8);
+  if(backup!==null)secRemoveChecked(MIGRATION_BACKUP_KEY);
+  if(marker!==null)secRemoveChecked(MIGRATION_PENDING_KEY);
+  _loadedFromV8=false;_legacyV8PendingCleanup=false;return Promise.resolve(true)
+ }catch(e){return Promise.reject(e&&e.reason?e:secMigrationError('migration-cleanup'))}
+}
 function secPersistBootSnapshot(snap){
  var primary=null,legacy=null,marker=null,backup=null;try{primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);marker=localStorage.getItem(MIGRATION_PENDING_KEY);backup=localStorage.getItem(MIGRATION_BACKUP_KEY)}catch(e){return Promise.reject(secMigrationError('storage'))}
- if(marker!==null||backup!==null)return Promise.reject(secMigrationError('migration-recovery'));
+ if(marker!==null||backup!==null){
+  if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0)return Promise.reject(secMigrationError('migration-recovery'));
+  /* A pending marker is a recoverable transaction, not a permanent boot lock. Keep every surviving source until a new encrypted snapshot is read back and decrypted. */
+  var recoverySource=primary;
+  if(primary!==null&&!isEncPayload(primary)){
+   if(marker==='v8'||marker==='v8-cleanup')return Promise.reject(secMigrationError('migration-recovery'));
+   if(backup!==null&&backup!==primary)return Promise.reject(secMigrationError('migration-recovery'));
+   if(backup===null&&marker==='primary')return Promise.reject(secMigrationError('migration-recovery'));
+  }else if(primary===null){
+   if(marker==='primary'&&backup===null)return Promise.reject(secMigrationError('migration-recovery'));
+   if(legacy===null&&backup===null)return Promise.reject(secMigrationError('migration-recovery'));
+   recoverySource=backup!==null?backup:legacy;
+  }
+  return secWriteEncryptedAndVerify(snap,{}).then(function(saved){
+   var written=localStorage.getItem(STORE_KEY);
+   if(written!==saved.raw||!isEncPayload(written))throw secMigrationError('migration-recovery');
+   return decryptJSON(written,_SEC.getPass(),{}).then(function(check){
+    if(!secStoreDataValid(check)||JSON.stringify(check)!==JSON.stringify(snap))throw secMigrationError('migration-recovery');
+    try{if(legacy!==null)secRemoveChecked(STORE_KEY_V8);if(backup!==null)secRemoveChecked(MIGRATION_BACKUP_KEY);if(marker!==null)secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
+    _loadedFromV8=false;_legacyV8PendingCleanup=false;_SEC.setCtx(saved.ctx);return true
+   })
+  }).catch(function(err){
+   /* Roll back only the primary slot to its exact pre-attempt bytes; retain marker, backup and legacy source for a retry. */
+   try{var now=localStorage.getItem(STORE_KEY);if(primary!==null&&now!==primary)secSetChecked(STORE_KEY,primary);else if(primary===null&&now!==null)secRemoveChecked(STORE_KEY)}catch(_){throw secMigrationError('migration-recovery')}
+   throw err&&err.reason?err:secMigrationError('migration-save')
+  })
+ }
  if(_loadedFromV8){
   if(primary!==null||legacy===null)return Promise.reject(secMigrationError('migration-recovery'));
   try{secSetChecked(MIGRATION_PENDING_KEY,'v8')}catch(e){try{secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){}return Promise.reject(secMigrationError('migration-save'))}
@@ -3194,17 +3232,17 @@ function secPersistBootSnapshot(snap){
    try{secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
    _loadedFromV8=false;_SEC.setCtx(saved.ctx);return true
   },function(err){
-   try{var current=localStorage.getItem(STORE_KEY);if(current!==null)secRemoveChecked(STORE_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){throw secMigrationError('migration-recovery')}
+   try{var current=localStorage.getItem(STORE_KEY);if(current!==null)secRemoveChecked(STORE_KEY)}catch(_){throw secMigrationError('migration-recovery')}
    throw secMigrationError('migration-save')
   })
  }
  if(primary!==null&&!isEncPayload(primary)){
-  try{secSetChecked(MIGRATION_PENDING_KEY,'primary');secSetChecked(MIGRATION_BACKUP_KEY,primary)}catch(e){try{if(localStorage.getItem(MIGRATION_BACKUP_KEY)===primary)secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){}return Promise.reject(secMigrationError('migration-save'))}
+  try{secSetChecked(MIGRATION_PENDING_KEY,'primary');secSetChecked(MIGRATION_BACKUP_KEY,primary)}catch(e){return Promise.reject(secMigrationError('migration-save'))}
   return secWriteEncryptedAndVerify(snap,{}).then(function(saved){
    try{if(legacy!==null)secRemoveChecked(STORE_KEY_V8);secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
    _legacyV8PendingCleanup=false;_SEC.setCtx(saved.ctx);return true
   },function(err){
-   try{if(localStorage.getItem(STORE_KEY)!==primary)secSetChecked(STORE_KEY,primary);secRemoveChecked(MIGRATION_BACKUP_KEY);secRemoveChecked(MIGRATION_PENDING_KEY)}catch(_){throw secMigrationError('migration-recovery')}
+   try{if(localStorage.getItem(STORE_KEY)!==primary)secSetChecked(STORE_KEY,primary)}catch(_){throw secMigrationError('migration-recovery')}
    throw secMigrationError('migration-save')
   })
  }
@@ -3212,8 +3250,7 @@ function secPersistBootSnapshot(snap){
   try{var current=localStorage.getItem(STORE_KEY);if(primary!==null&&current!==primary)secSetChecked(STORE_KEY,primary);else if(primary===null&&current!==null)secRemoveChecked(STORE_KEY)}catch(e){return Promise.reject(secMigrationError('migration-recovery'))}
   return Promise.reject(secMigrationError('migration-save'))
  })
-}
-function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return Promise.resolve(false); /* locked / booting: never overwrite stored data */
+}function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return Promise.resolve(false); /* locked / booting: never overwrite stored data */
  var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return Promise.resolve(false)}
  _savePending=false;if(_saveBusy){_saveDirty=true;return _savePromise||Promise.resolve(false)}
  var snap,prior=null;try{snap=snapV7();prior=localStorage.getItem(STORE_KEY)}catch(e){secWarnStore();return Promise.resolve(false)}
@@ -3258,8 +3295,33 @@ function secFinishBoot(persist){return Promise.resolve().then(function(){var iss
  function exposeWorkspace(){_SEC.ready=true;if(!secWorkspaceReady())return false;try{chrome();render()}catch(e){secProtectionBlock('init');return false}if(typeof bumpIdle==='function')bumpIdle();return !!(_SEC.ready&&!secProtectionIssue())}
  var mustPersist=!!(persist||_savePending||_saveDirty);if(!mustPersist)return exposeWorkspace();clearTimeout(_saveTimer);_saveTimer=null;_savePending=false;var snap;try{snap=snapV7()}catch(e){secProtectionBlock('migration-save');return false}
  return secPersistBootSnapshot(snap).then(function(){_savePending=false;_saveDirty=false;return exposeWorkspace()},function(e){secProtectionBlock(e&&e.reason||'migration-save');return false})}).catch(function(){secProtectionBlock('init');return false})}
-function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var raw=null,data=null,primary=null,legacy=null;_loadedFromV8=false;_legacyV8PendingCleanup=false;
- try{if(localStorage.getItem(MIGRATION_PENDING_KEY)!==null||localStorage.getItem(MIGRATION_BACKUP_KEY)!==null){secProtectionBlock('migration-recovery');return}primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);if(primary!==null){raw=primary;_legacyV8PendingCleanup=legacy!==null}else{raw=legacy;_loadedFromV8=legacy!==null}}catch(_){secProtectionBlock('storage');return}
+function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='function')_SEC.clearVerified();if(typeof idleInvalidate==='function')idleInvalidate();var raw=null,data=null,primary=null,legacy=null,backup=null,marker=null;_loadedFromV8=false;_legacyV8PendingCleanup=false;
+ try{primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);backup=localStorage.getItem(MIGRATION_BACKUP_KEY);marker=localStorage.getItem(MIGRATION_PENDING_KEY)}catch(_){secProtectionBlock('storage');return}
+ if(marker!==null||backup!==null){
+  if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0){secProtectionBlock('migration-recovery');return}
+  /* Prefer a primary ciphertext: it must be authenticated, never silently replaced by a plaintext fallback. */
+  if(primary!==null&&isEncPayload(primary)){raw=primary;_legacyV8PendingCleanup=legacy!==null||backup!==null||marker!==null;secShowUnlock(raw);return}
+  /* Recoverable plaintext states are accepted only as valid, credentialed data. A v8 marker cannot legitimately coexist with a plaintext primary. */
+  if(primary!==null){
+   if(marker==='v8'||marker==='v8-cleanup'){secProtectionBlock('migration-recovery');return}
+   try{data=normStore(JSON.parse(primary))}catch(_){}
+   if(!secStoreDataValid(data)){
+    data=null;
+    if(backup!==null){try{data=normStore(JSON.parse(backup))}catch(_){}}
+    if(!secStoreDataValid(data)){secProtectionBlock('migration-recovery');return}
+    raw=null;_loadedFromV8=false;secShowUnlock(null,data);return
+   }
+   if(backup!==null&&backup!==primary){secProtectionBlock('migration-recovery');return}
+   raw=null;_loadedFromV8=false;secShowUnlock(null,data);return
+  }
+  /* Primary slot is absent: prefer the preserved backup, then the legacy v8 source. */
+  var candidate=backup!==null?backup:legacy;
+  if(candidate===null){secProtectionBlock('migration-recovery');return}
+  try{data=normStore(JSON.parse(candidate))}catch(_){}
+  if(!secStoreDataValid(data)){secProtectionBlock('migration-recovery');return}
+  _loadedFromV8=(backup===null&&legacy!==null);secShowUnlock(null,data);return
+ }
+ if(primary!==null){raw=primary;_legacyV8PendingCleanup=legacy!==null}else{raw=legacy;_loadedFromV8=legacy!==null}
  if(raw!==null&&isEncPayload(raw)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}secShowUnlock(raw);return}
  if(raw!==null){
   if(!_SEC.avail()){secProtectionBlock('crypto-legacy');return}
@@ -3275,8 +3337,7 @@ function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='functi
  }
  var rec=S.userPasswords&&S.userPasswords.m;
  if(rec){if(!secPassRecordValid(rec)){secProtectionBlock('corrupt-credential');return}secShowUnlock(null);return}
- secShowSetup()}
-function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد كلمة مرور المدير<br><small class="sub">Définir le mot de passe du gérant</small></h2><p class="sub" style="margin:0 0 12px">تُستعمل كلمة المرور هذه لتشفير بيانات المكتب على هذا الجهاز ولا يمكن استرجاعها — احتفظ بنسخة احتياطية.<br>Ce mot de passe chiffre les données du cabinet sur cet appareil ; il est irrécupérable — conservez une sauvegarde.</p><form id="lkForm" novalidate><div class="fld"><label for="lkP1">كلمة المرور / Mot de passe</label><input id="lkP1" type="password" autocomplete="new-password"></div><div class="fld"><label for="lkP2">تأكيد / Confirmation</label><input id="lkP2" type="password" autocomplete="new-password"><div class="hint">8 خانات على الأقل مع حرف ورقم · 8 caractères min., une lettre et un chiffre</div></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">تعيين / Définir</button></div></form></div>');
+ secShowSetup()}function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد كلمة مرور المدير<br><small class="sub">Définir le mot de passe du gérant</small></h2><p class="sub" style="margin:0 0 12px">تُستعمل كلمة المرور هذه لتشفير بيانات المكتب على هذا الجهاز ولا يمكن استرجاعها — احتفظ بنسخة احتياطية.<br>Ce mot de passe chiffre les données du cabinet sur cet appareil ; il est irrécupérable — conservez une sauvegarde.</p><form id="lkForm" novalidate><div class="fld"><label for="lkP1">كلمة المرور / Mot de passe</label><input id="lkP1" type="password" autocomplete="new-password"></div><div class="fld"><label for="lkP2">تأكيد / Confirmation</label><input id="lkP2" type="password" autocomplete="new-password"><div class="hint">8 خانات على الأقل مع حرف ورقم · 8 caractères min., une lettre et un chiffre</div></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">تعيين / Définir</button></div></form></div>');
  var f=o.querySelector('#lkForm'),msg=o.querySelector('#lkMsg'),btn=o.querySelector('#lkBtn');o.querySelector('#lkP1').focus();
  f.addEventListener('submit',function(e){e.preventDefault();var p1=o.querySelector('#lkP1').value.trim(),p2=o.querySelector('#lkP2').value.trim();
   if(secPwChk(p1)){msg.textContent=secBi('sec_pw_weak');return}
@@ -3308,7 +3369,7 @@ function secShowUnlock(raw,pendingData){var o=secOverlay('<div class="modal"><h2
    Promise.resolve(verified).then(function(ok){
     if(ok!==true){if(raw){btn.disabled=false;secProtectionBlock('credential-mismatch')}else failedPassword();return}
     try{if(raw||pendingData)applyStore(d);_SEC.setPass(p);_SEC.markVerified();if(ctx.key)_SEC.setCtx(ctx);S.user='m';_unlockFails=0;try{localStorage.removeItem(UNLOCK_LOCK_KEY)}catch(_){}
-     var needsEncryptedSave=!!(pendingData||_loadedFromV8);var cleanup=(!needsEncryptedSave&&_legacyV8PendingCleanup&&raw)?secCleanupLegacyV8AfterVerified(raw):Promise.resolve(true);cleanup.then(function(){return secFinishBoot(needsEncryptedSave)}).then(function(ok){if(ok){secCloseOverlay();authLog('login','m')}},function(err){secProtectionBlock(err&&err.reason||'migration-cleanup')})
+     var needsEncryptedSave=!!(pendingData||_loadedFromV8);var recoveryPending=false;try{recoveryPending=localStorage.getItem(MIGRATION_PENDING_KEY)!==null||localStorage.getItem(MIGRATION_BACKUP_KEY)!==null}catch(_){}var cleanup=(!needsEncryptedSave&&raw&&recoveryPending)?secCleanupMigrationRecovery(raw):(!needsEncryptedSave&&_legacyV8PendingCleanup&&raw)?secCleanupLegacyV8AfterVerified(raw):Promise.resolve(true);cleanup.then(function(){return secFinishBoot(needsEncryptedSave)}).then(function(ok){if(ok){secCloseOverlay();authLog('login','m')}},function(err){secProtectionBlock(err&&err.reason||'migration-cleanup')})
     }catch(_){secProtectionBlock('init')}
    },function(){verifierUnavailable()})
   },function(err){decryptFailed(err)})})}
