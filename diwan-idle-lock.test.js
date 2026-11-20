@@ -1,4 +1,4 @@
-/* DIWAN-FIX-01 — fail-closed idle-lock regression tests.
+/* DIWAN-FIX-01 — fail-closed idle-lock and interrupted-migration recovery regression tests.
  * Run with: node --test diwan-idle-lock.test.js
  * The tested functions are extracted verbatim from index.html; browser DOM is
  * represented by small test doubles, while password hashing uses Node WebCrypto.
