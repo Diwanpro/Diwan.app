@@ -3300,6 +3300,7 @@ function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='functi
  try{primary=localStorage.getItem(STORE_KEY);legacy=localStorage.getItem(STORE_KEY_V8);backup=localStorage.getItem(MIGRATION_BACKUP_KEY);marker=localStorage.getItem(MIGRATION_PENDING_KEY)}catch(_){secProtectionBlock('storage');return}
  if(marker!==null||backup!==null){
   if(marker!==null&&['v8','v8-cleanup','primary'].indexOf(marker)<0){secProtectionBlock('migration-recovery');return}
+  if(marker===null&&backup!==null&&primary===null){secProtectionBlock('migration-recovery');return}
   /* Prefer a primary ciphertext: it must be authenticated, never silently replaced by a plaintext fallback. */
   if(primary!==null&&isEncPayload(primary)){if(!_SEC.avail()){secProtectionBlock('crypto-encrypted');return}raw=primary;_legacyV8PendingCleanup=legacy!==null||backup!==null||marker!==null;secShowUnlock(raw);return}
   /* Recoverable plaintext states are accepted only as valid, credentialed data. A v8 marker cannot legitimately coexist with a plaintext primary. */
