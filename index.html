@@ -3216,11 +3216,14 @@ function secPersistBootSnapshot(snap){
    if(written!==saved.raw||!isEncPayload(written))throw secMigrationError('migration-recovery');
    return decryptJSON(written,_SEC.getPass(),{}).then(function(check){
     if(!secStoreDataValid(check)||JSON.stringify(check)!==JSON.stringify(snap))throw secMigrationError('migration-recovery');
-    try{if(legacy!==null)secRemoveChecked(STORE_KEY_V8);if(backup!==null)secRemoveChecked(MIGRATION_BACKUP_KEY);if(marker!==null)secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
-    _loadedFromV8=false;_legacyV8PendingCleanup=false;_SEC.setCtx(saved.ctx);return true
+    return saved
    })
-  }).catch(function(err){
-   /* Roll back only the primary slot to its exact pre-attempt bytes; retain marker, backup and legacy source for a retry. */
+  }).then(function(saved){
+   /* Once the encrypted primary is verified, never roll it back because cleanup failed: a partially removed backup could otherwise become the only recoverable copy. */
+   try{if(legacy!==null)secRemoveChecked(STORE_KEY_V8);if(backup!==null)secRemoveChecked(MIGRATION_BACKUP_KEY);if(marker!==null)secRemoveChecked(MIGRATION_PENDING_KEY)}catch(e){throw secMigrationError('migration-cleanup')}
+   _loadedFromV8=false;_legacyV8PendingCleanup=false;_SEC.setCtx(saved.ctx);return true
+  },function(err){
+   /* Roll back only failures before verified encryption; preserve markers and candidate backups for retry. */
    try{var now=localStorage.getItem(STORE_KEY);if(primary!==null&&now!==primary)secSetChecked(STORE_KEY,primary);else if(primary===null&&now!==null)secRemoveChecked(STORE_KEY)}catch(_){throw secMigrationError('migration-recovery')}
    throw err&&err.reason?err:secMigrationError('migration-save')
   })
