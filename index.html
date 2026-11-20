@@ -4147,18 +4147,56 @@ document.addEventListener('change',function(e){
  if(e.target&&e.target.id==='roleDate'){S.roleDate=e.target.value;render()}
 });
 
-/* Idle auto-lock (V9.5) */
-var _idleT=null,_idleMs=10*60*1000;
-function bumpIdle(){if(_idleT)clearTimeout(_idleT);_idleT=setTimeout(function(){lockIdle(true)},_idleMs)}
-function lockIdle(on){var el=$('idleLock');if(!el)return;el.classList.toggle('on',!!on);if(on){var inp=$('idlePw');if(inp){inp.value='';setTimeout(function(){inp.focus()},100)}}else bumpIdle()}
+/* Idle auto-lock (V9.5) — unlock only after verifying the active user's stored password hash. */
+var _idleT=null,_idleMs=10*60*1000,_idleLocked=false,_idleVerified=false,_idleInertState=[];
+function bumpIdle(){if(_idleT)clearTimeout(_idleT);if(!_idleLocked)_idleT=setTimeout(function(){lockIdle(true)},_idleMs)}
+function idleSetInert(on){
+ if(on){
+  _idleInertState=[];
+  Array.prototype.forEach.call(document.body.children,function(el){
+   if(el.id==='idleLock'||el.tagName==='SCRIPT')return;
+   _idleInertState.push({el:el,inert:!!el.inert,ariaHidden:el.getAttribute('aria-hidden')});
+   el.inert=true;el.setAttribute('aria-hidden','true');
+  });
+ }else{
+  _idleInertState.forEach(function(x){x.el.inert=x.inert;if(x.ariaHidden===null)x.el.removeAttribute('aria-hidden');else x.el.setAttribute('aria-hidden',x.ariaHidden)});
+  _idleInertState=[];
+ }
+}
+function lockIdle(on){
+ var el=$('idleLock');if(!el)return;
+ on=!!on;
+ if(!on&&!_idleVerified)return; // No caller may dismiss the overlay without a successful credential check.
+ if(on===_idleLocked)return;
+ _idleLocked=on;el.classList.toggle('on',on);el.setAttribute('aria-hidden',on?'false':'true');
+ if(on){
+  _idleVerified=false;idleSetInert(true);
+  var inp=$('idlePw');if(inp){inp.value='';setTimeout(function(){inp.focus()},100)}
+ }else{idleSetInert(false);_idleVerified=false;bumpIdle()}
+}
+function idleInteractionGuard(e){
+ if(!_idleLocked)return;
+ var lock=$('idleLock'),inside=!!(lock&&(e.target===lock||lock.contains(e.target)));
+ if(inside)return;
+ if(e.cancelable)e.preventDefault();
+ e.stopImmediatePropagation();
+}
+['click','change','input','submit','keydown','keyup','keypress','pointerdown','pointerup','touchstart','contextmenu'].forEach(function(ev){document.addEventListener(ev,idleInteractionGuard,true)});
 function tryIdleUnlock(){
- var inp=$('idlePw');var pw=inp?inp.value:'';
- /* Accept any non-empty if no crypto pin set; otherwise try sec verify if available */
- if(!pw){toast('—');return}
+ var lock=$('idleLock'),inp=$('idlePw');
+ if(!lock||!lock.classList.contains('on')||!_idleLocked)return Promise.resolve(false);
+ var pw=inp?String(inp.value||''):'';
+ if(!pw){toast(t('sec_wrong_gen'));return Promise.resolve(false)}
+ var user=S&&S.user,record=S&&S.userPasswords&&S.userPasswords[user];
+ if(!_SEC||!_SEC.ready||!user||!U.some(function(u){return u.id===user})||!record||typeof verifyPass!=='function'){
+  toast(t('sec_err_generic'));return Promise.resolve(false);
+ }
  try{
-  if(typeof verifyUserPassword==='function'){verifyUserPassword(S.user,pw).then(function(ok){if(ok)lockIdle(false);else toast('⚠')}).catch(function(){lockIdle(false)})}
-  else lockIdle(false);
- }catch(_){lockIdle(false)}
+  return Promise.resolve(verifyPass(record,pw)).then(function(ok){
+   if(ok===true){_idleVerified=true;lockIdle(false);return true}
+   toast(t('sec_wrong_gen'));return false;
+  },function(){toast(t('sec_err_generic'));return false});
+ }catch(_){toast(t('sec_err_generic'));return Promise.resolve(false)}
 }
 ['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){document.addEventListener(ev,bumpIdle,{passive:true})});
 bumpIdle();
