@@ -421,7 +421,7 @@ html[dir=ltr] .tl li{padding:0 0 14px 24px}
 /* ============== i18n ============== */
 const L={
 ar:{appSub:'إدارة مكتب المحاماة',office:'مكتب الأستاذ بن علي للمحاماة',skip:'تخطَّ إلى المحتوى',
-demo:'نسخة عرض v8 — الروابط القضائية، مولّد الوثائق، والربط مع منصة العدالة. جرّب من القائمة الجانبية.',
+demo:'⚠ نسخة معاينة مهنية — جميع الأسماء والملفات والمبالغ والبيانات وهمية ومخصصة للاختبار فقط. لا تُدخل بيانات موكلين حقيقية.',
 nav_dash:'لوحة التحكم',nav_cases:'الملفات',nav_cal:'الجلسات والآجال',nav_tasks:'المهام',nav_mytasks:'مهامي',nav_clients:'الموكلون',nav_docs:'الوثائق',nav_fees:'الأتعاب والحسابات',nav_reports:'التقارير',nav_team:'الفريق والصلاحيات',nav_settings:'الإعدادات',nav_portal:'بوابة الموكل',nav_landing:'عن النظام',nav_faq:'الأسئلة الشائعة',nav_more:'المزيد',nav_links:'الروابط القضائية',nav_docgen:'مولّد الوثائق',nav_role:'رول الجلسات',nav_procedures:'التبليغ والتنفيذ',nav_scan:'سكانر PDF',nav_approvals:'الموافقات',nav_deadlines:'حاسبة الآجال',nav_cash:'الصندوق',nav_hr:'الموارد البشرية',nav_ja:'المساعدة القضائية',nav_services:'المفوضون القضائيون',nav_experts:'الخبراء',nav_exec:'التنفيذ',nav_kyc:'KYC',nav_accounts:'الحسابات',nav_license:'بطاقة الإجازة',nav_audit:'سجل العمليات',nav_library:'الاجتهادات',nav_import:'الاستيراد',nav_qr:'رموز QR',nav_reminders:'التذكيرات',
 r_collab:'محامٍ مساعد',inv_pw:'كلمة مرور المستخدم',inv_pw2:'تأكيد كلمة المرور',inv_pw_hint:'8 خانات على الأقل مع حرف ورقم — تُطلب عند تبديل الدور',inv_ok_pw:'تم إنشاء المستخدم وتعيين كلمة المرور',
 share_title:'نسبة أتعاب المساعد',share_lbl:'النسبة % من أتعاب الملف',share_save:'حفظ النسبة',share_ok:'تم حفظ نسبة الأتعاب',share_hint:'للمحامي المساعد أو المتربص المكلّف بالملف (0–100)',share_btn:'نسبة المساعد',share_none:'—',share_col:'نسبة المساعد',nav_collab:'المحامون المساعدون',
@@ -445,7 +445,7 @@ offbar:'أنت دون اتصال. تابع عملك، وستُزامَن تغي�
 savedOnline:'تم الحفظ',savedLocal:'حُفظ على الجهاز وسيُزامَن لاحقاً',
 r_m:'المحامي (المدير)',r_s:'سكرتارية',r_t:'متربص',viewAs:'عرض بصلاحيات',
 lang_btn:'Français',theme:'تبديل المظهر',notif:'الإشعارات',digest:'ملخص الصباح',on:'مفعّل',
-logout:'تسجيل الخروج',logout_demo:'عرض تجريبي: لا يوجد تسجيل خروج فعلي.',
+logout:'تسجيل الخروج',logout_demo:'⚠ نسخة معاينة مهنية — جميع البيانات وهمية ومخصصة للاختبار فقط. لا تُدخل بيانات موكلين حقيقية.',
 greet_m:'صباح الخير، أستاذ',greet_s:'صباح الخير، أمينة',greet_t:'صباح الخير، رياض',
 todaySum:(h,d)=>`لديك اليوم ${h} جلسات، و${d} آجال خلال 3 أيام.`,newCase:'+ ملف جديد',newTask:'+ مهمة جديدة',
 kpi_active:'ملفات نشطة',kpi_hear:'جلسات هذا الأسبوع',kpi_dl:'آجال قريبة',kpi_unpaid:'مبالغ غير محصلة',kpi_mytasks:'مهامي المفتوحة',kpi_myfiles:'ملفاتي',
@@ -493,7 +493,7 @@ links_title:'مركز الخدمات القضائية',links_sub:'روابط ر�
 dg_title:'مولّد الوثائق القانونية',dg_sub:'املأ الحقول → عاين → اطبع وثيقة جاهزة',dg_type:'نوع الوثيقة',dg_t1:'عريضة افتتاح دعوى',dg_t2:'عريضة استئناف',dg_t3:'مذكرة جوابية',dg_t4:'سند وكالة',dg_court:'الجهة القضائية',dg_fullname:'الاسم واللقب',dg_address:'الموطن',dg_quality:'الصفة',dg_company:'التسمية والمقر والصفة (للشخص المعنوي)',dg_lawyer:'المحامي',dg_lawyer_name:'اسم المحامي',dg_lawyer_addr:'عنوان المحامي المهني',dg_lawyer_phone:'هاتف المحامي',dg_subject:'موضوع الدعوى',dg_facts:'عرض موجز للوقائع',dg_requests:'الطلبات',dg_grounds:'الأوجه / الأسباب (للاستئناف)',dg_evidence:'المستندات المؤيدة',dg_judgment:'بيان الحكم المستأنف وتاريخه',dg_case_no:'رقم القضية',dg_party_natural:'شخص طبيعي',dg_party_legal:'شخص معنوي',dg_place:'حُرر بـ',dg_preview:'معاينة الوثيقة',dg_print:'طباعة / PDF',dg_reset:'مسح الحقول',dg_repub:'الجمهورية الجزائرية الديمقراطية الشعبية',dg_ministry:'وزارة العدل',dg_before:'أمام',dg_for:'لفائدة',dg_against:'ضد',dg_under:'تحت كافة التحفظات',dg_article15:'وفقاً للمادة 15 من قانون الإجراءات المدنية والإدارية',dg_article540:'وفقاً للمادة 540 من قانون الإجراءات المدنية والإدارية',dg_article568:'وفقاً للمادة 568 من قانون الإجراءات المدنية والإدارية',dg_petition:'عريضة افتتاح دعوى',dg_appeal:'عريضة استئناف',dg_memo:'مذكرة جوابية',dg_poa:'سند وكالة',dg_sign:'التوقيع والختم',dg_lawyer_line:'المحامي',dg_pick:'اختر نوع الوثيقة أولاً',dg_hint:'💡 املأ الحقول بالعربية. تُطبع الوثيقة على A4. النماذج استرشادية ويراجعها المحامي قبل الإيداع.'
 },
 fr:{appSub:'Gestion de cabinet d’avocats',office:'Cabinet Maître Ben Ali',skip:'Aller au contenu',
-demo:'Version démo v8 — liens judiciaires, générateur de documents et connexion à la plateforme de justice.',
+demo:'⚠ Version de prévisualisation professionnelle — tous les noms, dossiers et montants sont fictifs. N’utilisez aucune donnée réelle de client.',
 nav_dash:'Tableau de bord',nav_cases:'Dossiers',nav_cal:'Audiences et délais',nav_tasks:'Tâches',nav_mytasks:'Mes tâches',nav_clients:'Clients',nav_docs:'Documents',nav_fees:'Honoraires et comptes',nav_reports:'Rapports',nav_team:'Équipe et droits',nav_settings:'Paramètres',nav_portal:'Portail client',nav_landing:'À propos',nav_faq:'FAQ',nav_more:'Plus',nav_links:'Liens judiciaires',nav_docgen:'Générateur de documents',nav_role:"Rôle d'audience",nav_procedures:'Signification et exécution',nav_scan:'Scanner PDF',nav_approvals:'Approbations',nav_deadlines:'Calculateur de délais',nav_cash:'Caisse',nav_hr:'RH',nav_ja:'Aide juridictionnelle',nav_services:'Commissaires de justice',nav_experts:'Experts',nav_exec:'Exécution',nav_kyc:'KYC',nav_accounts:'Comptes',nav_license:'Carte professionnelle',nav_audit:"Journal d'audit",nav_library:'Jurisprudence',nav_import:'Import',nav_qr:'Codes QR',nav_reminders:'Rappels',
 r_collab:'Avocat collaborateur',inv_pw:'Mot de passe',inv_pw2:'Confirmation',inv_pw_hint:'8 car. min., lettre et chiffre',inv_ok_pw:'Utilisateur créé avec mot de passe',
 share_title:'Part honoraires collaborateur',share_lbl:'Pourcentage % des honoraires',share_save:'Enregistrer',share_ok:'Part enregistrée',share_hint:'Pour le collaborateur/stagiaire assigné (0–100)',share_btn:'Part collab.',share_none:'—',share_col:'Part collab.',nav_collab:'Collaborateurs',
@@ -514,7 +514,7 @@ g_work:'🏠 Travail quotidien',g_fin:'💰 Finances et honoraires',g_legal:'⚖
 search_ph:'Rechercher dossier, client ou n° (Ctrl+K)',no_results:'Aucun résultat',online:'En ligne',offline:'Hors ligne',syncing:'Synchronisation…',pendingN:n=>`${n} modif(s) en attente`,
 offbar:'Hors ligne. Modifications synchronisées au retour.',backOnline:'Simuler retour',syncedN:n=>`${n} modif(s) synchronisée(s)`,savedOnline:'Enregistré',savedLocal:'Enregistré localement',
 r_m:'Avocat (administrateur)',r_s:'Secrétariat',r_t:'Stagiaire',viewAs:'Voir avec les droits',lang_btn:'العربية',theme:'Changer thème',notif:'Notifications',digest:'Résumé du matin',on:'Activé',
-logout:'Se déconnecter',logout_demo:'Démo : pas de vraie déconnexion.',greet_m:'Bonjour, Maître',greet_s:'Bonjour, Amina',greet_t:'Bonjour, Riyad',
+logout:'Se déconnecter',logout_demo:'⚠ Version de prévisualisation professionnelle — données fictives uniquement. N’utilisez aucune donnée réelle de client.',greet_m:'Bonjour, Maître',greet_s:'Bonjour, Amina',greet_t:'Bonjour, Riyad',
 todaySum:(h,d)=>`Aujourd’hui : ${h} audience(s) ; ${d} délai(s) dans les 3 jours.`,newCase:'+ Dossier',newTask:'+ Tâche',
 kpi_active:'Dossiers actifs',kpi_hear:'Audiences cette semaine',kpi_dl:'Délais proches',kpi_unpaid:'Honoraires impayés',kpi_mytasks:'Mes tâches ouvertes',kpi_myfiles:'Mes dossiers',
 hint_dl48:n=>`${n} sous 48 h`,hint_none:'Rien d’urgent',hint_collected:'Encaissé',roll_title:'Audiences de la semaine',roll_empty:'Aucune audience',dl_label:'Délai',dl_title:'Délais à venir',days_unit:'jours',
@@ -1551,7 +1551,7 @@ function secWorkspaceReady(){if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready){s
  if(typeof secProtectionIssue!=='function'){secSetWorkspaceVisible(false);secProtectionBlock('verifier');return false}
  var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}secSetWorkspaceVisible(true);return true}
 function secResumeAfterLicense(){try{if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready)secBoot();else{chrome();render()}}catch(_){secProtectionBlock('init')}}
-function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.3.4 — '+t('appSub');
+function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان — نسخة المعاينة المهنية (v10.3.4)';
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
