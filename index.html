@@ -3687,7 +3687,7 @@ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.
 /* Reset only the synthetic records on this isolated preview branch. */
 document.addEventListener('click',function(e){
  var el=e.target.closest&&e.target.closest('[data-act]');if(!el||el.dataset.act!=='reset-preview-demo')return;
- if(!isM()||S.isDemo===false)return;
+ if(!isM())return;
  resetPreviewDemo();
 });
 /* Confidential conflict review: only the manager role can decide in this local preview. */
