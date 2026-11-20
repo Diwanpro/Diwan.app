@@ -1013,7 +1013,7 @@ function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filte
 function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<span class="chip ${c||'ok'}">${v}</span>`:''}</div>`; const v8sec=`<div class="card" style="margin-bottom:16px"><div class="card-b"><div class="kv"><span>${t('st_security')}</span><button class="btn sm" data-act="chgpass">${t('sec_chg_btn')}</button> <span class="chip ${_SEC.avail()?'ok':'bad'}">${t(_SEC.avail()?'sec_enc_on':'sec_enc_off')}</span> <button class="btn sm" data-act="enablenotif">${t('notif_enable')}</button></div><div class="kv"><span>${t('v7_export_full')}</span><button class="btn sm primary" data-act="exportfull">${ic('download')} ${t('v7_export_full')}</button></div></div></div>`;
  const cab=S.cabinet,ltr=v=>`<dd dir="ltr" style="text-align:start">${esc(v)}</dd>`;
  return `<div class="page-h"><div><h1>${t('st_title')}</h1></div></div>
- ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${colleaguesCard()}${encBackupCard()}${subscriptionsCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
+ ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${colleaguesCard()}${encBackupCard()}${subscriptionsCard()}${conflictReviewCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
   <dl class="dl-list" style="margin:0"><dt>${t('cabinet_name')}</dt><dd>${esc(tr(cab.name))}</dd><dt>${t('cabinet_addr')}</dt><dd>${esc(tr(cab.address))}</dd><dt>${t('cabinet_nif')}</dt>${ltr(cab.nif)}<dt>${t('cabinet_nis')}</dt>${ltr(cab.nis)}<dt>${t('cabinet_rc')}</dt>${ltr(cab.rc)}<dt>${t('cabinet_ai')}</dt>${ltr(cab.ai)}<dt>${t('cabinet_phone')}</dt>${ltr(cab.phone)}<dt>${t('cabinet_email')}</dt>${ltr(cab.email)}<dt>${t('cabinet_bank')}</dt><dd>${esc(tr(cab.bank))}</dd><dt>${t('cabinet_tva')}</dt><dd>${cab.tvaEnabled?cab.tva+'% — '+t('tva_on'):t('tva_off')}</dd><dt>${t('cabinet_timbre')}</dt><dd>${cab.timbre} دج<small class="sub" style="display:block;font-weight:400">${t('cabinet_timbre_hint')}</small></dd></dl></div></section>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_backup')}</h2></div><div class="card-b">${kv(t('st_b_auto'),t('on'))}${kv(t('st_b_last'),'✓')}${kv(t('st_b_restore'),'✓')}<div class="kv"><span>${t('st_b_export')}</span><button class="btn sm" data-act="exportfull">${ic('download')}${t('st_b_export')}</button></div></div></section>
  <section class="card"><div class="card-h"><h2>${t('st_security')}</h2></div><div class="card-b">${kv(t('st_lock'),t('on'))}${kv(t('st_2fa'),t('on'))}${kv(t('st_sync'),t('on'),'teal')}<p class="sub" style="margin:4px 0 0">${t('st_sync_d')}</p></div></section></div>
@@ -1712,16 +1712,17 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
   if(bad>=0){toast(t('pr_name_req'));const f=$('pp'+bad+'_firstName');if(f)f.focus();return}
   const cl0=keep[0],op0=keep.find((p,i)=>i>0&&p.role==='opponent'),clName=pFull(cl0),oppName=op0?pFull(op0):'',clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
   const v={no:val('no'),title:val('title'),titleFr:val('titleFr'),type:val('type'),court:val('court'),date:val('date'),time:val('time'),poa:val('poa'),ja:val('ja'),lim:val('lim'),who:val('who'),roleNumber:val('roleNumber'),judgeName:val('judgeName'),substName:val('substName'),delibDate:val('delibDate'),huissierName:val('huissierName'),signifStatus:val('signifStatus'),signifDate:val('signifDate'),lawyerId:($('f_lawyer')||{value:'m'}).value||'m'};
-  const conf=detectConflict({parties:keep}),blocking=conf.filter(x=>x.severity==='critical'||x.severity==='high');
-  const doCreate=()=>{closeModal();
-  undoable(()=>{const id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
-   S.cases.unshift({id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
-   try{var _sk=stampKindOf(+v.court),_sr=stampConsume(_sk,id,'تأسيس ملف '+v.no,!!v.ja);if(_sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
-   cfLogAccept(id,v.no,conf)},'t_case');
-  /* FIX4: the former single-clash toast is kept (medium-level warnings) and now lists the detected reasons */
-  if(conf.length&&!blocking.length)setTimeout(()=>toast('⚠ '+t('cfx_title')+' — '+conf[0].reason+' — '+t('cf_check_before')),600)};
-  if(blocking.length){conflictConfirm(conf,v,doCreate);return}
-  doCreate()})}
+  const conf=detectConflict({parties:keep});
+  if(conf.length){
+   /* Any detected conflict or uncertain match is routed to restricted review; do not create a matter yet. */
+   S.conflictReviews=S.conflictReviews||[];
+   var reviewId='cr-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+   S.conflictReviews.unshift({id:reviewId,status:'pending',draft:v,parties:keep,reasons:conf,createdAt:new Date().toISOString(),createdBy:S.user});
+   S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'إحالة سرية لمراجعة تعارض المصالح — '+v.no+' — '+conf.map(function(x){return x.severity}).join(', '),d:cfStamp()});if(S.audit.length>200)S.audit.length=200;
+   S.intakeLog=S.intakeLog||[];S.intakeLog.push({caseId:null,caseNo:v.no,decision:'review_required',reasons:conf,at:new Date().toISOString(),by:S.user});
+   closeModal();v9save();toast('تم إيقاف القبول وإحالة الحالة إلى المراجعة السرية / Admission bloquée — revue confidentielle requise');return
+  }
+  createIntakeCase(v,keep,conf)})}
 function newTask(){const m=isM();
  modal('m_task',[{n:'title',l:'fl_task',req:true},{n:'c',l:'fl_case',type:'select',opts:visCases().map(c=>[c.id,c.no+' — '+tr(c.title)]),v:String((visCases()[0]||{}).id||'')},
   {n:'who',l:'fl_who',type:'select',opts:m?U.map(u=>[u.id,tr(u.n)+' — '+t(u.rk)]):[[S.user,tr(me().n)]],v:m?'s':S.user},
@@ -3470,6 +3471,28 @@ function conflictConfirm(conf,meta,onAccept){var rows=conf.map(function(x){retur
  $('cfForm').addEventListener('submit',function(e){e.preventDefault();var box=$('cfAck').closest('.fld');
   if(!cfPhraseOk($('cfAck').value)){box.classList.add('bad');$('cfErr').textContent=t('cf_bad_phrase');$('cfErr').style.display='block';$('cfAck').focus();return}
   done=true;_cfOnDismiss=null;onAccept()})}
+
+/* Create a matter only after conflict screening has no findings, or after an authorized
+   confidential reviewer explicitly approves a pending review. */
+function createIntakeCase(v,keep,conf){
+ var cl0=keep[0]||{},op0=keep.find(function(p,i){return i>0&&p.role==='opponent'}),clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
+ closeModal();
+ undoable(function(){var id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
+  S.cases.unshift({id:id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
+  try{var sk=stampKindOf(+v.court),sr=stampConsume(sk,id,'تأسيس ملف '+v.no,!!v.ja);if(sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
+  cfLogAccept(id,v.no,conf)
+ },'t_case');
+}
+function conflictReviewCard(){
+ if(!isM())return '';
+ var pending=(S.conflictReviews||[]).filter(function(x){return x.status==='pending'});
+ var rows=pending.map(function(x){
+  var reasons=(x.reasons||[]).map(function(r){return '<li><b>'+esc(t('cf_sev_'+r.severity))+'</b> — '+esc(r.reason||'')+'</li>'}).join('');
+  return '<article class="card" style="margin:10px 0;border:1px solid var(--line)"><div class="card-b"><b>'+esc((x.draft&&x.draft.no)||'—')+'</b><p class="sub">طلب مراجعة سري / Demande de revue confidentielle · '+esc(new Date(x.createdAt).toLocaleString(S.lang==='ar'?'ar-DZ':'fr-FR'))+'</p><ul>'+reasons+'</ul><p class="note warn">لم يُنشأ ملف مقبول بعد. لا تعتمد إلا بعد مراجعة مهنية مستقلة. / Aucun dossier accepté n’a été créé.</p><div class="mf"><button class="btn" data-act="conflict-review-reject" data-id="'+esc(x.id)+'">رفض القبول / Refuser</button><button class="btn primary" data-act="conflict-review-approve" data-id="'+esc(x.id)+'">اعتماد بعد المراجعة / Autoriser après revue</button></div></div></article>'
+ }).join('');
+ return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>المراجعة السرية لتعارض المصالح / Revue confidentielle des conflits</h2><span class="chip '+(pending.length?'warn':'ok')+'">'+pending.length+'</span></div><div class="card-b">'+(rows||'<p class="empty">لا توجد حالات معلقة / Aucune demande en attente</p>')+'</div></section>'
+}
+
 function intakeLogCard(){var rows=(S.intakeLog||[]).slice(-30).reverse().map(function(x){var ok=x.decision==='accepted',rs=(x.reasons||[]).map(function(r){return esc((r.reason||'')+'')}).join('<br>');
   return '<div class="dlrow">'+av(x.by)+'<div style="flex:1"><strong>'+esc(x.caseNo||'—')+'</strong> <span class="chip '+(ok?'ok':'bad')+'">'+t(ok?'cf_log_acc':'cf_log_rej')+'</span><span class="sub">'+(rs||t('cf_log_none'))+'</span></div><small class="sub" dir="ltr" style="text-align:start">'+esc(new Date(x.at).toLocaleString('fr-FR'))+'</small></div>'}).join('')||'<p class="empty">—</p>';
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('cf_log_title')+'</h2></div><div class="card-b">'+rows+'</div></section>'}
@@ -3579,6 +3602,26 @@ function stmtPrintHTML(){var pg=$('invoicePrint')&&$('invoicePrint').querySelect
  var css=[].map.call(document.querySelectorAll('style'),function(s){return s.textContent}).join('\n');
  return '<!DOCTYPE html><html lang="'+S.lang+'" dir="'+(S.lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8"><title>'+esc(t('stmt'))+'</title>'+PRINT_FONT_LINK+'<style>'+css+'</style><style>:root{color-scheme:light}html,body{background:#fff!important;color:#0f1e2e}body{font-family:'+PRINT_FONT_STACK+'}h1,h2,h3{font-family:'+PRINT_FONT_STACK+'}.inv-page{background:#fff!important;color:#0f1e2e;box-shadow:none;margin:0 auto}</style></head><body>'+pg.outerHTML+'</body></html>'}
 document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;if(el.dataset.act==='printStmt'){var h=stmtPrintHTML();if(h)printHtmlIframe(h)}});
+
+/* Confidential conflict review: only the manager role can decide in this local preview. */
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;
+ var a=el.dataset.act;if(a!=='conflict-review-approve'&&a!=='conflict-review-reject')return;
+ if(!isM()){toast('هذه المراجعة مخصصة للمخوّل فقط / Réservé au responsable autorisé');return}
+ var item=(S.conflictReviews||[]).find(function(x){return x.id===el.dataset.id&&x.status==='pending'});
+ if(!item)return;
+ if(a==='conflict-review-reject'){
+  item.status='rejected';item.reviewedAt=new Date().toISOString();item.reviewedBy=S.user;
+  S.intakeLog=S.intakeLog||[];S.intakeLog.push({caseId:null,caseNo:item.draft.no,decision:'rejected',reasons:item.reasons,at:item.reviewedAt,by:S.user});
+  S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'رفض قبول بعد مراجعة تعارض المصالح — '+item.draft.no,d:cfStamp()});
+  v9save();render();toast('تم رفض القبول / Admission refusée');return
+ }
+ if(!confirm('تأكيد الاعتماد بعد مراجعة سرية مستقلة؟ / Confirmer l’autorisation après revue confidentielle ?'))return;
+ item.status='approved';item.reviewedAt=new Date().toISOString();item.reviewedBy=S.user;
+ S.audit=S.audit||[];S.audit.unshift({w:S.user,what:'اعتماد بعد مراجعة سرية لتعارض المصالح — '+item.draft.no,d:cfStamp()});
+ createIntakeCase(item.draft,item.parties,item.reasons);
+ v9save();render();toast('تم اعتماد الملف بعد المراجعة / Dossier autorisé après revue');
+});
 
 /* --- click handlers for the new security actions --- */
 document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;var a=el.dataset.act;
