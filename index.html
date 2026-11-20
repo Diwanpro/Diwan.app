@@ -3204,7 +3204,7 @@ function secPersistBootSnapshot(snap){
   var recoverySource=primary;
   if(primary!==null&&!isEncPayload(primary)){
    if(marker==='v8'||marker==='v8-cleanup')return Promise.reject(secMigrationError('migration-recovery'));
-   if(backup!==null&&backup!==primary)return Promise.reject(secMigrationError('migration-recovery'));
+   if(backup!==null&&backup!==primary&&marker!=='primary')return Promise.reject(secMigrationError('migration-recovery'));
    if(backup===null&&marker==='primary')return Promise.reject(secMigrationError('migration-recovery'));
   }else if(primary===null){
    if(marker==='primary'&&backup===null)return Promise.reject(secMigrationError('migration-recovery'));
@@ -3250,7 +3250,8 @@ function secPersistBootSnapshot(snap){
   try{var current=localStorage.getItem(STORE_KEY);if(primary!==null&&current!==primary)secSetChecked(STORE_KEY,primary);else if(primary===null&&current!==null)secRemoveChecked(STORE_KEY)}catch(e){return Promise.reject(secMigrationError('migration-recovery'))}
   return Promise.reject(secMigrationError('migration-save'))
  })
-}function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return Promise.resolve(false); /* locked / booting: never overwrite stored data */
+}
+function persistNow(){clearTimeout(_saveTimer);if(!_SEC||!_SEC.ready)return Promise.resolve(false); /* locked / booting: never overwrite stored data */
  var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return Promise.resolve(false)}
  _savePending=false;if(_saveBusy){_saveDirty=true;return _savePromise||Promise.resolve(false)}
  var snap,prior=null;try{snap=snapV7();prior=localStorage.getItem(STORE_KEY)}catch(e){secWarnStore();return Promise.resolve(false)}
@@ -3337,7 +3338,8 @@ function secBoot(){_SEC.ready=false;if(_SEC&&typeof _SEC.clearVerified==='functi
  }
  var rec=S.userPasswords&&S.userPasswords.m;
  if(rec){if(!secPassRecordValid(rec)){secProtectionBlock('corrupt-credential');return}secShowUnlock(null);return}
- secShowSetup()}function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد كلمة مرور المدير<br><small class="sub">Définir le mot de passe du gérant</small></h2><p class="sub" style="margin:0 0 12px">تُستعمل كلمة المرور هذه لتشفير بيانات المكتب على هذا الجهاز ولا يمكن استرجاعها — احتفظ بنسخة احتياطية.<br>Ce mot de passe chiffre les données du cabinet sur cet appareil ; il est irrécupérable — conservez une sauvegarde.</p><form id="lkForm" novalidate><div class="fld"><label for="lkP1">كلمة المرور / Mot de passe</label><input id="lkP1" type="password" autocomplete="new-password"></div><div class="fld"><label for="lkP2">تأكيد / Confirmation</label><input id="lkP2" type="password" autocomplete="new-password"><div class="hint">8 خانات على الأقل مع حرف ورقم · 8 caractères min., une lettre et un chiffre</div></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">تعيين / Définir</button></div></form></div>');
+ secShowSetup()}
+function secShowSetup(){var o=secOverlay('<div class="modal"><h2>🔐 إعداد كلمة مرور المدير<br><small class="sub">Définir le mot de passe du gérant</small></h2><p class="sub" style="margin:0 0 12px">تُستعمل كلمة المرور هذه لتشفير بيانات المكتب على هذا الجهاز ولا يمكن استرجاعها — احتفظ بنسخة احتياطية.<br>Ce mot de passe chiffre les données du cabinet sur cet appareil ; il est irrécupérable — conservez une sauvegarde.</p><form id="lkForm" novalidate><div class="fld"><label for="lkP1">كلمة المرور / Mot de passe</label><input id="lkP1" type="password" autocomplete="new-password"></div><div class="fld"><label for="lkP2">تأكيد / Confirmation</label><input id="lkP2" type="password" autocomplete="new-password"><div class="hint">8 خانات على الأقل مع حرف ورقم · 8 caractères min., une lettre et un chiffre</div></div><div class="lk-msg" id="lkMsg" role="alert"></div><div class="mf"><button type="submit" class="btn primary" id="lkBtn">تعيين / Définir</button></div></form></div>');
  var f=o.querySelector('#lkForm'),msg=o.querySelector('#lkMsg'),btn=o.querySelector('#lkBtn');o.querySelector('#lkP1').focus();
  f.addEventListener('submit',function(e){e.preventDefault();var p1=o.querySelector('#lkP1').value.trim(),p2=o.querySelector('#lkP2').value.trim();
   if(secPwChk(p1)){msg.textContent=secBi('sec_pw_weak');return}
