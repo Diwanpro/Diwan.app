@@ -90,7 +90,7 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(HTML, /if\(a==='setlawyer'\)\{\s*if\(!isM\(\)\)return/);
     assert.match(HTML, /n:'reason',l:'lw_change_reason',type:'textarea',req:true/);
     assert.match(HTML, /if\(c\.secret&&!confirm\(t\('lw_change_sensitive_confirm'\)\)\)return/);
-    assert.match(HTML, /var oldLawyer=c\.lawyerId\|\|'m',newLawyer=v\.lw\|\|'m',reason=String\(v\.reason\|\|'\'\)\.trim\(\)/);
+    assert.match(HTML, /var oldLawyer=c\.lawyerId\|\|'m',newLawyer=v\.lw\|\|'m',reason=String\(v\.reason\|\|\x27\x27\)\.trim\(\)/);
     assert.match(HTML, /تغيير المحامي المسؤول — '\+c\.no\+' — '\+lawyerName\(oldLawyer\)\+' → '\+lawyerName\(newLawyer\)\+' — السبب: '\+reason/);
     assert.match(HTML, /أعضاء الفريق لم يتغيروا تلقائياً/);
   });
