@@ -3,9 +3,6 @@ name: Diwan regression tests
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-  push:
-    branches:
-      - 'review/diwan-fix-01f-*'
 
 permissions:
   contents: read
@@ -22,4 +19,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run idle-lock and migration regression tests
-        run: node --test diwan-idle-lock.test.js diwan-deadlines.test.js
+        run: node --test --test-concurrency=1 diwan-idle-lock.test.js diwan-deadlines.test.js
