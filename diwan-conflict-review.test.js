@@ -102,6 +102,8 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(MANIFEST.short_name, /تجريبي/);
     assert.match(MANIFEST.description, /وهمية/);
     assert.match(SW, /diwan-preview-professional-20261120/);
+    assert.match(HTML, /dn\.innerHTML=t\('demo'\)\+' <button class="btn sm" data-act="cleardemo">'\+t\('preview_clear_label'\)/);
+    assert.match(HTML, /نسخة معاينة مهنية — جميع البيانات وهمية ومخصصة للاختبار فقط/);
     assert.doesNotMatch(SW, /var CACHE = 'diwan-v10\.3\.4';/);
   });
 
