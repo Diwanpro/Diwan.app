@@ -10,6 +10,8 @@ const { test, describe } = require('node:test');
 const assert = require('node:assert/strict');
 
 const HTML = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+const MANIFEST = JSON.parse(fs.readFileSync(path.join(__dirname, 'manifest.json'), 'utf8'));
+const SW = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf8');
 
 function functionSource(name) {
   const re = new RegExp('function\\s+' + name + '\\s*\\(');
@@ -82,6 +84,14 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(card, /if\(!isM\(\)\|\|S\.isDemo===false\)return ''/);
     assert.match(HTML, /resetPreviewDemo\(\)/);
     assert.match(HTML, /S\.cases=\[\s*\{id:1,no:'DEMO-2026-001'/);
+  });
+
+  test('preview app identity and service-worker cache are explicitly isolated', () => {
+    assert.match(MANIFEST.name, /نسخة المعاينة المهنية/);
+    assert.match(MANIFEST.short_name, /تجريبي/);
+    assert.match(MANIFEST.description, /وهمية/);
+    assert.match(SW, /diwan-preview-professional-20261120/);
+    assert.doesNotMatch(SW, /var CACHE = 'diwan-v10\.3\.4';/);
   });
 
   test('case creation is factored into a single path for clean intake and approved review', () => {
