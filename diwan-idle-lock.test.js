@@ -681,7 +681,7 @@ describe('verified legacy-store migration', () => {
     assert.equal(e.context._SEC.ready, true);
   });
 
-  test('failed primary write preserves plaintext v8 and does not expose or report successful boot', async () => {
+  test('failed primary write preserves plaintext v8 and keeps a retry marker without exposing the workspace', async () => {
     const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
     e.store.set('diwan_v8_data', fixture.raw);
     const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
@@ -689,14 +689,14 @@ describe('verified legacy-store migration', () => {
     e.context.secBoot(); await e.submit(fixture.password);
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
     assert.equal(e.store.has('diwan_v9_data'), false);
-    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8');
     assert.deepEqual(e.calls.blocked, ['migration-save']);
     assert.equal(e.context._SEC.ready, false);
     assert.equal(e.calls.renders, 0);
     assert.equal(e.calls.auth, undefined);
   });
 
-  test('unverifiable ciphertext write is removed while the original v8 data remains intact', async () => {
+  test('unverifiable ciphertext write is removed while v8 data and a retry marker remain intact', async () => {
     const e = makeUnlockEnv(), fixture = await legacyFixture(e, 'LegacyManager9');
     e.store.set('diwan_v8_data', fixture.raw);
     const setItem = e.context.localStorage.setItem.bind(e.context.localStorage);
@@ -704,7 +704,7 @@ describe('verified legacy-store migration', () => {
     e.context.secBoot(); await e.submit(fixture.password);
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw);
     assert.equal(e.store.has('diwan_v9_data'), false);
-    assert.equal(e.store.has('diwan_v9_migration_pending'), false);
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8');
     assert.deepEqual(e.calls.blocked, ['migration-save']);
     assert.equal(e.calls.renders, 0);
   });
@@ -728,7 +728,7 @@ describe('verified legacy-store migration', () => {
     assert.equal(e.context._SEC.ready, false, 'workspace stays closed until the manager authenticates again');
     assert.equal(e.store.get('diwan_v9_data'), encryptedPrimary, 'encrypted primary remains present');
     assert.equal(e.store.get('diwan_v8_data'), fixture.raw, 'legacy plaintext remains preserved when cleanup still fails');
-    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8-cleanup', 'recovery marker remains for retry');
+    assert.equal(e.store.get('diwan_v9_migration_pending'), 'v8', 'original recovery marker remains for retry');
   });
 
   test('restart after successful migration loads the primary encrypted copy without rewriting or setup', async () => {
