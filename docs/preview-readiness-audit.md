@@ -14,7 +14,7 @@ Prepare an isolated, polished demonstration for one or two lawyers, using synthe
 
 - `index.html`: primary single-page application; large inline HTML/CSS/JavaScript codebase.
 - `manifest.json`: Arabic/RTL PWA manifest.
-- `sw.js`: offline-first service worker; current cache namespace is `diwan-v10.3.4`.
+- `sw.js`: offline-first service worker; preview branch now uses the distinct cache namespace `diwan-preview-professional-20261120`.
 - `README.md`: describes local browser storage, offline operation, encryption and broad feature set.
 - `diwan-guide-unified-v9.7.html`: user guide.
 - `diwan-deadlines.test.js`, `diwan-idle-lock.test.js`, `.github/workflows/diwan-regression.yml`: automated regression coverage and CI.
@@ -47,7 +47,7 @@ Status definitions:
 | Audit trail | Partial / gap | Intake log and account/auth log functions exist. Completeness and tamper resistance are not proven. | Record conflict decisions, reassignment, role/permission changes, restore/reset and other sensitive actions with actor/time/outcome. State limitations honestly for client-side storage. |
 | Encryption and idle lock | Present / verify | PR #5 covers password verification and event handling; storage encryption logic exists. PR remains unmerged at audit time. | Integrate only on review branch after diff review; test correct/wrong password, lock/unlock, failed verification and real-browser interactions. |
 | Migration and backup recovery | Present / verify | PR #6 adds fail-closed recovery and regression tests; latest CI run passed. PR remains draft/open. | Keep recovery markers/backups on failed operations; test upgrade/recovery scenarios and verify restore before cleanup. |
-| PWA/offline behavior | Present / verify | Manifest and service worker exist; service worker cache namespace currently uses `diwan-v10.3.4`. | Change cache namespace for demo-specific assets if needed; test install, refresh/update, offline startup and stale-cache behavior. |
+| PWA/offline behavior | Present / verify | Manifest and service worker are explicitly labeled as preview; service worker uses `diwan-preview-professional-20261120`. The preview must still be hosted on a separate origin, because the service worker deletes other cache entries on its own origin. | Change cache namespace for demo-specific assets if needed; test install, refresh/update, offline startup and stale-cache behavior. |
 | Synthetic demo data | Partial / implemented on preview branch | Added opt-in reset with a deterministic fictional dataset, explicit confirmation, `DEMO-*` identifiers and an `.invalid` email; resets only the current browser's local records. Existing app data remains synthetic per owner statement. | Test reset, reload persistence, all cross-links and calculations; ensure no real-data import occurs. Add a persistent demo banner across all screens before sharing. |
 | Demo hosting and storage isolation | **Blocker** | Current app is local-storage-first; hosting under a different path on the same origin does not guarantee storage separation. | Prefer a separate origin/host for the demo. Verify service worker scope and localStorage/IndexedDB isolation. Do not deploy until verified. |
 | Two reviewers / shared data | Not supported by current evidence | README describes data stored locally on each device with no external server. | Treat reviewers' data as independent per browser. Shared synchronized records require a separate backend/auth/tenant design and are out of scope unless explicitly approved. |
