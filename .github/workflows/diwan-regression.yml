@@ -1,0 +1,24 @@
+name: Diwan regression tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run idle-lock and preview workflow regression tests
+        run: node --test --test-concurrency=1 diwan-idle-lock.test.js diwan-conflict-review.test.js
+      - name: Run deadline regression suite in an isolated process
+        run: node diwan-deadlines.test.js
