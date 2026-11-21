@@ -827,6 +827,38 @@ Object.assign(L.fr,{
  dash_shortcuts_title:'Accès rapides',
  dash_conflict_pending:n=>`${n} revue(s) de conflit d’intérêts en attente`
 });
+Object.assign(L.ar,{
+ ns_btn:'إنشاء مرحلة لاحقة',
+ ns_modal_title:'إنشاء مرحلة تقاضٍ جديدة (مرتبطة بالقضية الأم)',
+ ns_stage:'المرحلة القضائية الجديدة',
+ ns_pick_stage:'— اختر المرحلة القضائية —',
+ ns_pick_court:'— اختر الجهة القضائية —',
+ ns_no:'رقم ملف المرحلة الجديدة',
+ ns_no_hint:'أدخل رقماً مستقلاً للمرحلة الجديدة (لا تكرر رقم المرحلة الأصلية).',
+ ns_err_dup_no:'هذا الرقم مستخدم في مرحلة سابقة من نفس القضية — أدخل رقماً مستقلاً.',
+ ns_err_dup_stage:'توجد مرحلة مسجلة بنفس الدرجة والرقم ضمن هذه القضية.',
+ ns_created:'تم إنشاء المرحلة الجديدة وربطها بالقضية الأم',
+ ns_stages_title:'مراحل القضية الأم',
+ ns_stage_current:'المرحلة الحالية',
+ ns_open_stage:'فتح المرحلة',
+ ns_related_stage:'مرحلة مرتبطة بالقضية الأم'
+});
+Object.assign(L.fr,{
+ ns_btn:'Nouvelle phase',
+ ns_modal_title:'Créer une nouvelle phase procédurale (liée au dossier maître)',
+ ns_stage:'Nouvelle phase procédurale',
+ ns_pick_stage:'— Choisir la phase —',
+ ns_pick_court:'— Choisir la juridiction —',
+ ns_no:'N° du dossier de la nouvelle phase',
+ ns_no_hint:'Saisissez un numéro distinct pour cette phase (ne répétez pas le numéro initial).',
+ ns_err_dup_no:'Ce numéro est déjà utilisé dans une phase de cette affaire.',
+ ns_err_dup_stage:'Une phase identique existe déjà pour cette affaire.',
+ ns_created:'Nouvelle phase créée et liée au dossier maître',
+ ns_stages_title:'Phases du dossier maître',
+ ns_stage_current:'Phase actuelle',
+ ns_open_stage:'Ouvrir la phase',
+ ns_related_stage:'Phase liée au dossier maître'
+});
 /* DIWAN-ENGINE-START */
 const DEFAULT_HOLIDAYS=['01-01','01-12','05-01','07-05','11-01'];
 const DZ_HOLIDAYS=DEFAULT_HOLIDAYS;
@@ -1007,7 +1039,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const me=()=>U.find(u=>u.id===S.user);
 const isM=()=>me().role==='manager';const isPartner=()=>me().role==='partner';const isCollab=()=>me().role==='collaborator';
 const byU=id=>U.find(u=>u.id===id);
-const byC=id=>S.cases.find(c=>c.id===id);
+const byC=id=>S.cases.find(c=>c.id===id||(id!=null&&id!==''&&!Number.isNaN(id)&&String(c.id)===String(id)));
 const byInv=id=>S.invoices.find(i=>i.id===id);
 const fmt=s=>{if(!s)return '—';const d=D(s);return d.getDate()+' '+MON[S.lang][d.getMonth()]+' '+d.getFullYear()};
 /* عزل اتجاه المبلغ كي لا ينعكس داخل النص العربي */
@@ -1061,6 +1093,41 @@ function paidOf(cid){return (S.pays||[]).filter(p=>p.c===cid||p.caseId===cid).re
 function dueOf(c){if(!c||c.judicialAid)return 0;return Math.max(0,(c.fee[0]||0)-paidOf(c.id))}
 function clientOf(c){if(!c)return {ar:'—',fr:'—',ph:'—',nif:'—'};if(c.clientId!=null){const cl=(S.clients||CL).find(x=>x.id===c.clientId);if(cl)return cl}if(typeof c.cl==='number'&&CL[c.cl])return CL[c.cl];return {ar:'—',fr:'—',ph:'—',nif:'—'}}
 function normName(s){if(!s)return '';return String(s).replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/[ًٌٍَُِّْ]/g,'').replace(/\s+/g,' ').trim().toLowerCase()}
+function resolveRootCaseId(c){
+ if(!c)return null;
+ if(c.rootCaseId!=null&&c.rootCaseId!=='')return c.rootCaseId;
+ let cur=c;const seen=new Set([c.id]);
+ while(cur&&cur.parentId!=null&&cur.parentId!==''&&!seen.has(cur.parentId)){
+  seen.add(cur.parentId);
+  const p=byC(cur.parentId);
+  if(!p)return cur.parentId;
+  if(p.rootCaseId!=null&&p.rootCaseId!=='')return p.rootCaseId;
+  cur=p;
+ }
+ return cur?cur.id:c.id;
+}
+function matterStagesOf(c,pool){
+ if(!c)return [];
+ const rk=String(resolveRootCaseId(c));
+ return (pool||visCases()).filter(x=>x&&String(resolveRootCaseId(x))===rk).slice().sort((a,b)=>((+a.stage||0)-(+b.stage||0))||((+a.id||0)-(+b.id||0)));
+}
+function caseDirectMatch(c,qn){
+ if(!c||!qn)return false;
+ const cl=clientOf(c),clLegacy=(typeof c.cl==='number'&&CL[c.cl])?CL[c.cl]:null;
+ const blob=[c.title&&c.title.ar,c.title&&c.title.fr,tr(c.title),cl&&cl.ar,cl&&cl.fr,tr(cl),clLegacy&&clLegacy.ar,clLegacy&&clLegacy.fr,c.no,c.diwanNo,c.roleNumber,c.platformCaseNo].filter(Boolean).join(' ');
+ return normName(blob).includes(qn);
+}
+function normCasesAfterLoad(){
+ let maxId=0;
+ (S.cases||[]).forEach(c=>{
+  if(!c)return;
+  if(+c.id>maxId)maxId=+c.id;
+  if(!Array.isArray(c.sessions))c.sessions=[];
+  if(Array.isArray(c.linked))c.linked=Array.from(new Set(c.linked.filter(x=>x!=null&&x!==c.id)));
+  else c.linked=[];
+ });
+ if(!(S.nextId>maxId))S.nextId=maxId+1;
+}
 function commit(fn,toastKey,undo){fn();try{scheduleSave()}catch(_){}if(!S.online)S.pending++;
  try{S.audit=S.audit||[];S.audit.unshift({w:S.user,what:(toastKey?t(toastKey):'تعديل')+(S.arg&&byC(S.arg)?' — ملف '+byC(S.arg).no:''),d:new Date().toLocaleString('fr-FR')});if(S.audit.length>200)S.audit.length=200}catch(_){}
  toast((toastKey?t(toastKey)+' — ':'')+(S.online?t('savedOnline'):t('savedLocal')),undo);chrome();render()}
@@ -1239,14 +1306,16 @@ function casesV(){const r=me().role;
  <div class="filters"><input id="fq" type="search" placeholder="${t('f_q')}" aria-label="${t('f_q')}"><select id="ft" aria-label="${t('c_court')}"><option value="">${t('f_type_all')}</option>${Object.keys(TYPES).map(k=>`<option value="${k}">${tr(TYPES[k])}</option>`).join('')}</select>
  <select id="fs" aria-label="${t('c_stage')}"><option value="">${t('f_stage_all')}</option>${STAGES.map((s,i)=>`<option value="${i}">${tr(s)}</option>`).join('')}</select>${scope}</div>
  <section class="card cases"><div class="card-b"><div class="rows" id="caseRows"></div></div></section>`}
-function caseRows(){const q=(document.getElementById('fq')||{value:''}).value.trim().toLowerCase(),ty=(document.getElementById('ft')||{value:''}).value,sg=(document.getElementById('fs')||{value:''}).value;
+function caseRows(){const q=(document.getElementById('fq')||{value:''}).value.trim(),qn=normName(q),ty=(document.getElementById('ft')||{value:''}).value,sg=(document.getElementById('fs')||{value:''}).value;
  const r=me().role;let base=visCases();if(S.casesScope==='mine'){if(r==='secretary')base=base.filter(c=>c.as.includes(S.user));else if(r==='partner'||r==='manager')base=base.filter(c=>(c.lawyerId||'m')===S.user);else if(r==='collaborator')base=base.filter(c=>(c.lawyerId||'')===S.user||(c.as||[]).includes(S.user))} // FIX5: 'my files' filters by lawyerId
- let list=base.filter(c=>(!q||(tr(c.title)+tr(CL[c.cl]||{})+c.no).toLowerCase().includes(q))&&(!ty||c.type===ty)&&(sg===''||c.stage===+sg));
+ const directIds=qn?new Set(base.filter(c=>caseDirectMatch(c,qn)).map(c=>c.id)):null;
+ const matchedRoots=qn?new Set(Array.from(directIds).map(cid=>String(resolveRootCaseId(byC(cid))))):null;
+ let list=base.filter(c=>(!qn||matchedRoots.has(String(resolveRootCaseId(c))))&&(!ty||c.type===ty)&&(sg===''||c.stage===+sg));
  const dir=S.sortDir,key=S.sortBy;
- list=list.sort((a,b)=>{let x,y;if(key==='no'){x=a.no;y=b.no}else if(key==='stage'){x=a.stage;y=b.stage}else if(key==='next'){x=a.next||'9999';y=b.next||'9999'}else return 0;return x>y?dir:x<y?-dir:0});
+ list=list.sort((a,b)=>{if(qn){const da=directIds.has(a.id)?0:1,db=directIds.has(b.id)?0:1;if(da!==db)return da-db}let x,y;if(key==='no'){x=a.no;y=b.no}else if(key==='stage'){x=a.stage;y=b.stage}else if(key==='next'){x=a.next||'9999';y=b.next||'9999'}else return 0;return x>y?dir:x<y?-dir:0});
  const hb=(k,l)=>`<button data-act="sort" data-k="${k}">${l}${S.sortBy===k?(S.sortDir>0?' ▲':' ▼'):''}</button>`;
  const head=`<div class="row head">${hb('no',t('c_no'))}<span>${t('c_subject')}</span><span>${t('c_court')}</span>${hb('stage',t('c_stage'))}<span>${t('c_status')}</span><span>${t('c_team')}</span></div>`;
- const body=list.map(c=>`<button class="row" data-act="case" data-id="${c.id}"><span dir="ltr" style="text-align:start">${esc(c.no)}</span><span><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]||{}))}</small></span><span><small style="color:var(--ink)">${esc(tr(c.court))}</small>${typeChip(c.type)}</span><span>${tr(STAGES[c.stage])}</span><span>${stChip(c.st)}${c.judicialAid?`<span class="chip info" style="margin-inline-start:4px">${t('ja_badge')}</span>`:''}</span><span>${avs(c.as)}</span></button>`).join(''); // FIX04B ja_badge
+ const body=list.map(c=>{const refs=[c.roleNumber,c.platformCaseNo&&c.platformCaseNo!==c.no?c.platformCaseNo:''].filter(Boolean).join(' · ');const relBadge=(qn&&!directIds.has(c.id))?`<small style="display:block;color:var(--teal-ink);font-size:11px">${esc(t('ns_related_stage'))}</small>`:'';return `<button class="row" data-act="case" data-id="${c.id}"><span dir="ltr" style="text-align:start">${esc(c.no)}${refs?`<small style="display:block;color:var(--muted);font-size:11.5px">${esc(refs)}</small>`:''}</span><span><strong>${esc(tr(c.title))}</strong><small>${esc(tr(clientOf(c)))}</small></span><span><small style="color:var(--ink)">${esc(tr(c.court))}</small>${typeChip(c.type)}</span><span>${tr(STAGES[c.stage]||STAGES[0])}${relBadge}</span><span>${stChip(c.st)}${c.judicialAid?`<span class="chip info" style="margin-inline-start:4px">${t('ja_badge')}</span>`:''}</span><span>${avs(c.as)}</span></button>`}).join(''); // FIX04B ja_badge
  const empty=`<div class="empty-big"><h3>${t('empty_cases')}</h3><p>${t('empty_cases_cta')}</p>${r!=='trainee'?`<button class="btn primary" data-act="newcase">${ic('plus')}${t('newCase').replace('+ ','')}</button>`:''}</div>`;
  document.getElementById('caseRows').innerHTML=head+(body||empty)}
 
@@ -2163,13 +2232,14 @@ function importFile(f){if(!f)return;const r=new FileReader();r.onload=()=>{let d
 function importData(d){var _pa=S.auth;try{['cases','tasks','dls','docs','pays','expenses','invoices','trust','audit','officeExp','jurisprudence','glossary','installments','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','extraLawyers','intakeLog','conflictReviews','deliveries','userPasswords','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues'].forEach(k=>{if(d[k])S[k]=d[k]});if(d.cabinet){S.cabinet=d.cabinet;if(S.cabinet.timbreFixed!==true){S.cabinet.timbre=100;S.cabinet.timbreFixed=true}}if(Array.isArray(S.dlHolidays)){S.dlHolV2=false;try{holList()}catch(_){}}if(Array.isArray(S.dlRules)){S.dlRulesV2=false;try{dlRulesList()}catch(_){}}if(d.receiptSeq)S.receiptSeq=d.receiptSeq;if(d.invoiceSeq)S.invoiceSeq=d.invoiceSeq; // FIX-07
   if(d.clients){S.clients=d.clients;CL.length=0;d.clients.forEach(c=>CL.push(c))}
   (S.cases||[]).forEach(c=>{if(c.clientId!=null)c.cl=c.clientId-1;else if(typeof c.cl==='number')c.clientId=c.cl+1});
+  normCasesAfterLoad();
   try{applyRoles()}catch(_){}try{secPostImport(_pa)}catch(_){}toast('تم الاسترجاع — '+(d.cases?d.cases.length:0)+' ملف');chrome();render()}catch(err){toast('⚠ ملف غير صالح')}}
 function csvImport(){ // FIX-08: ؛ separator + client merge by normName
  const raw=($('csvIn')||{value:''}).value.trim();if(!raw){toast('ألصق البيانات أولاً');return}let n=0;
  raw.split(/\n+/).forEach(line=>{const p=line.split(/[;؛]/).map(x=>x.trim());if(p.length<3||!p[0]||isCsvHeader(p))return; // FIX08B
   let clIdx=CL.findIndex(c=>normName(tr(c))===normName(p[1]));
   if(clIdx<0){const nc={ar:p[1],fr:p[1],ph:'—',nif:'—'};CL.push(nc);clIdx=CL.length-1;if(S.clients){nc.id=CL.length;S.clients.push(nc)}} // FIX08B shared object
-  const id=S.nextId++;S.cases.unshift({id,no:p[0],title:{ar:p[2],fr:p[2]},type:TYPES[p[3]]?p[3]:'civil',court:COURTS[0],cl:clIdx,clientId:clIdx+1,opp:{ar:'—',fr:'—'},stage:0,st:'active',next:null,time:null,kind:'tbd',fee:[+p[4]||0,0],judg:null,docs:0,as:['m','s'],hasPOA:false,lim:null,notes:[],contacts:[],hours:0,sessions:[],parties:[mkParty('client',p[1])]/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:''});n++});
+  const id=S.nextId++;S.cases.unshift({id,rootCaseId:id,parentId:null,no:p[0],title:{ar:p[2],fr:p[2]},type:TYPES[p[3]]?p[3]:'civil',court:COURTS[0],cl:clIdx,clientId:clIdx+1,opp:{ar:'—',fr:'—'},stage:0,st:'active',next:null,time:null,kind:'tbd',fee:[+p[4]||0,0],judg:null,docs:0,as:['m','s'],hasPOA:false,lim:null,notes:[],contacts:[],hours:0,sessions:[],parties:[mkParty('client',p[1])]/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:''});n++});
  const r=$('csvRes');if(r)r.textContent='تم استيراد '+n+' ملف';toast('تم استيراد '+n+' ملفاً جديداً');scheduleSave();chrome();render()}
 function printStatement(i){const c0=CL[i];if(!c0)return;const cs=visCases().filter(c=>c.cl===i),kind=clientKindOf(c0); // FIX-04
  const rows=cs.map(c=>`<tr><td>${esc(c.no)}</td><td>${esc(tr(c.title))}</td><td>${money(c.fee[0])}</td><td>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))}</td><td>${money(dueOf(c))}</td></tr>`).join('');
@@ -2370,7 +2440,7 @@ function modal(title,fields,onSave,okLabel){lastFocus=document.activeElement;$('
   if(x.type==='select')inp=`<select id="f_${x.n}" name="${x.n}">${x.opts.map(o=>`<option value="${o[0]}" ${String(o[0])===String(x.v)?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`;
   else if(x.type==='textarea')inp=`<textarea id="f_${x.n}" name="${x.n}" rows="3">${esc(x.v||'')}</textarea>`;
   else if(x.type==='checkbox')inp=`<input id="f_${x.n}" name="${x.n}" type="checkbox" ${x.v?'checked':''}>`;
-  else inp=`<input id="f_${x.n}" name="${x.n}" type="${x.type||'text'}" value="${esc(x.v||'')}" ${x.min!==undefined?`min="${x.min}"`:''}>`;
+  else inp=`<input id="f_${x.n}" name="${x.n}" type="${x.type||'text'}" value="${esc(x.v||'')}" ${x.min!==undefined?`min="${x.min}"`:''}${x.dir?` dir="${esc(x.dir)}"`:''}>`;
   return `<div class="fld" data-f="${x.n}">${lab}${inp}${x.hint?`<div class="hint">${x.hint}</div>`:''}<div class="err"></div></div>`}).join('');
  $('modal').innerHTML=`<h2>${t(title)}</h2><form id="mf" novalidate>${f}<div class="mf"><button type="button" class="btn" data-act="closeModal">${t('cancel')}</button><button type="submit" class="btn primary">${t(okLabel||'save')}</button></div></form>`;
  $('modalWrap').classList.add('on');$('scrim').classList.add('on');
@@ -2573,7 +2643,7 @@ function saveDocVersion(){var cid=+(S.docGen&&S.docGen.caseId);var c=byC(cid);if
 function addChecklistItem(cid){var c=byC(cid);if(!c)return;var text=prompt('أدخل عنصر قائمة التحقق:');if(!text||!text.trim())return;c.checklists=c.checklists||[];c.checklists.push({id:uid(),text:text.trim(),done:false});scheduleSave();openDrawer(cid)}
 
 /* ============== DRAWER ============== */
-function openDrawer(id){const c=byC(id);if(c){var _init=false;if(c.legalRefs==null){c.legalRefs='';_init=true}if(!c.docVersions){c.docVersions=[];_init=true}if(!c.checklists){c.checklists=checklistDefaults(c.type);_init=true}if(_init)scheduleSave()}const m=isM(),p=Math.round(c.fee[1]/(c.fee[0]||1)*100),showFees=canFees(),dr=$('drawer');
+function openDrawer(id){const c=byC(id);if(!c)return;var _init=false;if(c.legalRefs==null){c.legalRefs='';_init=true}if(!c.docVersions){c.docVersions=[];_init=true}if(!c.checklists){c.checklists=checklistDefaults(c.type);_init=true}if(_init)scheduleSave();const m=isM(),p=Math.round(c.fee[1]/(c.fee[0]||1)*100),showFees=canFees(),dr=$('drawer');
  const poa=c.hasPOA?`<span class="chip ok">${t('d_poa_yes')}</span>`:`<span class="chip bad">${t('d_poa_no')}</span>`;
  const lim=c.lim?`<span class="chip ${diff(c.lim)<180?'warn':'mute'}">${fmt(c.lim)} (${t('inDays',diff(c.lim))})</span>`:`<span class="chip mute">—</span>`;
  const notes=(c.notes||[]).map(n=>`<li>${av(n.w,true)}<div style="flex:1"><div>${esc(tr(n.t))}</div><small class="sub">${fmt(n.d)}</small></div></li>`).join('')||`<li class="sub">—</li>`;
@@ -2587,17 +2657,20 @@ function openDrawer(id){const c=byC(id);if(c){var _init=false;if(c.legalRefs==nu
  const parts=(c.parties||[]).map(normParty).map(pp=>{/* V9-FIX-02 */const nm=pFull(pp)||'—',rl=pp.role==='other'?(tr(pp.roleLabel)||t('pr_role_other')):t('pr_role_'+pp.role),pl=pp.proc?procLbl(pp.proc):'';
   const row=(k,v)=>v?`<div class="pdet"><span>${t(k)}:</span> <b><bdi>${esc(v)}</bdi></b></div>`:'';
   return `<div class="pcard-v"><div class="dlrow"><span class="avatar sm">${esc(nm.charAt(0))}</span><div style="flex:1"><strong>${esc(nm)}</strong></div>${pl?`<span class="chip teal">${esc(pl)}</span>`:''}<span class="chip mute">${esc(rl)}</span></div>${row('pr_birthdate',pp.birthDate?fmt(pp.birthDate):'')}${row('pr_birthplace',tr(pp.birthPlace))}${row('pr_idtype',pp.idType?t('pr_id_'+pp.idType):'')}${row('pr_idnumber',pp.idNumber)}${row('pr_idissue',pp.idIssueDate?fmt(pp.idIssueDate):'')}${row('pr_idexpiry',pp.idExpiryDate?fmt(pp.idExpiryDate):'')}${row('pr_address',tr(pp.address))}</div>`}).join('')||`<p class="sub">—</p>`;
- const linked=(c.linked||[]).map(lid=>{const lc=byC(lid);return lc?`<button class="chip info" data-act="case" data-id="${lc.id}" style="cursor:pointer;border:0">${esc(lc.no)} — ${esc(tr(lc.title))}</button>`:''}).join(' ');
+ const stagesChain=matterStagesOf(c),stageIds=new Set(stagesChain.map(sc=>sc.id));
+ const stagesBlock=stagesChain.length>1?`<div data-matter-stages style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:12px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px"><b style="font-size:14px">${esc(t('ns_stages_title'))}</b><span class="chip teal">${stagesChain.length}</span></div>${stagesChain.map(sc=>{const sRefs=[sc.roleNumber,sc.platformCaseNo&&sc.platformCaseNo!==sc.no?sc.platformCaseNo:''].filter(Boolean).join(' · ');return `<div class="dlrow" style="padding:7px 0"><span class="chip ${sc.id===c.id?'teal':'mute'}">${esc(tr(STAGES[sc.stage]||STAGES[0]))}</span><div style="flex:1;min-width:0"><strong dir="ltr" style="display:inline-block">${esc(sc.no)}</strong>${sRefs?` <small dir="ltr" style="color:var(--muted)">(${esc(sRefs)})</small>`:''}<span class="sub">${esc(tr(sc.court))}</span></div>${stChip(sc.st)}${sc.id===c.id?`<span class="chip ok">${esc(t('ns_stage_current'))}</span>`:`<button type="button" class="btn sm" data-act="case" data-id="${sc.id}">${esc(t('ns_open_stage'))}</button>`}</div>`}).join('')}</div>`:'';
+ const linked=(c.linked||[]).filter(lid=>!stageIds.has(lid)).map(lid=>{const lc=byC(lid);return (lc&&canSee(lc))?`<button class="chip info" data-act="case" data-id="${lc.id}" style="cursor:pointer;border:0">${esc(lc.no)} — ${esc(tr(lc.title))}</button>`:''}).join(' ');
  const dlAuto=c.notif?DLK.map(rule=>{const dd=calcDeadline(c.notif,rule,false).prudent;return `<div style="font-size:13px;padding:3px 0">${tr(rule.name).split(' — ')[0]}: <b>${fmt(dd)}</b>${diff(dd)<0?' <span class="chip bad">انقضى</span>':''}</div>`}).join(''):`<p class="sub">لم يُسجَّل تاريخ تبليغ — <button class="btn sm" data-act="setnotif" data-id="${c.id}">تسجيل</button></p>`;
  const inst=S.installments.filter(x=>x.c===c.id&&!x.paid);
- const wa2=(()=>{const ph=CL[c.cl].ph;if(!ph||ph==='—')return '';const u='https://wa.me/213'+ph.replace(/\D/g,'').replace(/^0/,'');const msg=encodeURIComponent(t('wa_msg')+(c.next?' بتاريخ '+fmt(c.next)+' الساعة '+(c.time||''):''));return `<a class="btn" href="${u}?text=${msg}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`})();
+ const clObj=clientOf(c);
+ const wa2=(()=>{const ph=clObj.ph;if(!ph||ph==='—')return '';const u='https://wa.me/213'+ph.replace(/\D/g,'').replace(/^0/,'');const msg=encodeURIComponent(t('wa_msg')+(c.next?' بتاريخ '+fmt(c.next)+' الساعة '+(c.time||''):''));return `<a class="btn" href="${u}?text=${msg}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`})();
  dr.innerHTML=`<button class="btn sm close" data-act="closeDrawer">${t('close')}</button> <button class="btn sm" data-act="quicklegal" data-id="${c.id}">🔍 بحث قانوني</button> ${c.secret?`<span class="chip bad">${t('secret_file')}</span> `:''}${typeChip(c.type)} ${stChip(c.st)}<h2>${esc(tr(c.title))}</h2><div class="sub" dir="ltr" style="text-align:start">${esc(c.no)}</div>
- <div style="margin-top:16px">${stepper(c.stage)}</div>${plat}
+ <div style="margin-top:16px">${stepper(c.stage)}</div>${stagesBlock}${plat}
  <div class="drawer-tabs" role="tablist" aria-label="أقسام ملف القضية"><button role="tab" data-act="casetab" data-id="${c.id}" data-v="details" aria-current="${(S.caseDrawerTab||'details')==='details'}">تفاصيل القضية</button><button role="tab" data-act="casetab" data-id="${c.id}" data-v="legal" aria-current="${S.caseDrawerTab==='legal'}">السندات القانونية</button><button role="tab" data-act="casetab" data-id="${c.id}" data-v="checklist" aria-current="${S.caseDrawerTab==='checklist'}">قائمة التحقق</button></div>
  <section class="case-feature-pane" ${S.caseDrawerTab==='legal'?'':'hidden'}><h3>السندات القانونية</h3><p class="sub">أضف نصوصاً قانونية أو روابط يستند إليها المحامي. تُحفظ محلياً ضمن بيانات القضية.</p><textarea class="legal-ref-box" data-act="legalrefs" data-id="${c.id}" aria-label="السندات القانونية" placeholder="أدخل النص القانوني أو الرابط...">${esc(c.legalRefs||'')}</textarea></section>
  <section class="case-feature-pane" ${S.caseDrawerTab==='checklist'?'':'hidden'}><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3>قائمة التحقق</h3>${m?`<button class="btn sm primary" data-act="checkadd" data-id="${c.id}">+ إضافة عنصر</button>`:''}</div>${(c.checklists||[]).map(function(item){return '<div class="checklist-row '+(item.done?'done':'')+'"><input type="checkbox" data-act="checktoggle" data-id="'+c.id+'" data-item="'+item.id+'" '+(item.done?'checked':'')+' aria-label="'+esc(item.text)+'"><span style="flex:1">'+esc(item.text)+'</span>'+(m?'<button class="btn sm" data-act="checkdelete" data-id="'+c.id+'" data-item="'+item.id+'" aria-label="حذف '+esc(item.text)+'">حذف</button>':'')+'</div>'}).join('')||'<p class="empty">لا توجد عناصر.</p>'}</section>
  <div data-case-details ${S.caseDrawerTab==='details'?'':'hidden'}>
- <dl class="dl-list"><dt>${t('d_client')}</dt><dd>${esc(tr(CL[c.cl]))} <button class="btn sm" data-act="client" data-id="${c.cl}" style="margin-inline-start:6px">${t('nav_client')}</button></dd><dt>${t('d_opp')}</dt><dd>${esc(tr(c.opp))}</dd><dt>${t('d_court')}</dt><dd>${esc(tr(c.court))}</dd>
+ <dl class="dl-list"><dt>${t('d_client')}</dt><dd>${esc(tr(clObj))} <button class="btn sm" data-act="client" data-id="${c.cl}" style="margin-inline-start:6px">${t('nav_client')}</button></dd><dt>${t('d_opp')}</dt><dd>${esc(tr(c.opp))}</dd><dt>${t('d_court')}</dt><dd>${esc(tr(c.court))}</dd>
  <dt>${t('d_next')}</dt><dd>${c.next?fmt(c.next)+' — '+c.time+' ('+tr(KIND[c.kind])+')':tr(KIND[c.kind])}</dd><dt>${t('d_poa')}</dt><dd>${poa}</dd><dt>${t('d_lim')}</dt><dd>${lim}</dd>
  <dt>${t('d_judg')}</dt><dd>${c.judg?esc(tr(c.judg)):t('d_none_yet')}</dd><dt>${t('d_team')}</dt><dd>${avs(c.as)}</dd><dt>${t('lw_resp')}</dt><dd>${esc(lawyerName(c.lawyerId))}${m?` <button class="btn sm" data-act="setlawyer" data-id="${c.id}" style="margin-inline-start:6px">${t('lw_edit_btn')}</button>`:''}</dd>
  ${showFees?`<dt>${t('d_fees')}</dt><dd>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))} ${t('of')} ${money(c.fee[0])}<div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div></dd>`:''}</dl>
@@ -2614,7 +2687,7 @@ function openDrawer(id){const c=byC(id);if(c){var _init=false;if(c.legalRefs==nu
   <div class="kv"><span>${t('fl_signifdate')}</span><b>${c.signifDate?fmt(c.signifDate):(c.notif?fmt(c.notif):'—')}</b></div>
   ${sigDL(c)}
  </div>
- <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">${m?`<button class="btn primary" data-act="portal" data-id="${c.id}">${t('d_portal')}</button>`:''}${wa2}<button class="btn" data-act="setnotif" data-id="${c.id}">${t('signif_set_date')}</button><button class="btn" data-act="exportcase" data-id="${c.id}">${ic('download')}${t('exp_case_pdf')}</button><button class="btn" data-act="linkcase" data-id="${c.id}">${t('link_case')}</button><button class="btn" data-act="addparty" data-id="${c.id}">+ ${t('d_parties')}</button><button class="btn" data-act="addsession" data-id="${c.id}">+ ${t('d_sessions')}</button>${showFees?`<button class="btn" data-act="newinvoicefromcase" data-id="${c.id}">${ic('bills')}${t('d_newinvoice')}</button>`:''}<button class="btn" data-act="addnote" data-id="${c.id}">${t('d_addnote')}</button>${isM()?`<button class="btn sm" data-act="setshare" data-id="${c.id}">${t('share_btn')}</button>`:''}<button class="btn" data-act="addcontact" data-id="${c.id}">${t('d_addcontact')}</button><button class="btn" data-act="addexpensecase" data-id="${c.id}">${t('d_addexpense')}</button>${showFees?`<button class="btn primary" data-act="quickpay" data-id="${c.id}">💵 ${t('quick_receipt_btn')}</button>`:''}${m?`<button class="btn" data-act="togglesecret" data-id="${c.id}">${c.secret?'🔓 فك السرية':'🔒 '+t('secret_file')}</button>`:''}</div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">${canNewCase()?`<button class="btn primary" data-act="casefromfirst" data-id="${c.id}">+ ${esc(t('ns_btn'))}</button>`:''}${m?`<button class="btn primary" data-act="portal" data-id="${c.id}">${t('d_portal')}</button>`:''}${wa2}<button class="btn" data-act="setnotif" data-id="${c.id}">${t('signif_set_date')}</button><button class="btn" data-act="exportcase" data-id="${c.id}">${ic('download')}${t('exp_case_pdf')}</button><button class="btn" data-act="linkcase" data-id="${c.id}">${t('link_case')}</button><button class="btn" data-act="addparty" data-id="${c.id}">+ ${t('d_parties')}</button><button class="btn" data-act="addsession" data-id="${c.id}">+ ${t('d_sessions')}</button>${showFees?`<button class="btn" data-act="newinvoicefromcase" data-id="${c.id}">${ic('bills')}${t('d_newinvoice')}</button>`:''}<button class="btn" data-act="addnote" data-id="${c.id}">${t('d_addnote')}</button>${isM()?`<button class="btn sm" data-act="setshare" data-id="${c.id}">${t('share_btn')}</button>`:''}<button class="btn" data-act="addcontact" data-id="${c.id}">${t('d_addcontact')}</button><button class="btn" data-act="addexpensecase" data-id="${c.id}">${t('d_addexpense')}</button>${showFees?`<button class="btn primary" data-act="quickpay" data-id="${c.id}">💵 ${t('quick_receipt_btn')}</button>`:''}${m?`<button class="btn" data-act="togglesecret" data-id="${c.id}">${c.secret?'🔓 فك السرية':'🔒 '+t('secret_file')}</button>`:''}</div>
  ${renderTimerWidget(c)}
  <h3>${t('dlg_auto')}</h3>${dlAuto}
  ${linked?`<h3 style="margin-top:14px">ملفات مرتبطة (استئناف/تنفيذ...)</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${linked}</div>`:''}
@@ -2704,7 +2777,7 @@ document.addEventListener('click',e=>{
  const a=el.dataset.act,id=+el.dataset.id;
  switch(a){
   case 'go':go(el.dataset.v);break;
-  case 'case':$('results').classList.remove('on');openDrawer(id);break;
+  case 'case':$('results').classList.remove('on');openDrawer(isNaN(id)?el.dataset.id:id);break;
   case 'closeDrawer':closeDrawer();break;
   case 'closeModal':closeModal();break;
   case 'newcase':newCase();break;
@@ -2814,10 +2887,13 @@ document.addEventListener('keydown',e=>{
  if(e.key.toLowerCase()==='n'&&!e.ctrlKey&&!e.metaKey&&me().role!=='trainee'){e.preventDefault();newCase()}
  if(e.key.toLowerCase()==='t'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();newTask()}
 });
-$('gs').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase(),box=$('results');
+$('gs').addEventListener('input',e=>{const q=e.target.value.trim(),box=$('results');
  if(!q){box.classList.remove('on');return}
- const qn=normName(q);
- const caseHits=visCases().filter(c=>normName(tr(c.title)).includes(qn)||normName(tr(CL[c.cl]||{})).includes(qn)||normName(c.no).includes(qn)).slice(0,5).map(c=>`<button data-act="case" data-id="${c.id}"><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]))} — ${esc(c.no)}</small></button>`);
+ const qn=normName(q),pool=visCases();
+ const directHits=pool.filter(c=>caseDirectMatch(c,qn)),directSet=new Set(directHits.map(c=>c.id)),seenC=new Set(),orderedCases=[];
+ directHits.forEach(c=>{if(!seenC.has(c.id)){seenC.add(c.id);orderedCases.push({c,direct:true})}});
+ directHits.forEach(c=>{matterStagesOf(c,pool).forEach(sc=>{if(!seenC.has(sc.id)){seenC.add(sc.id);orderedCases.push({c:sc,direct:directSet.has(sc.id)})}})});
+ const caseHits=orderedCases.slice(0,8).map(({c,direct})=>{const refs=[c.roleNumber,c.platformCaseNo&&c.platformCaseNo!==c.no?c.platformCaseNo:''].filter(Boolean).join(' · ');const rel=!direct?` · ${t('ns_related_stage')}`:'';return `<button data-act="case" data-id="${c.id}"><strong>${esc(tr(c.title))} <span class="chip ${direct?'mute':'teal'}" style="font-size:10.5px">${esc(tr(STAGES[c.stage]||STAGES[0]))}</span></strong><small>${esc(tr(clientOf(c)))} — <span dir="ltr">${esc(c.no)}${refs?' ('+esc(refs)+')':''}</span>${esc(rel)}</small></button>`});
  const clHits=allowed('clients')?CL.map((cl,i)=>[cl,i]).filter(([cl,i])=>cl&&canSeeClient(cl,i)&&normName([cl.ar,cl.fr,cl.ph,cl.nin,cl.nif,cl.rc,cl.repName].filter(Boolean).join(' ')).includes(qn)).slice(0,4).map(([cl,i])=>`<button data-act="client" data-id="${i}"><strong>${esc(tr(cl))}</strong><small>${t(clientKindOf(cl)==='legal'?'cl_badge_legal':'cl_badge_natural')}${cl.ph&&cl.ph!=='—'?' · '+esc(cl.ph):''}</small></button>`):[];
  const all=[...caseHits,...clHits];
  box.innerHTML=all.length?all.join(''):`<p class="empty">${t('no_results')}</p>`;
@@ -3891,7 +3967,7 @@ function snapV7(forExport){return {schemaVersion:SCHEMA,cases:S.cases,clients:S.
 function loadStore(){try{var raw=localStorage.getItem(STORE_KEY);_loadedFromV8=false;if(!raw){raw=localStorage.getItem(STORE_KEY_V8);_loadedFromV8=!!raw}if(!raw)return null;if(isEncPayload(raw))return null;return normStore(JSON.parse(raw))}catch(e){return null}}
 function normStore(data){try{if(!data.clients&&data.cases){var clients=[],seen={};(data.cases||[]).forEach(function(c){if(c.clientId!=null)return;if(typeof c.cl==='number'){var src0=(CL)[c.cl]||{ar:'—',fr:'—',ph:'—'};var key=(src0.ar||'')+'|'+(src0.ph||'');if(seen[key]!=null)c.clientId=seen[key];else{var id=clients.length+1;clients.push(Object.assign({id:id},src0));seen[key]=id;c.clientId=id}}});data.clients=clients.length?clients:CL.map(function(x,i){return Object.assign({id:i+1},x)})}if(!data.dlHolidays)data.dlHolidays=DEFAULT_HOLIDAYS.slice();if(!data.dlRules)data.dlRules=DEFAULT_DLK.slice();if(!data.drafts)data.drafts=[];data.schemaVersion=SCHEMA;return data}catch(e){return null}}
 function normalizeSidebarGroups(value){var v=value&&typeof value==='object'?value:{};return {w:typeof v.w==='boolean'?v.w:false,f:typeof v.f==='boolean'?v.f:true,l:typeof v.l==='boolean'?v.l:true,a:typeof v.a==='boolean'?v.a:true,h:typeof v.h==='boolean'?v.h:(typeof v.x==='boolean'?v.x:true)}}
-function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','conflictReviews','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues','collapsedGroups'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);migrateParties()/* V9-FIX-02 */}
+function applyStore(data){if(!data)return;S.appointments=S.appointments||[];['cases','tasks','dls','docs','pays','expenses','officeExp','invoices','trust','installments','audit','cabinet','perms','tax','jurisprudence','glossary','drafts','dlHolidays','dlRules','dlMovableHolidays','license','processServers','services','experts','expertTasks','seizures','feesCalc','employees','payroll','auth','qrRegistry','smsLog','receiptSeq','invoiceSeq','notifSent','extraLawyers','intakeLog','conflictReviews','deliveries','userPasswords','appointments','stampInventory','stampMoves','caseExpenses','attendance','dlVacation','subs','colleagues','collapsedGroups'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});if(data.clients){S.clients=data.clients;CL.length=0;data.clients.forEach(function(c){CL.push(c)})}['nextId','nextTask','nextInv','nextTrust','nextPay','user','lang','pinHash','lastBackup'].forEach(function(k){if(data[k]!=null)S[k]=data[k]});S.isDemo=!!data.isDemo;S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);migrateParties();/* V9-FIX-02 */normCasesAfterLoad()}
 function clearDemo(){if(!confirm(t('v7_start_empty')+'؟'))return;S.cases=[];S.tasks=[];S.dls=[];S.docs=[];S.pays=[];S.expenses=[];S.officeExp=[];S.invoices=[];S.trust=[];S.installments=[];S.audit=[];S.drafts=[];S.intakeLog=[];S.conflictReviews=[];S.clients=[];CL.length=0;S.nextId=1;S.nextTask=1;S.nextInv=1;S.nextTrust=1;S.nextPay=1;S.isDemo=false;scheduleSave();chrome();render()}
 /* PIN removed v9.7 */
 /* PIN removed v9.7 */
@@ -4275,7 +4351,7 @@ function createIntakeCase(v,keep,conf,reviewApproved){
  var cl0=keep[0]||{},op0=keep.find(function(p,i){return i>0&&p.role==='opponent'}),clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
  closeModal();
  undoable(function(){var id=S.nextId++,clIdx=resolveIntakeClient(v,cl0,clAr,clFr);
-  S.cases.unshift({id:id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:clIdx,clientId:CL[clIdx]?CL[clIdx].id:clIdx+1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
+  S.cases.unshift({id:id,rootCaseId:id,parentId:null,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:clIdx,clientId:CL[clIdx]?CL[clIdx].id:clIdx+1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
   try{var sk=stampKindOf(+v.court),sr=stampConsume(sk,id,'تأسيس ملف '+v.no,!!v.ja);if(sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
   cfLogAccept(id,v.no,conf,!!reviewApproved)
  },'t_case');
@@ -5245,9 +5321,93 @@ if(a==='panic'){panicLockIdle();return}
  if(a==='fetchhours'){var cc=byC(id);if(cc){var h=+(cc.hours||0);var el=document.querySelector('[name=qty],#qty,input[data-n=qty]');if(el)el.value=h.toFixed(2);toast(t('t_fetch_hours')+': '+h.toFixed(2))}return}
 
  if(a==='idleunlock'){tryIdleUnlock();return}
- if(a==='casefromfirst'){ /* generate appeal from first instance */ var src=byC(id);if(!src)return;
-  var nw=JSON.parse(JSON.stringify(src));nw.id=uid();nw.no=(src.no||'')+'-استئناف';nw.parentId=src.id;nw.degree='appeal';nw.next='';nw.hearings=[];S.cases.unshift(nw);v9save();render();toast('تم إنشاء ملف الاستئناف');return}
+ if(a==='casefromfirst'){openNextStageModal(isNaN(id)?el.dataset.id:id);return}
 });
+function createNextStageCase(srcOrId,vals){
+ if(!canNewCase()){toast(t('t_perm'));return null}
+ var src=(srcOrId&&typeof srcOrId==='object')?srcOrId:byC(srcOrId);
+ if(!src||!vals)return null;
+ var stRaw=vals.stage,ctRaw=vals.court;
+ if(stRaw===''||stRaw==null||isNaN(+stRaw)||+stRaw<0||+stRaw>=STAGES.length)return null;
+ if(ctRaw===''||ctRaw==null||isNaN(+ctRaw)||+ctRaw<0||+ctRaw>=COURTS.length)return null;
+ var stageIdx=+stRaw,courtIdx=+ctRaw,noClean=String(vals.no||'').trim(),nv=normName(noClean);
+ if(!nv)return null;
+ if((S.cases||[]).some(function(c){return c&&normName(c.no)===nv})){toast(t('ns_err_dup_no'));return null}
+ var rootId=resolveRootCaseId(src),created=null;
+ undoable(function(){
+  normCasesAfterLoad();
+  var newId=S.nextId++;
+  var nw={
+   id:newId,
+   rootCaseId:rootId,
+   parentId:src.id,
+   no:noClean,
+   title:{ar:(src.title&&src.title.ar)||tr(src.title),fr:(src.title&&src.title.fr)||tr(src.title)},
+   type:src.type||'civil',
+   court:COURTS[courtIdx],
+   cl:src.cl,
+   clientId:src.clientId!=null?src.clientId:(typeof src.cl==='number'&&CL[src.cl]&&CL[src.cl].id!=null?CL[src.cl].id:(+src.cl||0)+1),
+   opp:{ar:(src.opp&&src.opp.ar)||'—',fr:(src.opp&&src.opp.fr)||'—'},
+   stage:stageIdx,
+   st:'active',
+   next:null,
+   time:null,
+   kind:'tbd',
+   fee:[0,0],
+   judg:null,
+   docs:0,
+   as:Array.isArray(src.as)?src.as.slice():['m','s'],
+   hasPOA:!!src.hasPOA,
+   judicialAid:false,
+   lawyerId:vals.lawyerId||src.lawyerId||'m',
+   jaNum:'',
+   jaDate:null,
+   lim:null,
+   notes:[],
+   contacts:[],
+   hours:0,
+   sessions:[],
+   parties:JSON.parse(JSON.stringify(src.parties||[])),
+   linked:[],
+   notif:null,
+   secret:!!src.secret,
+   platformCaseNo:String(vals.platformCaseNo||'').trim(),
+   platformUsername:src.platformUsername||'',
+   roleNumber:String(vals.roleNumber||'').trim(),
+   judgeName:'',
+   substName:'',
+   substFee:0,
+   delibDate:null,
+   huissierName:'',
+   signifStatus:'',
+   signifDate:null,
+   legalRefs:'',
+   docVersions:[],
+   checklists:checklistDefaults(src.type||'civil'),
+   createdAt:K(TODAY)
+  };
+  if(Array.isArray(src.sharedWith))nw.sharedWith=src.sharedWith.slice();
+  S.cases.unshift(nw);
+  created=nw;
+ },'ns_created');
+ return created;
+}
+function openNextStageModal(srcId){
+ if(!canNewCase()){toast(t('t_perm'));return}
+ var src=byC(srcId);if(!src)return;
+ var defStage=src.stage<=1?'2':(src.stage===2?'3':'');
+ modal('ns_modal_title',[
+  {n:'stage',l:'ns_stage',type:'select',v:defStage,req:true,opts:[['',t('ns_pick_stage')]].concat(STAGES.map(function(s,i){return [String(i),tr(s)]}))},
+  {n:'court',l:'fl_court',type:'select',v:'',req:true,opts:[['',t('ns_pick_court')]].concat(COURTS.map(function(ct,i){return [String(i),tr(ct)]}))},
+  {n:'no',l:'ns_no',v:'',dir:'ltr',req:true,hint:esc(t('ns_no_hint')),chk:function(val){var nv=normName(val);if(!nv)return 'err_req';if((S.cases||[]).some(function(c){return c&&normName(c.no)===nv}))return 'ns_err_dup_no';return ''}},
+  {n:'roleNumber',l:'fl_rolenumber',v:'',dir:'ltr'},
+  {n:'platformCaseNo',l:'d_case_no',v:'',dir:'ltr'},
+  {n:'lawyerId',l:'lw_resp',type:'select',v:src.lawyerId||'m',req:true,opts:lawyerOpts()}
+ ],function(vals){
+  var nw=createNextStageCase(src.id,vals);
+  if(nw)openDrawer(nw.id);
+ });
+}
 document.addEventListener('change',function(e){
  if(e.target&&e.target.id==='roleDate'){S.roleDate=e.target.value;render()}
 });
