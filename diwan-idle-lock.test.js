@@ -1232,12 +1232,30 @@ describe('idle lock protects UI and relocks after inactivity', () => {
 });
 
 
-describe('generated iframe HTML script boundary', () => {
-  test('the embedded iframe closing tag cannot terminate the outer script early', () => {
-    const escapedClose = HTML.indexOf('<\\/script>');
-    const firstLiteralClose = HTML.indexOf('</script>');
-    assert.ok(escapedClose >= 0, 'the generated iframe closing tag is escaped in source');
-    assert.ok(firstLiteralClose > escapedClose, 'the first literal closing tag follows the generated iframe template');
-    assert.ok(HTML.slice(0, firstLiteralClose).includes('printHtmlIframe(html)'), 'the complete iframe template and its render call remain inside the outer script');
+describe('HTML inline scripts and generated iframe template boundaries', () => {
+  test('every inline script element in index.html parses without SyntaxError or premature close', () => {
+    const scripts = [];
+    const scriptRe = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+    let match;
+    while ((match = scriptRe.exec(HTML)) !== null) {
+      const lineOffset = HTML.slice(0, match.index).split('\n').length - 1;
+      assert.doesNotThrow(
+        () => new vm.Script(match[1], { filename: 'index.html', lineOffset }),
+        'inline script starting at line ' + (lineOffset + 1) + ' must compile cleanly'
+      );
+      scripts.push(match[1]);
+    }
+    assert.equal(scripts.length, 3, 'expected main app script, service-worker script, and UX enhancement script');
+    assert.ok(scripts[0].includes('secBoot()'), 'main script retains full boot sequence through the end of the block');
+    assert.ok(scripts[2].includes('function enhanceSelect(') && scripts[2].includes('function initWizard('),
+      'UX enhancement script lives in its own top-level script before </body>');
+  });
+
+  test('exportCasePdf closes its printable HTML cleanly without embedding page-level scripts', () => {
+    const src = extractFunction('exportCasePdf');
+    assert.doesNotThrow(() => new vm.Script(src, { filename: 'index.html:exportCasePdf' }));
+    assert.ok(src.includes('</div></body></html>\';'), 'exportCasePdf closes its HTML template string cleanly');
+    assert.ok(!src.includes('<script') && !src.includes('<\\/script>'), 'exportCasePdf does not contain stray script tags');
+    assert.ok(src.includes('printHtmlIframe(html)'), 'exportCasePdf dispatches the completed HTML to printHtmlIframe');
   });
 });
