@@ -1984,7 +1984,7 @@ function exportCasePdf(cid){var c=byC(cid);if(!c)return;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
  const observer=new MutationObserver(records=>{records.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType===1)enhanceSelects(n)}));initWizard()});observer.observe(document.documentElement,{childList:true,subtree:true})
 })();
-</script>
+<\/script>
 </body></html>';
  printHtmlIframe(html)}
 
