@@ -377,6 +377,45 @@ html[dir=rtl] select{background-position:18px 18px,13px 18px!important;padding:9
 .case-wizard-progress{display:flex;gap:7px;margin:4px 0 20px}.case-wizard-stepmark{flex:1;min-width:0;border:0;background:var(--bg);color:var(--muted);border-radius:10px;padding:9px 5px;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px}.case-wizard-stepmark .step-no{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:var(--line);font-weight:700;flex:none}.case-wizard-stepmark[aria-current=step]{background:var(--teal-soft);color:var(--teal-ink);font-weight:700}.case-wizard-stepmark[aria-current=step] .step-no{background:var(--teal);color:#fff}.case-wizard-panel[hidden]{display:none!important}.case-wizard-panel h3{font-size:17px;margin:0 0 12px}.case-wizard-panel .nc-grid{margin-bottom:16px}.case-wizard-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:16px;margin-top:20px;flex-wrap:wrap}.case-wizard-actions .mf{margin:0;display:flex;gap:8px;flex-wrap:wrap}.case-wizard-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}.case-wizard-summary-item{padding:11px 12px;border:1px solid var(--line);border-radius:11px;min-width:0}.case-wizard-summary-item small{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}.case-wizard-summary-item strong{display:block;overflow-wrap:anywhere;font-weight:600}.case-wizard-note{padding:11px 13px;background:var(--teal-soft);color:var(--teal-ink);border-radius:10px;font-size:13px;margin:10px 0}
 @media(max-width:720px){.case-wizard-progress{gap:4px}.case-wizard-stepmark{flex-direction:column;font-size:10px;padding:7px 3px}.case-wizard-summary{grid-template-columns:1fr}.dash-priority .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-more-body{padding:0 8px 10px}}@media(prefers-reduced-motion:reduce){.select-popover{animation:none!important}select,.select-trigger{transition:none!important}}
 
+/* Diwan Client Onboarding & Profile Redesign: calm visual hierarchy, natural vs legal, RTL/LTR */
+.client-modal{width:min(740px,100%);padding:26px 28px}
+.client-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.client-modal-head h2{margin:0 0 3px;font-size:26px}
+.client-modal-sub{margin:0;color:var(--muted);font-size:13.5px}
+.req-star{color:var(--bad);margin-inline-start:3px;font-weight:700}
+.client-kind-seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.client-kind-btn{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg);text-align:start;display:flex;align-items:flex-start;gap:11px;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease}
+.client-kind-btn:hover{border-color:var(--teal)}
+.client-kind-btn[aria-pressed=true]{border-color:var(--teal);background:var(--teal-soft);box-shadow:0 6px 18px -12px var(--teal)}
+.client-kind-ic{width:38px;height:38px;border-radius:11px;background:var(--surface);color:var(--teal-ink);display:grid;place-items:center;font-size:18px;flex:none;border:1px solid var(--line)}
+.client-kind-btn[aria-pressed=true] .client-kind-ic{background:var(--teal);color:#fff;border-color:var(--teal)}
+.client-kind-btn b{display:block;font-size:14.5px;color:var(--ink);margin-bottom:1px}
+.client-kind-btn small{display:block;font-size:12px;color:var(--muted);line-height:1.45}
+.client-sec{border:1px solid var(--line);border-radius:16px;padding:16px 18px 4px;margin-bottom:14px;background:var(--surface)}
+.client-sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.client-sec-h h3{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--teal-ink);margin:0}
+.client-sec-h small{font-size:12px;color:var(--muted)}
+.client-extra{border:1px solid var(--line);border-radius:16px;margin-bottom:14px;background:var(--surface);overflow:hidden}
+.client-extra>summary{cursor:pointer;list-style:none;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--bg)}
+.client-extra>summary::-webkit-details-marker{display:none}
+.client-extra>summary::after{content:"＋";font-size:17px;color:var(--muted)}
+.client-extra[open]>summary{border-bottom:1px solid var(--line)}
+.client-extra[open]>summary::after{content:"−"}
+.client-extra-b{padding:14px 18px 4px}
+.client-alert{border-radius:13px;padding:12px 14px;margin-bottom:14px;font-size:13.5px;border:1px solid var(--line);line-height:1.6}
+.client-alert.draft{background:var(--info-soft);color:var(--info);border-color:color-mix(in srgb,var(--info) 35%,var(--line));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.client-alert.dup{background:var(--warn-soft);color:var(--ink);border-color:var(--warn)}
+.client-alert.block{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.client-alert-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.client-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line);margin-top:8px}
+.client-footer .mf{margin:0;flex-wrap:wrap}
+.client-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+.client-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 6px}
+.client-card-kv{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:4px 0}
+.client-picker-bar{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding:12px 14px;margin-bottom:12px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.client-picker-bar .fld{flex:1;min-width:220px;margin:0}
+@media(max-width:640px){.client-modal{padding:18px 16px}.client-kind-seg{grid-template-columns:1fr}.client-footer{flex-direction:column;align-items:stretch}.client-footer .mf{width:100%;justify-content:stretch}.client-footer .mf .btn{flex:1;justify-content:center}}
+
 </style>
 <!-- V10.1: أُزيلت مكتبة html2pdf.js — التصدير عبر الطباعة الأصلية «حفظ كـ PDF» -->
 </head>
@@ -701,7 +740,114 @@ function calcDeadline(from,rule,abroad,skip){
    warnHol:isNonWorking(end), vac:isVacation(end), vacSafe:isVacation(ext.date)}}
 /* DIWAN-ENGINE-END */
 Object.assign(S,{audit:[{w:'m',what:'فتح النظام — بدء العمل',d:new Date().toLocaleString('fr-FR')}],officeExp:[{d:addDays(-32),t:'إيجار المكتب الشهري',a:40000},{d:addDays(-20),t:'كهرباء وماء',a:6500},{d:addDays(-6),t:'أجور السكرتيرة',a:30000},{d:addDays(-3),t:'اشتراك الإنترنت والهاتف',a:4500}],tax:{regime:'',ifuOn:false,ifu:null,ibs:null},jurisprudence:[{court:'المحكمة العليا — الغرفة المدنية',year:2024,ref:'قرار رقم 108976',kw:'تقادم، ملكية، حيازة',text:'حيث إن دعوى الملكية تقع تحت طائلة التقادم المكسب وفق المادة 827 من القانون المدني، ويترتب على انقضائه انتقال الملكية للحائز بشروط القانون...'},{court:'المحكمة العليا — الغرفة الاجتماعية',year:2023,ref:'قرار رقم 98451',kw:'فصل، تعويض، 11-90',text:'يكون فصل الأجير تعسفياً إذا خالف المستخدم الإجراءات الشكلية المنصوص عليها في المادة 12 من القانون 11-90 المعدل والمتمم...'},{court:'مجلس قضاء قسنطينة',year:2024,ref:'حكم رقم 2210',kw:'شيك، صورية، 665',text:'تقوم قرينة الصورية بمجرد إثبات تقديم شيك بدون رصيد وفق المادة 665 من التجاري، ويبقى إثبات الحقيقة على من يتمسك بها...'}],glossary:[{ar:'أجل',fr:'Délai',d:'مدة زمنية قانونية لإجراء ما تحسب من تاريخ معين ولا يجوز تجاوزها.'},{ar:'استئناف',fr:'Appel',d:'طريق عادي للطعن في الأحكام أمام مجلس القضاء خلال شهر.'},{ar:'نقض',fr:'Cassation',d:'طريق غير عادي أمام المحكمة العليا لمخالفة القانون خلال شهرين.'},{ar:'معارضة',fr:'Opposition',d:'طعن في الأحكام الغيابية خلال شهر واحد من التبليغ (المادة 329 ق.إ.م.إ).'},{ar:'حائز',fr:'Possesseur',d:'من يملك الشيء بيده بشكل فعلي.'},{ar:'تقادم مكسب',fr:'Usucapion',d:'كسب الملكية بالحيازة المتواصلة المدة القانونية.'},{ar:'إنابة قضائية',fr:'Commissaire de justice',d:'المكلف بالتبليغ والتنفيذ (المفوض القضائي).'},{ar:'قسمة',fr:'Partage',d:'تقسيم المال الشائع بين الشركاء قضاءً أو اتفاقاً.'},{ar:'إحالة',fr:'Renvoi',d:'تأجيل الدعوى إلى جلسة لاحقة لاستكمال الإجراءات.'},{ar:'مداولة',fr:'Délibéré',d:'فترة تأمل القاضي قبل النطق بالحكم.'}],installments:[{c:4,amount:50000,due:addDays(10),paid:false},{c:8,amount:35000,due:addDays(-4),paid:false}],dlMovableHolidays:[],dlCalc:{date:K(TODAY),skip:true,result:null}});
-Object.assign(CL[0],{nin:'1080123456',birth:'1978-03-14',addr:'حي 200 مسكن، ميلة'});Object.assign(CL[1],{nin:'1090654321',birth:'1985-07-02',addr:'وسط المدينة، ميلة'});Object.assign(CL[2],{nin:'1070987654',birth:'1990-11-20',addr:'عين التين، ميلة'});Object.assign(CL[3],{addr:'المنطقة الصناعية، قسنطينة',birth:'—'});Object.assign(CL[4],{nin:'1050678901',birth:'1988-09-09',addr:'ميلة'});Object.assign(CL[5],{nin:'1060543210',birth:'1975-01-30',addr:'شلغوم العيد'});Object.assign(CL[6],{nin:'1040321654',birth:'1992-05-25',addr:'شلغوم العيد'});Object.assign(CL[7],{addr:'ميلة'});
+Object.assign(CL[0],{kind:'natural',nin:'1080123456',birth:'1978-03-14',addr:'حي 200 مسكن، ميلة',wilaya:'43'});Object.assign(CL[1],{kind:'natural',nin:'1090654321',birth:'1985-07-02',addr:'وسط المدينة، ميلة',wilaya:'43'});Object.assign(CL[2],{kind:'natural',nin:'1070987654',birth:'1990-11-20',addr:'عين التين، ميلة',wilaya:'43'});Object.assign(CL[3],{kind:'legal',legalForm:'SARL',addr:'المنطقة الصناعية، قسنطينة',birth:'—',wilaya:'25'});Object.assign(CL[4],{kind:'natural',nin:'1050678901',birth:'1988-09-09',addr:'ميلة',wilaya:'43'});Object.assign(CL[5],{kind:'natural',nin:'1060543210',birth:'1975-01-30',addr:'شلغوم العيد',wilaya:'43'});Object.assign(CL[6],{kind:'natural',nin:'1040321654',birth:'1992-05-25',addr:'شلغوم العيد',wilaya:'43'});Object.assign(CL[7],{kind:'natural',capacity:'heir',addr:'ميلة',wilaya:'43'});
+const DZ_WILAYAS=[
+ ['01','01 — أدرار','01 — Adrar'],['02','02 — الشلف','02 — Chlef'],['03','03 — الأغواط','03 — Laghouat'],['04','04 — أم البواقي','04 — Oum El Bouaghi'],
+ ['05','05 — باتنة','05 — Batna'],['06','06 — بجاية','06 — Béjaïa'],['07','07 — بسكرة','07 — Biskra'],['08','08 — بشار','08 — Béchar'],
+ ['09','09 — البليدة','09 — Blida'],['10','10 — البويرة','10 — Bouira'],['11','11 — تمنراست','11 — Tamanrasset'],['12','12 — تبسة','12 — Tébessa'],
+ ['13','13 — تلمسان','13 — Tlemcen'],['14','14 — تيارت','14 — Tiaret'],['15','15 — تيزي وزو','15 — Tizi Ouzou'],['16','16 — الجزائر','16 — Alger'],
+ ['17','17 — الجلفة','17 — Djelfa'],['18','18 — جيجل','18 — Jijel'],['19','19 — سطيف','19 — Sétif'],['20','20 — سعيدة','20 — Saïda'],
+ ['21','21 — سكيكدة','21 — Skikda'],['22','22 — سيدي بلعباس','22 — Sidi Bel Abbès'],['23','23 — عنابة','23 — Annaba'],['24','24 — قالمة','24 — Guelma'],
+ ['25','25 — قسنطينة','25 — Constantine'],['26','26 — المدية','26 — Médéa'],['27','27 — مستغانم','27 — Mostaganem'],['28','28 — المسيلة','28 — M’Sila'],
+ ['29','29 — معسكر','29 — Mascara'],['30','30 — ورقلة','30 — Ouargla'],['31','31 — وهران','31 — Oran'],['32','32 — البيض','32 — El Bayadh'],
+ ['33','33 — إليزي','33 — Illizi'],['34','34 — برج بوعريريج','34 — Bordj Bou Arréridj'],['35','35 — بومرداس','35 — Boumerdès'],['36','36 — الطارف','36 — El Tarf'],
+ ['37','37 — تندوف','37 — Tindouf'],['38','38 — تيسمسيلت','38 — Tissemsilt'],['39','39 — الوادي','39 — El Oued'],['40','40 — خنشلة','40 — Khenchela'],
+ ['41','41 — سوق أهراس','41 — Souk Ahras'],['42','42 — تيبازة','42 — Tipaza'],['43','43 — ميلة','43 — Mila'],['44','44 — عين الدفلى','44 — Aïn Defla'],
+ ['45','45 — النعامة','45 — Naâma'],['46','46 — عين تموشنت','46 — Aïn Témouchent'],['47','47 — غرداية','47 — Ghardaïa'],['48','48 — غليزان','48 — Relizane'],
+ ['49','49 — تيميمون','49 — Timimoun'],['50','50 — برج باجي مختار','50 — Bordj Badji Mokhtar'],['51','51 — أولاد جلال','51 — Ouled Djellal'],['52','52 — بني عباس','52 — Béni Abbès'],
+ ['53','53 — عين صالح','53 — In Salah'],['54','54 — عين قزام','54 — In Guezzam'],['55','55 — تقرت','55 — Touggourt'],['56','56 — جانت','56 — Djanet'],
+ ['57','57 — المغير','57 — El M’Ghair'],['58','58 — المنيعة','58 — El Meniaa'],['abroad','خارج الوطن','À l’étranger']
+];
+const CL_LEGAL_FORMS=['SARL','EURL','SPA','SNC','EPIC','ADMIN','ASSOC','OTHER'];
+const CL_CAPACITIES=['self','agent','guardian','heir'];
+const CL_REP_QUALITIES=['gerant','dg','pdg','mayor','authorized'];
+const CL_PREF_CONTACTS=['phone','whatsapp','office','email'];
+Object.assign(L.ar,{
+ cl_add_btn:'إضافة موكّل جديد',cl_edit_btn:'تعديل البيانات',cl_new_title:'إضافة موكّل جديد',cl_edit_title:'تعديل بيانات الموكل',
+ cl_modal_sub:'سجّل البيانات الأساسية أولاً، ثم أضف بيانات الهوية أو السجل عند توفرها.',
+ cl_req_legend:'الحقول المعلمة بـ * إلزامية للحفظ',
+ cl_kind_nat_d:'مواطن، أصيل، وارث، أو وكيل',cl_kind_leg_d:'شركة، مؤسسة، جمعية، أو هيئة عمومية',
+ cl_sec_basic:'1. البيانات الأساسية والتواصل',cl_sec_basic_sub:'تُستخدم في الملفات والوصولات والتواصل',
+ cl_sec_ident_nat:'2. بيانات الهوية والحالة المدنية',cl_sec_ident_leg:'2. المعرّفات القانونية والتمثيل الرسمي',cl_sec_ident_sub:'تُستخدم في العرائض وسندات التوكيل وملف KYC',
+ cl_sec_extra:'3. بيانات إضافية وملاحظات داخلية (اختياري)',
+ cl_name_nat_ar:'الاسم واللقب بالعربية',cl_name_leg_ar:'التسمية الاجتماعية / اسم الهيئة بالعربية',
+ cl_name_nat_fr:'الاسم واللقب باللاتينية (اختياري)',cl_name_leg_fr:'التسمية باللاتينية / الفرنسية (اختياري)',
+ cl_capacity:'صفة التعامل',cl_cap_self:'أصيل عن نفسه',cl_cap_agent:'وكيل بموجب وكالة',cl_cap_guardian:'ولي شرعي / وصي / مقدّم',cl_cap_heir:'أحد الورثة / عن التركة',
+ cl_legal_form:'الشكل القانوني',cl_lf_SARL:'ش.ذ.م.م (SARL)',cl_lf_EURL:'م.ش.و.ذ.م.م (EURL)',cl_lf_SPA:'شركة أسهم (SPA)',cl_lf_SNC:'شركة تضامن (SNC)',cl_lf_EPIC:'مؤسسة عمومية (EPIC / EPA)',cl_lf_ADMIN:'إدارة / جماعة محلية',cl_lf_ASSOC:'جمعية / تعاونية',cl_lf_OTHER:'شكل قانوني آخر',
+ cl_phone:'رقم الهاتف الأساسي',cl_phone2:'هاتف إضافي / واتساب',cl_email:'البريد الإلكتروني',
+ cl_wilaya:'الولاية / المقر',cl_wilaya_pick:'— اختر الولاية —',cl_addr_nat:'العنوان الكامل للإقامة',cl_addr_leg:'عنوان المقر الاجتماعي',
+ cl_nin:'رقم التعريف الوطني (NIN)',cl_nin_hint:'أرقام فقط (من بطاقة التعريف البيومترية أو شهادة الميلاد)',
+ cl_rc:'السجل التجاري (RC)',cl_nis:'رقم التعريف الإحصائي (NIS)',cl_ai:'المادة الضريبية (AI)',
+ cl_rep_name:'اسم الممثل القانوني ولقبه',cl_rep_quality:'صفة الممثل القانوني',
+ cl_rq_gerant:'مسير (Gérant)',cl_rq_dg:'مدير عام (DG)',cl_rq_pdg:'رئيس مجلس الإدارة (PDG)',cl_rq_mayor:'رئيس المجلس الشعبي البلدي / ممثل الإدارة',cl_rq_authorized:'ممثل قانوني مفوّض',
+ cl_profession_nat:'المهنة',cl_profession_leg:'مجال النشاط',
+ cl_pref_contact:'وسيلة التواصل المفضلة',cl_pc_phone:'مكالمة هاتفية',cl_pc_whatsapp:'واتساب',cl_pc_office:'حضور بالمكتب',cl_pc_email:'بريد إلكتروني',
+ cl_notes:'ملاحظات داخلية للمكتب',cl_notes_hint:'لا تظهر في بوابة الموكل أو الوصولات المطبوعة.',
+ cl_save_btn:'حفظ الموكل',cl_save_and_case:'حفظ وفتح ملف قضية',cl_new_case_for:'+ ملف جديد لهذا الموكل',cl_back_list:'العودة للموكلين',
+ cl_err_name_nat:'يرجى إدخال الاسم الكامل للموكل بالعربية.',cl_err_name_leg:'يرجى إدخال التسمية الاجتماعية أو اسم الهيئة.',
+ cl_err_phone_req:'يرجى إدخال رقم الهاتف للتواصل مع الموكل.',cl_err_phone_fmt:'رقم الهاتف غير صالح — أدخل رقماً صحيحاً (مثل 0550123456 أو +213550123456).',
+ cl_err_nin_fmt:'رقم التعريف الوطني (NIN) يجب أن يتكون من أرقام فقط (10 إلى 18 رقماً).',
+ cl_err_nif_fmt:'رقم التعريف الجبائي (NIF) يجب أن يتكون من 15 إلى 20 رقماً.',
+ cl_err_email_fmt:'صيغة البريد الإلكتروني غير صحيحة.',cl_err_date_future:'التاريخ لا يمكن أن يكون في المستقبل.',
+ cl_saved_ok:'حُفظت بيانات الموكل بنجاح',cl_updated_ok:'تم تحديث بيانات الموكل',
+ cl_draft_restored:'استُعيدت مسودة موكل غير محفوظة تلقائياً لحماية بياناتك.',cl_draft_clear:'مسح المسودة',
+ cl_dup_block_title:'لا يمكن الحفظ المكرر — معرّف رسمي مسجّل مسبقاً',
+ cl_dup_soft_title:'تنبيه تكرار محتمل — تحقّق قبل الحفظ',
+ cl_dup_open_existing:'فتح بطاقة الموكل الحالي',cl_dup_confirm_chk:'أؤكد أن هذا موكل مستقل مختلف وأرغب في حفظه',
+ cl_opp_warn_title:'تنبيه مهني (تعارض مصالح محتمل):',cl_opp_warn_body:'ورد تطابق مع طرف خصم في ملفات المكتب. عند تأسيس ملف قضية سيخضع وجوباً للمراجعة السرية لتعارض المصالح.',
+ cl_search_ph:'ابحث بالاسم، الهاتف، NIN، NIF، السجل التجاري أو العنوان…',
+ cl_filter_all:'الكل',cl_filter_nat:'طبيعي',cl_filter_leg:'معنوي',
+ cl_filter_cases_all:'كل الموكلين',cl_filter_with_cases:'لديهم ملفات',cl_filter_no_cases:'بلا ملفات بعد',
+ cl_no_cases_yet:'مسجّل بالقاعدة — لا توجد ملفات قضائية مرتبطة بعد',
+ cl_empty_title:'لا يوجد موكلون مسجّلون بعد',cl_empty_cta:'ابدأ بإضافة أول موكل للمكتب لتنظيم بيانات الهوية والملفات والوصولات.',
+ cl_no_match_title:'لا توجد نتائج مطابقة للبحث',cl_no_match_cta:'جرّب تعديل عبارة البحث أو تصفية النوع، أو أضف موكلاً جديداً.',
+ cl_pick_existing:'اختيار موكل مسجّل في المكتب (اختياري)',cl_pick_new_opt:'— موكل جديد (تعبئة يدوية أدناه) —',
+ cl_profile_ident:'البطاقة التعريفية والمهنية',cl_profile_docs:'وثائق الهوية ومستندات الملفات',cl_profile_appts:'مواعيد الموكل',
+ cl_new:'إضافة موكّل جديد',cl_badge_natural:'شخص طبيعي',cl_badge_legal:'شخص معنوي'
+});
+Object.assign(L.fr,{
+ cl_new:'Nouveau client',cl_badge_natural:'Personne physique',cl_badge_legal:'Personne morale',
+ cl_add_btn:'Nouveau client',cl_edit_btn:'Modifier la fiche',cl_new_title:'Ajouter un nouveau client',cl_edit_title:'Modifier la fiche client',
+ cl_modal_sub:'Renseignez d’abord l’essentiel, puis complétez l’identité ou le registre dès réception des pièces.',
+ cl_req_legend:'Les champs marqués * sont obligatoires',
+ cl_kind_nat_d:'Particulier, ayant droit ou mandataire',cl_kind_leg_d:'Société, entreprise, association ou organisme public',
+ cl_sec_basic:'1. Informations essentielles et contact',cl_sec_basic_sub:'Utilisées pour les dossiers, reçus et échanges',
+ cl_sec_ident_nat:'2. Pièce d’identité et état civil',cl_sec_ident_leg:'2. Identifiants légaux et représentant légal',cl_sec_ident_sub:'Utilisés dans les requêtes, procurations et dossier KYC',
+ cl_sec_extra:'3. Coordonnées complémentaires et notes internes (facultatif)',
+ cl_name_nat_ar:'Nom et prénom (en arabe)',cl_name_leg_ar:'Raison sociale / Dénomination (en arabe)',
+ cl_name_nat_fr:'Nom et prénom (latin / français)',cl_name_leg_fr:'Dénomination (latin / français)',
+ cl_capacity:'Qualité habituelle',cl_cap_self:'Agissant en son nom propre',cl_cap_agent:'Mandataire (procuration)',cl_cap_guardian:'Tuteur / représentant légal',cl_cap_heir:'Héritier / indivision successorale',
+ cl_legal_form:'Forme juridique',cl_lf_SARL:'SARL',cl_lf_EURL:'EURL',cl_lf_SPA:'SPA',cl_lf_SNC:'SNC',cl_lf_EPIC:'Établissement public (EPIC / EPA)',cl_lf_ADMIN:'Administration / collectivité locale',cl_lf_ASSOC:'Association / coopérative',cl_lf_OTHER:'Autre forme juridique',
+ cl_phone:'Téléphone principal',cl_phone2:'Téléphone secondaire / WhatsApp',cl_email:'Adresse e-mail',
+ cl_wilaya:'Wilaya / Siège',cl_wilaya_pick:'— Choisir la wilaya —',cl_addr_nat:'Adresse complète',cl_addr_leg:'Adresse du siège social',
+ cl_nin:'Numéro d’identification national (NIN)',cl_nin_hint:'Chiffres uniquement (carte biométrique ou acte d’état civil)',
+ cl_rc:'Registre du commerce (RC)',cl_nis:'Numéro d’identification statistique (NIS)',cl_ai:'Article d’imposition (AI)',
+ cl_rep_name:'Nom et prénom du représentant légal',cl_rep_quality:'Qualité du représentant',
+ cl_rq_gerant:'Gérant',cl_rq_dg:'Directeur général (DG)',cl_rq_pdg:'PDG',cl_rq_mayor:'P/APC ou représentant de l’administration',cl_rq_authorized:'Représentant dûment habilité',
+ cl_profession_nat:'Profession',cl_profession_leg:'Secteur d’activité',
+ cl_pref_contact:'Canal de contact préféré',cl_pc_phone:'Appel téléphonique',cl_pc_whatsapp:'WhatsApp',cl_pc_office:'Rendez-vous au cabinet',cl_pc_email:'E-mail',
+ cl_notes:'Notes internes du cabinet',cl_notes_hint:'Strictement internes — non visibles sur le portail client ni sur les reçus.',
+ cl_save_btn:'Enregistrer le client',cl_save_and_case:'Enregistrer et ouvrir un dossier',cl_new_case_for:'+ Nouveau dossier',cl_back_list:'Retour aux clients',
+ cl_err_name_nat:'Veuillez saisir le nom complet du client.',cl_err_name_leg:'Veuillez saisir la dénomination sociale ou le nom de l’organisme.',
+ cl_err_phone_req:'Veuillez saisir le numéro de téléphone principal.',cl_err_phone_fmt:'Numéro invalide — ex. 0550123456 ou +213550123456.',
+ cl_err_nin_fmt:'Le NIN doit contenir uniquement des chiffres (10 à 18 chiffres).',
+ cl_err_nif_fmt:'Le NIF doit contenir entre 15 et 20 chiffres.',
+ cl_err_email_fmt:'Format d’adresse e-mail invalide.',cl_err_date_future:'La date ne peut pas être dans le futur.',
+ cl_saved_ok:'Fiche client enregistrée avec succès',cl_updated_ok:'Fiche client mise à jour',
+ cl_draft_restored:'Un brouillon non enregistré a été restauré automatiquement.',cl_draft_clear:'Effacer le brouillon',
+ cl_dup_block_title:'Doublon bloqué — identifiant officiel déjà enregistré',
+ cl_dup_soft_title:'Doublon potentiel détecté — vérifiez avant d’enregistrer',
+ cl_dup_open_existing:'Ouvrir la fiche existante',cl_dup_confirm_chk:'Je confirme qu’il s’agit d’un client distinct et souhaite l’enregistrer',
+ cl_opp_warn_title:'Alerte déontologique (conflit potentiel) :',cl_opp_warn_body:'Correspondance détectée avec une partie adverse existante. Tout nouveau dossier sera soumis à la revue confidentielle des conflits.',
+ cl_search_ph:'Rechercher par nom, téléphone, NIN, NIF, RC ou adresse…',
+ cl_filter_all:'Tous',cl_filter_nat:'Physique',cl_filter_leg:'Morale',
+ cl_filter_cases_all:'Tous les clients',cl_filter_with_cases:'Avec dossiers',cl_filter_no_cases:'Sans dossier',
+ cl_no_cases_yet:'Enregistré — aucun dossier contentieux rattaché pour le moment',
+ cl_empty_title:'Aucun client enregistré',cl_empty_cta:'Ajoutez votre premier client pour structurer identités, dossiers et reçus.',
+ cl_no_match_title:'Aucun client ne correspond aux filtres',cl_no_match_cta:'Modifiez votre recherche ou ajoutez un nouveau client.',
+ cl_pick_existing:'Sélectionner un client déjà enregistré (facultatif)',cl_pick_new_opt:'— Nouveau client (saisie ci-dessous) —',
+ cl_profile_ident:'Fiche signalétique et juridique',cl_profile_docs:'Pièces KYC et documents des dossiers',cl_profile_appts:'Rendez-vous du client'
+});
 /* V9-FIX-02 */
 Object.assign(L.ar,{nc_sec_case:'بيانات القضية',pr_party:'الطرف',pr_role:'الصفة',pr_role_client:'موكل',pr_role_opponent:'خصم',pr_role_other:'طرف آخر',pr_role_free:'الصفة (نص حر)',pr_first:'الاسم',pr_last:'اللقب',pr_birthdate:'تاريخ الميلاد',pr_birthplace:'مكان الميلاد',pr_idtype:'نوع الوثيقة',pr_id_none:'لا شيء',pr_id_nin:'بطاقة وطنية (NIN)',pr_id_passport:'جواز سفر',pr_id_license:'رخصة سياقة',pr_idnumber:'رقم الوثيقة',pr_idissue:'تاريخ الإصدار',pr_idexpiry:'تاريخ الانتهاء',pr_address:'مكان الإقامة',pr_add:'+ إضافة طرف',pr_add_aria:'إضافة طرف جديد',pr_remove_aria:'حذف هذا الطرف',pr_name_req:'اسم الطرف مطلوب'});
 Object.assign(L.fr,{nc_sec_case:'Données du dossier',pr_party:'Partie',pr_role:'Qualité',pr_role_client:'Client',pr_role_opponent:'Adversaire',pr_role_other:'Autre partie',pr_role_free:'Qualité (libre)',pr_first:'Prénom',pr_last:'Nom',pr_birthdate:'Date de naissance',pr_birthplace:'Lieu de naissance',pr_idtype:'Type de pièce',pr_id_none:'Aucune',pr_id_nin:'Carte nationale (NIN)',pr_id_passport:'Passeport',pr_id_license:'Permis de conduire',pr_idnumber:'N° de la pièce',pr_idissue:'Date de délivrance',pr_idexpiry:'Date d’expiration',pr_address:'Lieu de résidence',pr_add:'+ Ajouter une partie',pr_add_aria:'Ajouter une nouvelle partie',pr_remove_aria:'Supprimer cette partie',pr_name_req:'Le nom de la partie est requis'});
@@ -758,6 +904,7 @@ function visCases(){return S.cases.filter(canSee)}
 function myDls(){return (S.dls||[]).filter(x=>{const c=byC(x.c);return c&&canSee(c)})}
 function myTasks(){return (S.tasks||[]).filter(x=>(isM()||x.who===S.user)&&(!byC(x.c)||canSee(byC(x.c))))}
 function canFees(){const r=me().role;return r==='manager'||r==='partner'||r==='collaborator'||(r==='secretary'&&S.perms.secFees)}
+function canNewCase(){return me().role!=='trainee'}
 const NAVS=()=>{const r=me().role,a=[];
  // Five navigation groups: daily, finance, legal tools, admin/reports, help/portals.
  a.push(['dash','home','nav_dash','w']);
@@ -774,7 +921,16 @@ const NAVS=()=>{const r=me().role,a=[];
  if(r==='manager'||r==='partner')a.push(['portal','phone','nav_portal','h']);
  a.push(['links','link','nav_links','h'],['guide','book','nav_guide','h'],['landing','info','nav_landing','h'],['faq','shield','nav_faq','h']);
  return a};
-const allowed=v=>NAVS().some(n=>n[0]===v)||v==='finance-expenses'||v==='finance-recoverable';
+const allowed=v=>{
+ if(NAVS().some(n=>n[0]===v))return true;
+ const r=me().role;
+ if(v==='client')return r!=='trainee';
+ if(v==='finance-expenses'||v==='finance-recoverable')return canFees();
+ if(v==='kyc'||v==='services'||v==='experts'||v==='exec'||v==='ja')return r==='manager'||r==='partner'||r==='collaborator';
+ if(v==='scan'||v==='approvals')return true;
+ if(v==='audit'||v==='import'||v==='hr'||v==='accounts'||v==='qr')return r==='manager';
+ return false;
+};
 const caseBal=cid=>(S.trust||[]).filter(x=>x.c===cid).reduce((a,x)=>a+(x.type==='deposit'?x.amount:-x.amount),0);
 
 function paidOf(cid){return (S.pays||[]).filter(p=>p.c===cid||p.caseId===cid).reduce((a,p)=>a+(+p.a||+p.amount||0),0)}
@@ -788,10 +944,10 @@ function undoable(fn,toastKey){const snap=JSON.stringify({cases:S.cases,tasks:S.
  commit(fn,toastKey,()=>{try{const s=JSON.parse(snap);S.cases=s.cases;S.tasks=s.tasks;S.docs=s.docs;S.pays=s.pays;S.expenses=s.expenses;S.invoices=s.invoices;S.trust=s.trust;chrome();render();toast(t('undo_done'))}catch(_){}})}
 
 function urgent(){return myDls().filter(x=>diff(x.d)>=0&&diff(x.d)<=2).sort((a,b)=>D(a.d)-D(b.d))}
-function dlRows(list,max){return list.sort((a,b)=>D(a.d)-D(b.d)).slice(0,max).map(x=>{const n=diff(x.d),cls=n<=2?'bad':n<=5?'warn':'ok';
-  return `<button class="dlrow" data-act="case" data-id="${x.c}"><div class="left ${cls}">${n}<small>${t('days_unit')}</small></div><div><strong>${esc(tr(x.l))}</strong><span class="sub">${esc(tr(byC(x.c).title))} — ${fmt(x.d)}</span></div></button>`}).join('')||`<p class="empty">—</p>`}
-function taskRow(x,showWho){const c=byC(x.c),pc={high:'bad',mid:'warn',low:'mute'}[x.p];
- return `<div class="task ${x.done?'done':''}"><input class="chk" type="checkbox" data-act="task" data-id="${x.id}" ${x.done?'checked':''} aria-label="${esc(tr(x.t))}"><div><div class="tt">${esc(tr(x.t))}</div><div class="meta"><button class="chip mute" data-act="case" data-id="${c.id}" style="cursor:pointer">${esc(c.no)}</button>${showWho?avs([x.who]):''}<span class="sub">${fmt(x.d)}</span></div></div><span class="chip ${pc}">${t('prio_'+x.p)}</span></div>`}
+function dlRows(list,max){return list.sort((a,b)=>D(a.d)-D(b.d)).slice(0,max).map(x=>{const n=diff(x.d),cls=n<=2?'bad':n<=5?'warn':'ok',cs=byC(x.c);
+  return `<button class="dlrow" data-act="case" data-id="${x.c}"><div class="left ${cls}">${n}<small>${t('days_unit')}</small></div><div><strong>${esc(tr(x.l))}</strong><span class="sub">${esc(cs?tr(cs.title):'—')} — ${fmt(x.d)}</span></div></button>`}).join('')||`<p class="empty">—</p>`}
+function taskRow(x,showWho){const c=byC(x.c),pc={high:'bad',mid:'warn',low:'mute'}[x.p]||'mute';
+ return `<div class="task ${x.done?'done':''}"><input class="chk" type="checkbox" data-act="task" data-id="${x.id}" ${x.done?'checked':''} aria-label="${esc(tr(x.t))}"><div><div class="tt">${esc(tr(x.t))}</div><div class="meta">${c?`<button class="chip mute" data-act="case" data-id="${c.id}" style="cursor:pointer">${esc(c.no)}</button>`:''}${showWho?avs([x.who]):''}<span class="sub">${fmt(x.d)}</span></div></div><span class="chip ${pc}">${t('prio_'+x.p)}</span></div>`}
 
 /* ============== views ============== */
 
@@ -840,21 +996,21 @@ function dash(){const m=isM(),r=me().role,my=myCases(),tk=myTasks();
  ${(()=>{const n=my.filter(c=>c.next===K(TODAY)).length;return `<button class="fab" data-act="quickhear" aria-label="${t('qh_fab')}">⚡ ${t('qh_fab')}${n?` <span class="badge">${n}</span>`:''}</button>`})()}`}
 
 function casesV(){const r=me().role;
- const scope=(r==='secretary'||r==='partner'||r==='manager')?`<div class="seg" role="group"><button data-act="scope" data-v="mine" aria-pressed="${S.casesScope==='mine'}">${t('f_mine')}</button><button data-act="scope" data-v="all" aria-pressed="${S.casesScope==='all'}">${t('f_everyone')}</button></div>`:'';
+ const scope=(r==='secretary'||r==='partner'||r==='manager'||r==='collaborator')?`<div class="seg" role="group"><button data-act="scope" data-v="mine" aria-pressed="${S.casesScope==='mine'}">${t('f_mine')}</button><button data-act="scope" data-v="all" aria-pressed="${S.casesScope==='all'}">${t('f_everyone')}</button></div>`:'';
  const total=visCases().length; // FIX04B
  return `<div class="page-h"><div><h1>${t('cases_title')}</h1><p>${t('cases_sub',total)}</p></div>${r!=='trainee'?`<button class="btn primary" data-act="newcase">${ic('plus')}${t('newCase').replace('+ ','')}</button>`:''}</div>
  <div class="filters"><input id="fq" type="search" placeholder="${t('f_q')}" aria-label="${t('f_q')}"><select id="ft" aria-label="${t('c_court')}"><option value="">${t('f_type_all')}</option>${Object.keys(TYPES).map(k=>`<option value="${k}">${tr(TYPES[k])}</option>`).join('')}</select>
  <select id="fs" aria-label="${t('c_stage')}"><option value="">${t('f_stage_all')}</option>${STAGES.map((s,i)=>`<option value="${i}">${tr(s)}</option>`).join('')}</select>${scope}</div>
  <section class="card cases"><div class="card-b"><div class="rows" id="caseRows"></div></div></section>`}
 function caseRows(){const q=(document.getElementById('fq')||{value:''}).value.trim().toLowerCase(),ty=(document.getElementById('ft')||{value:''}).value,sg=(document.getElementById('fs')||{value:''}).value;
- const r=me().role;let base=visCases();if(S.casesScope==='mine'){if(r==='secretary')base=base.filter(c=>c.as.includes(S.user));else if(r==='partner'||r==='manager')base=base.filter(c=>(c.lawyerId||'m')===S.user)} // FIX5: 'my files' filters by lawyerId
- let list=base.filter(c=>(!q||(tr(c.title)+tr(CL[c.cl])+c.no).toLowerCase().includes(q))&&(!ty||c.type===ty)&&(sg===''||c.stage===+sg));
+ const r=me().role;let base=visCases();if(S.casesScope==='mine'){if(r==='secretary')base=base.filter(c=>c.as.includes(S.user));else if(r==='partner'||r==='manager')base=base.filter(c=>(c.lawyerId||'m')===S.user);else if(r==='collaborator')base=base.filter(c=>(c.lawyerId||'')===S.user||(c.as||[]).includes(S.user))} // FIX5: 'my files' filters by lawyerId
+ let list=base.filter(c=>(!q||(tr(c.title)+tr(CL[c.cl]||{})+c.no).toLowerCase().includes(q))&&(!ty||c.type===ty)&&(sg===''||c.stage===+sg));
  const dir=S.sortDir,key=S.sortBy;
  list=list.sort((a,b)=>{let x,y;if(key==='no'){x=a.no;y=b.no}else if(key==='stage'){x=a.stage;y=b.stage}else if(key==='next'){x=a.next||'9999';y=b.next||'9999'}else return 0;return x>y?dir:x<y?-dir:0});
  const hb=(k,l)=>`<button data-act="sort" data-k="${k}">${l}${S.sortBy===k?(S.sortDir>0?' ▲':' ▼'):''}</button>`;
  const head=`<div class="row head">${hb('no',t('c_no'))}<span>${t('c_subject')}</span><span>${t('c_court')}</span>${hb('stage',t('c_stage'))}<span>${t('c_status')}</span><span>${t('c_team')}</span></div>`;
- const body=list.map(c=>`<button class="row" data-act="case" data-id="${c.id}"><span dir="ltr" style="text-align:start">${esc(c.no)}</span><span><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]))}</small></span><span><small style="color:var(--ink)">${esc(tr(c.court))}</small>${typeChip(c.type)}</span><span>${tr(STAGES[c.stage])}</span><span>${stChip(c.st)}${c.judicialAid?`<span class="chip info" style="margin-inline-start:4px">${t('ja_badge')}</span>`:''}</span><span>${avs(c.as)}</span></button>`).join(''); // FIX04B ja_badge
- const empty=`<div class="empty-big"><h3>${t('empty_cases')}</h3><p>${t('empty_cases_cta')}</p><button class="btn primary" data-act="newcase">${ic('plus')}${t('newCase').replace('+ ','')}</button></div>`;
+ const body=list.map(c=>`<button class="row" data-act="case" data-id="${c.id}"><span dir="ltr" style="text-align:start">${esc(c.no)}</span><span><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]||{}))}</small></span><span><small style="color:var(--ink)">${esc(tr(c.court))}</small>${typeChip(c.type)}</span><span>${tr(STAGES[c.stage])}</span><span>${stChip(c.st)}${c.judicialAid?`<span class="chip info" style="margin-inline-start:4px">${t('ja_badge')}</span>`:''}</span><span>${avs(c.as)}</span></button>`).join(''); // FIX04B ja_badge
+ const empty=`<div class="empty-big"><h3>${t('empty_cases')}</h3><p>${t('empty_cases_cta')}</p>${r!=='trainee'?`<button class="btn primary" data-act="newcase">${ic('plus')}${t('newCase').replace('+ ','')}</button>`:''}</div>`;
  document.getElementById('caseRows').innerHTML=head+(body||empty)}
 
 function tasksV(){const m=isM();let list=myTasks();
@@ -885,14 +1041,303 @@ function calV(){const y=S.calY,mo=S.calM,first=new Date(y,mo,1),pad=first.getDay
  <section class="card"><div class="card-b">${side}</div></section></div>
  <section class="card"><div class="card-h"><h2>${t('upcoming')}</h2></div><div class="card-b"><div class="rows">${up||`<p class="empty">${t('cal_none')}</p>`}</div></div></section>`}
 
-function clientsV(){const r=me().role,showPh=r==='manager'||S.perms.secContacts; // FIX-04: use visCases for secrecy
- const cards=CL.map((c,i)=>{const cs=visCases().filter(x=>x.cl===i);if(!cs.length)return ''; // FIX04B
-  return `<article class="card client"><span class="avatar">${tr(c).charAt(0)}</span><strong style="font-size:17px">${esc(tr(c))}</strong><span class="sub">${cs.length} ${t('files_n')} — ${[...new Set(cs.map(x=>tr(TYPES[x.type])))].join('، ')}</span>${showPh?`<span class="sub" dir="ltr" style="text-align:start">${c.ph}</span>`:''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="btn sm primary" data-act="client" data-id="${i}">${t('nav_client')}</button><button class="btn sm" data-act="case" data-id="${cs[0].id}">${t('cl_open')}</button></div></article>`}).join('');
- return `<div class="page-h"><div><h1>${t('cl_title')}</h1><p>${t('cl_sub',CL.length)}</p></div></div><div class="cards">${cards}</div>`}
+var _clientModalDraft=null;
+function wilayaLbl(code){if(!code)return '';const w=DZ_WILAYAS.find(x=>x[0]===String(code));return w?(S.lang==='fr'?w[2]:w[1]):String(code)}
+function clientKindOf(cl){if(!cl)return 'natural';if(cl.kind==='legal')return 'legal';if(cl.kind==='natural')return 'natural';
+ if((cl.nif&&cl.nif!=='—')||(cl.rc&&cl.rc!=='—')||(cl.nis&&cl.nis!=='—')||cl.legalForm)return 'legal';
+ if(/^(شركة|مؤسسة|جمعية|تعاونية|بلدية|ولاية|مديرية|صندوق|بنك|ديوان|sarl|eurl|spa|snc|epic|epa)\b/i.test(((cl.ar||'')+' '+(cl.fr||'')).trim()))return 'legal';
+ return 'natural'}
+function clientKycStatus(cl){const kind=clientKindOf(cl),docs=(cl&&cl.kycDocs)||[];
+ const hasVal=v=>!!(v&&String(v).trim()&&String(v).trim()!=='—');
+ const idOk=kind==='legal'?(hasVal(cl&&cl.nif)||hasVal(cl&&cl.rc)||hasVal(cl&&cl.nis)):(hasVal(cl&&cl.nin)||hasVal(cl&&cl.idNumber));
+ const ok=idOk&&docs.length>0,why=[];if(!idOk)why.push(t('kyc_need_id'));if(!docs.length)why.push(t('kyc_need_docs'));
+ return {ok,idOk,docs,docsCount:docs.length,why,kind}}
+function canSeeClient(cl,idx){if(!cl)return false;const r=me().role,all=(S.cases||[]).filter(x=>x.cl===idx);
+ if(all.length>0)return visCases().some(x=>x.cl===idx);
+ return r!=='trainee'||!!(S.perms&&S.perms.traineeAll)}
+function nextClientId(){let mx=0;(CL||[]).forEach((c,i)=>{const n=+(c&&c.id)||0;if(n>mx)mx=n;if(i+1>mx)mx=i+1});return mx+1}
+function ensureClientsSync(){if(!Array.isArray(S.clients))S.clients=[];CL.forEach((c,i)=>{if(c&&!c.id)c.id=i+1});S.clients.length=0;CL.forEach(c=>S.clients.push(c));return S.clients}
+function normDigits(s){return String(s||'').replace(/\D/g,'')}
+function normAlnumKey(s){const v=String(s||'').trim();if(!v||v==='—')return '';return v.replace(/[\s\-./]/g,'').toUpperCase()}
+function normPhoneKey(s){const v=String(s||'').trim();if(!v||v==='—')return '';if(/^DEMO-PHONE-/i.test(v))return v.toUpperCase();
+ let d=normDigits(v);if(d.startsWith('00213'))d=d.slice(5);else if(d.startsWith('213')&&d.length>=11)d=d.slice(3);if(d.startsWith('0')&&d.length>=9)d=d.slice(1);return d.length>=8?d:''}
+function validPhoneDz(s){const v=String(s||'').trim();if(!v||v==='—')return false;if(/^DEMO-PHONE-[A-Z0-9-]+$/i.test(v))return true;
+ if(!/^[+\d][\d\s().-]{6,22}$/.test(v))return false;const d=normDigits(v);return d.length>=8&&d.length<=15}
+function validNinDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;if(/^DEMO-/i.test(v))return true;
+ const clean=v.replace(/\s+/g,'');return /^\d{10,18}$/.test(clean)}
+function validNifDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;if(/^DEMO-NIF-/i.test(v))return true;
+ const clean=v.replace(/\s+/g,'');return /^\d{15,20}$/.test(clean)}
+function validEmailStr(s){const v=String(s||'').trim();if(!v)return true;return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)}
+function validateClientInput(v){const errs={};
+ if(!v.ar||v.ar.trim().length<2)errs.ar=v.kind==='legal'?'cl_err_name_leg':'cl_err_name_nat';
+ if(!v.ph||!v.ph.trim()||v.ph.trim()==='—')errs.ph='cl_err_phone_req';
+ else if(!validPhoneDz(v.ph))errs.ph='cl_err_phone_fmt';
+ if(v.kind==='natural'&&v.nin&&!validNinDz(v.nin))errs.nin='cl_err_nin_fmt';
+ if(v.kind==='legal'&&v.nif&&v.nif!=='—'&&!validNifDz(v.nif))errs.nif='cl_err_nif_fmt';
+ if(v.email&&!validEmailStr(v.email))errs.email='cl_err_email_fmt';
+ if(v.kind==='natural'&&v.birth&&v.birth!=='—'&&v.birth>K(TODAY))errs.birth='cl_err_date_future';
+ if(v.kind==='natural'&&v.idIssueDate&&v.idIssueDate>K(TODAY))errs.idIssueDate='cl_err_date_future';
+ return errs}
+function findClientDuplicates(cand,excludeIdx){const out=[];
+ const nAr=normName(cand.ar),nFr=normName(cand.fr),phK=normPhoneKey(cand.ph);
+ const ninK=cand.kind==='natural'?normAlnumKey(cand.nin):'',nifK=cand.kind==='legal'?normAlnumKey(cand.nif):'',rcK=cand.kind==='legal'?normAlnumKey(cand.rc):'';
+ (CL||[]).forEach((c,i)=>{if(!c||i===excludeIdx)return;
+  const cNin=normAlnumKey(c.nin),cNif=normAlnumKey(c.nif),cRc=normAlnumKey(c.rc),cPh=normPhoneKey(c.ph);
+  if(ninK&&ninK.length>=6&&cNin&&ninK===cNin){out.push({idx:i,client:c,blocking:true,field:'NIN',val:c.nin});return}
+  if(nifK&&nifK.length>=8&&cNif&&nifK===cNif){out.push({idx:i,client:c,blocking:true,field:'NIF',val:c.nif});return}
+  if(rcK&&rcK.length>=5&&cRc&&rcK===cRc){out.push({idx:i,client:c,blocking:true,field:'RC',val:c.rc});return}
+  const sameName=(nAr&&normName(c.ar)===nAr)||(nFr&&nFr.length>=3&&normName(c.fr)===nFr);
+  const samePh=phK&&cPh&&phK===cPh;
+  if(sameName||samePh)out.push({idx:i,client:c,blocking:false,field:sameName&&samePh?'الاسم والهاتف':(sameName?'الاسم':'الهاتف'),val:samePh?c.ph:tr(c)})});
+ return out}
+function findFormerOpponentsForClient(cand){const hits=[],seen={};
+ const names=[normName(cand.ar),normName(cand.fr)].filter(Boolean);
+ const ninK=cand.kind==='natural'?normAlnumKey(cand.nin):'',nifK=cand.kind==='legal'?normAlnumKey(cand.nif):'';
+ (S.cases||[]).forEach(c=>{const ps=typeof normParties==='function'?normParties(c):[];
+  ps.forEach(p=>{if(!p||p.role!=='opponent')return;const pNm=pFull(p)||tr(c.opp)||'—',k=c.no+'|'+pNm;if(seen[k])return;
+   const pNin=p.idType==='nin'?normAlnumKey(p.idNumber):'',pNif=p.kind==='legal'?normAlnumKey(p.nif):'';
+   const pNames=[normName(pFullL(p,'ar')),normName(pFullL(p,'fr')),normName(tr(c.opp))].filter(Boolean);
+   if((ninK&&pNin&&ninK===pNin)||(nifK&&pNif&&nifK===pNif)||names.some(x=>pNames.includes(x))){seen[k]=1;hits.push({caseId:c.id,caseNo:c.no,name:pNm})}})});
+ (S.opponentsHistory||[]).forEach(h=>{if(!h||!h.n)return;const k=(h.caseNo||'—')+'|'+tr(h.n);if(seen[k])return;
+  const hNin=normAlnumKey(h.nin),hNif=normAlnumKey(h.nif),hNm=normName(tr(h.n));
+  if((ninK&&hNin&&ninK===hNin)||(nifK&&hNif&&nifK===hNif)||(hNm&&names.includes(hNm))){seen[k]=1;hits.push({caseId:h.caseId||0,caseNo:h.caseNo||'—',name:tr(h.n)})}});
+ return hits}
+function blankClientForm(){return {kind:'natural',ar:'',fr:'',capacity:'self',legalForm:'SARL',ph:'',ph2:'',email:'',wilaya:'',addr:'',idType:'nin',nin:'',idNumber:'',idIssueDate:'',birth:'',birthPlace:'',repName:'',repQuality:'gerant',nif:'',rc:'',nis:'',ai:'',profession:'',prefContact:'phone',notes:''}}
+function clientToFormModel(cl){const b=blankClientForm();if(!cl)return b;
+ b.kind=clientKindOf(cl);b.ar=cl.ar||'';b.fr=(cl.fr&&cl.fr!==cl.ar)?cl.fr:(cl.fr||'');
+ b.capacity=cl.capacity||'self';b.legalForm=cl.legalForm||'SARL';
+ b.ph=(cl.ph&&cl.ph!=='—')?cl.ph:'';b.ph2=cl.ph2||'';b.email=cl.email||'';
+ b.wilaya=cl.wilaya||'';b.addr=(cl.addr&&cl.addr!=='—')?cl.addr:'';
+ b.idType=cl.idType||(cl.nin?'nin':'');b.nin=(cl.nin&&cl.nin!=='—')?cl.nin:'';
+ b.idNumber=cl.idNumber||'';b.idIssueDate=cl.idIssueDate||'';
+ b.birth=(cl.birth&&cl.birth!=='—')?cl.birth:'';b.birthPlace=cl.birthPlace||'';
+ b.repName=cl.repName||'';b.repQuality=cl.repQuality||'gerant';
+ b.nif=(cl.nif&&cl.nif!=='—')?cl.nif:'';b.rc=(cl.rc&&cl.rc!=='—')?cl.rc:'';
+ b.nis=(cl.nis&&cl.nis!=='—')?cl.nis:'';b.ai=cl.ai||'';
+ b.profession=cl.profession||'';b.prefContact=cl.prefContact||'phone';b.notes=cl.notes||'';
+ return b}
+function upsertClientRecord(v,editIdx){const isEdit=typeof editIdx==='number'&&editIdx>=0&&!!CL[editIdx];
+ const target=isEdit?CL[editIdx]:{id:nextClientId(),kycDocs:[],createdAt:K(TODAY)};
+ const fullAddr=(v.addr||'').trim()||(v.wilaya?wilayaLbl(v.wilaya).replace(/^\d+\s*—\s*/,''):'');
+ target.kind=v.kind==='legal'?'legal':'natural';
+ target.ar=v.ar.trim();target.fr=(v.fr||'').trim()||target.ar;
+ target.ph=v.ph.trim();target.ph2=(v.ph2||'').trim();target.email=(v.email||'').trim();
+ target.wilaya=v.wilaya||'';target.addr=fullAddr;
+ target.profession=(v.profession||'').trim();target.prefContact=v.prefContact||'phone';target.notes=(v.notes||'').trim();
+ if(target.kind==='legal'){
+  target.legalForm=v.legalForm||'';target.repName=(v.repName||'').trim();target.repQuality=v.repQuality||'';
+  target.nif=(v.nif||'').trim()||'—';target.rc=(v.rc||'').trim();target.nis=(v.nis||'').trim();target.ai=(v.ai||'').trim();
+  if(!isEdit){target.nin='';target.birth='—';target.birthPlace='';target.idType='';target.idNumber='';target.idIssueDate=''}
+ }else{
+  target.capacity=v.capacity||'self';target.idType=v.idType||'';
+  target.nin=(v.nin||'').trim();target.idNumber=v.idType?((v.idNumber||'').trim()):'';target.idIssueDate=v.idType?(v.idIssueDate||''):'';
+  target.birth=v.birth||'';target.birthPlace=(v.birthPlace||'').trim();
+  if(!isEdit)target.nif='—';
+ }
+ target.updatedAt=K(TODAY);
+ let idx=editIdx;
+ if(!isEdit){CL.push(target);idx=CL.length-1}
+ ensureClientsSync();syncClient(idx);
+ S.audit=S.audit||[];S.audit.unshift({w:S.user,what:t(isEdit?'cl_edit_title':'cl_new_title')+' — '+target.ar,d:new Date().toLocaleString('fr-FR')});if(S.audit.length>200)S.audit.length=200;
+ v9save();return {idx,client:target,isEdit}}
+function clientToPartyFlat(cl){if(!cl)return flatParty('client');const k=clientKindOf(cl),p=flatParty('client');
+ p.kind=k==='legal'?'legal':'natural';p.proc='demandeur';
+ if(k==='legal'){p.firstName=cl.ar||'';p.firstNameFr=cl.fr||cl.ar||'';p.nif=(cl.nif&&cl.nif!=='—')?cl.nif:''}
+ else{p.firstName=cl.ar||'';p.firstNameFr=cl.fr||cl.ar||'';p.birthDate=(cl.birth&&cl.birth!=='—')?cl.birth:'';p.birthPlace=cl.birthPlace||'';
+  if(cl.nin&&cl.nin!=='—'){p.idType='nin';p.idNumber=cl.nin}else if(cl.idType){p.idType=cl.idType;p.idNumber=cl.idNumber||''}p.idIssueDate=cl.idIssueDate||''}
+ p.address=cl.addr||'';p.ph=(cl.ph&&cl.ph!=='—')?cl.ph:'';return p}
+function openClientModal(editIdx,opts){if(me().role==='trainee')return;
+ const isEdit=typeof editIdx==='number'&&editIdx>=0&&!!CL[editIdx];
+ const hasDraft=!isEdit&&_clientModalDraft&&Object.keys(_clientModalDraft).some(k=>k!=='kind'&&k!=='capacity'&&k!=='legalForm'&&k!=='idType'&&k!=='repQuality'&&k!=='prefContact'&&_clientModalDraft[k]);
+ const m=isEdit?clientToFormModel(CL[editIdx]):(hasDraft?Object.assign(blankClientForm(),_clientModalDraft):blankClientForm());
+ const hasExtra=!!(m.ph2||m.email||m.profession||m.notes||(m.prefContact&&m.prefContact!=='phone'));
+ lastFocus=document.activeElement;$('modal').className='modal lg client-modal';
+ const req='<span class="req-star" aria-hidden="true">*</span>';
+ const wOpts=[['',t('cl_wilaya_pick')]].concat(DZ_WILAYAS.map(w=>[w[0],S.lang==='fr'?w[2]:w[1]]));
+ const capOpts=CL_CAPACITIES.map(k=>[k,t('cl_cap_'+k)]);
+ const lfOpts=CL_LEGAL_FORMS.map(k=>[k,t('cl_lf_'+k)]);
+ const rqOpts=CL_REP_QUALITIES.map(k=>[k,t('cl_rq_'+k)]);
+ const pcOpts=CL_PREF_CONTACTS.map(k=>[k,t('cl_pc_'+k)]);
+ const idOpts=[['nin',t('pr_id_nin')],['passport',t('pr_id_passport')],['license',t('pr_id_license')],['',t('pr_id_none')]];
+ const selHTML=(id,opts,val)=>opts.map(o=>`<option value="${esc(o[0])}" ${String(o[0])===String(val)?'selected':''}>${esc(o[1])}</option>`).join('');
+ $('modal').innerHTML=`<div class="client-modal-head"><div><h2 id="clModalTitle">${t(isEdit?'cl_edit_title':'cl_new_title')}</h2><p class="client-modal-sub">${t('cl_modal_sub')}</p></div><small class="sub">${t('cl_req_legend')}</small></div>
+  <div id="clDraftBar" class="client-alert draft"${hasDraft?'':' hidden'}><span>💾 ${t('cl_draft_restored')}</span><button type="button" class="btn sm" id="clClearDraft">${t('cl_draft_clear')}</button></div>
+  <div id="clAlertBox" aria-live="polite"></div>
+  <form id="clForm" novalidate>
+   <div class="client-kind-seg" role="group" aria-label="${esc(t('pr_kind'))}">
+    <button type="button" class="client-kind-btn" data-cl-kind="natural" aria-pressed="${m.kind!=='legal'}"><span class="client-kind-ic" aria-hidden="true">👤</span><div><b>${t('pr_kind_natural')}</b><small>${t('cl_kind_nat_d')}</small></div></button>
+    <button type="button" class="client-kind-btn" data-cl-kind="legal" aria-pressed="${m.kind==='legal'}"><span class="client-kind-ic" aria-hidden="true">🏢</span><div><b>${t('pr_kind_legal')}</b><small>${t('cl_kind_leg_d')}</small></div></button>
+   </div>
+   <input type="hidden" id="cl_kind" value="${esc(m.kind)}">
+   <section class="client-sec">
+    <div class="client-sec-h"><h3>${t('cl_sec_basic')}</h3><small>${t('cl_sec_basic_sub')}</small></div>
+    <div class="nc-grid">
+     <div class="fld" data-f="ar"><label for="cl_ar" id="lbl_cl_ar">${t(m.kind==='legal'?'cl_name_leg_ar':'cl_name_nat_ar')}${req}</label><input id="cl_ar" name="ar" type="text" value="${esc(m.ar)}" autocomplete="off" required><div class="err"></div></div>
+     <div class="fld" data-f="fr"><label for="cl_fr" id="lbl_cl_fr">${t(m.kind==='legal'?'cl_name_leg_fr':'cl_name_nat_fr')}</label><input id="cl_fr" name="fr" type="text" dir="ltr" value="${esc(m.fr)}" autocomplete="off"><div class="err"></div></div>
+     <div class="fld" data-cl-only="natural" ${m.kind==='legal'?'hidden':''}><label for="cl_capacity">${t('cl_capacity')}</label><select id="cl_capacity" name="capacity">${selHTML('capacity',capOpts,m.capacity)}</select></div>
+     <div class="fld" data-cl-only="legal" ${m.kind==='legal'?'':'hidden'}><label for="cl_legalForm">${t('cl_legal_form')}</label><select id="cl_legalForm" name="legalForm">${selHTML('legalForm',lfOpts,m.legalForm)}</select></div>
+     <div class="fld" data-f="ph"><label for="cl_ph">${t('cl_phone')}${req}</label><input id="cl_ph" name="ph" type="tel" dir="ltr" placeholder="0550 12 34 56" value="${esc(m.ph)}" required><div class="err"></div></div>
+     <div class="fld" data-f="wilaya"><label for="cl_wilaya">${t('cl_wilaya')}</label><select id="cl_wilaya" name="wilaya">${selHTML('wilaya',wOpts,m.wilaya)}</select></div>
+     <div class="fld" data-f="addr"><label for="cl_addr" id="lbl_cl_addr">${t(m.kind==='legal'?'cl_addr_leg':'cl_addr_nat')}</label><input id="cl_addr" name="addr" type="text" value="${esc(m.addr)}"><div class="err"></div></div>
+    </div>
+   </section>
+   <section class="client-sec">
+    <div class="client-sec-h"><h3 id="lbl_cl_sec2">${t(m.kind==='legal'?'cl_sec_ident_leg':'cl_sec_ident_nat')}</h3><small>${t('cl_sec_ident_sub')}</small></div>
+    <div class="nc-grid" data-cl-only="natural" ${m.kind==='legal'?'hidden':''}>
+     <div class="fld" data-f="nin"><label for="cl_nin">${t('cl_nin')}</label><input id="cl_nin" name="nin" type="text" dir="ltr" inputmode="numeric" value="${esc(m.nin)}" placeholder="109876543210000000"><div class="hint">${t('cl_nin_hint')}</div><div class="err"></div></div>
+     <div class="fld" data-f="idType"><label for="cl_idType">${t('pr_idtype')}</label><select id="cl_idType" name="idType">${selHTML('idType',idOpts,m.idType)}</select></div>
+     <div class="fld" data-f="idNumber" data-cl-iddoc ${m.idType?'':'hidden'}><label for="cl_idNumber">${t('pr_idnumber')}</label><input id="cl_idNumber" name="idNumber" type="text" dir="ltr" value="${esc(m.idNumber)}"><div class="err"></div></div>
+     <div class="fld" data-f="idIssueDate" data-cl-iddoc ${m.idType?'':'hidden'}><label for="cl_idIssueDate">${t('pr_idissue')}</label><input id="cl_idIssueDate" name="idIssueDate" type="date" max="${K(TODAY)}" value="${esc(m.idIssueDate)}"><div class="err"></div></div>
+     <div class="fld" data-f="birth"><label for="cl_birth">${t('pr_birthdate')}</label><input id="cl_birth" name="birth" type="date" max="${K(TODAY)}" value="${esc(m.birth)}"><div class="err"></div></div>
+     <div class="fld" data-f="birthPlace"><label for="cl_birthPlace">${t('pr_birthplace')}</label><input id="cl_birthPlace" name="birthPlace" type="text" value="${esc(m.birthPlace)}"><div class="err"></div></div>
+    </div>
+    <div class="nc-grid" data-cl-only="legal" ${m.kind==='legal'?'':'hidden'}>
+     <div class="fld" data-f="repName"><label for="cl_repName">${t('cl_rep_name')}</label><input id="cl_repName" name="repName" type="text" value="${esc(m.repName)}"><div class="err"></div></div>
+     <div class="fld" data-f="repQuality"><label for="cl_repQuality">${t('cl_rep_quality')}</label><select id="cl_repQuality" name="repQuality">${selHTML('repQuality',rqOpts,m.repQuality)}</select></div>
+     <div class="fld" data-f="nif"><label for="cl_nif">${t('pr_nif')}</label><input id="cl_nif" name="nif" type="text" dir="ltr" inputmode="numeric" value="${esc(m.nif)}" placeholder="000123456789012"><div class="err"></div></div>
+     <div class="fld" data-f="rc"><label for="cl_rc">${t('cl_rc')}</label><input id="cl_rc" name="rc" type="text" dir="ltr" value="${esc(m.rc)}" placeholder="19/00-1234567B20"><div class="err"></div></div>
+     <div class="fld" data-f="nis"><label for="cl_nis">${t('cl_nis')}</label><input id="cl_nis" name="nis" type="text" dir="ltr" value="${esc(m.nis)}"><div class="err"></div></div>
+     <div class="fld" data-f="ai"><label for="cl_ai">${t('cl_ai')}</label><input id="cl_ai" name="ai" type="text" dir="ltr" value="${esc(m.ai)}"><div class="err"></div></div>
+    </div>
+   </section>
+   <details class="client-extra" ${hasExtra?'open':''}>
+    <summary>${t('cl_sec_extra')}</summary>
+    <div class="client-extra-b"><div class="nc-grid">
+     <div class="fld" data-f="ph2"><label for="cl_ph2">${t('cl_phone2')}</label><input id="cl_ph2" name="ph2" type="tel" dir="ltr" value="${esc(m.ph2)}"><div class="err"></div></div>
+     <div class="fld" data-f="email"><label for="cl_email">${t('cl_email')}</label><input id="cl_email" name="email" type="email" dir="ltr" value="${esc(m.email)}"><div class="err"></div></div>
+     <div class="fld" data-f="profession"><label for="cl_profession" id="lbl_cl_prof">${t(m.kind==='legal'?'cl_profession_leg':'cl_profession_nat')}</label><input id="cl_profession" name="profession" type="text" value="${esc(m.profession)}"></div>
+     <div class="fld" data-f="prefContact"><label for="cl_prefContact">${t('cl_pref_contact')}</label><select id="cl_prefContact" name="prefContact">${selHTML('prefContact',pcOpts,m.prefContact)}</select></div>
+     <div class="fld full" data-f="notes"><label for="cl_notes">${t('cl_notes')}</label><textarea id="cl_notes" name="notes" rows="2">${esc(m.notes)}</textarea><div class="hint">${t('cl_notes_hint')}</div></div>
+    </div></div>
+   </details>
+   <div class="client-footer">
+    <button type="button" class="btn" id="clCancelBtn">${t('cancel')}</button>
+    <div class="mf">
+     ${(!isEdit&&!(opts&&opts.fromCaseModal))?`<button type="button" class="btn" id="clSaveOpenCase">${t('cl_save_and_case')}</button>`:''}
+     <button type="submit" class="btn primary" id="clSubmitBtn">${t('cl_save_btn')}</button>
+    </div>
+   </div>
+  </form>`;
+ $('modalWrap').classList.add('on');$('scrim').classList.add('on');
+ const form=$('clForm'),alertBox=$('clAlertBox');let openCaseAfter=false;
+ const readForm=()=>{const g=id=>{const el=$('cl_'+id);return el?el.value:''};
+  return {kind:g('kind')==='legal'?'legal':'natural',ar:g('ar'),fr:g('fr'),capacity:g('capacity'),legalForm:g('legalForm'),ph:g('ph'),ph2:g('ph2'),email:g('email'),wilaya:g('wilaya'),addr:g('addr'),idType:g('idType'),nin:g('nin'),idNumber:g('idNumber'),idIssueDate:g('idIssueDate'),birth:g('birth'),birthPlace:g('birthPlace'),repName:g('repName'),repQuality:g('repQuality'),nif:g('nif'),rc:g('rc'),nis:g('nis'),ai:g('ai'),profession:g('profession'),prefContact:g('prefContact'),notes:g('notes')}};
+ const saveDraftLocal=()=>{if(!isEdit)_clientModalDraft=readForm()};
+ const clearFieldErrors=()=>{form.querySelectorAll('.fld.bad').forEach(b=>{b.classList.remove('bad');const e=b.querySelector('.err');if(e)e.textContent='';const i=b.querySelector('input,select,textarea');if(i)i.removeAttribute('aria-invalid')})};
+ const showAlerts=(dups,opps,keepConfirm)=>{
+  let html='';
+  if(opps&&opps.length){
+   html+=`<div class="client-alert dup"><strong>⚠ ${esc(t('cl_opp_warn_title'))}</strong><div>${esc(t('cl_opp_warn_body'))} (${opps.map(o=>esc(o.name+' — '+o.caseNo)).join('، ')})</div></div>`;
+  }
+  if(dups&&dups.length){
+   const hard=dups.some(d=>d.blocking),d0=dups[0];
+   html+=`<div class="client-alert ${hard?'block':'dup'}" role="alert"><strong>${esc(t(hard?'cl_dup_block_title':'cl_dup_soft_title'))}</strong><div>${dups.map(d=>`«${esc(tr(d.client))}» (${esc(d.field)}: <span dir="ltr">${esc(d.val||'—')}</span>)`).join(' · ')}</div><div class="client-alert-actions"><button type="button" class="btn sm" data-open-existing="${d0.idx}">${esc(t('cl_dup_open_existing'))}</button>${hard?'':`<label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600"><input type="checkbox" id="clConfirmDup" ${keepConfirm?'checked':''}> ${esc(t('cl_dup_confirm_chk'))}</label>`}</div></div>`;
+  }
+  alertBox.innerHTML=html;
+  const openBtn=alertBox.querySelector('[data-open-existing]');
+  if(openBtn)openBtn.addEventListener('click',()=>{const idx=+openBtn.dataset.openExisting;_clientModalDraft=null;closeModal();if(opts&&typeof opts.onPicked==='function'){opts.onPicked(idx);return}go('client',idx)});
+ };
+ const refreshPassiveWarnings=()=>{const cur=readForm();const opps=findFormerOpponentsForClient(cur);const dups=findClientDuplicates(cur,isEdit?editIdx:-1);
+  const prevChk=!!($('clConfirmDup')&&$('clConfirmDup').checked);
+  if(opps.length||dups.some(d=>d.blocking))showAlerts(dups.filter(d=>d.blocking),opps,prevChk);else if(!dups.length)alertBox.innerHTML=''};
+ const setKind=k=>{const isLeg=k==='legal';$('cl_kind').value=isLeg?'legal':'natural';
+  form.querySelectorAll('[data-cl-kind]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.clKind===(isLeg?'legal':'natural'))));
+  form.querySelectorAll('[data-cl-only="natural"]').forEach(el=>el.hidden=isLeg);
+  form.querySelectorAll('[data-cl-only="legal"]').forEach(el=>el.hidden=!isLeg);
+  $('lbl_cl_ar').innerHTML=t(isLeg?'cl_name_leg_ar':'cl_name_nat_ar')+req;
+  $('lbl_cl_fr').textContent=t(isLeg?'cl_name_leg_fr':'cl_name_nat_fr');
+  $('lbl_cl_addr').textContent=t(isLeg?'cl_addr_leg':'cl_addr_nat');
+  $('lbl_cl_sec2').textContent=t(isLeg?'cl_sec_ident_leg':'cl_sec_ident_nat');
+  $('lbl_cl_prof').textContent=t(isLeg?'cl_profession_leg':'cl_profession_nat');
+  clearFieldErrors();saveDraftLocal();refreshPassiveWarnings()};
+ form.querySelectorAll('[data-cl-kind]').forEach(b=>b.addEventListener('click',()=>setKind(b.dataset.clKind)));
+ const idSel=$('cl_idType');if(idSel)idSel.addEventListener('change',()=>{form.querySelectorAll('[data-cl-iddoc]').forEach(el=>el.hidden=!idSel.value);saveDraftLocal()});
+ form.addEventListener('input',e=>{const box=e.target.closest&&e.target.closest('.fld.bad');if(box){box.classList.remove('bad');const er=box.querySelector('.err');if(er)er.textContent='';e.target.removeAttribute('aria-invalid')}saveDraftLocal()});
+ form.addEventListener('change',()=>{saveDraftLocal();refreshPassiveWarnings()});
+ ['cl_ar','cl_ph','cl_nin','cl_nif','cl_rc'].forEach(id=>{const el=$(id);if(el)el.addEventListener('blur',refreshPassiveWarnings)});
+ const clrBtn=$('clClearDraft');if(clrBtn)clrBtn.addEventListener('click',()=>{_clientModalDraft=null;openClientModal(null,opts)});
+ $('clCancelBtn').addEventListener('click',()=>{_clientModalDraft=null;closeModal()});
+ const saveCaseBtn=$('clSaveOpenCase');if(saveCaseBtn)saveCaseBtn.addEventListener('click',()=>{openCaseAfter=true;if(typeof form.requestSubmit==='function')form.requestSubmit();else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))});
+ form.addEventListener('submit',e=>{e.preventDefault();const withCase=openCaseAfter;openCaseAfter=false;clearFieldErrors();
+  const vals=readForm(),errs=validateClientInput(vals),errKeys=Object.keys(errs);
+  if(errKeys.length){
+   if(errs.email){const det=form.querySelector('.client-extra');if(det)det.open=true}
+   errKeys.forEach(k=>{const inp=$('cl_'+k),box=inp&&inp.closest('.fld');if(box){box.classList.add('bad');const er=box.querySelector('.err');if(er)er.textContent=t(errs[k]);inp.setAttribute('aria-invalid','true')}});
+   const firstBad=form.querySelector('.fld.bad input,.fld.bad select');if(firstBad)firstBad.focus();
+   return;
+  }
+  const dups=findClientDuplicates(vals,isEdit?editIdx:-1),opps=findFormerOpponentsForClient(vals);
+  const confirmDup=!!($('clConfirmDup')&&$('clConfirmDup').checked);
+  if(dups.some(d=>d.blocking)||(dups.length&&!confirmDup)){
+   showAlerts(dups,opps,confirmDup);
+   if(alertBox.scrollIntoView)alertBox.scrollIntoView({block:'nearest',behavior:'smooth'});
+   return;
+  }
+  if(opps.length&&!confirm(t('cl_opp_warn_title')+'\n'+t('cl_opp_warn_body'))){
+   showAlerts(dups,opps,confirmDup);
+   if(alertBox.scrollIntoView)alertBox.scrollIntoView({block:'nearest',behavior:'smooth'});
+   return;
+  }
+  const res=upsertClientRecord(vals,isEdit?editIdx:-1);
+  _clientModalDraft=null;closeModal();
+  toast(t(isEdit?'cl_updated_ok':'cl_saved_ok'));
+  if(opts&&typeof opts.onSaved==='function'){opts.onSaved(res.idx,res.client);chrome();return}
+  if(withCase){chrome();render();newCase(res.idx);return}
+  if(S.view==='client'&&isEdit){chrome();render();return}
+  if(!isEdit&&S.view!=='clients'){go('client',res.idx);return}
+  chrome();render()});
+ refreshPassiveWarnings();
+ const firstInp=$('cl_ar');if(firstInp)firstInp.focus()}
+function renderClientCardsHTML(){const r=me().role,showPh=r==='manager'||r==='partner'||r==='collaborator'||S.perms.secContacts;
+ const q=normName(S.clientQuery||''),kf=S.clientKindFilter||'all',cf=S.clientCaseFilter||'all';
+ const visIdx=[];CL.forEach((c,i)=>{if(canSeeClient(c,i))visIdx.push(i)});
+ if(!visIdx.length)return `<div class="empty-big card" style="grid-column:1/-1"><h3>${t('cl_empty_title')}</h3><p>${t('cl_empty_cta')}</p>${r!=='trainee'?`<button class="btn primary" data-act="newclient">${ic('plus')}${t('cl_add_btn')}</button>`:''}</div>`;
+ const cards=visIdx.map(i=>{const c=CL[i],kind=clientKindOf(c),cs=visCases().filter(x=>x.cl===i),kyc=clientKycStatus(c);
+  if(kf!=='all'&&kind!==kf)return '';
+  if(cf==='with'&&!cs.length)return '';
+  if(cf==='without'&&cs.length>0)return '';
+  if(q){const hay=normName([c.ar,c.fr,c.ph,c.ph2,c.nin,c.nif,c.rc,c.nis,c.addr,c.repName,wilayaLbl(c.wilaya)].filter(Boolean).join(' '));if(!hay.includes(q))return ''}
+  const idLine=kind==='legal'?`NIF: ${c.nif||'—'}${c.rc?' · RC: '+c.rc:''}`:`NIN: ${c.nin||'—'}`;
+  const lfChip=kind==='legal'&&c.legalForm?`<span class="chip mute">${esc(c.legalForm)}</span>`:'';
+  const caseLine=cs.length?`${cs.length} ${t('files_n')} — ${[...new Set(cs.map(x=>tr(TYPES[x.type])))].join('، ')}`:t('cl_no_cases_yet');
+  return `<article class="card client" data-client-idx="${i}">
+   <div class="client-card-head"><span class="avatar">${esc((tr(c)||'?').charAt(0))}</span><div style="flex:1;min-width:0"><strong style="font-size:17px;display:block">${esc(tr(c))}</strong>${c.fr&&c.ar&&c.fr!==c.ar?`<small class="sub" dir="ltr" style="text-align:start">${esc(S.lang==='ar'?c.fr:c.ar)}</small>`:''}</div></div>
+   <div class="client-card-meta"><span class="chip ${kind==='legal'?'info':'teal'}">${t(kind==='legal'?'pr_kind_legal':'pr_kind_natural')}</span>${lfChip}<span class="chip ${kyc.ok?'ok':'warn'}">${t(kyc.ok?'kyc_complete':'kyc_missing')}</span></div>
+   <span class="sub">${esc(caseLine)}</span>
+   <div class="client-card-kv">
+    ${showPh?`<span dir="ltr" style="text-align:start">📞 ${esc(c.ph||'—')}</span>`:''}
+    <span dir="ltr" style="text-align:start">🪪 ${esc(idLine)}</span>
+    ${(c.addr||c.wilaya)?`<span>📍 ${esc(c.addr||wilayaLbl(c.wilaya))}</span>`:''}
+   </div>
+   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px">
+    <button class="btn sm primary" data-act="client" data-id="${i}">${t('nav_client')}</button>
+    ${r!=='trainee'?`<button class="btn sm" data-act="editclient" data-id="${i}">${t('cl_edit_btn')}</button>`:''}
+    ${cs.length?`<button class="btn sm" data-act="case" data-id="${cs[0].id}">${t('cl_open')}</button>`:(r!=='trainee'?`<button class="btn sm" data-act="newcaseforclient" data-id="${i}">${t('cl_new_case_for')}</button>`:'')}
+   </div></article>`}).filter(Boolean);
+ if(!cards.length)return `<div class="empty-big card" style="grid-column:1/-1"><h3>${t('cl_no_match_title')}</h3><p>${t('cl_no_match_cta')}</p>${r!=='trainee'?`<button class="btn primary" data-act="newclient">${ic('plus')}${t('cl_add_btn')}</button>`:''}</div>`;
+ return cards.join('')}
+function clientsV(){const r=me().role; // FIX-04: use canSeeClient for secrecy + standalone clients
+ const visList=CL.filter((c,i)=>canSeeClient(c,i)),natCount=visList.filter(c=>clientKindOf(c)==='natural').length,legCount=visList.length-natCount;
+ const kf=S.clientKindFilter||'all',cf=S.clientCaseFilter||'all';
+ return `<div class="page-h"><div><h1>${t('cl_title')}</h1><p>${t('cl_sub',visList.length)}${visList.length?` · ${natCount} ${t('pr_kind_natural')} · ${legCount} ${t('pr_kind_legal')}`:''}</p></div>${r!=='trainee'?`<button class="btn primary" data-act="newclient">${ic('plus')}${t('cl_add_btn')}</button>`:''}</div>
+ <div class="filters">
+  <input id="clq" type="search" value="${esc(S.clientQuery||'')}" placeholder="${esc(t('cl_search_ph'))}" aria-label="${esc(t('cl_search_ph'))}">
+  <div class="seg" role="group" aria-label="${esc(t('pr_kind'))}">
+   <button type="button" data-act="clkindf" data-v="all" aria-pressed="${kf==='all'}">${t('cl_filter_all')}</button>
+   <button type="button" data-act="clkindf" data-v="natural" aria-pressed="${kf==='natural'}">${t('cl_filter_nat')}</button>
+   <button type="button" data-act="clkindf" data-v="legal" aria-pressed="${kf==='legal'}">${t('cl_filter_leg')}</button>
+  </div>
+  <select id="clcf" aria-label="${esc(t('cl_filter_cases_all'))}">
+   <option value="all" ${cf==='all'?'selected':''}>${t('cl_filter_cases_all')}</option>
+   <option value="with" ${cf==='with'?'selected':''}>${t('cl_filter_with_cases')}</option>
+   <option value="without" ${cf==='without'?'selected':''}>${t('cl_filter_no_cases')}</option>
+  </select>
+ </div>
+ <div class="cards" id="clientCardsWrap">${renderClientCardsHTML()}</div>`}
 
 function docsV(){const ids=new Set(visCases().map(c=>c.id)),list=S.docs.filter(d=>ids.has(d.c));
  return `<div class="page-h"><div><h1>${t('dc_title')}</h1><p>${t('dc_sub')}</p></div><button class="btn primary" data-act="upload">${t('dc_upload').replace('+ ','')}</button></div>
- <section class="card"><div class="card-b">${list.length?list.map(d=>`<div class="doc"><div class="ficon">${d.t}</div><div><strong>${esc(tr(d.n))}</strong><span class="sub">${esc(tr(byC(d.c).title))} — ${fmt(d.d)}</span></div><span class="sub">${d.s}</span><span class="chip ${d.sh?'ok':'mute'}">${d.sh?t('dc_shared'):t('dc_internal')}</span></div>`).join(''):`<div class="empty-big"><h3>${t('dc_empty')}</h3><p>${t('dc_empty_cta')}</p><button class="btn primary" data-act="upload">${ic('plus')}${t('dc_upload').replace('+ ','')}</button></div>`}</div></section>`}
+ <section class="card"><div class="card-b">${list.length?list.map(d=>{const dc=byC(d.c);return `<div class="doc"><div class="ficon">${d.t}</div><div><strong>${esc(tr(d.n))}</strong><span class="sub">${esc(dc?tr(dc.title):'—')} — ${fmt(d.d)}</span></div><span class="sub">${d.s}</span><span class="chip ${d.sh?'ok':'mute'}">${d.sh?t('dc_shared'):t('dc_internal')}</span></div>`}).join(''):`<div class="empty-big"><h3>${t('dc_empty')}</h3><p>${t('dc_empty_cta')}</p><button class="btn primary" data-act="upload">${ic('plus')}${t('dc_upload').replace('+ ','')}</button></div>`}</div></section>`}
 
 function feesV(){
  const tab=(k,l)=>`<button role="tab" data-act="feestab" data-v="${k}" aria-current="${S.feesTab===k}">${l}</button>`;
@@ -957,7 +1402,7 @@ function trustV(){
 function expensesV(){
   const EXV=(S.expenses||[]).filter(e=>{const c=byC(e.c);return c&&canSee(c);}); // FIX04B
   const expT=EXV.reduce((a,e)=>a+e.a,0);
-  const rows=EXV.slice().sort((a,b)=>D(b.d)-D(a.d)).map(e=>`<div class="dlrow"><div class="ficon" style="width:34px;height:38px">${ic('coin')}</div><div style="flex:1"><strong>${esc(tr(e.t))}</strong><span class="sub">${esc(tr(byC(e.c).title))} — ${fmt(e.d)}</span></div><b>${money(e.a)}</b></div>`).join('');
+  const rows=EXV.slice().sort((a,b)=>D(b.d)-D(a.d)).map(e=>{const ec=byC(e.c);return `<div class="dlrow"><div class="ficon" style="width:34px;height:38px">${ic('coin')}</div><div style="flex:1"><strong>${esc(tr(e.t))}</strong><span class="sub">${esc(ec?tr(ec.title):'—')} — ${fmt(e.d)}</span></div><b>${money(e.a)}</b></div>`}).join('');
  return `<div class="page-h" style="margin-bottom:8px"><div><h2 style="font-size:26px">${t('fe_expenses')}</h2><p>${t('tax_expenses')}: <b>${money(expT)}</b></p></div><button class="btn primary" data-act="newexpense">${ic('plus')}${t('d_addexpense').replace('+ ','')}</button></div>
  <section class="card"><div class="card-b">${rows||`<p class="empty">—</p>`}</div></section>`}
 
@@ -1011,14 +1456,15 @@ function taxV(){
  <section class="card"><div class="card-h"><h2>${regTitle}</h2></div><div class="card-b">${regBody}</div></section></div>
  <div class="note warn" style="margin-top:16px">${ic('info')} ${t('tax_note')}</div>`}
 
-function teamV(){const mem=U.filter(u=>!u.partner).map(u=>{const n=S.cases.filter(c=>c.as.includes(u.id)).length;return `<div class="dlrow">${av(u.id)}<div style="flex:1"><strong>${tr(u.n)}</strong><span class="sub">${t(u.rk)}</span></div><div style="text-align:end"><b>${n}</b> <span class="sub" style="display:inline">${t('tm_assigned')}</span>${(isM()&&u.id!=='m'&&S.userPasswords&&S.userPasswords[u.id])?` <button class="btn sm" data-act="pwreset" data-id="${u.id}">${t('sec_reset_btn')}</button>`:''}</div></div>`}).join('');
+function teamV(){const mem=U.filter(u=>!u.extraPartner).map(u=>{const n=S.cases.filter(c=>c.as.includes(u.id)||c.lawyerId===u.id).length;return `<div class="dlrow">${av(u.id)}<div style="flex:1"><strong>${tr(u.n)}</strong><span class="sub">${t(u.rk)}</span></div><div style="text-align:end"><b>${n}</b> <span class="sub" style="display:inline">${t('tm_assigned')}</span>${(isM()&&u.id!=='m'&&S.userPasswords&&S.userPasswords[u.id])?` <button class="btn sm" data-act="pwreset" data-id="${u.id}">${t('sec_reset_btn')}</button>`:''}</div></div>`}).join('');
  const inv=S.invites.length?`<h3 style="margin:14px 0 4px">${t('tm_pending')}</h3>`+S.invites.map(i=>`<div class="dlrow"><span class="avatar">${esc(i.n.charAt(0))}</span><div style="flex:1"><strong>${esc(i.n)}</strong><span class="sub">${esc(i.e)}</span></div><span class="chip warn">${t(i.r)}</span></div>`).join(''):'';
  const tg=k=>`<div class="tg"><label for="p_${k}">${t('p_'+k)}</label><input class="sw" type="checkbox" id="p_${k}" data-act="perm" data-k="${k}" ${S.perms[k]?'checked':''}></div>`;
  const cell=v=>`<td class="${v==='yes'?'y':v==='cfg'?'lim':'n'}">${t(v)}</td>`;
  const row=(l,m,s,tt)=>`<tr><td>${t(l)}</td>${cell(m)}${cell(s)}${cell(tt)}</tr>`;
+ const lwGovNote=S.lang==='fr'?'Gouvernance du dossier : la modification de l’avocat responsable est réservée au gérant, exige un motif écrit consigné au journal d’audit et ne modifie pas automatiquement l’équipe opérationnelle assignée.':'حوكمة المسؤولية المهنية: تعديل «المحامي المسؤول» على الملف محصور بصاحب المكتب/المسير مع إلزامية ذكر السبب وتوثيقه في سجل العمليات، دون تعديل تلقائي لقائمة المكلفين بالمتابعة.';
  return `<div class="page-h"><div><h1>${t('tm_title')}</h1><p>${t('tm_sub')}</p></div><button class="btn primary" data-act="invite">${t('tm_invite').replace('+ ','')}</button></div>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('tm_members')}</h2></div><div class="card-b">${mem}${inv}</div></section>
- <section class="card"><div class="card-h"><h2>${t('tm_perms')}</h2></div><div class="card-b">${tg('secFees')}${tg('secContacts')}${tg('traineeAll')}</div></section></div>
+ <section class="card"><div class="card-h"><h2>${t('tm_perms')}</h2></div><div class="card-b">${tg('secFees')}${tg('secContacts')}${tg('traineeAll')}<p class="note" style="margin-top:12px">${esc(lwGovNote)}</p></div></section></div>
  ${lawyersCard()}<section class="card"><div class="card-h"><h2>${t('tm_matrix')}</h2></div><div class="card-b" style="overflow-x:auto"><table class="matrix"><thead><tr><th></th><th>${t('r_m')}</th><th>${t('r_s')}</th><th>${t('r_t')}</th></tr></thead><tbody>
  ${row('f_dash','yes','yes','yes')}${row('f_allcases','yes','yes','cfg')}${row('f_mycases','yes','yes','yes')}${row('f_tasks','yes','yes','yes')}${row('f_clients','yes','cfg','no')}${row('f_docs','yes','yes','yes')}${row('f_fees','yes','cfg','no')}${row('f_reports','yes','no','no')}${row('f_team','yes','no','no')}${row('f_settings','yes','no','no')}
  </tbody></table></div></section>`}
@@ -1453,13 +1899,13 @@ function deadlinesV(){
   ${S.dlCalc.result?`<table class="matrix" style="margin-top:18px"><thead><tr><th style="text-align:start">نوع الأجل</th><th>${t('dl_col_prudent')}</th><th>${t('dl_col_legal')}</th><th>المتبقي</th><th></th></tr></thead><tbody>${S.dlCalc.result}</tbody></table>`:''}
   <p class="note warn" style="margin-top:14px">${t('dl_legal_note')}</p>
  </div></section>`}
-function cashV(){const inF=S.pays.reduce((a,p)=>a+p.a,0),off=S.officeExp.reduce((a,e)=>a+e.a,0),cexp=S.expenses.reduce((a,e)=>a+e.a,0),profit=inF-off-cexp;
+function cashV(){const inF=(S.pays||[]).reduce((a,p)=>a+(+p.a||+p.amount||0),0),off=(S.officeExp||[]).reduce((a,e)=>a+e.a,0),cexp=(S.expenses||[]).reduce((a,e)=>a+e.a,0),profit=inF-off-cexp;
  const kpi=(l,v,c)=>`<div class="card kpi"><div><span>${l}</span><b class="sm" style="color:${c||'inherit'}">${money(v)}</b></div></div>`;
- const rows=[...S.pays.map(p=>({d:p.d,t:'تحصيل أتعاب — '+tr(CL[byC(p.c).cl]),a:p.a,dir:1})),...S.officeExp.map(e=>({d:e.d,t:e.t,a:e.a,dir:-1})),...S.expenses.map(e=>({d:e.d,t:'مصروف قضائي: '+tr(e.t),a:e.a,dir:-1}))].sort((a,b)=>D(b.d)-D(a.d));
+ const rows=[...(S.pays||[]).map(p=>{const pc=byC(p.c||p.caseId);return {d:p.d||p.date,t:'تحصيل أتعاب — '+(pc?tr(clientOf(pc)):'—'),a:+p.a||+p.amount||0,dir:1}}),...(S.officeExp||[]).map(e=>({d:e.d,t:e.t,a:e.a,dir:-1})),...(S.expenses||[]).map(e=>({d:e.d,t:'مصروف قضائي: '+tr(e.t),a:e.a,dir:-1}))].sort((a,b)=>D(b.d)-D(a.d));
  let bal=0;const r2=rows.map(r=>{bal+=r.dir*r.a;return `<div class="trust-row"><div class="trust-type ${r.dir>0?'dep':'wd'}">${r.dir>0?ic('plus'):ic('undo')}</div><div><strong>${esc(r.t)}</strong><span class="sub">${fmt(r.d)}</span></div><div class="trust-amount ${r.dir>0?'dep':'wd'}">${r.dir>0?'+':'−'}${money(r.a)}</div><b>${money(bal)}</b></div>`}).join('');
  return `<div class="page-h"><div><h1>دفتر الصندوق والربح الصافي</h1><p>حركة الصندوق: تحصيلات الأتعاب مقابل مصاريف المكتب العامة والمصاريف القضائية</p></div><button class="btn primary" data-act="addoffexp">+ مصروف مكتب</button></div>
  <div class="kpis">${kpi('إجمالي المتحصلات',inF)}${kpi('مصاريف المكتب العامة',off)}${kpi('المصاريف القضائية المدفوعة',cexp)}${kpi('الربح الصافي التقديري',profit,profit>=0?'var(--ok)':'var(--bad)')}</div>
- <section class="card"><div class="card-h"><h2>كشف حركة الصندوق</h2></div><div class="card-b">${r2}</div></section>`}
+ <section class="card"><div class="card-h"><h2>كشف حركة الصندوق</h2></div><div class="card-b">${r2||'<p class="empty">—</p>'}</div></section>`}
 // FIX12-F: auditV() moved to the v9 block (user + text filters)
 function jurisRows(q){return S.jurisprudence.filter(j=>!q||(j.court+j.kw+j.text+j.ref).includes(q)).map(j=>`<div class="dlrow"><div class="ficon" style="width:44px;height:50px">${j.year}</div><div style="flex:1"><strong>${esc(j.court)} — ${esc(j.ref)}</strong><p style="margin:4px 0;font-size:13.5px">${esc(j.text)}</p><span class="chip mute">${esc(j.kw)}</span></div></div>`).join('')||'<p class="empty">لا نتائج</p>'}
 function glosRows(q){return S.glossary.filter(g=>!q||(g.ar+g.fr+g.d).toLowerCase().includes(q.toLowerCase())).map(g=>`<div class="dlrow"><div style="flex:1"><strong>${esc(g.ar)} — <i style="color:var(--muted)">${esc(g.fr)}</i></strong><span class="sub">${esc(g.d)}</span></div></div>`).join('')||'<p class="empty">لا نتائج</p>'}
@@ -1487,25 +1933,63 @@ function csvImport(){ // FIX-08: ؛ separator + client merge by normName
   if(clIdx<0){const nc={ar:p[1],fr:p[1],ph:'—',nif:'—'};CL.push(nc);clIdx=CL.length-1;if(S.clients){nc.id=CL.length;S.clients.push(nc)}} // FIX08B shared object
   const id=S.nextId++;S.cases.unshift({id,no:p[0],title:{ar:p[2],fr:p[2]},type:TYPES[p[3]]?p[3]:'civil',court:COURTS[0],cl:clIdx,clientId:clIdx+1,opp:{ar:'—',fr:'—'},stage:0,st:'active',next:null,time:null,kind:'tbd',fee:[+p[4]||0,0],judg:null,docs:0,as:['m','s'],hasPOA:false,lim:null,notes:[],contacts:[],hours:0,sessions:[],parties:[mkParty('client',p[1])]/* V9-FIX-02 */,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:''});n++});
  const r=$('csvRes');if(r)r.textContent='تم استيراد '+n+' ملف';toast('تم استيراد '+n+' ملفاً جديداً');scheduleSave();chrome();render()}
-function printStatement(i){const c0=CL[i],cs=visCases().filter(c=>c.cl===i); // FIX-04
- const rows=cs.map(c=>`<tr><td>${c.no}</td><td>${esc(tr(c.title))}</td><td>${money(c.fee[0])}</td><td>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))}</td><td>${money(dueOf(c))}</td></tr>`).join('');
- const pays=(S.pays||[]).filter(p=>cs.some(c=>c.id===p.c)).map(p=>`<tr><td>${fmt(p.d)}</td><td>${esc(tr(byC(p.c).title))}</td><td>${money(p.a)}</td></tr>`).join('');
+function printStatement(i){const c0=CL[i];if(!c0)return;const cs=visCases().filter(c=>c.cl===i),kind=clientKindOf(c0); // FIX-04
+ const rows=cs.map(c=>`<tr><td>${esc(c.no)}</td><td>${esc(tr(c.title))}</td><td>${money(c.fee[0])}</td><td>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))}</td><td>${money(dueOf(c))}</td></tr>`).join('');
+ const pays=(S.pays||[]).filter(p=>cs.some(c=>c.id===(p.c||p.caseId))).map(p=>{const pc=byC(p.c||p.caseId);return `<tr><td>${fmt(p.d||p.date)}</td><td>${esc(pc?tr(pc.title):'—')}</td><td>${money(+p.a||+p.amount||0)}</td></tr>`}).join('');
+ const idMeta=kind==='legal'?`NIF: ${esc(c0.nif||'—')}${c0.rc?' · RC: '+esc(c0.rc):''}`:(c0.nin?`NIN: ${esc(c0.nin)}`:'');
  $('invoicePrint').innerHTML=`<div class="inv-toolbar"><button class="btn" data-act="closeInv">${t('close')}</button><button class="btn primary" data-act="printStmt">${ic('print')} ${t('inv_print')}</button></div><div class="inv-page"><div class="inv-head"><div class="cab-info"><strong>${esc(tr(S.cabinet.name))}</strong><div>${esc(tr(S.cabinet.address))} — ${esc(S.cabinet.phone)}</div></div><div class="cab-logo"><img src="./logo.png" alt="شعار ديوان" class="brand-img" style="width:100%;height:100%;object-fit:contain;display:block"></div></div>
- <div class="inv-title"><h1>${t('stmt')}</h1><div class="meta"><strong>${esc(tr(c0))}</strong>${esc(c0.addr||'')}<br><span dir="ltr">${esc(c0.ph||'')}</span></div></div>
- <table><thead><tr><th>${t('c_no')}</th><th>${t('fl_title')}</th><th>${t('fe_agree')}</th><th>${t('collected')}</th><th>${t('fe_rem')}</th></tr></thead><tbody>${rows}</tbody></table>
+ <div class="inv-title"><h1>${t('stmt')}</h1><div class="meta"><strong>${esc(tr(c0))}</strong>${esc(c0.addr||wilayaLbl(c0.wilaya)||'')}${idMeta?`<br><span dir="ltr">${idMeta}</span>`:''}<br><span dir="ltr">${esc(c0.ph||'')}</span></div></div>
+ <table><thead><tr><th>${t('c_no')}</th><th>${t('fl_title')}</th><th>${t('fe_agree')}</th><th>${t('collected')}</th><th>${t('fe_rem')}</th></tr></thead><tbody>${rows||'<tr><td colspan="5">—</td></tr>'}</tbody></table>
  <h3 style="font-family:'Amiri',serif">سجل الدفعات</h3><table><thead><tr><th>${t('inv_date')}</th><th>${t('fl_case')}</th><th>${t('inv_total')}</th></tr></thead><tbody>${pays||'<tr><td colspan="3">—</td></tr>'}</tbody></table>
  <div class="inv-legal">وثيقة مُعدّة آلياً من نظام ديوان — لا تُغني عن وصل الأتعاب الرسمي.</div></div>`;
  $('invoicePrint').classList.add('on');document.body.style.overflow='hidden'}
-function clientV(id){const i=(id===undefined||id===null)?0:id,c0=CL[i],cs=visCases().filter(c=>c.cl===i); // FIX-04
- const tot=cs.reduce((a,c)=>a+c.fee[0],0),paid=cs.reduce((a,c)=>a+c.fee[1],0);
- const wa=c0.ph&&c0.ph!=='—'?`https://wa.me/213${c0.ph.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent(t('wa_msg'))}`:null;
- const inst=S.installments.filter(x=>cs.some(c2=>c2.id===x.c)&&!x.paid);
- return `<div class="page-h"><div><h1>${esc(tr(c0))}</h1><p>الملف الشامل للموكل — ${cs.length} ${t('files_n')} — هوية، وكالات، أتعاب، أقساط</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">${wa?`<a class="btn primary" href="${wa}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`:''}<button class="btn" data-act="stmt" data-id="${i}">${ic('print')} ${t('stmt')}</button></div></div>
- <div class="kpis"><div class="card kpi"><div><span>رقم الهوية الوطنية (NIN)</span><b class="sm" dir="ltr">${esc(c0.nin||'—')}</b></div></div><div class="card kpi"><div><span>تاريخ الميلاد</span><b class="sm">${esc(c0.birth||'—')}</b></div></div><div class="card kpi"><div><span>العنوان</span><b class="sm">${esc(c0.addr||'—')}</b></div></div><div class="card kpi"><div><span>الهاتف</span><b class="sm" dir="ltr">${esc(c0.ph||'—')}</b></div></div></div>
- <div class="g2"><section class="card"><div class="card-h"><h2>ملفات الموكل</h2></div><div class="card-b">${cs.map(c=>`<button class="dlrow" data-act="case" data-id="${c.id}"><div style="flex:1"><strong>${esc(tr(c.title))}</strong><span class="sub">${c.no} — ${esc(tr(c.court))}</span></div><div style="text-align:end"><b>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))}</b> <span class="sub" style="display:inline">/ ${money(c.fee[0])}</span></div></button>`).join('')||'<p class="empty">—</p>'}</div></section>
- <section class="card"><div class="card-h"><h2>الملخص المالي</h2></div><div class="card-b"><div class="tax-row"><span>إجمالي اتفاقات الأتعاب</span><strong>${money(tot)}</strong></div><div class="tax-row"><span>المحصَّل</span><strong>${money(paid)}</strong></div><div class="tax-row big"><span>المتبقي</span><strong>${money(tot-paid)}</strong></div>
- <h3 style="margin:16px 0 4px;font-size:16px">أقساط مستحقة (اتفاقية الأتعاب)</h3>${inst.map(x=>`<div class="dlrow"><span class="chip ${diff(x.due)<0?'bad':'warn'}">${diff(x.due)<0?'متأخرة':'مستحقة'}</span><div style="flex:1"><b>${money(x.amount)}</b></div><small class="sub">${fmt(x.due)}</small></div>`).join('')||'<p class="sub">—</p>'}
- <p class="note" style="margin-top:12px">يدعم النظام تسجيل ملفات المساعدة القضائية (موكلين بلا أتعاب اتفاقية) كما في الواقع المهني الجزائري.</p></div></section></div>`}
+function clientV(id){const i=(id===undefined||id===null)?0:+id,c0=CL[i],r=me().role;
+ if(!c0||!canSeeClient(c0,i))return `<div class="page-h"><div><h1>${t('nav_client')}</h1></div><button class="btn" data-act="go" data-v="clients">← ${t('cl_back_list')}</button></div><div class="empty-big card"><h3>${t('cl_empty_title')}</h3><p>${t('cl_empty_cta')}</p></div>`;
+ const cs=visCases().filter(c=>c.cl===i),kind=clientKindOf(c0),kyc=clientKycStatus(c0),showPh=r==='manager'||r==='partner'||r==='collaborator'||S.perms.secContacts,showFees=canFees();
+ const tot=cs.filter(c=>!c.judicialAid).reduce((a,c)=>a+(c.fee[0]||0),0),paid=cs.reduce((a,c)=>a+paidOf(c.id),0),rem=cs.reduce((a,c)=>a+dueOf(c),0);
+ const rawPh=(c0.ph2||c0.ph||'');
+ const wa=(showPh&&rawPh&&rawPh!=='—'&&!/^DEMO-/i.test(rawPh))?`https://wa.me/213${rawPh.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent(t('wa_msg'))}`:null;
+ const inst=(S.installments||[]).filter(x=>cs.some(c2=>c2.id===x.c)&&!x.paid);
+ const caseIds=new Set(cs.map(c=>c.id));
+ const cDocs=(S.docs||[]).filter(d=>caseIds.has(d.c)||d.cl===i);
+ const cAppts=(S.appointments||[]).filter(a=>a.clientIdx===i||(a.caseId&&caseIds.has(+a.caseId)));
+ const kpis=kind==='legal'
+  ?`<div class="card kpi"><div><span>${t('pr_nif')}</span><b class="sm" dir="ltr">${esc(c0.nif||'—')}</b></div></div><div class="card kpi"><div><span>${t('cl_rc')}</span><b class="sm" dir="ltr">${esc(c0.rc||c0.nis||'—')}</b></div></div><div class="card kpi"><div><span>${t('cl_rep_name')}</span><b class="sm">${esc(c0.repName||'—')}</b>${c0.repQuality?`<small>${esc(t('cl_rq_'+c0.repQuality))}</small>`:''}</div></div><div class="card kpi"><div><span>${t('cl_phone')}</span><b class="sm" dir="ltr">${esc(showPh?(c0.ph||'—'):'•••')}</b></div></div>`
+  :`<div class="card kpi"><div><span>${t('cl_nin')}</span><b class="sm" dir="ltr">${esc(c0.nin||c0.idNumber||'—')}</b></div></div><div class="card kpi"><div><span>${t('pr_birthdate')}</span><b class="sm">${esc(c0.birth&&c0.birth!=='—'?fmt(c0.birth):'—')}</b>${c0.birthPlace?`<small>${esc(c0.birthPlace)}</small>`:''}</div></div><div class="card kpi"><div><span>${t('cl_addr_nat')}</span><b class="sm">${esc(c0.addr||wilayaLbl(c0.wilaya)||'—')}</b></div></div><div class="card kpi"><div><span>${t('cl_phone')}</span><b class="sm" dir="ltr">${esc(showPh?(c0.ph||'—'):'•••')}</b></div></div>`;
+ const rowDL=(lbl,val,ltr)=>val&&val!=='—'?`<dt>${esc(lbl)}</dt><dd${ltr?' dir="ltr" style="text-align:start"':''}>${esc(val)}</dd>`:'';
+ const identRows=(c0.fr&&c0.fr!==c0.ar?rowDL(t(kind==='legal'?'cl_name_leg_fr':'cl_name_nat_fr'),c0.fr,1):'')
+  +(kind==='legal'
+   ?(rowDL(t('cl_legal_form'),c0.legalForm?t('cl_lf_'+c0.legalForm):'')+rowDL(t('cl_rep_name'),c0.repName)+rowDL(t('cl_rep_quality'),c0.repQuality?t('cl_rq_'+c0.repQuality):'')+rowDL(t('pr_nif'),c0.nif,1)+rowDL(t('cl_rc'),c0.rc,1)+rowDL(t('cl_nis'),c0.nis,1)+rowDL(t('cl_ai'),c0.ai,1))
+   :(rowDL(t('cl_capacity'),c0.capacity?t('cl_cap_'+c0.capacity):'')+rowDL(t('cl_nin'),c0.nin,1)+rowDL(t('pr_idtype'),c0.idType?t('pr_id_'+c0.idType):'')+rowDL(t('pr_idnumber'),c0.idNumber,1)+rowDL(t('pr_birthdate'),c0.birth&&c0.birth!=='—'?fmt(c0.birth):'')+rowDL(t('pr_birthplace'),c0.birthPlace)))
+  +rowDL(t('cl_wilaya'),wilayaLbl(c0.wilaya))+rowDL(t(kind==='legal'?'cl_addr_leg':'cl_addr_nat'),c0.addr)
+  +(showPh?(rowDL(t('cl_phone'),c0.ph,1)+rowDL(t('cl_phone2'),c0.ph2,1)+rowDL(t('cl_email'),c0.email,1)):'')
+  +rowDL(t(kind==='legal'?'cl_profession_leg':'cl_profession_nat'),c0.profession)+rowDL(t('cl_pref_contact'),c0.prefContact?t('cl_pc_'+c0.prefContact):'');
+ return `<div class="page-h"><div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px"><span class="chip ${kind==='legal'?'info':'teal'}">${t(kind==='legal'?'pr_kind_legal':'pr_kind_natural')}</span>${kind==='legal'&&c0.legalForm?`<span class="chip mute">${esc(c0.legalForm)}</span>`:''}<span class="chip ${kyc.ok?'ok':'warn'}">${t(kyc.ok?'kyc_complete':'kyc_missing')}</span></div><h1>${esc(tr(c0))}</h1><p>الملف الشامل للموكل — ${cs.length} ${t('files_n')}</p></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button class="btn" data-act="go" data-v="clients">← ${t('cl_back_list')}</button>
+   ${r!=='trainee'?`<button class="btn" data-act="editclient" data-id="${i}">${t('cl_edit_btn')}</button><button class="btn primary" data-act="newcaseforclient" data-id="${i}">${t('cl_new_case_for')}</button>`:''}
+   ${wa?`<a class="btn" href="${wa}" target="_blank" rel="noopener">${ic('phone')} واتساب</a>`:''}
+   ${showFees?`<button class="btn" data-act="stmt" data-id="${i}">${ic('print')} ${t('stmt')}</button>`:''}
+  </div></div>
+ <div class="kpis">${kpis}</div>
+ <div class="g2">
+  <section class="card"><div class="card-h"><h2>ملفات الموكل</h2>${r!=='trainee'?`<button class="btn sm primary" data-act="newcaseforclient" data-id="${i}">${t('cl_new_case_for')}</button>`:''}</div><div class="card-b">${cs.map(c=>`<button class="dlrow" data-act="case" data-id="${c.id}"><div style="flex:1"><strong>${esc(tr(c.title))}</strong><span class="sub">${esc(c.no)} — ${esc(tr(c.court))}</span></div><div style="text-align:end">${showFees?`<b>${money(paidOf(c.id))}</b> <span class="sub" style="display:inline">/ ${money(c.fee[0])}</span>`:stChip(c.st)}</div></button>`).join('')||`<p class="empty">${t('cl_no_cases_yet')}</p>`}</div></section>
+  <section class="card"><div class="card-h"><h2>${showFees?'الملخص المالي':t('cl_profile_ident')}</h2></div><div class="card-b">
+   ${showFees?`<div class="tax-row"><span>إجمالي اتفاقات الأتعاب</span><strong>${money(tot)}</strong></div><div class="tax-row"><span>المحصَّل</span><strong>${money(paid)}</strong></div><div class="tax-row big"><span>المتبقي</span><strong>${money(rem)}</strong></div>
+   <h3 style="margin:16px 0 4px;font-size:16px">أقساط مستحقة (اتفاقية الأتعاب)</h3>${inst.map(x=>`<div class="dlrow"><span class="chip ${diff(x.due)<0?'bad':'warn'}">${diff(x.due)<0?'متأخرة':'مستحقة'}</span><div style="flex:1"><b>${money(x.amount)}</b></div><small class="sub">${fmt(x.due)}</small></div>`).join('')||'<p class="sub">—</p>'}
+   <p class="note" style="margin-top:12px">يدعم النظام تسجيل ملفات المساعدة القضائية (موكلين بلا أتعاب اتفاقية) كما في الواقع المهني الجزائري.</p>`
+   :`<dl class="dl-list" style="margin:0">${identRows||`<dt>—</dt><dd>—</dd>`}</dl>`}
+  </div></section>
+ </div>
+ <div class="g2e">
+  <section class="card"><div class="card-h"><h2>${t('cl_profile_ident')}</h2>${r!=='trainee'?`<button class="btn sm" data-act="editclient" data-id="${i}">${t('cl_edit_btn')}</button>`:''}</div><div class="card-b"><dl class="dl-list" style="margin:0">${identRows||`<dt>—</dt><dd>—</dd>`}</dl>${(c0.notes&&r!=='trainee')?`<div class="note" style="margin-top:12px"><b>${t('cl_notes')}:</b> ${esc(c0.notes)}</div>`:''}</div></section>
+  <section class="card"><div class="card-h"><h2>${t('cl_profile_docs')}</h2>${isM()||r==='partner'||r==='secretary'?`<button class="btn sm primary" data-act="kycupload" data-id="${i}">${t('kyc_up_btn')}</button>`:''}</div><div class="card-b">
+   ${(kyc.docs||[]).map(d=>`<div class="dlrow"><span class="chip ok">KYC</span><div style="flex:1"><strong>${esc(d.n)}</strong><span class="sub">${esc(t('kyc_t_'+d.type))} · ${fmt(d.d)}</span></div></div>`).join('')}
+   ${cDocs.filter(d=>!d.kyc).map(d=>`<div class="dlrow"><span class="chip mute">${esc(d.t||'DOC')}</span><div style="flex:1"><strong>${esc(tr(d.n))}</strong><span class="sub">${fmt(d.d)} · ${esc(d.s||'')}</span></div></div>`).join('')}
+   ${(!kyc.docs.length&&!cDocs.length)?`<p class="empty">${t('kyc_need_docs')}</p>`:''}
+   ${cAppts.length?`<h3 style="margin:14px 0 6px;font-size:15px">${t('cl_profile_appts')}</h3>`+cAppts.map(a=>`<div class="dlrow"><span class="chip info">${esc(a.time||'—')}</span><div style="flex:1"><strong>${esc(a.subject||t('appt_type_'+(a.type||'meeting')))}</strong><span class="sub">${fmt(a.date)}</span></div></div>`).join(''):''}
+  </div></section>
+ </div>`}
 function addParty(cid){modal('m_party',[{n:'n',l:'fl_partyname',req:true},{n:'r',l:'fl_role',req:true,v:'خصم'}],v=>{undoable(()=>{const _np=mkParty(/موكل/.test(v.r)?'client':/خصم/.test(v.r)?'opponent':'other',v.n);_np.roleLabel=_bi(v.r);byC(cid).parties.push(_np)/* V9-FIX-02 */},'savedOnline');openDrawer(cid)})}
 function addSession(cid){modal('m_session',[{n:'date',l:'fl_date',type:'date',req:true,v:K(TODAY)},{n:'kind',l:'fl_kind',req:true,v:'جلسة مرافعة'},{n:'out',l:'fl_outcome',type:'textarea',req:true},{n:'next',l:'fl_next2',type:'date'}],v=>{undoable(()=>{const c=byC(cid);c.sessions.unshift({date:v.date,kind:v.kind,out:v.out,next:v.next||null});if(v.next){c.next=v.next;c.time=c.time||'09:00'}} ,'savedOnline');openDrawer(cid)})}
 function addOffExp(){modal('m_offexp',[{n:'t',l:'fl_expense',req:true},{n:'a',l:'fl_amount',type:'number',req:true,min:1,chk:amtChk}],v=>undoable(()=>{S.officeExp.unshift({d:K(TODAY),t:v.t,a:+v.a})},'savedOnline'))}
@@ -1608,10 +2092,15 @@ function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!sec
  $('notif').innerHTML=`<h3>${t('digest')}</h3><ul><li>${ic('cal')} <b>${th}</b> ${t('n_hear')}</li><li>${ic('alert')} <b>${ur.length}</b> ${t('n_dl')}</li><li>${ic('tasks')} <b>${ot}</b> ${t('n_task')}</li></ul>`}
 function render(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;if(!allowed(S.view))S.view='dash';$('view').innerHTML=VIEWS[S.view]();
  if(S.view==='cases'){caseRows();['fq','ft','fs'].forEach(i=>$(i).addEventListener('input',caseRows))}
+ if(S.view==='clients'){
+  const clq=$('clq'),clcf=$('clcf');
+  if(clq)clq.addEventListener('input',e=>{S.clientQuery=e.target.value;const g=$('clientCardsWrap');if(g)g.innerHTML=renderClientCardsHTML()});
+  if(clcf)clcf.addEventListener('change',e=>{S.clientCaseFilter=e.target.value;const g=$('clientCardsWrap');if(g)g.innerHTML=renderClientCardsHTML()});
+ }
  if(S.view==='portal')$('portalSel').addEventListener('change',e=>{S.arg=+e.target.value;render()});
  if(S.view==='tasks'&&$('tw'))$('tw').addEventListener('change',e=>{S.taskWho=e.target.value;render()});
  if(S.view==='library'){const lq=$('libq'),gq=$('glq');if(lq)lq.addEventListener('input',e=>{$('juris').innerHTML=jurisRows(e.target.value.trim())});if(gq)gq.addEventListener('input',e=>{$('glos').innerHTML=glosRows(e.target.value.trim())})}}
-function go(v,arg){S.view=v;S.arg=arg||null;closeDrawer();$('side').classList.remove('on');chrome();render();window.scrollTo({top:0})}
+function go(v,arg){S.view=v;S.arg=arg===undefined?null:arg;closeDrawer();$('side').classList.remove('on');chrome();render();window.scrollTo({top:0})}
 
 /* ============== overlays ============== */
 function toast(m,undo){const e=document.createElement('div');e.className='toast';e.innerHTML=`<span>${esc(m)}</span>`+(undo?`<button type="button">${t('undo')}</button>`:'');
@@ -1656,7 +2145,7 @@ function modal(title,fields,onSave,okLabel){lastFocus=document.activeElement;$('
 function closeModal(){if(typeof _cfOnDismiss==='function'){var _cf=_cfOnDismiss;_cfOnDismiss=null;try{_cf()}catch(_){}}$('modalWrap').classList.remove('on');$('modal').className='modal';if(!$('drawer').classList.contains('on'))$('scrim').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 const amtChk=v=>(isNaN(+v)||+v<=0)?'err_amount':'';
 
-function newCase(){newCaseModal()} // V9-FIX-02: delegates to the dedicated modal (modal() untouched)
+function newCase(prefClientIdx){newCaseModal(prefClientIdx)} // V9-FIX-02: delegates to the dedicated modal (modal() untouched)
 // V9-FIX-02: helpers for party cards
 function pFull(p){return [tr(p.firstName),tr(p.lastName)].filter(Boolean).join(' ')}
 function pFullL(p,l){var f=_bi(p&&p.firstName),n=_bi(p&&p.lastName);return [f[l]||f.ar,n[l]||n.ar].filter(Boolean).join(' ')}
@@ -1682,7 +2171,9 @@ function readPartyDOM(){return [...$('modal').querySelectorAll('[data-party]')].
  return {role:i===0?'client':(g('role')||'other'),proc:g('proc'),roleLabel:g('roleLabel'),firstName:g('firstName'),lastName:g('lastName'),birthDate:g('birthDate'),birthPlace:g('birthPlace'),idType:g('idType'),idNumber:g('idNumber'),idIssueDate:g('idIssueDate'),idExpiryDate:g('idExpiryDate'),address:g('address'),kind:g('kind')==='legal'?'legal':'',nif:g('kind')==='legal'?g('nif'):'',firstNameFr:g('firstNameFr'),lastNameFr:g('lastNameFr')}})}
 function cleanParty(r,i){const b=blankParty(i===0?'client':(r.role||'other'));b.roleLabel=b.role==='other'?_bi(r.roleLabel):{ar:'',fr:''};b.proc=normProc(r.proc);if(b.proc)b.role=procBase(b.proc);b.procLabel=b.proc?{ar:t('pr_pc_'+b.proc),fr:t('pr_pc_'+b.proc)}:{ar:'',fr:''};b.firstName={ar:r.firstName||r.firstNameFr||'',fr:r.firstNameFr||r.firstName||''};b.lastName={ar:r.lastName||r.lastNameFr||'',fr:r.lastNameFr||r.lastName||''};
  b.birthDate=r.birthDate||'';b.birthPlace=_bi(r.birthPlace);b.idType=r.idType||'';if(b.idType){b.idNumber=r.idNumber||'';b.idIssueDate=r.idIssueDate||'';b.idExpiryDate=r.idExpiryDate||''}b.address=_bi(r.address);b.kind=r.kind==='legal'?'legal':'natural';b.nif=b.kind==='legal'?(r.nif||''):'';return b}
-function newCaseModal(){lastFocus=document.activeElement;$('modal').className='modal lg';
+function newCaseModal(prefClientIdx){lastFocus=document.activeElement;$('modal').className='modal lg';
+ ensureClientsSync();
+ const hasPref=typeof prefClientIdx==='number'&&prefClientIdx>=0&&!!CL[prefClientIdx];
  const as=U.filter(u=>u.id!=='m').map(u=>[u.id,tr(u.n)+' — '+t(u.rk)]);
  const F=(id,lab,inner,cls)=>`<div class="fld${cls?' '+cls:''}" data-f="${id}"><label for="f_${id}">${t(lab)}</label>${inner}<div class="err"></div></div>`;
  const I=(id,lab,type,val,extra,cls)=>F(id,lab,`<input id="f_${id}" name="${id}" type="${type||'text'}" value="${esc(val||'')}" ${extra||''}>`,cls);
@@ -1690,6 +2181,7 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
  const IB=(id,lab,type,val,extra,ltr)=>`<div class="fld" data-f="${id}"><label for="f_${id}">${BL(lab)}</label><input id="f_${id}" name="${id}" type="${type||'text'}" value="${esc(val||'')}" ${extra||''}${ltr?' dir="ltr"':''}><div class="err"></div></div>`;
  const Sel=(id,lab,opts,val)=>F(id,lab,`<select id="f_${id}" name="${id}">${opts.map(o=>`<option value="${o[0]}" ${String(o[0])===String(val)?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`);
  const Chk=(id,lab)=>F(id,lab,`<input id="f_${id}" name="${id}" type="checkbox">`);
+ const lwOpts=lawyerOpts();
  $('modal').innerHTML=`<h2>${t('m_case')}</h2><form id="mf" novalidate>
   <h3 class="nc-sec first">${t('nc_sec_case')}</h3>
   <div class="nc-grid">${I('no','fl_no','text','2026/00'+(520+S.nextId))}${IB('title','nc_title_ar','text','','')}${IB('titleFr','nc_title_fr','text','','',1)}
@@ -1699,18 +2191,23 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
    ${I('substName','fl_substname','text','')}${I('delibDate','fl_delibdate','date','')}
    ${I('huissierName','fl_huissier','text','')}${Sel('signifStatus','fl_signifstatus',[['','—'],['done',t('signif_done')],['refused',t('signif_refused')],['absent',t('signif_absent')]],'')}
    ${I('signifDate','fl_signifdate','date','')}
-   ${Chk('poa','fl_poa')}${Chk('ja','v7_ja')}${I('lim','fl_lim','date','')}${Sel('who','fl_assign',as,isM()?'s':me().id)}${lwList().some(l=>l.active!==false)?Sel('lawyer','lw_resp',lawyerOpts(),me().partner?me().id:'m'):''}</div>
+   ${Chk('poa','fl_poa')}${Chk('ja','v7_ja')}${I('lim','fl_lim','date','')}${Sel('who','fl_assign',as,isM()?'s':me().id)}${lwOpts.length>1?Sel('lawyer','lw_resp',lwOpts,me().partner?me().id:'m'):''}</div>
   <h3 class="nc-sec">${t('d_parties')}</h3>
-  <div id="partyList"><div id="partyCards"></div><button type="button" class="btn" data-act="party-add" aria-label="${esc(t('pr_add_aria'))}">${t('pr_add')}</button></div>
+  <div id="partyList">
+   <div class="client-picker-bar"><div class="fld"><label for="pickExistingClient">${t('cl_pick_existing')}</label><select id="pickExistingClient"><option value="">${t('cl_pick_new_opt')}</option>${CL.map((c,i)=>canSeeClient(c,i)?`<option value="${i}" ${hasPref&&prefClientIdx===i?'selected':''}>${esc(tr(c))}${c.ph&&c.ph!=='—'?' — '+esc(c.ph):''}</option>`:'').join('')}</select></div>${canNewCase()?`<button type="button" class="btn sm" data-act="party-open-newclient">${ic('plus')} ${t('cl_new')}</button>`:''}</div>
+   <div id="partyCards"></div><button type="button" class="btn" data-act="party-add" aria-label="${esc(t('pr_add_aria'))}">${t('pr_add')}</button></div>
   <div class="mf"><button type="button" class="btn" data-act="closeModal">${t('cancel')}</button><button type="submit" class="btn primary">${t('save')}</button></div></form>`;
  $('modalWrap').classList.add('on');$('scrim').classList.add('on');
- let model=[flatParty('client'),flatParty('opponent')];
+ let model=[hasPref?clientToPartyFlat(CL[prefClientIdx]):flatParty('client'),flatParty('opponent')];
  const paint=()=>{$('partyCards').innerHTML=model.map((p,i)=>partyCardHTML(i,p)).join('')};paint();
  const list=$('partyList');
  list.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='party-open-newclient'){e.stopPropagation();closeModal();openClientModal(null,{onSaved:idx=>newCaseModal(idx)});return}
   if(a==='party-add'){e.stopPropagation();model=readPartyDOM();model.push(flatParty('other'));paint();const f=$('pp'+(model.length-1)+'_firstName');if(f)f.focus()}
   else if(a==='party-remove'){e.stopPropagation();model=readPartyDOM();model.splice(+b.dataset.i,1);paint();const ad=list.querySelector('[data-act="party-add"]');if(ad)ad.focus()}});
- list.addEventListener('change',e=>{const el=e.target,card=el.closest&&el.closest('[data-party]');if(!card)return;
+ list.addEventListener('change',e=>{const el=e.target;
+  if(el.id==='pickExistingClient'){model=readPartyDOM();model[0]=(el.value!==''&&CL[+el.value])?clientToPartyFlat(CL[+el.value]):flatParty('client');paint();return}
+  const card=el.closest&&el.closest('[data-party]');if(!card)return;
   if(el.dataset.k==='idType')card.querySelector('.idfields').hidden=!el.value;
   if(el.dataset.k==='role')card.querySelector('[data-rl]').hidden=el.value!=='other';
   if(el.dataset.k==='proc'){var pb=procBase(el.value);if(pb){var rs=card.querySelector('[data-k="role"]');if(rs){rs.value=pb;var rl2=card.querySelector('[data-rl]');if(rl2)rl2.hidden=pb!=='other'}}}
@@ -1724,7 +2221,8 @@ function newCaseModal(){lastFocus=document.activeElement;$('modal').className='m
   raws.forEach((r,i)=>{const blank=i>0&&!Object.keys(r).some(k=>k!=='role'&&r[k]);if(blank)return;if(!r.firstName&&!r.lastName&&!r.firstNameFr&&!r.lastNameFr&&bad<0)bad=i;keep.push(cleanParty(r,i))});
   if(bad>=0){toast(t('pr_name_req'));const f=$('pp'+bad+'_firstName');if(f)f.focus();return}
   const cl0=keep[0],op0=keep.find((p,i)=>i>0&&p.role==='opponent'),clName=pFull(cl0),oppName=op0?pFull(op0):'',clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
-  const v={no:val('no'),title:val('title'),titleFr:val('titleFr'),type:val('type'),court:val('court'),date:val('date'),time:val('time'),poa:val('poa'),ja:val('ja'),lim:val('lim'),who:val('who'),roleNumber:val('roleNumber'),judgeName:val('judgeName'),substName:val('substName'),delibDate:val('delibDate'),huissierName:val('huissierName'),signifStatus:val('signifStatus'),signifDate:val('signifDate'),lawyerId:($('f_lawyer')||{value:'m'}).value||'m'};
+  const pickSel=$('pickExistingClient'),pickedIdx=(pickSel&&pickSel.value!=='')?+pickSel.value:null;
+  const v={no:val('no'),title:val('title'),titleFr:val('titleFr'),type:val('type'),court:val('court'),date:val('date'),time:val('time'),poa:val('poa'),ja:val('ja'),lim:val('lim'),who:val('who'),roleNumber:val('roleNumber'),judgeName:val('judgeName'),substName:val('substName'),delibDate:val('delibDate'),huissierName:val('huissierName'),signifStatus:val('signifStatus'),signifDate:val('signifDate'),lawyerId:($('f_lawyer')||{value:'m'}).value||'m',clientIdx:pickedIdx};
   const conf=detectConflict({parties:keep});
   if(conf.length){
    /* Any detected conflict or uncertain match is routed to restricted review; do not create a matter yet. */
@@ -1863,7 +2361,7 @@ function openDrawer(id){const c=byC(id);if(c){var _init=false;if(c.legalRefs==nu
  <div data-case-details ${S.caseDrawerTab==='details'?'':'hidden'}>
  <dl class="dl-list"><dt>${t('d_client')}</dt><dd>${esc(tr(CL[c.cl]))} <button class="btn sm" data-act="client" data-id="${c.cl}" style="margin-inline-start:6px">${t('nav_client')}</button></dd><dt>${t('d_opp')}</dt><dd>${esc(tr(c.opp))}</dd><dt>${t('d_court')}</dt><dd>${esc(tr(c.court))}</dd>
  <dt>${t('d_next')}</dt><dd>${c.next?fmt(c.next)+' — '+c.time+' ('+tr(KIND[c.kind])+')':tr(KIND[c.kind])}</dd><dt>${t('d_poa')}</dt><dd>${poa}</dd><dt>${t('d_lim')}</dt><dd>${lim}</dd>
- <dt>${t('d_judg')}</dt><dd>${c.judg?esc(tr(c.judg)):t('d_none_yet')}</dd><dt>${t('d_team')}</dt><dd>${avs(c.as)}</dd>${(lwList().length||(c.lawyerId&&c.lawyerId!=='m'))?`<dt>${t('lw_resp')}</dt><dd>${esc(lawyerName(c.lawyerId))}${m?` <button class="btn sm" data-act="setlawyer" data-id="${c.id}" style="margin-inline-start:6px">${t('lw_edit_btn')}</button>`:''}</dd>`:''}
+ <dt>${t('d_judg')}</dt><dd>${c.judg?esc(tr(c.judg)):t('d_none_yet')}</dd><dt>${t('d_team')}</dt><dd>${avs(c.as)}</dd><dt>${t('lw_resp')}</dt><dd>${esc(lawyerName(c.lawyerId))}${m?` <button class="btn sm" data-act="setlawyer" data-id="${c.id}" style="margin-inline-start:6px">${t('lw_edit_btn')}</button>`:''}</dd>
  ${showFees?`<dt>${t('d_fees')}</dt><dd>${money(typeof paidOf==="function"?paidOf(c.id):(c.fee[1]||0))} ${t('of')} ${money(c.fee[0])}<div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div></dd>`:''}</dl>
  <div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:12px 0">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px"><b style="font-size:14px">${t('hear_track')}</b><button class="btn sm" data-act="casehear" data-id="${c.id}">${t('hear_edit')}</button></div>
@@ -2002,7 +2500,11 @@ document.addEventListener('click',e=>{
   case 'open_cours':{const c=byC(id);
     if(c&&c.platformUsername&&navigator.clipboard){navigator.clipboard.writeText(c.platformUsername).then(()=>toast(t('d_copied'))).catch(()=>{})}
     window.open('http://coursdesaffaires.mjustice.dz/affaire/index.php','_blank','noopener');break}
-  case 'client':go('client',id);break;
+  case 'client':$('results').classList.remove('on');go('client',id);break;
+  case 'newclient':if(!canNewCase())break;openClientModal(null);break;
+  case 'editclient':if(!canNewCase())break;openClientModal(id);break;
+  case 'newcaseforclient':if(!canNewCase())break;newCase(id);break;
+  case 'clkindf':{S.clientKindFilter=el.dataset.v||'all';const g=$('clientCardsWrap');if(g){g.innerHTML=renderClientCardsHTML();document.querySelectorAll('[data-act="clkindf"]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.v||'all')===S.clientKindFilter)))}else render();break}
   case 'stmt':printStatement(id);break;
   case 'dlcalc':{const dd=$('dl_date');S.dlCalc.date=dd?dd.value:K(TODAY);S.dlCalc.abroad=!!($('dl_abroad')||{}).checked;if($('dl_vac_on')){S.dlVacation=S.dlVacation||{};S.dlVacation.on=!!$('dl_vac_on').checked}S.dlCalc.caseId=+(($('dl_case')||{}).value||0)||null;S.dlCalc.result=calcDLTable();render();break}
   // FIX-01: save calculated deadline to case
@@ -2076,8 +2578,11 @@ document.addEventListener('keydown',e=>{
 });
 $('gs').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase(),box=$('results');
  if(!q){box.classList.remove('on');return}
- const qn=normName(q);const list=visCases().filter(c=>normName(tr(c.title)).includes(qn)||normName(tr(CL[c.cl]||{})).includes(qn)||normName(c.no).includes(qn)).slice(0,6); // FIX-12
- box.innerHTML=list.length?list.map(c=>`<button data-act="case" data-id="${c.id}"><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]))} — ${esc(c.no)}</small></button>`).join(''):`<p class="empty">${t('no_results')}</p>`;
+ const qn=normName(q);
+ const caseHits=visCases().filter(c=>normName(tr(c.title)).includes(qn)||normName(tr(CL[c.cl]||{})).includes(qn)||normName(c.no).includes(qn)).slice(0,5).map(c=>`<button data-act="case" data-id="${c.id}"><strong>${esc(tr(c.title))}</strong><small>${esc(tr(CL[c.cl]))} — ${esc(c.no)}</small></button>`);
+ const clHits=allowed('clients')?CL.map((cl,i)=>[cl,i]).filter(([cl,i])=>cl&&canSeeClient(cl,i)&&normName([cl.ar,cl.fr,cl.ph,cl.nin,cl.nif,cl.rc,cl.repName].filter(Boolean).join(' ')).includes(qn)).slice(0,4).map(([cl,i])=>`<button data-act="client" data-id="${i}"><strong>${esc(tr(cl))}</strong><small>${t(clientKindOf(cl)==='legal'?'cl_badge_legal':'cl_badge_natural')}${cl.ph&&cl.ph!=='—'?' · '+esc(cl.ph):''}</small></button>`):[];
+ const all=[...caseHits,...clHits];
+ box.innerHTML=all.length?all.join(''):`<p class="empty">${t('no_results')}</p>`;
  box.classList.add('on')});
 
 // FIX-13-REAL // FIX13R — all language packs are registered before the first chrome()
@@ -2705,10 +3210,22 @@ function dgAutofill(cid){
  var ps=(c.parties||[]).map(normParty);
  var cl=ps.filter(function(p){return p.role==='client'})[0]||ps[0]||null;
  var op=ps.filter(function(p){return p.role==='opponent'})[0]||null;
+ var clRec=(typeof c.cl==='number'&&CL[c.cl])?CL[c.cl]:null;
  var dg=S.docGen,cab=S.cabinet||{},ci=0,i;
  for(i=0;i<COURTS.length;i++){if(tr(COURTS[i])===tr(c.court)){ci=i;break}}
  dg.caseId=String(c.id);dg.caseNo=c.no||'';dg.court=String(ci);dg.courtName=tr(COURTS[ci]);
- if(cl){dg.pName=pFull(cl);dg.pAddr=tr(cl.address);dg.pQuality=cl.kind==='legal'?'legal':'natural';dg.pCompany=cl.kind==='legal'?pFull(cl):''}
+ if(cl||clRec){
+  var isLg=cl?(cl.kind==='legal'):(clRec&&clientKindOf(clRec)==='legal');
+  dg.pName=(cl&&pFull(cl))||(clRec&&tr(clRec))||'';
+  dg.pAddr=(cl&&tr(cl.address))||(clRec&&clRec.addr)||'';
+  dg.pQuality=isLg?'legal':'natural';
+  dg.pCompany=isLg?dg.pName:'';
+  dg.pPhone=(clRec&&clRec.ph&&clRec.ph!=='—')?clRec.ph:'';
+  dg.pNin=(cl&&cl.idType==='nin'&&cl.idNumber)||(clRec&&clRec.nin)||'';
+  dg.pNif=(cl&&cl.nif)||(clRec&&clRec.nif&&clRec.nif!=='—'?clRec.nif:'')||'';
+  dg.pRc=(clRec&&clRec.rc)||'';
+  dg.pRep=(clRec&&clRec.repName)||'';
+ }
  if(op){dg.dName=pFull(op);dg.dAddr=tr(op.address);dg.dQuality=op.kind==='legal'?'legal':'natural';dg.dCompany=op.kind==='legal'?pFull(op):''}
  dg.subject=tr(c.title);dg.lawyerName=tr(cab.name)||'';dg.lawyerAddr=tr(cab.address)||'';dg.lawyerPhone=cab.phone||'';
  dg.priorAdmin=c.priorAdmin||c.adminRecourse||'';dg.refNo=dg.refNo||c.no||'';
@@ -3485,13 +4002,42 @@ function conflictConfirm(conf,meta,onAccept){var rows=conf.map(function(x){retur
   if(!cfPhraseOk($('cfAck').value)){box.classList.add('bad');$('cfErr').textContent=t('cf_bad_phrase');$('cfErr').style.display='block';$('cfAck').focus();return}
   done=true;_cfOnDismiss=null;onAccept()})}
 
+function resolveIntakeClient(v,cl0,clAr,clFr){
+ ensureClientsSync();
+ if(v&&typeof v.clientIdx==='number'&&CL[v.clientIdx]&&normName(CL[v.clientIdx].ar)===normName(clAr)){
+  var ex=CL[v.clientIdx];
+  if(!ex.nin&&cl0.idType==='nin'&&cl0.idNumber)ex.nin=cl0.idNumber;
+  if((!ex.nif||ex.nif==='—')&&cl0.kind==='legal'&&cl0.nif)ex.nif=cl0.nif;
+  if(!ex.birth&&cl0.birthDate)ex.birth=cl0.birthDate;
+  if(!ex.addr&&tr(cl0.address))ex.addr=tr(cl0.address);
+  ensureClientsSync();
+  return v.clientIdx;
+ }
+ var ninClean=cl0.idType==='nin'?String(cl0.idNumber||'').replace(/\s+/g,''):'';
+ var nifClean=cl0.kind==='legal'?String(cl0.nif||'').replace(/\s+/g,''):'';
+ for(var i=0;i<CL.length;i++){
+  var c=CL[i];if(!c)continue;
+  var match=(ninClean&&String(c.nin||'').replace(/\s+/g,'')===ninClean)||(nifClean&&nifClean!=='—'&&String(c.nif||'').replace(/\s+/g,'')===nifClean)||(clAr&&normName(c.ar)===normName(clAr));
+  if(match){
+   if(!c.nin&&ninClean)c.nin=ninClean;
+   if((!c.nif||c.nif==='—')&&nifClean)c.nif=nifClean;
+   if(!c.birth&&cl0.birthDate)c.birth=cl0.birthDate;
+   if(!c.addr&&tr(cl0.address))c.addr=tr(cl0.address);
+   ensureClientsSync();
+   return i;
+  }
+ }
+ var rec={id:nextClientId(),kind:cl0.kind==='legal'?'legal':'natural',ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—',nin:ninClean,idType:cl0.idType||'',idNumber:cl0.idNumber||'',idIssueDate:cl0.idIssueDate||'',birth:cl0.birthDate||'',birthPlace:tr(cl0.birthPlace)||'',addr:tr(cl0.address)||'',kycDocs:[],createdAt:K(TODAY)};
+ CL.push(rec);ensureClientsSync();
+ return CL.length-1;
+}
 /* Create a matter only after conflict screening has no findings, or after an authorized
    confidential reviewer explicitly approves a pending review. */
 function createIntakeCase(v,keep,conf,reviewApproved){
  var cl0=keep[0]||{},op0=keep.find(function(p,i){return i>0&&p.role==='opponent'}),clAr=pFullL(cl0,'ar'),clFr=pFullL(cl0,'fr')||clAr,oppAr=op0?pFullL(op0,'ar'):'',oppFr=op0?(pFullL(op0,'fr')||oppAr):'';
  closeModal();
- undoable(function(){var id=S.nextId++;CL.push({ar:clAr,fr:clFr,ph:'—',nif:(cl0.kind==='legal'&&cl0.nif)||'—'});
-  S.cases.unshift({id:id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:CL.length-1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
+ undoable(function(){var id=S.nextId++,clIdx=resolveIntakeClient(v,cl0,clAr,clFr);
+  S.cases.unshift({id:id,no:v.no,title:{ar:v.title,fr:v.titleFr||v.title},type:v.type,court:COURTS[+v.court],cl:clIdx,clientId:CL[clIdx]?CL[clIdx].id:clIdx+1,opp:{ar:oppAr||'—',fr:oppFr||oppAr||'—'},stage:0,st:'active',next:v.date||null,time:v.date?v.time:null,kind:v.date?'plead':'tbd',fee:[0,0],judg:null,docs:0,as:['m',v.who],hasPOA:!!v.poa,judicialAid:!!v.ja,lawyerId:v.lawyerId,jaNum:'',jaDate:null,lim:v.lim||null,notes:[],contacts:[],hours:0,sessions:[],parties:keep,linked:[],notif:null,secret:false,platformCaseNo:'',platformUsername:'',roleNumber:v.roleNumber||'',judgeName:v.judgeName||'',substName:v.substName||'',delibDate:v.delibDate||null,huissierName:v.huissierName||'',signifStatus:v.signifStatus||'',signifDate:v.signifDate||null,legalRefs:'',docVersions:[],checklists:checklistDefaults(v.type),createdAt:K(TODAY)});
   try{var sk=stampKindOf(+v.court),sr=stampConsume(sk,id,'تأسيس ملف '+v.no,!!v.ja);if(sr.state==='empty')toast(t('stamp_empty'))}catch(_){}
   cfLogAccept(id,v.no,conf,!!reviewApproved)
  },'t_case');
@@ -3525,11 +4071,11 @@ function resetPreviewDemo(){
  var opp4=party('opponent','يوسف','قاسمي','Youcef','Kassimi');
  CL.length=0;
  [
-  {ar:'نادية بلقاسم',fr:'Nadia Belkacem',ph:'DEMO-PHONE-001',nif:'—'},
-  {ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction',ph:'DEMO-PHONE-002',nif:'DEMO-NIF-ATLAS-001'},
-  {ar:'مراد حداد',fr:'Mourad Haddad',ph:'DEMO-PHONE-003',nif:'—'},
-  {ar:'شركة الواحة للخدمات',fr:'SARL El Waha Services',ph:'DEMO-PHONE-004',nif:'DEMO-NIF-WAHA-002'},
-  {ar:'ليلى بن صالح',fr:'Leila Ben Salah',ph:'DEMO-PHONE-005',nif:'—'}
+  {id:1,kind:'natural',ar:'نادية بلقاسم',fr:'Nadia Belkacem',ph:'DEMO-PHONE-001',nif:'—',wilaya:'16',kycDocs:[]},
+  {id:2,kind:'legal',legalForm:'EURL',ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction',ph:'DEMO-PHONE-002',nif:'DEMO-NIF-ATLAS-001',wilaya:'16',kycDocs:[]},
+  {id:3,kind:'natural',ar:'مراد حداد',fr:'Mourad Haddad',ph:'DEMO-PHONE-003',nif:'—',wilaya:'25',kycDocs:[]},
+  {id:4,kind:'legal',legalForm:'SARL',ar:'شركة الواحة للخدمات',fr:'SARL El Waha Services',ph:'DEMO-PHONE-004',nif:'DEMO-NIF-WAHA-002',wilaya:'31',kycDocs:[]},
+  {id:5,kind:'natural',ar:'ليلى بن صالح',fr:'Leila Ben Salah',ph:'DEMO-PHONE-005',nif:'—',wilaya:'09',kycDocs:[]}
  ].forEach(function(c){CL.push(c)});
  S.cases=[
   {id:1,no:'DEMO-2026-001',title:{ar:'نزاع مدني حول تنفيذ عقد أشغال',fr:'Litige civil — exécution d’un contrat de travaux'},type:'civil',court:COURTS[0],cl:0,opp:{ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction'},stage:0,st:'active',next:addDays(3),time:'09:30',kind:'plead',fee:[120000,45000],judg:null,docs:2,as:['m','c','t'],hasPOA:true,judicialAid:false,lawyerId:'m',lim:addDays(60),notes:[],contacts:[],hours:2,sessions:[],parties:[client1,opp1],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-001',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'محضر تجريبي',signifStatus:'done',signifDate:addDays(-10),legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-30)},
@@ -3537,7 +4083,7 @@ function resetPreviewDemo(){
   {id:3,no:'DEMO-2026-003',title:{ar:'نزاع تجاري بين شركتين',fr:'Litige commercial entre sociétés'},type:'commercial',court:COURTS[3],cl:3,opp:{ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction'},stage:1,st:'active',next:addDays(1),time:'11:15',kind:'instr',fee:[180000,75000],judg:null,docs:3,as:['m','c'],hasPOA:true,judicialAid:false,lawyerId:'c',lim:addDays(45),notes:[],contacts:[],hours:3,sessions:[],parties:[client3,opp3],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-003',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'محضر تجريبي',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('commercial'),createdAt:addDays(-20)},
   {id:4,no:'DEMO-2026-004',title:{ar:'ملف مدني — اختبار المسار الكامل',fr:'Dossier civil — test du parcours complet'},type:'civil',court:COURTS[0],cl:4,opp:{ar:'يوسف قاسمي',fr:'Youcef Kassimi'},stage:0,st:'active',next:addDays(14),time:'09:00',kind:'plead',fee:[60000,15000],judg:null,docs:1,as:['m','s'],hasPOA:false,judicialAid:false,lawyerId:'m',lim:addDays(120),notes:[],contacts:[],hours:0,sessions:[],parties:[client4,opp4],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-004',judgeName:'',substName:'',delibDate:null,huissierName:'',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-4)}
  ];
- S.clients=CL.map(function(c,i){return Object.assign({id:i+1},c)});
+ S.clients=[];ensureClientsSync();
  S.dls=[
   {c:1,l:{ar:'إعداد مذكرة جوابية — بيانات تجريبية',fr:'Préparer un mémoire en réponse — démo'},d:addDays(2),who:'t'},
   {c:3,l:{ar:'مراجعة مستندات الشركة',fr:'Examiner les pièces de la société'},d:addDays(1),who:'c'},
@@ -3579,11 +4125,16 @@ function intakeLogCard(){var rows=(S.intakeLog||[]).slice(-30).reverse().map(fun
 /* ===== FIX5: multiple lawyers (partners) ===== */
 function lwList(){return S.extraLawyers||[]}
 function lawyerById(id){return lwList().find(function(l){return l.id===id})||null}
-function lawyerName(id){if(!id||id==='m'){var u=byU('m');return u?tr(u.n):'—'}var l=lawyerById(id);return l?tr(l.name):'—'}
-function lawyerOpts(){return [['m',lawyerName('m')+' — '+t('r_m')]].concat(lwList().filter(function(l){return l.active!==false}).map(function(l){return [l.id,tr(l.name)+' — '+t('r_p')]}))}
-/* partners live in U as pseudo-users (role 'partner') so me()/av()/role switching work unchanged; the manager/secretary/trainee roles are untouched */
-function syncPartnersU(){for(var i=U.length-1;i>=0;i--)if(U[i].partner)U.splice(i,1);
- lwList().forEach(function(l){if(l.active===false)return;var nm=l.name||{ar:'',fr:''},a=nm.ar||nm.fr||'',f=nm.fr||nm.ar||'';U.push({id:l.id,role:'partner',partner:true,n:{ar:a,fr:f},rk:'r_p',init:{ar:(a||'?').charAt(0),fr:(f||'?').charAt(0)}})});
+function lawyerName(id){if(!id||id==='m'){var m=byU('m');return m?tr(m.n):'—'}var l=lawyerById(id);if(l)return tr(l.name);var u=byU(id);return u?tr(u.n):'—'}
+function lawyerOpts(){
+ var base=U.filter(function(u){return !u.extraPartner&&(u.role==='manager'||u.role==='partner'||u.role==='collaborator')}).map(function(u){return [u.id,tr(u.n)+' — '+t(u.rk)]});
+ var seen={};base.forEach(function(o){seen[o[0]]=1});
+ var extra=lwList().filter(function(l){return l.active!==false&&!seen[l.id]}).map(function(l){return [l.id,tr(l.name)+' — '+t('r_p')]});
+ return base.concat(extra);
+}
+/* partners live in U as pseudo-users (role 'partner') so me()/av()/role switching work unchanged; built-in U members (including built-in partner 'p') are untouched */
+function syncPartnersU(){for(var i=U.length-1;i>=0;i--)if(U[i].extraPartner)U.splice(i,1);
+ lwList().forEach(function(l){if(l.active===false||byU(l.id))return;var nm=l.name||{ar:'',fr:''},a=nm.ar||nm.fr||'',f=nm.fr||nm.ar||'';U.push({id:l.id,role:'partner',partner:true,extraPartner:true,n:{ar:a,fr:f},rk:'r_p',init:{ar:(a||'?').charAt(0),fr:(f||'?').charAt(0)}})});
  if(!byU(S.user))S.user='m'}
 function lwStatus(l){var lic=l.license||{},de=lic.expires?diff(lic.expires):999;return {de:de,st:(lic.status==='suspended'||de<0||de<=30)?'bad':de<=60?'warn':'ok',txt:lic.status==='suspended'?t('lw_suspended'):(de<0?t('lic_bad'):de<=60?t('lic_warn'):t('lic_ok'))}}
 function lawyersCard(){var rows=lwList().map(function(l){var n=S.cases.filter(function(c){return c.lawyerId===l.id}).length,off=l.active===false;
@@ -4252,11 +4803,13 @@ function execV(){ // FEAT-CRUD-04
 
 /* ---------- FEAT-CRUD-05: KYC ---------- */
 function kycV(){ // FEAT-CRUD-05
+ ensureClientsSync();
  var rows=CL.map(function(cl,i){
-  var docs=cl.kycDocs||[],idOk=!!(cl.nif&&cl.nif!=='—'&&(cl.nin||cl.nis)),ok=idOk&&docs.length>0,why=[];
-  if(!idOk)why.push(t('kyc_need_id'));if(!docs.length)why.push(t('kyc_need_docs'));
-  return `<div class="dlrow"><div style="flex:1"><strong>${esc(tr(cl))}</strong><span class="sub">NIF: ${esc(cl.nif||'—')} · NIN: ${esc(cl.nin||'—')} · ${docs.length} ${t('kyc_docs')}</span>${docs.length?`<span class="sub">${docs.map(function(d){return esc(d.n)+' ('+esc(t('kyc_t_'+d.type))+')'}).join('، ')}</span>`:''}</div><span class="chip ${ok?'ok':'warn'}">${ok?t('kyc_complete'):t('kyc_missing')+(why.length?' — '+why.join('، '):'')}</span><button class="btn sm primary" data-act="kycupload" data-id="${i}">${t('kyc_up_btn')}</button></div>`}).join('')||'<p class="empty">—</p>';
- return `<div class="page-h"><div><h1>${t('kyc_title')}</h1></div></div><section class="card"><div class="card-b">${rows}</div></section>`}
+  if(!cl||!canSeeClient(cl,i))return '';
+  var docs=cl.kycDocs||[],kyc=clientKycStatus(cl),isLg=kyc.kind==='legal';
+  var idLine=isLg?`NIF: ${esc(cl.nif||'—')} · RC: ${esc(cl.rc||'—')}`:`NIN: ${esc(cl.nin||cl.idNumber||'—')}`;
+  return `<div class="dlrow"><div style="flex:1"><strong>${esc(tr(cl))}</strong> <span class="chip ${isLg?'info':'teal'}">${t(isLg?'cl_badge_legal':'cl_badge_natural')}</span><span class="sub">${idLine} · ${docs.length} ${t('kyc_docs')}</span>${docs.length?`<span class="sub">${docs.map(function(d){return esc(d.n)+' ('+esc(t('kyc_t_'+d.type))+')'}).join('، ')}</span>`:''}</div><span class="chip ${kyc.ok?'ok':'warn'}">${kyc.ok?t('kyc_complete'):t('kyc_missing')+(kyc.why.length?' — '+kyc.why.join('، '):'')}</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm" data-act="client" data-id="${i}">${t('nav_client')}</button>${canNewCase()?`<button class="btn sm" data-act="editclient" data-id="${i}">${t('cl_edit_btn')}</button>`:''}<button class="btn sm primary" data-act="kycupload" data-id="${i}">${t('kyc_up_btn')}</button></div></div>`}).filter(Boolean).join('')||'<p class="empty">—</p>';
+ return `<div class="page-h"><div><h1>${t('kyc_title')}</h1></div>${canNewCase()?`<button class="btn primary" data-act="newclient">${ic('plus')} ${t('cl_new')}</button>`:''}</div><section class="card"><div class="card-b">${rows}</div></section>`}
 function uploadDoc(kind,clIdx){ // FEAT-CRUD-05: kind==='kyc' stores a KYC document for a client
  if(kind==='kyc'){
   var cl=CL[clIdx];if(!cl)return;
@@ -4287,7 +4840,7 @@ function authLogText(l){
  var _nm=u?tr(u.n):String(l.p),_k='acc_log_'+l.k;if(['login','fail','lock','pwset','pwchange','pwreset'].indexOf(l.k)>=0&&L.ar[_k])return t(_k,_nm);
  return String(l.k||'')}
 function accountsV(){ // FEAT-CRUD-06
- var rows=U.filter(function(u){return !u.partner}).map(function(u){return `<div class="row" style="grid-template-columns:auto 1fr auto auto">${av(u.id)}<div><strong>${tr(u.n)}</strong><small>${t(u.rk)}</small></div><span class="chip mute">${u.id===S.user?t('acc_active'):''}</span><button class="btn sm" data-act="accrole" data-id="${u.id}">${t('acc_role_btn')}</button></div>`}).join('');
+ var rows=U.filter(function(u){return !u.extraPartner}).map(function(u){return `<div class="row" style="grid-template-columns:auto 1fr auto auto">${av(u.id)}<div><strong>${tr(u.n)}</strong><small>${t(u.rk)}</small></div><span class="chip mute">${u.id===S.user?t('acc_active'):''}</span><button class="btn sm" data-act="accrole" data-id="${u.id}">${t('acc_role_btn')}</button></div>`}).join('');
  var log=((S.auth&&S.auth.log)||[]).slice(-10).reverse().map(function(l){return `<div class="dlrow">${av(l.w)}<div style="flex:1">${esc(authLogText(l))}</div><small class="sub" dir="ltr" style="text-align:start">${esc(new Date(l.d).toLocaleString('fr-FR'))}</small></div>`}).join('')||'<p class="empty">—</p>';
  return `<div class="page-h"><div><h1>${t('acc_title')}</h1></div></div>
  <section class="card"><div class="card-b"><p class="note warn">${t('acc_note')}</p><div class="rows">${rows}</div></div></section>
@@ -4548,16 +5101,28 @@ if ('serviceWorker' in navigator) {
  }
  function enhanceSelects(root){if(root.matches&&root.matches('select'))enhanceSelect(root);if(root.querySelectorAll)root.querySelectorAll('select').forEach(enhanceSelect)}
  function initWizard(){const form=document.querySelector('#modalWrap.on #mf');if(!form||form.dataset.diwanWizard)return;const originalGrid=form.querySelector('.nc-grid'),headers=Array.from(form.querySelectorAll(':scope > .nc-sec')),party=form.querySelector('#partyList'),actions=form.querySelector(':scope > .mf');if(!originalGrid||!party||!actions)return;form.dataset.diwanWizard='1';
-  const fields=Array.from(originalGrid.querySelectorAll(':scope > .fld')),core=new Set(['no','title','titleFr','type','court']),panelWrap=document.createElement('div');panelWrap.className='case-wizard';const progress=document.createElement('div');progress.className='case-wizard-progress';progress.setAttribute('aria-label',document.documentElement.lang==='fr'?'Étapes du dossier':'خطوات إنشاء الملف');const titles=document.documentElement.lang==='fr'?['Identité','Procédure','Parties','Vérification']:['البيانات الأساسية','الإجراءات','الأطراف','المراجعة'];
-  const panels=titles.map((title,i)=>{const p=document.createElement('section');p.className='case-wizard-panel';p.hidden=i!==0;p.setAttribute('aria-label',title);const h=document.createElement('h3');h.textContent=title;p.appendChild(h);const mark=document.createElement('div');mark.className='case-wizard-stepmark';const num=document.createElement('span');num.className='step-no';num.textContent=String(i+1);const label=document.createElement('span');label.textContent=title;mark.append(num,label);mark.setAttribute('aria-current',i===0?'step':'false');progress.appendChild(mark);panelWrap.appendChild(p);return p});
+  const isFr=()=>document.documentElement.lang==='fr';
+  const fields=Array.from(originalGrid.querySelectorAll(':scope > .fld')),core=new Set(['no','title','titleFr','type','court']),panelWrap=document.createElement('div');panelWrap.className='case-wizard';const progress=document.createElement('div');progress.className='case-wizard-progress';progress.setAttribute('aria-label',isFr()?'Étapes du dossier':'خطوات إنشاء الملف');const titles=isFr()?['Identité','Procédure','Parties','Vérification']:['البيانات الأساسية','الإجراءات','الأطراف','المراجعة'];
+  const panels=titles.map((title,i)=>{const p=document.createElement('section');p.className='case-wizard-panel';p.hidden=i!==0;p.setAttribute('aria-label',title);const h=document.createElement('h3');h.textContent=title;p.appendChild(h);const mark=document.createElement('button');mark.type='button';mark.className='case-wizard-stepmark';mark.dataset.wizardStep=String(i);mark.style.cursor='pointer';const num=document.createElement('span');num.className='step-no';num.textContent=String(i+1);const label=document.createElement('span');label.textContent=title;mark.append(num,label);mark.setAttribute('aria-current',i===0?'step':'false');progress.appendChild(mark);panelWrap.appendChild(p);return p});
   const grid1=document.createElement('div');grid1.className='nc-grid';const grid2=document.createElement('div');grid2.className='nc-grid';fields.forEach(f=>(core.has(f.dataset.f)?grid1:grid2).appendChild(f));panels[0].appendChild(grid1);panels[1].appendChild(grid2);panels[2].appendChild(party);
-  const note=document.createElement('div');note.className='case-wizard-note';note.textContent=document.documentElement.lang==='fr'?'Tout conflit potentiel est transmis à une revue habilitée avant la création du dossier.':'أي تعارض محتمل سيُحال إلى مراجعة مخوّلة قبل إنشاء الملف.';panels[2].appendChild(note);const summary=document.createElement('div');summary.className='case-wizard-summary';panels[3].appendChild(summary);
-  const footer=document.createElement('div');footer.className='case-wizard-actions';const prev=document.createElement('button');prev.type='button';prev.className='btn';prev.textContent=document.documentElement.lang==='fr'?'Précédent':'السابق';prev.dataset.wizardNav='prev';const next=document.createElement('button');next.type='button';next.className='btn primary';next.textContent=document.documentElement.lang==='fr'?'Suivant':'التالي';next.dataset.wizardNav='next';const count=document.createElement('span');count.className='sub';count.setAttribute('aria-live','polite');footer.append(prev,count,next);panels[3].appendChild(actions);footer.appendChild(actions.querySelector('[type="submit"]'));panels[3].appendChild(footer);
-  headers.forEach(h=>h.remove());originalGrid.remove();form.insertBefore(progress,form.firstChild);form.insertBefore(panelWrap,progress.nextSibling);let step=0;
-  function makeSummary(){summary.replaceChildren();const ids=[['no',document.documentElement.lang==='fr'?'Numéro':'رقم الملف'],['title',document.documentElement.lang==='fr'?'Intitulé':'عنوان الملف'],['type',document.documentElement.lang==='fr'?'Type':'النوع'],['court',document.documentElement.lang==='fr'?'Juridiction':'الجهة القضائية'],['date',document.documentElement.lang==='fr'?'Date':'التاريخ'],['who',document.documentElement.lang==='fr'?'Responsable administratif':'المسؤول الإداري'],['lawyer',document.documentElement.lang==='fr'?'Avocat responsable':'المحامي المسؤول']];ids.forEach(([id,label])=>{const el=form.querySelector('#f_'+id);if(!el)return;let val=el.value;if(el.tagName==='SELECT')val=el.options[el.selectedIndex]?.textContent||'';const box=document.createElement('div');box.className='case-wizard-summary-item';const sm=document.createElement('small');sm.textContent=label;const strong=document.createElement('strong');strong.textContent=val||'—';box.append(sm,strong);summary.appendChild(box)});const box=document.createElement('div');box.className='case-wizard-summary-item';const sm=document.createElement('small');sm.textContent=document.documentElement.lang==='fr'?'Parties renseignées':'الأطراف المدخلة';const strong=document.createElement('strong');strong.textContent=String(form.querySelectorAll('[data-party]').length);box.append(sm,strong);summary.appendChild(box)}
-  function show(n){step=Math.max(0,Math.min(3,n));panels.forEach((p,i)=>p.hidden=i!==step);Array.from(progress.children).forEach((m,i)=>m.setAttribute('aria-current',i===step?'step':'false'));prev.disabled=step===0;next.textContent=step===3?(document.documentElement.lang==='fr'?'Confirmer et enregistrer':'تأكيد وحفظ'):(document.documentElement.lang==='fr'?'Suivant':'التالي');count.textContent=(step+1)+' / 4';if(step===3)makeSummary();const focus=panels[step].querySelector('input:not([type=checkbox]),.select-trigger,select:not(.native-select-backed),button');if(focus)focus.focus({preventScroll:true})}
-  function validate(){if(step!==0)return true;let ok=true;['no','title'].forEach(id=>{const el=form.querySelector('#f_'+id),box=el&&el.closest('.fld');if(!el||!box)return;const bad=!el.value.trim();box.classList.toggle('bad',bad);const err=box.querySelector('.err');if(err)err.textContent=bad?(document.documentElement.lang==='fr'?'Champ obligatoire':'هذا الحقل مطلوب'):'';if(bad){ok=false;el.focus()}});return ok}
-  footer.addEventListener('click',e=>{const b=e.target.closest('[data-wizard-nav]');if(!b)return;if(b.dataset.wizardNav==='prev'){show(step-1);return}if(step<3){if(validate())show(step+1)}else{makeSummary();form.requestSubmit()}});
+  const note=document.createElement('div');note.className='case-wizard-note';note.textContent=isFr()?'Tout conflit potentiel est transmis à une revue habilitée avant la création du dossier.':'أي تعارض محتمل سيُحال إلى مراجعة مخوّلة قبل إنشاء الملف.';panels[2].appendChild(note);const summary=document.createElement('div');summary.className='case-wizard-summary';panels[3].appendChild(summary);
+  actions.hidden=true;
+  const footer=document.createElement('div');footer.className='case-wizard-actions';
+  const leftGrp=document.createElement('div');leftGrp.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center';
+  const cancelBtn=document.createElement('button');cancelBtn.type='button';cancelBtn.className='btn';cancelBtn.dataset.act='closeModal';cancelBtn.textContent=isFr()?'Annuler':'إلغاء';
+  const prev=document.createElement('button');prev.type='button';prev.className='btn';prev.textContent=isFr()?'Précédent':'السابق';prev.dataset.wizardNav='prev';
+  leftGrp.append(cancelBtn,prev);
+  const count=document.createElement('span');count.className='sub';count.setAttribute('aria-live','polite');
+  const next=document.createElement('button');next.type='button';next.className='btn primary';next.textContent=isFr()?'Suivant':'التالي';next.dataset.wizardNav='next';
+  footer.append(leftGrp,count,next);
+  headers.forEach(h=>h.remove());originalGrid.remove();form.insertBefore(progress,form.firstChild);form.insertBefore(panelWrap,progress.nextSibling);form.appendChild(footer);let step=0;
+  function partySummaryName(idx){const fn=(form.querySelector('#pp'+idx+'_firstName')?.value||'').trim()||(form.querySelector('#pp'+idx+'_firstNameFr')?.value||'').trim();const ln=(form.querySelector('#pp'+idx+'_lastName')?.value||'').trim()||(form.querySelector('#pp'+idx+'_lastNameFr')?.value||'').trim();return [fn,ln].filter(Boolean).join(' ')}
+  function addSumItem(label,val){const box=document.createElement('div');box.className='case-wizard-summary-item';const sm=document.createElement('small');sm.textContent=label;const strong=document.createElement('strong');strong.textContent=val||'—';box.append(sm,strong);summary.appendChild(box)}
+  function makeSummary(){summary.replaceChildren();const ids=[['no',isFr()?'Numéro':'رقم الملف'],['title',isFr()?'Intitulé':'عنوان الملف'],['type',isFr()?'Type':'النوع'],['court',isFr()?'Juridiction':'الجهة القضائية'],['date',isFr()?'Date':'التاريخ'],['who',isFr()?'Responsable administratif':'المسؤول الإداري'],['lawyer',isFr()?'Avocat responsable':'المحامي المسؤول']];ids.forEach(([id,label])=>{const el=form.querySelector('#f_'+id);if(!el)return;let val=el.value;if(el.tagName==='SELECT')val=el.options[el.selectedIndex]?.textContent||'';addSumItem(label,val)});addSumItem(isFr()?'Client':'الموكل',partySummaryName(0));const oppN=partySummaryName(1);if(oppN)addSumItem(isFr()?'Adversaire':'الخصم',oppN);addSumItem(isFr()?'Parties renseignées':'الأطراف المدخلة',String(form.querySelectorAll('[data-party]').length))}
+  function show(n){step=Math.max(0,Math.min(3,n));panels.forEach((p,i)=>p.hidden=i!==step);Array.from(progress.children).forEach((m,i)=>m.setAttribute('aria-current',i===step?'step':'false'));prev.disabled=step===0;next.textContent=step===3?(isFr()?'Confirmer et enregistrer':'تأكيد وحفظ'):(isFr()?'Suivant':'التالي');count.textContent=(step+1)+' / 4';if(step===3)makeSummary();const focus=panels[step].querySelector('input:not([type=checkbox]),.select-trigger,select:not(.native-select-backed),button');if(focus)focus.focus({preventScroll:true})}
+  function validate(targetStep){const s=targetStep!==undefined?targetStep:step;if(s===0){let ok=true;['no','title'].forEach(id=>{const el=form.querySelector('#f_'+id),box=el&&el.closest('.fld');if(!el||!box)return;const bad=!el.value.trim();box.classList.toggle('bad',bad);const err=box.querySelector('.err');if(err)err.textContent=bad?(isFr()?'Champ obligatoire':'هذا الحقل مطلوب'):'';if(bad){ok=false;el.focus()}});return ok}if(s===2){if(!partySummaryName(0)){if(typeof toast==='function'&&typeof t==='function')toast(t('pr_name_req'));const f0=form.querySelector('#pp0_firstName');if(f0)f0.focus();return false}}return true}
+  progress.addEventListener('click',e=>{const b=e.target.closest('[data-wizard-step]');if(!b)return;const dst=+b.dataset.wizardStep;if(dst<step){show(dst);return}for(let k=step;k<dst;k++){if(!validate(k))return}show(dst)});
+  footer.addEventListener('click',e=>{const b=e.target.closest('[data-wizard-nav]');if(!b)return;if(b.dataset.wizardNav==='prev'){show(step-1);return}if(step<3){if(validate())show(step+1)}else{makeSummary();if(typeof form.requestSubmit==='function')form.requestSubmit();else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))}});
   form.addEventListener('submit',e=>{if(step!==3){e.preventDefault();e.stopImmediatePropagation();if(validate())show(Math.min(3,step+1))}},true);show(0)
  }
  function run(){enhanceSelects(document);initWizard()}

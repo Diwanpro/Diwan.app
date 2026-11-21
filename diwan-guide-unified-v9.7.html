@@ -303,7 +303,7 @@ ul.steps li::before{content:counter(s);position:absolute;inset-inline-start:0;to
   <h3 style="color:var(--bad);margin-bottom:10px">🩸 الواقع اليومي المؤلم</h3>
   <ul>
    <li><strong>دفاتر ورقية مبعثرة</strong> بين المكتب والبيت والمحكمة.</li>
-   <li><strong>آجال تفوت</strong> بسبب عدم وجود نظام تنبيه (استئناف 30 يوماً، نقض شهران، معارضة 10 أيام).</li>
+   <li><strong>آجال تفوت</strong> بسبب عدم وجود نظام تنبيه (استئناف شهر واحد، نقض شهران، معارضة شهر واحد).</li>
    <li><strong>أتعاب غير محصّلة</strong> لا أحد يتذكرها لأن لا فهرس واضح.</li>
    <li><strong>أمانات الموكلين مختلطة</strong> بالأتعاب → مخاطرة تأديبية.</li>
    <li><strong>موكل يطلب معلومات</strong> فتضيع نصف ساعة في البحث.</li>
@@ -426,7 +426,7 @@ ul.steps li::before{content:counter(s);position:absolute;inset-inline-start:0;to
    <div class="screen-card"><h4><span class="n">6.2</span> الملفات</h4><p>جدول 6 أعمدة + فلاتر + فرز + درج تفاصيل شامل (أطراف، جلسات، أتعاب، وثائق، تاريخ، ملفات مرتبطة).</p><div class="tags"><span class="tag">الجميع</span><span class="tag trn">المتربص: المكلف فقط</span></div></div>
    <div class="screen-card"><h4><span class="n">6.3</span> الجلسات والآجال</h4><p>تقويم شهري 7 أعمدة، الأزرق للجلسات والذهبي للآجال. تفاصيل اليوم عند النقر + تنبيه التعارض في نفس التوقيت.</p><div class="tags"><span class="tag">الجميع</span></div></div>
    <div class="screen-card"><h4><span class="n">6.4</span> المهام</h4><p>عنوان، ملف، مكلّف، أولوية، تاريخ، مربع إتمام. فلاتر مفتوحة/منجزة/الكل. فلاتر حسب المستخدم للمدير.</p><div class="tags"><span class="tag">الجميع</span></div></div>
-   <div class="screen-card"><h4><span class="n">6.5</span> الموكلون</h4><p>بطاقة لكل موكل + بيانات NIN والميلاد والعنوان + ملخص مالي + رابط واتساب مباشر + زر «كشف حساب الموكل».</p><div class="tags"><span class="tag mgr">المدير</span><span class="tag sec">السكرتيرة</span></div></div>
+   <div class="screen-card"><h4><span class="n">6.5</span> الموكلون</h4><p>إضافة وتعديل الموكلين (شخص طبيعي أو شخص معنوي: SARL/EURL/SPA/مؤسسة...) مع فحص التكرار وتعارض الخصوم السابقين، بحث وتصفية فورية، بطاقة تفصيلية للهوية أو السجل التجاري والـ NIF، حالة KYC، ملخص مالي، واتساب، وزر «حفظ وفتح ملف قضية» أو «كشف حساب الموكل».</p><div class="tags"><span class="tag mgr">المدير / المحامون</span><span class="tag sec">السكرتيرة: بإذن</span></div></div>
    <div class="screen-card"><h4><span class="n">6.6</span> الوثائق</h4><p>قائمة كل الوثائق مرتبطة بملفاتها + نوع (PDF/DOC/IMG/KYC) + شارة «مشارك/داخلي» + تحميل الملف الفعلي من IndexedDB.</p><div class="tags"><span class="tag">الجميع</span></div></div>
    <div class="screen-card"><h4><span class="n">6.7</span> سكانر PDF</h4><p>التقاط صور من الكاميرا، ضغط تلقائي (max 2400px, JPEG q0.7)، تجميع في PDF واحد عبر jsPDF، ثم رفعه للملف.</p><div class="tags"><span class="tag">الجميع</span></div></div>
    <div class="screen-card"><h4><span class="n">6.8</span> الموافقات</h4><p>4 تبويبات: بانتظار المراجعة، معتمدة، مرفوضة، مسوداتي. المدير يعتمد أو يرفض مع سبب. المتربص يرسل مسودته للموافقة قبل الطباعة.</p><div class="tags"><span class="tag mgr">المدير</span><span class="tag trn">المتربص</span></div></div>
@@ -1362,6 +1362,16 @@ ul.steps li::before{content:counter(s);position:absolute;inset-inline-start:0;to
      <li>تظهر قائمة افتراضية مناسبة لنوع القضية؛ مثال العقارية يتضمن التحقق من عقد الملكية ومحضر المعاينة.</li>
      <li>ضع علامة ✓ بجانب الإجراء عند إنجازه. تبقى حالة كل عنصر محفوظة مع القضية.</li>
      <li>يمكن لمدير المكتب إضافة عنصر أو حذف عنصر من القائمة الخاصة بالقضية لتناسب إجراءات المكتب.</li>
+    </ol>
+   </article>
+
+   <article class="screen-card">
+    <h4><span class="n">13.4</span> إضافة موكّل جديد وربطه بملف قضية</h4>
+    <ol>
+     <li>انتقل إلى شاشة <strong>الموكلون</strong> واضغط <strong>+ إضافة موكّل جديد</strong>، أو افتح نافذة <strong>ملف جديد</strong> واضغط <strong>+ إضافة موكّل جديد</strong> من خطوة الأطراف.</li>
+     <li>اختر نوع الموكل في أعلى النموذج: <strong>شخص طبيعي</strong> (الاسم واللقب، NIN، وثيقة الهوية، الميلاد، المهنة) أو <strong>شخص معنوي</strong> (التسمية الاجتماعية، الشكل القانوني SARL/EURL/SPA/...، NIF، السجل التجاري RC، الممثل القانوني وصفته).</li>
+     <li>أدخل رقم الهاتف والولاية لتسهيل التواصل والاختصاص الإقليمي؛ يفحص التطبيق تلقائياً التكرار (نفس NIN أو NIF أو الاسم والهاتف) وسجل الخصوم السابقين لمنع تعارض المصالح.</li>
+     <li>اضغط <strong>حفظ الموكل</strong> لإدراجه في السجل حتى قبل فتح قضية، أو <strong>حفظ وفتح ملف قضية</strong> للانتقال مباشرة إلى معالج إنشاء الملف مع تعبئة بيانات الموكل تلقائياً.</li>
     </ol>
    </article>
   </div>
