@@ -1230,3 +1230,14 @@ describe('idle lock protects UI and relocks after inactivity', () => {
     assert.equal(e.idleLock.classList.contains('on'), true, 'fresh timer locks again after inactivity');
   });
 });
+
+
+describe('generated iframe HTML script boundary', () => {
+  test('the embedded iframe closing tag cannot terminate the outer script early', () => {
+    const escapedClose = HTML.indexOf('<\\/script>');
+    const firstLiteralClose = HTML.indexOf('</script>');
+    assert.ok(escapedClose >= 0, 'the generated iframe closing tag is escaped in source');
+    assert.ok(firstLiteralClose > escapedClose, 'the first literal closing tag follows the generated iframe template');
+    assert.ok(HTML.slice(0, firstLiteralClose).includes('printHtmlIframe(html)'), 'the complete iframe template and its render call remain inside the outer script');
+  });
+});
