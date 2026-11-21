@@ -6,6 +6,7 @@
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const { test, describe } = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -71,22 +72,44 @@ describe('Diwan conflict-of-interest intake gate', () => {
   });
 
 
-  test('preview reset is opt-in, manager-only, deterministic, and explicitly synthetic', () => {
-    const seed = functionSource('resetPreviewDemo');
-    const card = functionSource('previewDemoCard');
-    assert.match(seed, /if\(!isM\(\)\)return/);
-    assert.match(seed, /if\(!confirm\(/);
-    assert.match(seed, /DEMO-2026-001/);
-    assert.match(seed, /DEMO-NIF-ATLAS-001/);
-    assert.match(seed, /demo@example\.invalid/);
-    assert.match(seed, /S\.conflictReviews=\[\]/);
-    assert.match(seed, /S\.processServers=\[\];S\.services=\[\];S\.experts=\[\]/);
-    assert.match(seed, /S\.deliveries=\[\];S\.qrRegistry=\[\];S\.smsLog=\[\]/);
-    assert.match(seed, /S\.isDemo=true/);
-    assert.match(card, /if\(!isM\(\)\)return ''/);
-    assert.match(HTML, /resetPreviewDemo\(\)/);
-    assert.doesNotMatch(HTML, /if\(!isM\(\)\|\|S\.isDemo===false\)return;\s*resetPreviewDemo\(\)/, 'reset must remain available after the demo data have been cleared');
-    assert.match(HTML, /S\.cases=\[\s*\{id:1,no:'DEMO-2026-001'/);
+  test('production build excludes synthetic preview reset UI and DEMO-* validation bypasses while keeping clearDemo confirmation-gated', () => {
+    assert.doesNotMatch(HTML, /function\s+resetPreviewDemo\s*\(/);
+    assert.doesNotMatch(HTML, /function\s+previewDemoCard\s*\(/);
+    assert.doesNotMatch(HTML, /data-act="reset-preview-demo"/);
+    assert.doesNotMatch(HTML, /DEMO-2026-001|DEMO-NIF-ATLAS-001|demo@example\.invalid/);
+    assert.doesNotMatch(HTML, /\^DEMO-/);
+
+    const settingsSrc = functionSource('settingsV');
+    assert.doesNotMatch(settingsSrc, /previewDemoCard/);
+    assert.match(settingsSrc, /conflictReviewCard\(\)/);
+    assert.match(settingsSrc, /intakeLogCard\(\)/);
+    assert.match(settingsSrc, /encBackupCard\(\)/);
+    assert.match(settingsSrc, /licenseCard\(\)/);
+
+    const clearSrc = functionSource('clearDemo');
+    assert.match(clearSrc, /if\(!confirm\(t\('v7_start_empty'\)/);
+    assert.match(clearSrc, /S\.intakeLog=\[\];S\.conflictReviews=\[\]/);
+    assert.match(clearSrc, /S\.isDemo=false/);
+
+    const validatorsCtx = vm.createContext({});
+    vm.runInContext(
+      [
+        functionSource('normDigits'),
+        functionSource('normPhoneKey'),
+        functionSource('validPhoneDz'),
+        functionSource('validNinDz'),
+        functionSource('validNifDz')
+      ].join('\n'),
+      validatorsCtx
+    );
+    assert.equal(validatorsCtx.validPhoneDz('0550 12 34 41'), true);
+    assert.equal(validatorsCtx.validPhoneDz('+213 31 55 66 77'), true);
+    assert.equal(validatorsCtx.validPhoneDz('DEMO-PHONE-001'), false);
+    assert.equal(validatorsCtx.normPhoneKey('DEMO-PHONE-001'), '');
+    assert.equal(validatorsCtx.validNinDz('109880250012345678'), true);
+    assert.equal(validatorsCtx.validNinDz('DEMO-NIN-001'), false);
+    assert.equal(validatorsCtx.validNifDz('002416098765432'), true);
+    assert.equal(validatorsCtx.validNifDz('DEMO-NIF-ATLAS-001'), false);
   });
 
   test('responsible-lawyer changes require a reason and are audited; sensitive matters need confirmation', () => {
@@ -98,14 +121,18 @@ describe('Diwan conflict-of-interest intake gate', () => {
     assert.match(HTML, /أعضاء الفريق لم يتغيروا تلقائياً/);
   });
 
-  test('preview app identity and service-worker cache are explicitly isolated', () => {
-    assert.match(MANIFEST.name, /نسخة المعاينة المهنية/);
-    assert.match(MANIFEST.short_name, /تجريبي/);
-    assert.match(MANIFEST.description, /وهمية/);
-    assert.match(SW, /diwan-preview-professional-20261120/);
-    assert.match(HTML, /dn\.innerHTML=t\('demo'\)\+' <button class="btn sm" data-act="cleardemo">'\+t\('preview_clear_label'\)/);
-    assert.match(HTML, /نسخة معاينة مهنية — جميع البيانات وهمية ومخصصة للاختبار فقط/);
+  test('production app identity and service-worker cache are configured for official release', () => {
+    assert.equal(MANIFEST.name, 'ديوان — نظام إدارة مكتب المحاماة');
+    assert.equal(MANIFEST.short_name, 'ديوان');
+    assert.doesNotMatch(MANIFEST.name, /نسخة المعاينة|تجريبي/);
+    assert.doesNotMatch(MANIFEST.short_name, /تجريبي|معاينة/);
+    assert.doesNotMatch(MANIFEST.description, /نسخة معاينة|وهمية/);
+    assert.match(SW, /^var CACHE = 'diwan-v10\.\d+\.\d+';$/m);
+    assert.doesNotMatch(SW, /diwan-preview-professional/);
     assert.doesNotMatch(SW, /var CACHE = 'diwan-v10\.3\.4';/);
+    assert.match(SW, /keys\.filter\(function \(k\) \{ return k !== CACHE; \}\)\.map\(function \(k\) \{\s*return caches\.delete\(k\);/);
+    assert.doesNotMatch(HTML, /نسخة معاينة مهنية|لا تُدخل بيانات موكلين حقيقية|preview_clear_label/);
+    assert.match(functionSource('chrome'), /document\.title='ديوان v10\.3\.5 — '\+t\('appSub'\)/);
   });
 
   test('case creation is factored into a single path for clean intake and approved review', () => {

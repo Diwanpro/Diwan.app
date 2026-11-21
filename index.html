@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ديوان v10.3.4 — نظام إدارة مكتب المحاماة (الجزائر)</title>
+<title>ديوان v10.3.5 — نظام إدارة مكتب المحاماة (الجزائر)</title>
 <link rel="icon" type="image/png" href="./logo.png">
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0f8f86">
@@ -535,7 +535,7 @@ td>.select-enhanced{min-width:112px}
 /* ============== i18n ============== */
 const L={
 ar:{appSub:'إدارة مكتب المحاماة',office:'مكتب الأستاذ بن علي للمحاماة',skip:'تخطَّ إلى المحتوى',
-demo:'⚠ نسخة معاينة مهنية — جميع الأسماء والملفات والمبالغ والبيانات وهمية ومخصصة للاختبار فقط. لا تُدخل بيانات موكلين حقيقية.',
+demo:'بيانات نموذجية أولية — يمكنك البدء بملف فارغ في أي وقت.',
 nav_dash:'لوحة التحكم',nav_cases:'الملفات',nav_cal:'الجلسات والآجال',nav_tasks:'المهام',nav_mytasks:'مهامي',nav_clients:'الموكلون',nav_docs:'الوثائق',nav_fees:'الأتعاب والحسابات',nav_reports:'التقارير',nav_team:'الفريق والصلاحيات',nav_settings:'الإعدادات',nav_portal:'بوابة الموكل',nav_landing:'عن النظام',nav_faq:'الأسئلة الشائعة',nav_more:'المزيد',nav_links:'الروابط القضائية',nav_docgen:'مولّد الوثائق',nav_role:'رول الجلسات',nav_procedures:'التبليغ والتنفيذ',nav_scan:'سكانر PDF',nav_approvals:'الموافقات',nav_deadlines:'حاسبة الآجال',nav_cash:'الصندوق',nav_hr:'الموارد البشرية',nav_ja:'المساعدة القضائية',nav_services:'المفوضون القضائيون',nav_experts:'الخبراء',nav_exec:'التنفيذ',nav_kyc:'KYC',nav_accounts:'الحسابات',nav_license:'بطاقة الإجازة',nav_audit:'سجل العمليات',nav_library:'الاجتهادات',nav_import:'الاستيراد',nav_qr:'رموز QR',nav_reminders:'التذكيرات',
 r_collab:'محامٍ مساعد',inv_pw:'كلمة مرور المستخدم',inv_pw2:'تأكيد كلمة المرور',inv_pw_hint:'8 خانات على الأقل مع حرف ورقم — تُطلب عند تبديل الدور',inv_ok_pw:'تم إنشاء المستخدم وتعيين كلمة المرور',
 share_title:'نسبة أتعاب المساعد',share_lbl:'النسبة % من أتعاب الملف',share_save:'حفظ النسبة',share_ok:'تم حفظ نسبة الأتعاب',share_hint:'للمحامي المساعد أو المتربص المكلّف بالملف (0–100)',share_btn:'نسبة المساعد',share_none:'—',share_col:'نسبة المساعد',nav_collab:'المحامون المساعدون',
@@ -559,7 +559,7 @@ offbar:'أنت دون اتصال. تابع عملك، وستُزامَن تغي�
 savedOnline:'تم الحفظ',savedLocal:'حُفظ على الجهاز وسيُزامَن لاحقاً',
 r_m:'المحامي (المدير)',r_s:'سكرتارية',r_t:'متربص',viewAs:'عرض بصلاحيات',
 lang_btn:'Français',theme:'تبديل المظهر',notif:'الإشعارات',digest:'ملخص الصباح',on:'مفعّل',
-logout:'تسجيل الخروج',logout_demo:'⚠ نسخة معاينة مهنية — جميع البيانات وهمية ومخصصة للاختبار فقط. لا تُدخل بيانات موكلين حقيقية.',
+logout:'تسجيل الخروج',logout_demo:'التطبيق يعمل محلياً دون خادم خارجي — استخدم قفل الشاشة لحماية الجلسة.',
 greet_m:'صباح الخير، أستاذ',greet_s:'صباح الخير، أمينة',greet_t:'صباح الخير، رياض',
 todaySum:(h,d)=>`لديك اليوم ${h} جلسات، و${d} آجال خلال 3 أيام.`,newCase:'+ ملف جديد',newTask:'+ مهمة جديدة',
 kpi_active:'ملفات نشطة',kpi_hear:'جلسات هذا الأسبوع',kpi_dl:'آجال قريبة',kpi_unpaid:'مبالغ غير محصلة',kpi_mytasks:'مهامي المفتوحة',kpi_myfiles:'ملفاتي',
@@ -607,7 +607,7 @@ links_title:'مركز الخدمات القضائية',links_sub:'روابط ر�
 dg_title:'مولّد الوثائق القانونية',dg_sub:'املأ الحقول → عاين → اطبع وثيقة جاهزة',dg_type:'نوع الوثيقة',dg_t1:'عريضة افتتاح دعوى',dg_t2:'عريضة استئناف',dg_t3:'مذكرة جوابية',dg_t4:'سند وكالة',dg_court:'الجهة القضائية',dg_fullname:'الاسم واللقب',dg_address:'الموطن',dg_quality:'الصفة',dg_company:'التسمية والمقر والصفة (للشخص المعنوي)',dg_lawyer:'المحامي',dg_lawyer_name:'اسم المحامي',dg_lawyer_addr:'عنوان المحامي المهني',dg_lawyer_phone:'هاتف المحامي',dg_subject:'موضوع الدعوى',dg_facts:'عرض موجز للوقائع',dg_requests:'الطلبات',dg_grounds:'الأوجه / الأسباب (للاستئناف)',dg_evidence:'المستندات المؤيدة',dg_judgment:'بيان الحكم المستأنف وتاريخه',dg_case_no:'رقم القضية',dg_party_natural:'شخص طبيعي',dg_party_legal:'شخص معنوي',dg_place:'حُرر بـ',dg_preview:'معاينة الوثيقة',dg_print:'طباعة / PDF',dg_reset:'مسح الحقول',dg_repub:'الجمهورية الجزائرية الديمقراطية الشعبية',dg_ministry:'وزارة العدل',dg_before:'أمام',dg_for:'لفائدة',dg_against:'ضد',dg_under:'تحت كافة التحفظات',dg_article15:'وفقاً للمادة 15 من قانون الإجراءات المدنية والإدارية',dg_article540:'وفقاً للمادة 540 من قانون الإجراءات المدنية والإدارية',dg_article568:'وفقاً للمادة 568 من قانون الإجراءات المدنية والإدارية',dg_petition:'عريضة افتتاح دعوى',dg_appeal:'عريضة استئناف',dg_memo:'مذكرة جوابية',dg_poa:'سند وكالة',dg_sign:'التوقيع والختم',dg_lawyer_line:'المحامي',dg_pick:'اختر نوع الوثيقة أولاً',dg_hint:'💡 املأ الحقول بالعربية. تُطبع الوثيقة على A4. النماذج استرشادية ويراجعها المحامي قبل الإيداع.'
 },
 fr:{appSub:'Gestion de cabinet d’avocats',office:'Cabinet Maître Ben Ali',skip:'Aller au contenu',
-demo:'⚠ Version de prévisualisation professionnelle — tous les noms, dossiers et montants sont fictifs. N’utilisez aucune donnée réelle de client.',
+demo:'Données d’exemple initiales — vous pouvez démarrer avec un dossier vide à tout moment.',
 nav_dash:'Tableau de bord',nav_cases:'Dossiers',nav_cal:'Audiences et délais',nav_tasks:'Tâches',nav_mytasks:'Mes tâches',nav_clients:'Clients',nav_docs:'Documents',nav_fees:'Honoraires et comptes',nav_reports:'Rapports',nav_team:'Équipe et droits',nav_settings:'Paramètres',nav_portal:'Portail client',nav_landing:'À propos',nav_faq:'FAQ',nav_more:'Plus',nav_links:'Liens judiciaires',nav_docgen:'Générateur de documents',nav_role:"Rôle d'audience",nav_procedures:'Signification et exécution',nav_scan:'Scanner PDF',nav_approvals:'Approbations',nav_deadlines:'Calculateur de délais',nav_cash:'Caisse',nav_hr:'RH',nav_ja:'Aide juridictionnelle',nav_services:'Commissaires de justice',nav_experts:'Experts',nav_exec:'Exécution',nav_kyc:'KYC',nav_accounts:'Comptes',nav_license:'Carte professionnelle',nav_audit:"Journal d'audit",nav_library:'Jurisprudence',nav_import:'Import',nav_qr:'Codes QR',nav_reminders:'Rappels',
 r_collab:'Avocat collaborateur',inv_pw:'Mot de passe',inv_pw2:'Confirmation',inv_pw_hint:'8 car. min., lettre et chiffre',inv_ok_pw:'Utilisateur créé avec mot de passe',
 share_title:'Part honoraires collaborateur',share_lbl:'Pourcentage % des honoraires',share_save:'Enregistrer',share_ok:'Part enregistrée',share_hint:'Pour le collaborateur/stagiaire assigné (0–100)',share_btn:'Part collab.',share_none:'—',share_col:'Part collab.',nav_collab:'Collaborateurs',
@@ -628,7 +628,7 @@ g_work:'🏠 Travail quotidien',g_fin:'💰 Finances et honoraires',g_legal:'⚖
 search_ph:'Rechercher dossier, client ou n° (Ctrl+K)',no_results:'Aucun résultat',online:'En ligne',offline:'Hors ligne',syncing:'Synchronisation…',pendingN:n=>`${n} modif(s) en attente`,
 offbar:'Hors ligne. Modifications synchronisées au retour.',backOnline:'Simuler retour',syncedN:n=>`${n} modif(s) synchronisée(s)`,savedOnline:'Enregistré',savedLocal:'Enregistré localement',
 r_m:'Avocat (administrateur)',r_s:'Secrétariat',r_t:'Stagiaire',viewAs:'Voir avec les droits',lang_btn:'العربية',theme:'Changer thème',notif:'Notifications',digest:'Résumé du matin',on:'Activé',
-logout:'Se déconnecter',logout_demo:'⚠ Version de prévisualisation professionnelle — données fictives uniquement. N’utilisez aucune donnée réelle de client.',greet_m:'Bonjour, Maître',greet_s:'Bonjour, Amina',greet_t:'Bonjour, Riyad',
+logout:'Se déconnecter',logout_demo:'Application locale sans serveur externe — utilisez le verrouillage d’écran pour protéger la session.',greet_m:'Bonjour, Maître',greet_s:'Bonjour, Amina',greet_t:'Bonjour, Riyad',
 todaySum:(h,d)=>`Aujourd’hui : ${h} audience(s) ; ${d} délai(s) dans les 3 jours.`,newCase:'+ Dossier',newTask:'+ Tâche',
 kpi_active:'Dossiers actifs',kpi_hear:'Audiences cette semaine',kpi_dl:'Délais proches',kpi_unpaid:'Honoraires impayés',kpi_mytasks:'Mes tâches ouvertes',kpi_myfiles:'Mes dossiers',
 hint_dl48:n=>`${n} sous 48 h`,hint_none:'Rien d’urgent',hint_collected:'Encaissé',roll_title:'Audiences de la semaine',roll_empty:'Aucune audience',dl_label:'Délai',dl_title:'Délais à venir',days_unit:'jours',
@@ -1366,13 +1366,13 @@ function nextClientId(){let mx=0;(CL||[]).forEach((c,i)=>{const n=+(c&&c.id)||0;
 function ensureClientsSync(){if(!Array.isArray(S.clients))S.clients=[];CL.forEach((c,i)=>{if(c&&!c.id)c.id=i+1});S.clients.length=0;CL.forEach(c=>S.clients.push(c));return S.clients}
 function normDigits(s){return String(s||'').replace(/\D/g,'')}
 function normAlnumKey(s){const v=String(s||'').trim();if(!v||v==='—')return '';return v.replace(/[\s\-./]/g,'').toUpperCase()}
-function normPhoneKey(s){const v=String(s||'').trim();if(!v||v==='—')return '';if(/^DEMO-PHONE-/i.test(v))return v.toUpperCase();
+function normPhoneKey(s){const v=String(s||'').trim();if(!v||v==='—')return '';
  let d=normDigits(v);if(d.startsWith('00213'))d=d.slice(5);else if(d.startsWith('213')&&d.length>=11)d=d.slice(3);if(d.startsWith('0')&&d.length>=9)d=d.slice(1);return d.length>=8?d:''}
-function validPhoneDz(s){const v=String(s||'').trim();if(!v||v==='—')return false;if(/^DEMO-PHONE-[A-Z0-9-]+$/i.test(v))return true;
+function validPhoneDz(s){const v=String(s||'').trim();if(!v||v==='—')return false;
  if(!/^[+\d][\d\s().-]{6,22}$/.test(v))return false;const d=normDigits(v);return d.length>=8&&d.length<=15}
-function validNinDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;if(/^DEMO-/i.test(v))return true;
+function validNinDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;
  const clean=v.replace(/\s+/g,'');return /^\d{10,18}$/.test(clean)}
-function validNifDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;if(/^DEMO-NIF-/i.test(v))return true;
+function validNifDz(s){const v=String(s||'').trim();if(!v||v==='—')return true;
  const clean=v.replace(/\s+/g,'');return /^\d{15,20}$/.test(clean)}
 function validEmailStr(s){const v=String(s||'').trim();if(!v)return true;return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)}
 function validateClientInput(v){const errs={};
@@ -1779,7 +1779,7 @@ function teamV(){const mem=U.filter(u=>!u.extraPartner).map(u=>{const n=S.cases.
 function settingsV(){const kv=(l,v,c)=>`<div class="kv"><span>${l}</span>${v?`<span class="chip ${c||'ok'}">${v}</span>`:''}</div>`; const v8sec=`<div class="card" style="margin-bottom:16px"><div class="card-b"><div class="kv"><span>${t('st_security')}</span><button class="btn sm" data-act="chgpass">${t('sec_chg_btn')}</button> <span class="chip ${_SEC.avail()?'ok':'bad'}">${t(_SEC.avail()?'sec_enc_on':'sec_enc_off')}</span> <button class="btn sm" data-act="enablenotif">${t('notif_enable')}</button></div><div class="kv"><span>${t('v7_export_full')}</span><button class="btn sm primary" data-act="exportfull">${ic('download')} ${t('v7_export_full')}</button></div></div></div>`;
  const cab=S.cabinet,ltr=v=>`<dd dir="ltr" style="text-align:start">${esc(v)}</dd>`;
  return `<div class="page-h"><div><h1>${t('st_title')}</h1></div></div>
- ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${colleaguesCard()}${encBackupCard()}${subscriptionsCard()}${previewDemoCard()}${conflictReviewCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
+ ${v8sec}${licenseCard()}${stampCardV()}${sigCardV()}${colleaguesCard()}${encBackupCard()}${subscriptionsCard()}${conflictReviewCard()}${intakeLogCard()}<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>${t('cabinet_title')}</h2><button class="btn sm" data-act="editcabinet">${t('cabinet_edit')}</button></div><div class="card-b"><p class="sub" style="margin:0 0 10px">${t('cabinet_sub')}</p>
   <dl class="dl-list" style="margin:0"><dt>${t('cabinet_name')}</dt><dd>${esc(tr(cab.name))}</dd><dt>${t('cabinet_addr')}</dt><dd>${esc(tr(cab.address))}</dd><dt>${t('cabinet_nif')}</dt>${ltr(cab.nif)}<dt>${t('cabinet_nis')}</dt>${ltr(cab.nis)}<dt>${t('cabinet_rc')}</dt>${ltr(cab.rc)}<dt>${t('cabinet_ai')}</dt>${ltr(cab.ai)}<dt>${t('cabinet_phone')}</dt>${ltr(cab.phone)}<dt>${t('cabinet_email')}</dt>${ltr(cab.email)}<dt>${t('cabinet_bank')}</dt><dd>${esc(tr(cab.bank))}</dd><dt>${t('cabinet_tva')}</dt><dd>${cab.tvaEnabled?cab.tva+'% — '+t('tva_on'):t('tva_off')}</dd><dt>${t('cabinet_timbre')}</dt><dd>${cab.timbre} دج<small class="sub" style="display:block;font-weight:400">${t('cabinet_timbre_hint')}</small></dd></dl></div></section>
  <div class="g2e"><section class="card"><div class="card-h"><h2>${t('st_backup')}</h2></div><div class="card-b">${kv(t('st_b_auto'),t('on'))}${kv(t('st_b_last'),'✓')}${kv(t('st_b_restore'),'✓')}<div class="kv"><span>${t('st_b_export')}</span><button class="btn sm" data-act="exportfull">${ic('download')}${t('st_b_export')}</button></div></div></section>
  <section class="card"><div class="card-h"><h2>${t('st_security')}</h2></div><div class="card-b">${kv(t('st_lock'),t('on'))}${kv(t('st_2fa'),t('on'))}${kv(t('st_sync'),t('on'),'teal')}<p class="sub" style="margin:4px 0 0">${t('st_sync_d')}</p></div></section></div>
@@ -2256,7 +2256,7 @@ function clientV(id){const i=(id===undefined||id===null)?0:+id,c0=CL[i],r=me().r
  const cs=visCases().filter(c=>c.cl===i),kind=clientKindOf(c0),kyc=clientKycStatus(c0),showPh=r==='manager'||r==='partner'||r==='collaborator'||S.perms.secContacts,showFees=canFees();
  const tot=cs.filter(c=>!c.judicialAid).reduce((a,c)=>a+(c.fee[0]||0),0),paid=cs.reduce((a,c)=>a+paidOf(c.id),0),rem=cs.reduce((a,c)=>a+dueOf(c),0);
  const rawPh=(c0.ph2||c0.ph||'');
- const wa=(showPh&&rawPh&&rawPh!=='—'&&!/^DEMO-/i.test(rawPh))?`https://wa.me/213${rawPh.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent(t('wa_msg'))}`:null;
+ const wa=(showPh&&rawPh&&rawPh!=='—'&&validPhoneDz(rawPh))?`https://wa.me/213${rawPh.replace(/\D/g,'').replace(/^0/,'')}?text=${encodeURIComponent(t('wa_msg'))}`:null;
  const inst=(S.installments||[]).filter(x=>cs.some(c2=>c2.id===x.c)&&!x.paid);
  const caseIds=new Set(cs.map(c=>c.id));
  const cDocs=(S.docs||[]).filter(d=>caseIds.has(d.c)||d.cl===i);
@@ -2356,12 +2356,12 @@ function secWorkspaceReady(){if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready){s
  if(typeof secProtectionIssue!=='function'){secSetWorkspaceVisible(false);secProtectionBlock('verifier');return false}
  var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}secSetWorkspaceVisible(true);return true}
 function secResumeAfterLicense(){try{if(typeof _SEC==='undefined'||!_SEC||!_SEC.ready)secBoot();else{chrome();render()}}catch(_){secProtectionBlock('init')}}
-function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان — نسخة المعاينة المهنية (v10.3.4)';
+function chrome(){if(window._LK_ON){secSetWorkspaceVisible(false);return}if(!secWorkspaceReady())return;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title='ديوان v10.3.5 — '+t('appSub');
  $('skipLink').textContent=t('skip');$('appSub').textContent=t('appSub');$('officeName').textContent=tr(S.cabinet.name);
  let hijri='';try{hijri=' · '+new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}catch(_){}
  $('dateLine').textContent=DAYN[S.lang][TODAY.getDay()]+' '+fmt(K(TODAY))+hijri;
  $('gs').placeholder=t('search_ph');$('gsLabel').textContent=t('search_ph');
- $('demoNote').textContent=t('demo');$('viewAsLbl').textContent=t('viewAs');$('langTxt').textContent=t('lang_btn');
+ var _dn=$('demoNote');if(_dn){_dn.style.display=S.isDemo?'':'none';_dn.innerHTML=S.isDemo?(t('v7_demo_bar')+' <button class="btn sm" data-act="cleardemo">'+t('v7_start_empty')+'</button>'):''}$('viewAsLbl').textContent=t('viewAs');$('langTxt').textContent=t('lang_btn');
  $('themeBtn').setAttribute('aria-label',t('theme'));$('bellBtn').setAttribute('aria-label',t('notif'));$('menuBtn').setAttribute('aria-label',t('nav_more'));
  const navs=NAVS();let h='',g='';
  // V9-FIX-04
@@ -2974,8 +2974,8 @@ Object.assign(L.ar,{pr_kind:'نوع الشخص',pr_kind_natural:'شخص طبيع
 Object.assign(L.fr,{pr_kind:'Type de personne',pr_kind_natural:'Personne physique',pr_kind_legal:'Personne morale',pr_nif:'NIF',cfx_title:'Conflit d’intérêts possible',cf_intro:'Des correspondances ont été détectées avec des dossiers existants. Le dossier ne peut être accepté qu’après vérification de l’absence de conflit d’intérêts.',cf_type_phrase:'Pour continuer, saisissez littéralement : « قبلت المسؤولية » (ou « J’accepte la responsabilité »)',cf_bad_phrase:'Phrase non conforme — saisissez : J’accepte la responsabilité',cf_accept:'Accepter le dossier',cf_reject:'Refuser le dossier',cf_rejected:'Dossier refusé ; le motif est consigné au journal',cf_sev_critical:'Critique',cf_sev_high:'Élevé',cf_sev_medium:'Moyen',cf_ctx:(n,r,no)=>`dossier ${no} : « ${n} » (${r})`,cf_r_nin:(n,r,ctx)=>`NIN identique : « ${n} » (${r}) — ${ctx}`,cf_r_nif:(n,r,ctx)=>`NIF identique (personne morale) : « ${n} » (${r}) — ${ctx}`,cf_r_swap:(n,r,ctx)=>`Client/adversaire inversés : « ${n} » (${r}) — ${ctx}`,cf_r_name:(n,r,ctx)=>`Nom identique : « ${n} » (${r}) — ${ctx}`,cf_r_sim:(n,ctx)=>`Noms similaires : « ${n} » — ${ctx}`,cf_log_title:'Journal d’acceptation des dossiers',cf_log_acc:'Accepté',cf_log_rej:'Refusé',cf_log_none:'Aucun conflit',cf_check_before:'vérifiez avant d’accepter'});
 
 /* FIX5 i18n */
-Object.assign(L.ar,{preview_clear_label:'مسح البيانات الوهمية',lw_change_reason:'سبب تغيير المحامي المسؤول',lw_change_reason_hint:'سجّل السبب المهني. لا يتغير أعضاء الفريق تلقائياً؛ راجع صلاحيات الوصول عند الحاجة.',lw_change_same:'المحامي المحدد هو المسؤول الحالي بالفعل',lw_change_sensitive_confirm:'هذا ملف حساس أو مقيّد. هل تؤكد تغيير المسؤول بعد مراجعة الصلاحيات؟',lw_change_saved:'تم تغيير المسؤول وتسجيل السبب',lw_title:'المحامون الشركاء',lw_add:'إضافة محامٍ شريك',lw_edit:'تعديل بيانات المحامي',lw_name_ar:'الاسم (بالعربية)',lw_name_fr:'الاسم (بالفرنسية)',lw_barno:'رقم القيد بالنقابة',lw_phone:'الهاتف',lw_email:'البريد الإلكتروني',lw_active:'نشط',lw_inactive:'معطّل',lw_suspended:'موقوف',lw_toggle_off:'تعطيل',lw_toggle_on:'تفعيل',lw_edit_btn:'تعديل',lw_files:'ملف',lw_resp:'المحامي المسؤول',lw_none:'لا يوجد محامون شركاء بعد',lw_saved:'تم الحفظ',lw_lic_title:'تراخيص المحامين الشركاء',lw_self:'لا يمكن تعطيل المستخدم الحالي'});
-Object.assign(L.fr,{preview_clear_label:'Effacer les données fictives',lw_change_reason:'Motif du changement de responsable',lw_change_reason_hint:'Consignez le motif professionnel. L’équipe ne change pas automatiquement ; vérifiez les accès si nécessaire.',lw_change_same:'Cet avocat est déjà le responsable actuel',lw_change_sensitive_confirm:'Ce dossier est sensible ou restreint. Confirmer le changement après vérification des accès ?',lw_change_saved:'Responsable modifié et motif enregistré',lw_title:'Avocats associés',lw_add:'Ajouter un associé',lw_edit:'Modifier l’associé',lw_name_ar:'Nom (arabe)',lw_name_fr:'Nom (français)',lw_barno:'N° d’inscription au barreau',lw_phone:'Téléphone',lw_email:'E-mail',lw_active:'Actif',lw_inactive:'Désactivé',lw_suspended:'Suspendu',lw_toggle_off:'Désactiver',lw_toggle_on:'Activer',lw_edit_btn:'Modifier',lw_files:'dossier(s)',lw_resp:'Avocat responsable',lw_none:'Aucun associé pour l’instant',lw_saved:'Enregistré',lw_lic_title:'Agréments des associés',lw_self:'Impossible de désactiver l’utilisateur courant'});
+Object.assign(L.ar,{lw_change_reason:'سبب تغيير المحامي المسؤول',lw_change_reason_hint:'سجّل السبب المهني. لا يتغير أعضاء الفريق تلقائياً؛ راجع صلاحيات الوصول عند الحاجة.',lw_change_same:'المحامي المحدد هو المسؤول الحالي بالفعل',lw_change_sensitive_confirm:'هذا ملف حساس أو مقيّد. هل تؤكد تغيير المسؤول بعد مراجعة الصلاحيات؟',lw_change_saved:'تم تغيير المسؤول وتسجيل السبب',lw_title:'المحامون الشركاء',lw_add:'إضافة محامٍ شريك',lw_edit:'تعديل بيانات المحامي',lw_name_ar:'الاسم (بالعربية)',lw_name_fr:'الاسم (بالفرنسية)',lw_barno:'رقم القيد بالنقابة',lw_phone:'الهاتف',lw_email:'البريد الإلكتروني',lw_active:'نشط',lw_inactive:'معطّل',lw_suspended:'موقوف',lw_toggle_off:'تعطيل',lw_toggle_on:'تفعيل',lw_edit_btn:'تعديل',lw_files:'ملف',lw_resp:'المحامي المسؤول',lw_none:'لا يوجد محامون شركاء بعد',lw_saved:'تم الحفظ',lw_lic_title:'تراخيص المحامين الشركاء',lw_self:'لا يمكن تعطيل المستخدم الحالي'});
+Object.assign(L.fr,{lw_change_reason:'Motif du changement de responsable',lw_change_reason_hint:'Consignez le motif professionnel. L’équipe ne change pas automatiquement ; vérifiez les accès si nécessaire.',lw_change_same:'Cet avocat est déjà le responsable actuel',lw_change_sensitive_confirm:'Ce dossier est sensible ou restreint. Confirmer le changement après vérification des accès ?',lw_change_saved:'Responsable modifié et motif enregistré',lw_title:'Avocats associés',lw_add:'Ajouter un associé',lw_edit:'Modifier l’associé',lw_name_ar:'Nom (arabe)',lw_name_fr:'Nom (français)',lw_barno:'N° d’inscription au barreau',lw_phone:'Téléphone',lw_email:'E-mail',lw_active:'Actif',lw_inactive:'Désactivé',lw_suspended:'Suspendu',lw_toggle_off:'Désactiver',lw_toggle_on:'Activer',lw_edit_btn:'Modifier',lw_files:'dossier(s)',lw_resp:'Avocat responsable',lw_none:'Aucun associé pour l’instant',lw_saved:'Enregistré',lw_lic_title:'Agréments des associés',lw_self:'Impossible de désactiver l’utilisateur courant'});
 
 /* FIX6 i18n */
 Object.assign(L.ar,{dl_download:'تحميل',dl_file_pick:'ملف مرفق (اختياري)',idb_fail:'تعذّر حفظ الملف في قاعدة بيانات المتصفح — حُفظت البيانات الوصفية فقط',idb_missing:'الملف غير موجود في هذا المتصفح',idb_saved:'تم حفظ الملف',dv_title:'التبليغات والإعلانات (مفوض قضائي)',dv_new:'تبليغ جديد',dv_type:'النوع',dv_signification:'تبليغ رسمي',dv_notification:'إشعار',dv_bailiff:'المفوض القضائي',dv_view:'عرض المستند',dv_added:'تمت إضافة التبليغ',xp_title:'مسار التنفيذ',xp_s1:'تبليغ الحكم',xp_s2:'التكليف بالوفاء',xp_s3:'شهادة عدم الطعن',xp_s4:'الحجز (لدى الغير / عقاري / راتب)',xp_s5:'المزاد والبيع',xp_s6:'استيفاء المحكوم له',xp_done:'منجزة',xp_todo:'لم تُنجز',xp_notes:'ملاحظات',xp_type:'نوع الحجز',xp_t_third:'حجز لدى الغير',xp_t_real:'حجز عقاري',xp_t_salary:'حجز على الراتب',xp_amount:'المبلغ المستوفى (دج)',xp_deadline:'تاريخ إيداع الخبرة (أدخله من أمر القاضي)',xp_edit:'تحديث',xp_saved:'تم تحديث مسار التنفيذ'});
@@ -4136,7 +4136,7 @@ function secProtectionBlock(reason){_SEC.ready=false;if(_SEC&&typeof _SEC.clearV
  secOverlay('<div class="modal"><h2>🔒 تعذر فتح مساحة العمل بأمان<br><small class="sub">Workspace security unavailable</small></h2><p style="white-space:pre-line">'+msg+'</p></div>')}
 function secDemoInit(){ S.collapsedGroups=normalizeSidebarGroups(S.collapsedGroups);S.clients=CL.map(function(x,i){x.id=i+1;return x});S.cases.forEach(function(c){if(c.clientId==null&&typeof c.cl==='number')c.clientId=c.cl+1});S.dlHolidays=DEFAULT_HOLIDAYS.slice();S.dlRules=DEFAULT_DLK.map(function(x){return Object.assign({},x)});S.isDemo=true;S.nextPay=1}
 function secFinishBoot(persist){return Promise.resolve().then(function(){var issue=secProtectionIssue();if(issue){secProtectionBlock(issue);return false}if(typeof _SEC.consumeVerified!=='function'||!_SEC.consumeVerified()){secProtectionBlock('verifier');return false}try{applyRoles()}catch(_){}try{if(typeof syncPartnersU==='function')syncPartnersU()}catch(_){}
- setTimeout(function(){if(S.isDemo){var dn=document.getElementById('demoNote');if(dn)dn.innerHTML=t('demo')+' <button class="btn sm" data-act="cleardemo">'+t('preview_clear_label')+'</button>'}},300);
+ setTimeout(function(){var dn=document.getElementById('demoNote');if(dn){dn.style.display=S.isDemo?'':'none';dn.innerHTML=S.isDemo?(t('v7_demo_bar')+' <button class="btn sm" data-act="cleardemo">'+t('v7_start_empty')+'</button>'):''}},300);
  try{var _r=(me()||{}).role;if(_r==='manager'||_r==='partner')S.casesScope='all'}catch(_){}try{migrateV3()}catch(_){}
  function exposeWorkspace(){_SEC.ready=true;if(!secWorkspaceReady())return false;try{chrome();render()}catch(e){secProtectionBlock('init');return false}if(typeof bumpIdle==='function')bumpIdle();return !!(_SEC.ready&&!secProtectionIssue())}
  var mustPersist=!!(persist||_savePending||_saveDirty);if(!mustPersist)return exposeWorkspace();clearTimeout(_saveTimer);_saveTimer=null;_savePending=false;var snap;try{snap=snapV7()}catch(e){secProtectionBlock('migration-save');return false}
@@ -4366,72 +4366,6 @@ function conflictReviewCard(){
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>المراجعة السرية لتعارض المصالح / Revue confidentielle des conflits</h2><span class="chip '+(pending.length?'warn':'ok')+'">'+pending.length+'</span></div><div class="card-b">'+(rows||'<p class="empty">لا توجد حالات معلقة / Aucune demande en attente</p>')+'</div></section>'
 }
 
-/* Deterministic fictional dataset for the isolated professional preview.
-   This action is opt-in and replaces the current local demo records after confirmation. */
-function resetPreviewDemo(){
- if(!isM())return;
- if(!confirm('سيتم استبدال جميع سجلات المعاينة المحلية ببيانات وهمية جديدة. لن يؤثر ذلك في نطاق/موقع آخر. هل تتابع؟\nToutes les données locales de démonstration seront remplacées. Continuer ?'))return;
- var party=function(role,arFirst,arLast,frFirst,frLast,kind){
-  return {role:role,proc:'',procLabel:{ar:'',fr:''},roleLabel:{ar:'',fr:''},kind:kind||'natural',nif:'',firstName:{ar:arFirst,fr:frFirst},lastName:{ar:arLast,fr:frLast},birthDate:'',birthPlace:{ar:'',fr:''},idType:'',idNumber:'',idIssueDate:'',idExpiryDate:'',address:{ar:'عنوان تجريبي — لا وجود له',fr:'Adresse fictive — inexistante'}};
- };
- var client1=party('client','نادية','بلقاسم','Nadia','Belkacem');
- var opp1=party('opponent','شركة أطلس للبناء','', 'EURL Atlas Construction','', 'legal');
- opp1.nif='DEMO-NIF-ATLAS-001';
- var client2=party('client','مراد','حداد','Mourad','Haddad');
- var opp2=party('opponent','نادية','بلقاسم','Nadia','Belkacem');
- var client3=party('client','شركة الواحة للخدمات','', 'SARL El Waha Services','', 'legal');client3.nif='DEMO-NIF-WAHA-002';
- var opp3=party('opponent','شركة أطلس للبناء','', 'EURL Atlas Construction','', 'legal');opp3.nif='DEMO-NIF-ATLAS-001';
- var client4=party('client','ليلى','بن صالح','Leila','Ben Salah');
- var opp4=party('opponent','يوسف','قاسمي','Youcef','Kassimi');
- CL.length=0;
- [
-  {id:1,kind:'natural',ar:'نادية بلقاسم',fr:'Nadia Belkacem',ph:'DEMO-PHONE-001',nif:'—',wilaya:'16',kycDocs:[]},
-  {id:2,kind:'legal',legalForm:'EURL',ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction',ph:'DEMO-PHONE-002',nif:'DEMO-NIF-ATLAS-001',wilaya:'16',kycDocs:[]},
-  {id:3,kind:'natural',ar:'مراد حداد',fr:'Mourad Haddad',ph:'DEMO-PHONE-003',nif:'—',wilaya:'25',kycDocs:[]},
-  {id:4,kind:'legal',legalForm:'SARL',ar:'شركة الواحة للخدمات',fr:'SARL El Waha Services',ph:'DEMO-PHONE-004',nif:'DEMO-NIF-WAHA-002',wilaya:'31',kycDocs:[]},
-  {id:5,kind:'natural',ar:'ليلى بن صالح',fr:'Leila Ben Salah',ph:'DEMO-PHONE-005',nif:'—',wilaya:'09',kycDocs:[]}
- ].forEach(function(c){CL.push(c)});
- S.cases=[
-  {id:1,no:'DEMO-2026-001',title:{ar:'نزاع مدني حول تنفيذ عقد أشغال',fr:'Litige civil — exécution d’un contrat de travaux'},type:'civil',court:COURTS[0],cl:0,opp:{ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction'},stage:0,st:'active',next:addDays(3),time:'09:30',kind:'plead',fee:[120000,45000],judg:null,docs:2,as:['m','c','t'],hasPOA:true,judicialAid:false,lawyerId:'m',lim:addDays(60),notes:[],contacts:[],hours:2,sessions:[],parties:[client1,opp1],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-001',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'محضر تجريبي',signifStatus:'done',signifDate:addDays(-10),legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-30)},
-  {id:2,no:'DEMO-2026-002',title:{ar:'مطالبة بتعويض مدني',fr:'Demande d’indemnisation civile'},type:'civil',court:COURTS[1],cl:2,opp:{ar:'نادية بلقاسم',fr:'Nadia Belkacem'},stage:0,st:'active',next:addDays(7),time:'10:00',kind:'plead',fee:[90000,30000],judg:null,docs:1,as:['m','p'],hasPOA:true,judicialAid:false,lawyerId:'p',lim:addDays(90),notes:[],contacts:[],hours:1,sessions:[],parties:[client2,opp2],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-002',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-12)},
-  {id:3,no:'DEMO-2026-003',title:{ar:'نزاع تجاري بين شركتين',fr:'Litige commercial entre sociétés'},type:'commercial',court:COURTS[3],cl:3,opp:{ar:'شركة أطلس للبناء',fr:'EURL Atlas Construction'},stage:1,st:'active',next:addDays(1),time:'11:15',kind:'instr',fee:[180000,75000],judg:null,docs:3,as:['m','c'],hasPOA:true,judicialAid:false,lawyerId:'c',lim:addDays(45),notes:[],contacts:[],hours:3,sessions:[],parties:[client3,opp3],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-003',judgeName:'قاضٍ تجريبي',substName:'',delibDate:null,huissierName:'محضر تجريبي',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('commercial'),createdAt:addDays(-20)},
-  {id:4,no:'DEMO-2026-004',title:{ar:'ملف مدني — اختبار المسار الكامل',fr:'Dossier civil — test du parcours complet'},type:'civil',court:COURTS[0],cl:4,opp:{ar:'يوسف قاسمي',fr:'Youcef Kassimi'},stage:0,st:'active',next:addDays(14),time:'09:00',kind:'plead',fee:[60000,15000],judg:null,docs:1,as:['m','s'],hasPOA:false,judicialAid:false,lawyerId:'m',lim:addDays(120),notes:[],contacts:[],hours:0,sessions:[],parties:[client4,opp4],linked:[],notif:null,secret:false,roleNumber:'DEMO-RP-004',judgeName:'',substName:'',delibDate:null,huissierName:'',signifStatus:'',signifDate:null,legalRefs:'',docVersions:[],checklists:checklistDefaults('civil'),createdAt:addDays(-4)}
- ];
- S.clients=[];ensureClientsSync();
- S.dls=[
-  {c:1,l:{ar:'إعداد مذكرة جوابية — بيانات تجريبية',fr:'Préparer un mémoire en réponse — démo'},d:addDays(2),who:'t'},
-  {c:3,l:{ar:'مراجعة مستندات الشركة',fr:'Examiner les pièces de la société'},d:addDays(1),who:'c'},
-  {c:4,l:{ar:'التحقق من قائمة الوثائق',fr:'Vérifier la liste des pièces'},d:addDays(10),who:'s'}
- ];
- S.tasks=[
-  {id:1,t:{ar:'مراجعة ملف الجلسة',fr:'Vérifier le dossier d’audience'},c:1,who:'t',p:'high',d:addDays(1),done:false},
-  {id:2,t:{ar:'الاتصال بالموكل التجريبي',fr:'Appeler le client fictif'},c:2,who:'s',p:'mid',d:addDays(2),done:false},
-  {id:3,t:{ar:'تجهيز الوثائق',fr:'Préparer les documents'},c:3,who:'c',p:'high',d:addDays(0),done:false},
-  {id:4,t:{ar:'أرشفة النسخة النهائية',fr:'Archiver la version finale'},c:4,who:'t',p:'low',d:addDays(5),done:true}
- ];
- S.docs=[
-  {n:{ar:'عريضة افتتاحية — نموذج تجريبي.pdf',fr:'Requête introductive — démo.pdf'},c:1,t:'PDF',s:'420 KB',d:addDays(-3),sh:false},
-  {n:{ar:'فاتورة تجريبية.pdf',fr:'Facture fictive.pdf'},c:3,t:'PDF',s:'95 KB',d:addDays(-1),sh:false},
-  {n:{ar:'قائمة الوثائق — نموذج.pdf',fr:'Liste des pièces — démo.pdf'},c:4,t:'PDF',s:'110 KB',d:addDays(-2),sh:false}
- ];
- S.pays=[{c:1,a:30000,d:addDays(-4),amount:30000,date:addDays(-4),method:'cash',ref:'DEMO-REC-001'}];
- S.expenses=[{c:1,a:5000,t:{ar:'مصاريف تبليغ تجريبية',fr:'Frais de signification fictifs'},d:addDays(-2)}];
- S.officeExp=[{d:addDays(-5),t:'مصاريف مكتبية تجريبية',a:3500}];
- S.invoices=[{id:1,no:'DEMO-INV-001',caseId:1,date:addDays(-4),items:[{desc:{ar:'دفعة أتعاب تجريبية',fr:'Acompte fictif sur honoraires'},qty:1,price:30000}],withTVA:false,withTimbre:false,paid:true,paidDate:addDays(-4),method:'cash'}];
- S.trust=[{id:1,c:1,type:'deposit',amount:12000,date:addDays(-3),ref:'DEMO-AM-001',note:{ar:'أمانة افتراضية لمصاريف خبير',fr:'Provision fictive pour expertise'}}];
- S.installments=[];S.audit=[{w:'m',what:'إعادة تهيئة بيانات المعاينة الوهمية',d:new Date().toLocaleString('fr-FR')}];S.drafts=[];S.intakeLog=[];S.conflictReviews=[];
- S.appointments=[];S.caseExpenses=[];S.stampMoves=[];S.processServers=[];S.services=[];S.experts=[];S.expertTasks=[];S.seizures=[];S.feesCalc=[];S.employees=[];S.payroll=[];S.deliveries=[];S.qrRegistry=[];S.smsLog=[];S.notifSent={};S.subs={};S.attendance=[];S.tax={regime:'',ifuOn:false,ifu:null,ibs:null};S.docGen=DG0();S.nextId=5;S.nextTask=5;S.nextInv=2;S.nextTrust=2;S.nextPay=2;
- S.receiptSeq={year:TODAY.getFullYear(),next:2};S.invoiceSeq={year:TODAY.getFullYear(),next:2};S.isDemo=true;
- S.cabinet={name:{ar:'مكتب ديوان التجريبي',fr:'Cabinet Diwan — démonstration'},address:{ar:'عنوان افتراضي — غير حقيقي',fr:'Adresse fictive — non réelle'},nif:'DEMO-NIF-000',nis:'DEMO-NIS-000',rc:'DEMO-RC-000',ai:'DEMO-AI-000',phone:'DEMO-PHONE-000',email:'demo@example.invalid',bank:{ar:'بيانات بنكية وهمية غير قابلة للاستخدام',fr:'Coordonnées bancaires fictives inutilisables'},tva:0,tvaEnabled:false,timbre:0,timbreFixed:true};
- S.stampInventory={court:12,council:8,admin:4};
- S.dlMovableHolidays=[];S.dlVacation={on:false,from:'07-15',to:'08-31'};
- scheduleSave();chrome();render();toast('تمت إعادة تهيئة بيانات المعاينة الوهمية / Jeu de démonstration réinitialisé');
-}
-function previewDemoCard(){
- if(!isM())return '';
- return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>بيانات المعاينة / Données de démonstration</h2><span class="chip warn">DEMO</span></div><div class="card-b"><p class="sub">كل السجلات أسماء وبيانات افتراضية، ولا يجوز استخدامها في ملف حقيقي. / Toutes les données sont fictives.</p><p class="sub">إعادة التهيئة تستبدل سجلات هذا المتصفح فقط، ولا تمس نطاقاً أو جهازاً آخر. / Réinitialise uniquement les données locales de ce navigateur.</p><button class="btn primary" data-act="reset-preview-demo">إعادة تهيئة بيانات المعاينة / Réinitialiser la démo</button></div></section>'
-}
-
 function intakeLogCard(){var rows=(S.intakeLog||[]).slice(-30).reverse().map(function(x){var ok=x.decision==='accepted'||x.decision==='review_approved',rs=(x.reasons||[]).map(function(r){return esc((r.reason||'')+'')}).join('<br>');
   return '<div class="dlrow">'+av(x.by)+'<div style="flex:1"><strong>'+esc(x.caseNo||'—')+'</strong> <span class="chip '+(ok?'ok':'bad')+'">'+t(ok?'cf_log_acc':'cf_log_rej')+'</span><span class="sub">'+(rs||t('cf_log_none'))+'</span></div><small class="sub" dir="ltr" style="text-align:start">'+esc(new Date(x.at).toLocaleString('fr-FR'))+'</small></div>'}).join('')||'<p class="empty">—</p>';
  return '<section class="card" style="margin-bottom:20px"><div class="card-h"><h2>'+t('cf_log_title')+'</h2></div><div class="card-b">'+rows+'</div></section>'}
@@ -4562,13 +4496,7 @@ function stmtPrintHTML(){var pg=$('invoicePrint')&&$('invoicePrint').querySelect
  return '<!DOCTYPE html><html lang="'+S.lang+'" dir="'+(S.lang==='ar'?'rtl':'ltr')+'"><head><meta charset="UTF-8"><title>'+esc(t('stmt'))+'</title>'+PRINT_FONT_LINK+'<style>'+css+'</style><style>:root{color-scheme:light}html,body{background:#fff!important;color:#0f1e2e}body{font-family:'+PRINT_FONT_STACK+'}h1,h2,h3{font-family:'+PRINT_FONT_STACK+'}.inv-page{background:#fff!important;color:#0f1e2e;box-shadow:none;margin:0 auto}</style></head><body>'+pg.outerHTML+'</body></html>'}
 document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;if(el.dataset.act==='printStmt'){var h=stmtPrintHTML();if(h)printHtmlIframe(h)}});
 
-/* Reset only the synthetic records on this isolated preview branch. */
-document.addEventListener('click',function(e){
- var el=e.target.closest&&e.target.closest('[data-act]');if(!el||el.dataset.act!=='reset-preview-demo')return;
- if(!isM())return;
- resetPreviewDemo();
-});
-/* Confidential conflict review: only the manager role can decide in this local preview. */
+/* Confidential conflict review: only the manager role can decide in this local workspace. */
 document.addEventListener('click',function(e){
  var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;
  var a=el.dataset.act;if(a!=='conflict-review-approve'&&a!=='conflict-review-reject')return;
